@@ -390,7 +390,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     double                      nValDouble      = 0;
     OUString                    aValString;
 
-    SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),sal_True,&pItem);
+    SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),true,&pItem);
 
     if(eState==SFX_ITEM_SET)
     {
@@ -408,7 +408,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 
     }
 
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),sal_True,&pItem);
+    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
 
     if(eState==SFX_ITEM_SET)
     {
@@ -691,7 +691,7 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
         sal_uInt16          nWhich       = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
-        SfxItemState    eItemState   = rMyItemSet.GetItemState( nWhich, sal_False );
+        SfxItemState    eItemState   = rMyItemSet.GetItemState( nWhich, false );
 
         // OK chosen - Is format code input entered already taken over?
         // If not, simulate Add. Upon syntax error ignore input and prevent Put.
@@ -763,7 +763,7 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         if ( m_pCbSourceFormat->IsEnabled() )
         {
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
-            SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, sal_False );
+            SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, false );
             const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                         GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
             sal_Bool bOld = (pBoolItem ? pBoolItem->GetValue() : sal_False);

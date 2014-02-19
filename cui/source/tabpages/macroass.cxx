@@ -178,7 +178,7 @@ sal_Bool _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
     ((SvxMacroTableDtor&)aItem.GetMacroTable()) = aTbl;
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET != GetItemSet().GetItemState( aItem.Which(), sal_True, &pItem )
+    if( SFX_ITEM_SET != GetItemSet().GetItemState( aItem.Which(), true, &pItem )
         || aItem != *(SvxMacroItem*)pItem )
     {
         rSet.Put( aItem );
@@ -212,7 +212,7 @@ void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
 void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
 {
     const SfxPoolItem* pEventsItem;
-    if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, sal_True, &pEventsItem ) )
+    if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
     {
         mpImpl->bGotEvents = sal_True;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
@@ -227,11 +227,11 @@ void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
 void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( aPageRg[0] ), sal_True, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( aPageRg[0] ), true, &pItem ))
         aTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
 
     const SfxPoolItem* pEventsItem;
-    if( !mpImpl->bGotEvents && SFX_ITEM_SET == rSet.GetItemState( SID_EVENTCONFIG, sal_True, &pEventsItem ) )
+    if( !mpImpl->bGotEvents && SFX_ITEM_SET == rSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
     {
         mpImpl->bGotEvents = sal_True;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();

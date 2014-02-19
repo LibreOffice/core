@@ -5249,7 +5249,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             const SfxPoolItem* pPoolItem=NULL;
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
-                                                     sal_False, &pPoolItem );
+                                                     false, &pPoolItem );
             if( SFX_ITEM_DEFAULT == eState )
                 aSet.Put( XFillColorItem( OUString(),
                           Color( mnDefaultColor ) ) );

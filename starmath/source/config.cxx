@@ -52,31 +52,31 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
 
     sal_uInt16 nU16;
     bool bVal;
-    if (rSet.GetItemState(SID_PRINTSIZE, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_PRINTSIZE, true, &pItem) == SFX_ITEM_SET)
     {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintSize( (SmPrintSize) nU16 );
     }
-    if (rSet.GetItemState(SID_PRINTZOOM, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_PRINTZOOM, true, &pItem) == SFX_ITEM_SET)
     {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintZoomFactor( nU16 );
     }
-    if (rSet.GetItemState(SID_PRINTTITLE, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_PRINTTITLE, true, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintTitle( bVal );
     }
-    if (rSet.GetItemState(SID_PRINTTEXT, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_PRINTTEXT, true, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintFormulaText( bVal );
     }
-    if (rSet.GetItemState(SID_PRINTFRAME, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_PRINTFRAME, true, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetPrintFrame( bVal );
     }
-    if (rSet.GetItemState(SID_AUTOREDRAW, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_AUTOREDRAW, true, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetAutoRedraw( bVal );
     }
-    if (rSet.GetItemState(SID_NO_RIGHT_SPACES, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_NO_RIGHT_SPACES, true, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         if (IsIgnoreSpacesRight() != bVal)
         {
@@ -86,7 +86,7 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
     }
-    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, true, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetSaveOnlyUsedSymbols( bVal );
     }

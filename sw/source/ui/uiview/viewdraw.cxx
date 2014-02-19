@@ -82,7 +82,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     sal_Bool bDeselect = sal_False;
 
     sal_uInt16 nSlotId = rReq.GetSlot();
-    if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), sal_False, &pItem))
+    if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
     {
         pEItem = dynamic_cast< const SfxAllEnumItem*>(pItem);
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);

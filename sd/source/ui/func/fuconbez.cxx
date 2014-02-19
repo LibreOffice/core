@@ -83,7 +83,7 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = NULL;
-        if( SFX_ITEM_SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
             maTargets = ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue();
     }
 }

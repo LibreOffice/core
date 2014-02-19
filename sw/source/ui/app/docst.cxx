@@ -263,21 +263,21 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
     {
     case SID_STYLE_NEW:
         if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY,
-            sal_False, &pItem ))
+            false, &pItem ))
         {
             const sal_uInt16 nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
 
             OUString sName;
             sal_uInt16 nMask = 0;
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_NEW,
-                sal_False, &pItem ))
+                false, &pItem ))
                 sName = ((const SfxStringItem*)pItem)->GetValue();
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_MASK,
-                sal_False, &pItem ))
+                false, &pItem ))
                 nMask = ((const SfxUInt16Item*)pItem)->GetValue();
             OUString sParent;
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_REFERENCE,
-                sal_False, &pItem ))
+                false, &pItem ))
                 sParent = ((const SfxStringItem*)pItem)->GetValue();
 
             nRet = Edit( sName, sParent, nFamily, nMask, sal_True, OString(), 0, rReq.IsAPI() );
@@ -367,14 +367,14 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 SAL_WARN_IF( !pArgs->Count(), "sw.ui", "SfxBug ItemSet is empty" );
 
                 SwWrtShell* pShell = GetWrtShell();
-                if( SFX_ITEM_SET == pArgs->GetItemState(nSlot, sal_False, &pItem ))
+                if( SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem ))
                     aParam = ((const SfxStringItem*)pItem)->GetValue();
 
                 if( SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_FAMILY,
-                    sal_False, &pItem ))
+                    false, &pItem ))
                     nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
 
-                if( SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_FAMILYNAME, sal_False, &pItem ))
+                if( SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_FAMILYNAME, false, &pItem ))
                 {
                     OUString aFamily = ((const SfxStringItem*)pItem)->GetValue();
                     if(aFamily.equalsAscii("CharacterStyles"))
@@ -394,10 +394,10 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 }
 
                 if( SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_MASK,
-                    sal_False, &pItem ))
+                    false, &pItem ))
                     nMask = ((const SfxUInt16Item*)pItem)->GetValue();
                 if( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_WRTSHELL,
-                    sal_False, &pItem ))
+                    false, &pItem ))
                     pActShell = pShell = (SwWrtShell*)((SwPtrItem*)pItem)->GetValue();
 
                 if( nSlot == SID_STYLE_UPDATE_BY_EXAMPLE )
@@ -426,7 +426,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         }
                         break;
                         case SFX_STYLE_FAMILY_PSEUDO:
-                        if(SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, sal_False, &pItem))
+                        if(SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, false, &pItem))
                         {
                             aParam = ((const SfxStringItem*)pItem)->GetValue();
                         }
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
         if( SFX_STYLE_FAMILY_PAGE == m_nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
         {
             const SfxPoolItem *pItem = NULL;
-            if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False ) , sal_True, &pItem ) == SFX_ITEM_SET )
+            if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false ) , true, &pItem ) == SFX_ITEM_SET )
                 SwChartHelper::DoUpdateAllCharts( pDoc );
         }
     }

@@ -3345,7 +3345,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         }
         else if ( pAktItemSet )
         {
-            if ( SFX_ITEM_SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, sal_False ) )
+            if ( SFX_ITEM_SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 SvxUnderlineItem *pUnderline
                     = (SvxUnderlineItem *)(pAktItemSet->Get( RES_CHRATR_UNDERLINE, sal_False ) .Clone());

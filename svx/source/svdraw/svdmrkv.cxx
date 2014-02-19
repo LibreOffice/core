@@ -929,7 +929,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 SdrModel* pModel = GetModel();
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
 
-                if(SFX_ITEM_SET != rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, sal_False))
+                if(SFX_ITEM_SET != rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, false))
                 {
                     // add this item, it's not yet there
                     XFillFloatTransparenceItem aNewItem(

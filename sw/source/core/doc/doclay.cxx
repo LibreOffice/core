@@ -571,9 +571,9 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     const SwFmtAnchor* pAnchor = 0;
     if( pFlySet )
     {
-        pFlySet->GetItemState( RES_ANCHOR, sal_False,
+        pFlySet->GetItemState( RES_ANCHOR, false,
                                 (const SfxPoolItem**)&pAnchor );
-        if( SFX_ITEM_SET == pFlySet->GetItemState( RES_CNTNT, sal_False ))
+        if( SFX_ITEM_SET == pFlySet->GetItemState( RES_CNTNT, false ))
         {
             SfxItemSet aTmpSet( *pFlySet );
             aTmpSet.ClearItem( RES_CNTNT );
@@ -690,7 +690,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
     {
         const SwFmtAnchor* pAnch;
         if( (pFlySet && SFX_ITEM_SET == pFlySet->GetItemState(
-                RES_ANCHOR, sal_False, (const SfxPoolItem**)&pAnch )) ||
+                RES_ANCHOR, false, (const SfxPoolItem**)&pAnch )) ||
             ( pFrmFmt && SFX_ITEM_SET == pFrmFmt->GetItemState(
                 RES_ANCHOR, sal_True, (const SfxPoolItem**)&pAnch )) )
         {
@@ -724,7 +724,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
 
         if (bCalledFromShell && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
             SFX_ITEM_SET == pAnchorNode->GetSwAttrSet().
-            GetItemState(RES_PARATR_ADJUST, sal_True, &pItem))
+            GetItemState(RES_PARATR_ADJUST, true, &pItem))
         {
             static_cast<SwCntntNode *>(pNewTxtNd)->SetAttr(*pItem);
         }
@@ -864,7 +864,7 @@ SwDrawFrmFmt* SwDoc::InsertDrawObj(
     SwDrawFrmFmt* pFmt = MakeDrawFrmFmt( OUString(), GetDfltFrmFmt() );
 
     const SwFmtAnchor* pAnchor = 0;
-    rFlyAttrSet.GetItemState( RES_ANCHOR, sal_False, (const SfxPoolItem**) &pAnchor );
+    rFlyAttrSet.GetItemState( RES_ANCHOR, false, (const SfxPoolItem**) &pAnchor );
     pFmt->SetFmtAttr( rFlyAttrSet );
 
     // Didn't set the Anchor yet?
@@ -1106,15 +1106,15 @@ static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uIn
 {
     const SfxPoolItem *pOldItem = NULL, *pNewItem = NULL;
 
-    rOldSet.GetItemState( nWhich, sal_False, &pOldItem);
+    rOldSet.GetItemState( nWhich, false, &pOldItem);
     if (pOldItem != NULL)
         rNewSet.Put( *pOldItem );
     else
     {
-        pOldItem = rOldSet.GetItem( nWhich, sal_True);
+        pOldItem = rOldSet.GetItem( nWhich, true);
         if (pOldItem != NULL)
         {
-            pNewItem = rNewSet.GetItem( nWhich, sal_True);
+            pNewItem = rNewSet.GetItem( nWhich, true);
             if (pNewItem != NULL)
             {
                 if (*pOldItem != *pNewItem)
@@ -1254,17 +1254,17 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     // default item in the new Set. Because the graphic's size has never changed!
                     const SfxPoolItem *pItem;
                     if( SFX_ITEM_SET == pOldFmt->GetAttrSet().
-                            GetItemState( RES_BOX, sal_True, &pItem ))
+                            GetItemState( RES_BOX, true, &pItem ))
                         pNewSet->Put( *pItem );
                     else if( SFX_ITEM_SET == pNewFmt->GetAttrSet().
-                            GetItemState( RES_BOX, sal_True ))
+                            GetItemState( RES_BOX, true ))
                         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
                     if( SFX_ITEM_SET == pOldFmt->GetAttrSet().
-                            GetItemState( RES_SHADOW, sal_True, &pItem ))
+                            GetItemState( RES_SHADOW, true, &pItem ))
                         pNewSet->Put( *pItem );
                     else if( SFX_ITEM_SET == pNewFmt->GetAttrSet().
-                            GetItemState( RES_SHADOW, sal_True ))
+                            GetItemState( RES_SHADOW, true ))
                         pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
                 }
                 else
@@ -1591,10 +1591,10 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                  rDoc.GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
     // Set border and shadow to default if the template contains any.
-    if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState( RES_BOX, sal_True ))
+    if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState( RES_BOX, true ))
         pNewSet->Put( *GetDfltAttr( RES_BOX ) );
 
-    if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState(RES_SHADOW,sal_True))
+    if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState(RES_SHADOW,true))
         pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
 
     pNewFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));

@@ -607,13 +607,13 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     if( pSet )
                     {
                         if(    !pTOXAttr->HadBreakItem()
-                            && SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False, &pItem ) )
+                            && SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
                         {
                             aBkSet.Put( *pItem );
                             pNd->ResetAttr( RES_BREAK );
                         }
                         if(    !pTOXAttr->HadPageDescItem()
-                            && SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, sal_False, &pItem ) )
+                            && SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) )
                         {
                             aBkSet.Put( *pItem );
                             pNd->ResetAttr( RES_PAGEDESC );

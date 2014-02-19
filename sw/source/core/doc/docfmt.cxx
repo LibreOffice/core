@@ -213,7 +213,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                                                 RES_PARATR_OUTLINELEVEL };
         for( sal_uInt16 n = 0; n < 4; ++n )
         {
-            if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], sal_False, &pItem ))
+            if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], false, &pItem ))
             {
                 bool bSave = false;
                 switch( aSavIds[ n ] )
@@ -270,7 +270,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
                            pItem->Which() != RES_PARATR_NUMRULE ) ||
-                         ( aSet.GetItemState( pItem->Which(), sal_False ) != SFX_ITEM_SET ) )
+                         ( aSet.GetItemState( pItem->Which(), false ) != SFX_ITEM_SET ) )
                     {
                         pNode->ResetAttr( pItem->Which() );
                     }
@@ -696,7 +696,7 @@ static bool lcl_InsAttr(
         SwTableNode* pTblNd;
         const SwFmtPageDesc* pDesc;
         if( SFX_ITEM_SET == pOtherSet->GetItemState( RES_PAGEDESC,
-                        sal_False, (const SfxPoolItem**)&pDesc ))
+                        false, (const SfxPoolItem**)&pDesc ))
         {
             if( pNode )
             {
@@ -743,7 +743,7 @@ static bool lcl_InsAttr(
         if( pNode && 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
             0 != (pTblNd = pNode->FindTableNode() ) &&
             SFX_ITEM_SET == pOtherSet->GetItemState( RES_BREAK,
-                        sal_False, (const SfxPoolItem**)&pBreak ) )
+                        false, (const SfxPoolItem**)&pBreak ) )
         {
             SwTableNode* pCurTblNd = pTblNd;
             while ( 0 != ( pCurTblNd = pCurTblNd->StartOfSectionNode()->FindTableNode() ) )
@@ -774,7 +774,7 @@ static bool lcl_InsAttr(
             const SwNumRuleItem* pRule;
             sal_uInt16 nPoolId=0;
             if( SFX_ITEM_SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
-                                sal_False, (const SfxPoolItem**)&pRule ) &&
+                                false, (const SfxPoolItem**)&pRule ) &&
                 !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
                 USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                 nsSwGetPoolIdFromName::GET_POOLID_NUMRULE )) )
@@ -989,8 +989,8 @@ static bool lcl_InsAttr(
     }
 
     bool bCreateSwpHints = pCharSet && (
-        SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, sal_False ) ||
-        SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, sal_False ) );
+        SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, false ) ||
+        SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, false ) );
 
     for(; aSt < aEnd; ++aSt )
     {
@@ -1318,7 +1318,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
 
         const SfxPoolItem* pTmpItem;
         if( ( SFX_ITEM_SET ==
-                aNew.GetItemState( RES_PARATR_TABSTOP, sal_False, &pTmpItem ) ) &&
+                aNew.GetItemState( RES_PARATR_TABSTOP, false, &pTmpItem ) ) &&
             ((SvxTabStopItem*)pTmpItem)->Count() )
         {
             // Set the default values of all TabStops to the new value.
@@ -1988,7 +1988,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
             SFX_ITEM_SET == pSrc->GetAttrSet().GetItemState(
-            RES_PAGEDESC, sal_False, &pItem ) &&
+            RES_PAGEDESC, false, &pItem ) &&
             ((SwFmtPageDesc*)pItem)->GetPageDesc() )
         {
             SwFmtPageDesc aPageDesc( *(SwFmtPageDesc*)pItem );
@@ -2046,7 +2046,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     // Copy content nodes across documents!
     sal_uInt16 nAttr = static_cast<sal_uInt16>( bCpyHeader ? RES_HEADER : RES_FOOTER );
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET != rSrcFmt.GetAttrSet().GetItemState( nAttr, sal_False, &pItem ))
+    if( SFX_ITEM_SET != rSrcFmt.GetAttrSet().GetItemState( nAttr, false, &pItem ))
         return ;
 
     // The header only contains the reference to the format from the other document!
@@ -2065,7 +2065,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
         pNewFmt->CopyAttrs( *pOldFmt, sal_True );
 
         if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState(
-            RES_CNTNT, sal_False, &pItem ))
+            RES_CNTNT, false, &pItem ))
         {
             SwFmtCntnt* pCntnt = (SwFmtCntnt*)pItem;
             if( pCntnt->GetCntntIdx() )
@@ -2441,7 +2441,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
             // we handle the adjust item separately
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pTNd->GetpSwAttrSet()->GetItemState(
-                    RES_PARATR_ADJUST, sal_False, &pItem ))
+                    RES_PARATR_ADJUST, false, &pItem ))
                 aTmp.Put( *pItem );
             aExtraData.SetItemSet( aTmp );
         }

@@ -48,7 +48,7 @@ public:
     inline sal_uInt16           From() const { return nFrom; }
     inline sal_uInt16&          To() { return nTo; }
     inline sal_uInt16           To() const { return nTo; }
-    inline sal_Bool             HasRange() const { return nTo>nFrom; }
+    inline bool             HasRange() const { return nTo>nFrom; }
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
 };

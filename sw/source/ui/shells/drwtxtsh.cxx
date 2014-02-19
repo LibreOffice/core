@@ -412,7 +412,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             const SfxPoolItem* pItem = 0;
                         if(pNewAttrs)
             {
-                                pNewAttrs->GetItemState(nSlot, sal_False, &pItem );
+                                pNewAttrs->GetItemState(nSlot, false, &pItem );
                              pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
             }
                         break;
@@ -524,7 +524,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
             {
             case SID_UNDO:
             case SID_REDO:
-                if( SFX_ITEM_SET == pArgs->GetItemState( nId, sal_False, &pItem ) &&
+                if( SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ) &&
                     1 < (nCnt = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
                     // then we make by ourself.
@@ -692,7 +692,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
     OUString sSym;
     OUString sFontName;
@@ -700,7 +700,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     {
         sSym = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();

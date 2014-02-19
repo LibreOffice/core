@@ -752,7 +752,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         {
             SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
             const SfxPoolItem* pItem = NULL;
-            if( aSet.GetItemState( EE_PARA_JUST, sal_True, &pItem ) == SFX_ITEM_SET )
+            if( aSet.GetItemState( EE_PARA_JUST, true, &pItem ) == SFX_ITEM_SET )
             {
                 SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
                 pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST ) );

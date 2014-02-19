@@ -330,7 +330,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 rReq.Done(*pSet);
                 // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
                 if( SFX_ITEM_SET == pSet->GetItemState(
-                                SID_ATTR_GRAF_FRMSIZE, sal_False, &pItem ))
+                                SID_ATTR_GRAF_FRMSIZE, false, &pItem ))
                 {
                     SwFmtFrmSize aSize;
                     const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
@@ -338,7 +338,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aSize.SetHeight( rSz.Height() );
 
                     if( SFX_ITEM_SET == pSet->GetItemState(
-                            SID_ATTR_GRAF_FRMSIZE_PERCENT, sal_False, &pItem ))
+                            SID_ATTR_GRAF_FRMSIZE_PERCENT, false, &pItem ))
                     {
                         const Size& rRelativeSize = ((SvxSizeItem*)pItem)->GetSize();
                         aSize.SetWidthPercent( static_cast< sal_uInt8 >( rRelativeSize.Width() ) );
@@ -368,14 +368,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 bool bApplyUsrPref = false;
                 if (SFX_ITEM_SET == pSet->GetItemState(
-                    FN_KEEP_ASPECT_RATIO, sal_True, &pItem ))
+                    FN_KEEP_ASPECT_RATIO, true, &pItem ))
                 {
                     aUsrPref.SetKeepRatio(
                                     ((const SfxBoolItem*)pItem)->GetValue() );
                     bApplyUsrPref = true;
                 }
                 if( SFX_ITEM_SET == pSet->GetItemState(
-                    SID_ATTR_GRAF_KEEP_ZOOM, sal_True, &pItem ))
+                    SID_ATTR_GRAF_KEEP_ZOOM, true, &pItem ))
                 {
                     aUsrPref.SetGrfKeepZoom(
                                     ((const SfxBoolItem*)pItem)->GetValue() );
@@ -387,7 +387,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 // and now set all the graphic attributes and other stuff
                 if( SFX_ITEM_SET == pSet->GetItemState(
-                                        SID_ATTR_GRAF_GRAPHIC, sal_True, &pItem ))
+                                        SID_ATTR_GRAF_GRAPHIC, true, &pItem ))
                 {
                     if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
                         sGrfNm = ((SvxBrushItem*)pItem)->GetGraphicLink();
@@ -414,7 +414,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     }
                 }
                 if ( SFX_ITEM_SET == pSet->GetItemState(
-                                        FN_SET_FRM_ALT_NAME, sal_True, &pItem ))
+                                        FN_SET_FRM_ALT_NAME, true, &pItem ))
                 {
                     // #i73249#
                     rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
@@ -461,7 +461,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         const SfxItemSet *pArgs = rReq.GetArgs();
         const SfxPoolItem* pItem;
         sal_uInt16 nSlot = rReq.GetSlot();
-        if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, sal_False, &pItem ))
+        if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, false, &pItem ))
             pItem = 0;
 
         switch( nSlot )

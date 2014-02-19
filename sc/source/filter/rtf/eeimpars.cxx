@@ -181,7 +181,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && bSimple; nId++)
             {
                 const SfxPoolItem* pItem = 0;
-                SfxItemState eState = aSet.GetItemState( nId, sal_True, &pItem );
+                SfxItemState eState = aSet.GetItemState( nId, true, &pItem );
                 if (eState == SFX_ITEM_DONTCARE)
                     bSimple = false;
                 else if (eState == SFX_ITEM_SET)

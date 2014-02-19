@@ -154,7 +154,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
     /*  Use SvxMarginItem instead of margins from SvxBoxItem, if present.
         ->  Remember this state in mbUseMarginItem, because other special handling
             is needed across various functions... */
-    mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),sal_True) != SFX_ITEM_UNKNOWN;
+    mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),true) != SFX_ITEM_UNKNOWN;
 
     const SfxPoolItem* pItem = NULL;
     if (rCoreAttrs.HasItem(SID_ATTR_BORDER_STYLES, &pItem))
@@ -208,7 +208,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
     sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
     sal_Bool bIsDontCare = sal_True;
 
-    if ( rCoreAttrs.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreAttrs.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
         // paragraph or table
         const SvxBoxInfoItem* pBoxInfo =
@@ -418,7 +418,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
                 if ( pBoxInfoItem->IsDist() )
                 {
-                    if( rSet.GetItemState( nWhichBox, sal_True ) >= SFX_ITEM_DEFAULT )
+                    if( rSet.GetItemState( nWhichBox, true ) >= SFX_ITEM_DEFAULT )
                     {
                         sal_Bool bIsAnyBorderVisible = m_pFrameSel->IsAnyBorderVisible();
                         if( !bIsAnyBorderVisible || !pBoxInfoItem->IsMinDist() )
@@ -543,7 +543,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
@@ -590,7 +590,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
     bool                  bPut          = true;
     sal_uInt16                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
-    sal_uInt16                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+    sal_uInt16                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
@@ -697,11 +697,11 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //
     bPut = true;
 
-    if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     sal_False ))
+    if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     false ))
     {
         bPut = aBoxItem != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich)) ? sal_True : sal_False;
     }
-    if(  SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, sal_False ) )
+    if(  SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, false ) )
     {
         const SvxBoxInfoItem& rOldBoxInfo = (const SvxBoxInfoItem&)
                                 rOldSet.Get(nBoxInfoWhich);

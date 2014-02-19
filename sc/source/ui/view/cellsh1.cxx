@@ -1236,7 +1236,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -1491,7 +1491,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem=NULL;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -1784,7 +1784,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET ==
-                        pReqArgs->GetItemState( SCITEM_CONSOLIDATEDATA, sal_True, &pItem ) )
+                        pReqArgs->GetItemState( SCITEM_CONSOLIDATEDATA, true, &pItem ) )
                 {
                     const ScConsolidateParam& rParam =
                             ((const ScConsolidateItem*)pItem)->GetData();
@@ -2145,7 +2145,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     bool bShow;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs && (pReqArgs->GetItemState( FID_NOTE_VISIBLE, sal_True, &pItem ) == SFX_ITEM_SET) )
+                    if ( pReqArgs && (pReqArgs->GetItemState( FID_NOTE_VISIBLE, true, &pItem ) == SFX_ITEM_SET) )
                         bShow = ((const SfxBoolItem*) pItem)->GetValue();
                     else
                         bShow = !pNote->IsCaptionShown();

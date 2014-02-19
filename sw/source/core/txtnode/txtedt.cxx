@@ -309,7 +309,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     if ( !pSet1 )
     {
         OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
-        if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, sal_False ) )
+        if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, false ) )
         {
             pNewSet = rSet2.Clone( sal_True );
             pNewSet->ClearItem( nWhichId );
@@ -321,7 +321,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
         const SfxPoolItem* pItem = aIter.GetCurItem();
         while( true )
         {
-            if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), sal_False ) )
+            if ( SFX_ITEM_SET == rSet2.GetItemState( pItem->Which(), false ) )
             {
                 if ( !pNewSet )
                     pNewSet = rSet2.Clone( sal_True );
@@ -453,7 +453,7 @@ void SwTxtNode::RstTxtAttr(
         // 1. case: We want to reset only the attributes listed in pSet:
         if ( pSet )
         {
-            bSkipAttr = SFX_ITEM_SET != pSet->GetItemState( pHt->Which(), sal_False );
+            bSkipAttr = SFX_ITEM_SET != pSet->GetItemState( pHt->Which(), false );
             if ( bSkipAttr && RES_TXTATR_AUTOFMT == pHt->Which() )
             {
                 // if the current attribute is an autostyle, we have to check if the autostyle

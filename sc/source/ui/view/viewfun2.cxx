@@ -2964,13 +2964,13 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     const SfxItemSet&       rSelItemSet = pSelAttrs->GetItemSet();
 
     const SfxPoolItem*      pBorderAttr = NULL;
-    SfxItemState            eItemState = rSelItemSet.GetItemState( ATTR_BORDER, sal_True, &pBorderAttr );
+    SfxItemState            eItemState = rSelItemSet.GetItemState( ATTR_BORDER, true, &pBorderAttr );
 
     const SfxPoolItem*      pTLBRItem = 0;
-    SfxItemState            eTLBRState = rSelItemSet.GetItemState( ATTR_BORDER_TLBR, sal_True, &pTLBRItem );
+    SfxItemState            eTLBRState = rSelItemSet.GetItemState( ATTR_BORDER_TLBR, true, &pTLBRItem );
 
     const SfxPoolItem*      pBLTRItem = 0;
-    SfxItemState            eBLTRState = rSelItemSet.GetItemState( ATTR_BORDER_BLTR, sal_True, &pBLTRItem );
+    SfxItemState            eBLTRState = rSelItemSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
 
     // any of the lines visible?
     if( (eItemState != SFX_ITEM_DEFAULT) || (eTLBRState != SFX_ITEM_DEFAULT) || (eBLTRState != SFX_ITEM_DEFAULT) )

@@ -1846,7 +1846,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             const SfxItemSet *pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
 
-            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, sal_True, &pItem ) )
+            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
             {
                 const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
                 aGraphic.SetZoom( nCurrentZoom );

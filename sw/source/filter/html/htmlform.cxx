@@ -949,7 +949,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         // linken/rechten Rand setzen
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, sal_True,
+        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true,
                                                      &pItem ) )
         {
             // Ggf. den Erstzeilen-Einzug noch plaetten
@@ -981,7 +981,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
 
         // oberen/unteren Rand setzen
-        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, sal_True,
+        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true,
                                                      &pItem ) )
         {
             // Ggf. den Erstzeilen-Einzug noch plaetten
@@ -1014,7 +1014,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             rFCompPropSet->getPropertySetInfo();
         OUString sPropName = "BackgroundColor";
-        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_BACKGROUND, sal_True,
+        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_BACKGROUND, true,
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -1030,7 +1030,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
 
         sPropName = "TextColor";
-        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_COLOR, sal_True,
+        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_COLOR, true,
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
@@ -1041,7 +1041,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         sPropName = "FontHeight";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONTSIZE,
-                                                     sal_True, &pItem ) &&
+                                                     true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             float fVal = static_cast< float >(
@@ -1050,7 +1050,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
-        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONT, sal_True,
+        if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONT, true,
                                                      &pItem ) )
         {
             const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
@@ -1088,7 +1088,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         sPropName = "FontWeight";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_WEIGHT,
-                                                     sal_True, &pItem ) &&
+                                                     true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             float fVal = VCLUnoHelper::ConvertFontWeight(
@@ -1099,7 +1099,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         sPropName = "FontSlant";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_POSTURE,
-                                                     sal_True, &pItem ) &&
+                                                     true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp <<= (sal_Int16)((SvxPostureItem *)pItem)->GetPosture();
@@ -1108,7 +1108,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         sPropName = "FontUnderline";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_UNDERLINE,
-                                                     sal_True, &pItem ) &&
+                                                     true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp <<= (sal_Int16)((SvxUnderlineItem *)pItem)->GetLineStyle();
@@ -1117,7 +1117,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
 
         sPropName = "FontStrikeout";
         if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_CHRATR_CROSSEDOUT,
-                                                     sal_True, &pItem ) &&
+                                                     true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp <<= (sal_Int16)((SvxCrossedOutItem *)pItem)->GetStrikeout();

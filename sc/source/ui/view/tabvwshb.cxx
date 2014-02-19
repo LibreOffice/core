@@ -508,7 +508,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 
                 sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
                     nCount = ((const SfxUInt16Item*)pItem)->GetValue();
 
                 // lock paint for more than one cell undo action (not for editing within a cell)

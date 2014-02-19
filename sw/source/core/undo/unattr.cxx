@@ -136,7 +136,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
 void SwUndoFmtAttr::Init()
 {
     // treat change of anchor specially
-    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, sal_False ))
+    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
     {
         SaveFlyAnchor( m_bSaveDrawPt );
     }
@@ -184,7 +184,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
-    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, sal_False ))
+    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
     {
         bAnchorAttrRestored = RestoreFlyAnchor(rContext);
         if ( bAnchorAttrRestored )
@@ -839,7 +839,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
 {
     // RefMarks are not repeat capable
-    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, sal_False ) )
+    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, false ) )
     {
         rContext.GetDoc().InsertItemSet( rContext.GetRepeatPaM(),
                                            m_AttrSet, m_nInsertFlags );
@@ -891,7 +891,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
 {
-    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, sal_False ))
+    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, false ))
         return ;
 
     SwHistoryHint* pHstHnt;
@@ -964,7 +964,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     , m_pTabStop( 0 )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) )
     {
         // store separately, because it may change!
         m_pTabStop.reset( static_cast<SvxTabStopItem*>(pItem->Clone()) );

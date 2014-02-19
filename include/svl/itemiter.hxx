@@ -47,8 +47,8 @@ public:
                        { return _rSet._nCount ? *(_rSet._aItems+_nAkt) : 0; }
     const SfxPoolItem* NextItem();
 
-    sal_Bool               IsAtStart() const { return _nAkt == _nStt; }
-    sal_Bool               IsAtEnd() const   { return _nAkt == _nEnd; }
+    bool               IsAtStart() const { return _nAkt == _nStt; }
+    bool               IsAtEnd() const   { return _nAkt == _nEnd; }
 
     sal_uInt16             GetCurPos() const { return _nAkt; }
     sal_uInt16             GetFirstPos() const { return _nStt; }

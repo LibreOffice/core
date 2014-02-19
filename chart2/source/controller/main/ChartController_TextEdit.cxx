@@ -178,7 +178,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem=0;
         OUString aString;
-        if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET &&
+        if ( pSet && pSet->GetItemState( SID_CHARMAP, true, &pItem) == SFX_ITEM_SET &&
              pItem->ISA(SfxStringItem) )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 

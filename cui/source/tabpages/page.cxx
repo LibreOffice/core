@@ -238,7 +238,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     const SfxPoolItem* pItem;
 
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
@@ -637,7 +637,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     }
 
     SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
-                                                sal_True, &pItem );
+                                                true, &pItem );
     if( SFX_ITEM_UNKNOWN != eState )
     {
         sal_uInt32 nVal  = SFX_ITEM_SET == eState
@@ -1181,7 +1181,7 @@ void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
             (const SvxSetItem&)rSet.Get( nWhich, sal_False );
@@ -1212,7 +1212,7 @@ void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
             (const SvxSetItem&)rSet.Get( nWhich, sal_False );
@@ -1279,7 +1279,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                            sal_False, (const SfxPoolItem**)&pSetItem ) )
+                            false, (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -1326,7 +1326,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
-                            sal_False, (const SfxPoolItem**)&pSetItem ) )
+                            false, (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
         const SfxBoolItem& rFooterOn =

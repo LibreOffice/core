@@ -129,7 +129,7 @@ namespace dbaui
         sal_Bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
         m_aPB_CreateDB.Show( bEnableCreateButton );
 
-        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
 
         // forward the values to the controls
         if ( bValid )

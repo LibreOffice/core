@@ -85,7 +85,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     {
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
-                                                            sal_False, &pItem ) )
+                                                            false, &pItem ) )
         {
             OUString sName;
             const SwPageDesc *pPageDesc =
@@ -108,7 +108,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET ==
             rFmt.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
-                                            sal_False, &pItem ) )
+                                            false, &pItem ) )
         {
             sal_Int32 nFormat = (sal_Int32)
                 ((const SwTblBoxNumFormat *)pItem)->GetValue();

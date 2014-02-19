@@ -692,14 +692,14 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             const_cast<SfxItemSet&>(rSet).Put( SwFmtAnchor( FLY_AT_PAGE, 1 ) );
 
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem )
+            if( SFX_ITEM_SET == rSet.GetItemState( RES_HORI_ORIENT, false, &pItem )
                 && text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient() )
             {
                 bHOriChgd = true;
                 aOldH = *((SwFmtHoriOrient*)pItem);
                 ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem )
+            if( SFX_ITEM_SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
                 && text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
             {
                 bVOriChgd = true;
@@ -802,7 +802,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         if( pFlyAttrSet )
         {
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pFlyAttrSet->GetItemState( RES_ANCHOR, sal_False,
+            if( SFX_ITEM_SET == pFlyAttrSet->GetItemState( RES_ANCHOR, false,
                     &pItem ) )
             {
                 SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
@@ -1053,7 +1053,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     // now examine all attributes. Remove forbidden attributes, then
     // get all remaining attributes and enter them
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false, &pItem ) )
     {
         SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
         RndStdIds eType = pAnchor->GetAnchorId();
@@ -1102,7 +1102,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
             StartAllAction();
             const Point aPt( pFly->Frm().Pos() );
 
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
+            if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false ))
                 sw_ChkAndSetNewAnchor( *this, *pFly, rSet );
             SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
 
@@ -1138,7 +1138,7 @@ sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     StartAllAction();
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false ))
     {
         RndStdIds nNew = ((SwFmtAnchor&)rSet.Get( RES_ANCHOR )).GetAnchorId();
         if ( nNew != pFmt->GetAnchor().GetAnchorId() )

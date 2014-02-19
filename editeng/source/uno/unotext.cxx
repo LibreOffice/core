@@ -643,7 +643,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     switch( pMap->nWID )
     {
     case EE_FEATURE_FIELD:
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, sal_False ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SFX_ITEM_SET )
         {
             SvxFieldItem* pItem = (SvxFieldItem*)rSet.GetItem( EE_FEATURE_FIELD );
             const SvxFieldData* pData = pItem->GetField();
@@ -665,7 +665,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
         break;
 
     case WID_PORTIONTYPE:
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, sal_False ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SFX_ITEM_SET )
         {
             OUString aType("TextField");
             rAny <<= aType;
@@ -698,10 +698,10 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
 
     case EE_PARA_NUMBULLET:
         {
-            if((rSet.GetItemState( EE_PARA_NUMBULLET, sal_True ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT)) == 0)
+            if((rSet.GetItemState( EE_PARA_NUMBULLET, true ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT)) == 0)
                 throw uno::RuntimeException();
 
-            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, sal_True );
+            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, true );
 
             if( pBulletItem == NULL )
                 throw uno::RuntimeException();
@@ -739,9 +739,9 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
     case EE_PARA_BULLETSTATE:
         {
             sal_Bool bState = sal_False;
-            if( rSet.GetItemState( EE_PARA_BULLETSTATE, sal_True ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT))
+            if( rSet.GetItemState( EE_PARA_BULLETSTATE, true ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT))
             {
-                SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, sal_True );
+                SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, true );
                 bState = pItem->GetValue() ? sal_True : sal_False;
             }
 
@@ -820,7 +820,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
                     if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                     {
                         const SfxPoolItem* pItem;
-                        if( pNewAttrSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if( pNewAttrSet->GetItemState( pMap->nWID, true, &pItem ) == SFX_ITEM_SET )
                         {
                             pOldAttrSet->Put( *pItem );
                         }
@@ -840,7 +840,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
                     if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                     {
                         const SfxPoolItem* pItem;
-                        if( pNewParaSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if( pNewParaSet->GetItemState( pMap->nWID, true, &pItem ) == SFX_ITEM_SET )
                         {
                             pOldParaSet->Put( *pItem );
                         }
@@ -1169,7 +1169,7 @@ sal_Bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, cons
             return !bUnknownPropertyFound;
 
         if( nWID != 0 )
-            eItemState = pSet->GetItemState( nWID, sal_False );
+            eItemState = pSet->GetItemState( nWID, false );
 
         switch( eItemState )
         {
@@ -1222,7 +1222,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
 {
     do
     {
-        SfxItemSet aSet( *pForwarder->GetPool(), sal_True );
+        SfxItemSet aSet( *pForwarder->GetPool(), true );
 
         if( pMap->nWID == WID_FONTDESC )
         {

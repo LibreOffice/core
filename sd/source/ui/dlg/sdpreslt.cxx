@@ -66,7 +66,7 @@ void SdPresLayoutDlg::Reset()
     long nName;
 
     // replace master page
-    if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, sal_False, &pPoolItem ) == SFX_ITEM_SET )
+    if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, false, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
         m_pCbxMasterPage->Enable( !bMasterPage );
@@ -76,7 +76,7 @@ void SdPresLayoutDlg::Reset()
     // remove not used master pages
     m_pCbxCheckMasters->Check(sal_False);
 
-    if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, true, &pPoolItem) == SFX_ITEM_SET)
         maName = ((const SfxStringItem*)pPoolItem)->GetValue();
     else
         maName = "";

@@ -103,10 +103,10 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
         // Do NOT copy AutoNumRules into the template
         const SfxPoolItem* pItem;
         const SwNumRule* pRule = 0;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False ) ||
-            SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,sal_False ) ||
+        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false ) ||
+            SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,false ) ||
             ( SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                sal_False, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                false, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
                 ((SwNumRuleItem*)pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() )
             )
@@ -116,7 +116,7 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
             aSet.ClearItem( RES_PAGEDESC );
 
             if( pRule || (SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                sal_False, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                false, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
                 ((SwNumRuleItem*)pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() ))
                 aSet.ClearItem( RES_PARATR_NUMRULE );

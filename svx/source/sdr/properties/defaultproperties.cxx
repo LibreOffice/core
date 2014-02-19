@@ -152,7 +152,7 @@ namespace sdr
 
             while(nWhich)
             {
-                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False, &pPoolItem))
+                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, false, &pPoolItem))
                 {
                     if(AllowItemChange(nWhich, pPoolItem))
                     {

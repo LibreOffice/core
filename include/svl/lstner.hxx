@@ -47,10 +47,10 @@ public:
                         SfxListener( const SfxListener &rCopy );
     virtual             ~SfxListener();
 
-    sal_Bool                StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPreventDups = sal_False );
-    sal_Bool                EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllDups = sal_False );
+    bool                StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups = false );
+    bool                EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups = false );
     void                EndListeningAll();
-    sal_Bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
+    bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 
     sal_uInt16              GetBroadcasterCount() const
                         { return aBCs.size(); }

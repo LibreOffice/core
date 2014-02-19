@@ -397,7 +397,7 @@ namespace drawinglayer
                     // need to check XFillFloatTransparence, object fill may still be completely transparent
                     const SfxPoolItem* pGradientItem;
 
-                    if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, sal_True, &pGradientItem)
+                    if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
                         && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
                     {
                         const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
@@ -576,7 +576,7 @@ namespace drawinglayer
         {
             const SfxPoolItem* pGradientItem;
 
-            if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, sal_True, &pGradientItem)
+            if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
                 && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
             {
                 // test if float transparence is completely transparent

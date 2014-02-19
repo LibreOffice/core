@@ -506,7 +506,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         if( pArgs )
                         {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTINFO, sal_True, &pPoolItem ) )
+                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTINFO, true, &pPoolItem ) )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
@@ -518,7 +518,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         if( pArgs )
                         {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTHEIGHT, sal_True, &pPoolItem ) )
+                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTHEIGHT, true, &pPoolItem ) )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
@@ -528,7 +528,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_COLOR:
                     {
-                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_COLOR, sal_True, &pPoolItem ) )
+                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_COLOR, true, &pPoolItem ) )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
@@ -544,7 +544,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
                 sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
-                if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, sal_True, &pPoolItem ) )
+                if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
                     nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
                 if( bLeftToRight )

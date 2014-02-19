@@ -1153,7 +1153,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
     const SfxSpellCheckItem* pItem = 0;
 
     SfxItemState eItemState = rSet.GetItemState( GetWhich( SID_ATTR_SPELL ),
-                                    sal_False, (const SfxPoolItem**)&pItem );
+                                    false, (const SfxPoolItem**)&pItem );
 
     // is it about a default-item?
     if ( eItemState == SFX_ITEM_DEFAULT )
@@ -1512,7 +1512,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     const SfxHyphenRegionItem *pHyp = NULL;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
         pHyp = &( (const SfxHyphenRegionItem &) rSet.Get( nWhich ) );
 
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );

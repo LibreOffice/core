@@ -297,8 +297,8 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     const SfxPoolItem* pGradientItem = NULL;
     const SfxPoolItem* pLinearItem = NULL;
-    SfxItemState eStateGradient(rOutAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, sal_True, &pGradientItem));
-    SfxItemState eStateLinear(rOutAttrs.GetItemState(XATTR_FILLTRANSPARENCE, sal_True, &pLinearItem));
+    SfxItemState eStateGradient(rOutAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
+    SfxItemState eStateLinear(rOutAttrs.GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
     sal_Bool bGradActive = (eStateGradient == SFX_ITEM_SET && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled());
     sal_Bool bLinearActive = (eStateLinear == SFX_ITEM_SET && ((XFillTransparenceItem*)pLinearItem)->GetValue() != 0);
 
@@ -399,13 +399,13 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
 void SvxTransparenceTabPage::Reset(const SfxItemSet& rAttrs)
 {
     const SfxPoolItem* pGradientItem = NULL;
-    SfxItemState eStateGradient(rAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, sal_True, &pGradientItem));
+    SfxItemState eStateGradient(rAttrs.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
     if(!pGradientItem)
         pGradientItem = &rAttrs.Get(XATTR_FILLFLOATTRANSPARENCE);
     sal_Bool bGradActive = (eStateGradient == SFX_ITEM_SET && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled());
 
     const SfxPoolItem* pLinearItem = NULL;
-    SfxItemState eStateLinear(rAttrs.GetItemState(XATTR_FILLTRANSPARENCE, sal_True, &pLinearItem));
+    SfxItemState eStateLinear(rAttrs.GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
     if(!pLinearItem)
         pLinearItem = &rAttrs.Get(XATTR_FILLTRANSPARENCE);
     sal_Bool bLinearActive = (eStateLinear == SFX_ITEM_SET && ((XFillTransparenceItem*)pLinearItem)->GetValue() != 0);
@@ -1010,7 +1010,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                  // NEW
                  if( (eSavedStyle != eStyle) &&
                      ( bModified ||
-                       SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True ) ) )
+                       SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true ) ) )
                  {
                      XFillStyleItem aStyleItem( XFILL_SOLID );
                      pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
@@ -1041,7 +1041,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 // NEW
                 if( (eSavedStyle != eStyle) &&
                     ( bModified ||
-                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), sal_True ) ) )
+                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true ) ) )
                 {
                     XFillStyleItem aStyleItem( XFILL_GRADIENT );
                     pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
@@ -1087,7 +1087,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 // NEW
                 if( (eSavedStyle != eStyle) &&
                     ( bModified ||
-                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), sal_True ) ) )
+                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true ) ) )
                 {
                     XFillStyleItem aStyleItem( XFILL_HATCH );
                     pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
@@ -1118,7 +1118,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 // NEW
                 if( (eSavedStyle != eStyle) &&
                     ( bModified ||
-                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True ) ) )
+                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), true ) ) )
                 {
                     XFillStyleItem aStyleItem( XFILL_BITMAP );
                     pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
@@ -1824,7 +1824,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
         rXFSet.Put( XFillColorItem( OUString(), m_pLbColor->GetSelectEntryColor() ) );
     }
     // NEW
-    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
+    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
     {
         rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
         Color aColor( ( ( const XFillColorItem* ) pPoolItem )->GetColorValue() );
@@ -1896,7 +1896,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
         rXFSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
         rXFSet.Put( XFillGradientItem( OUString(), pEntry->GetGradient() ) );
     }
-    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), sal_True, &pPoolItem ) )
+    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) )
     {
         rXFSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
         rXFSet.Put( XFillGradientItem( OUString(), ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() ) );
@@ -1967,7 +1967,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
         rXFSet.Put( XFillStyleItem( XFILL_HATCH ) );
         rXFSet.Put( XFillHatchItem( OUString(), pEntry->GetHatch() ) );
     }
-    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), sal_True, &pPoolItem ) )
+    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true, &pPoolItem ) )
     {
         rXFSet.Put( XFillStyleItem( XFILL_HATCH ) );
         rXFSet.Put( XFillHatchItem( OUString(), ( ( const XFillHatchItem* ) pPoolItem )->GetHatchValue() ) );
@@ -1992,7 +1992,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
     {
         rXFSet.Put( XFillColorItem( OUString(), m_pLbHatchBckgrdColor->GetSelectEntryColor() ) );
     }
-    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
+    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
     {
         Color aColor( ( ( const XFillColorItem* ) pPoolItem )->GetColorValue() );
         rXFSet.Put( XFillColorItem( OUString(), aColor ) );
@@ -2094,7 +2094,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
         rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
         rXFSet.Put(XFillBitmapItem(OUString(), pEntry->GetGraphicObject()));
     }
-    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True, &pPoolItem ) )
+    else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), true, &pPoolItem ) )
     {
         rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
         rXFSet.Put(XFillBitmapItem(OUString(), ((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));

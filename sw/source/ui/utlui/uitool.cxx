@@ -101,7 +101,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     const SfxPoolItem *pBoxInfo;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER,
-                                        sal_True, &pBoxInfo))
+                                        true, &pBoxInfo))
         aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
         // Table variant: If more than one table cells are selected
@@ -124,7 +124,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
     // Background
     {
         const SfxPoolItem *pTmpBrush;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, sal_True, &pTmpBrush ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND, true, &pTmpBrush ) )
         {
             SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
             aTmpBrush.SetWhich( RES_BACKGROUND );
@@ -138,7 +138,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
     {
         // Border
         const SfxPoolItem *pTmpItem;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, true, &pTmpItem ) )
         {
             SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpItem) );
             aTmpBox.SetWhich( RES_BOX );
@@ -148,7 +148,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
             rSet.ClearItem(RES_BOX);
 
         // Border shadow
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_SHADOW, sal_False, &pTmpItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_SHADOW, false, &pTmpItem ) )
         {
             SvxShadowItem aTmpShadow( *((SvxShadowItem*)pTmpItem) );
             aTmpShadow.SetWhich( RES_SHADOW );
@@ -164,7 +164,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode)
     // Background
     {
         const SfxPoolItem *pTmpBrush;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pTmpBrush ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, false, &pTmpBrush ) )
         {
             SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
             aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
@@ -177,7 +177,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode)
     {
         // Border
         const SfxPoolItem *pTmpItem;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, sal_False, &pTmpItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, false, &pTmpItem ) )
         {
             SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpItem) );
             aTmpBox.SetWhich( RES_CHRATR_BOX );
@@ -186,7 +186,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode)
         rSet.ClearItem( RES_BOX );
 
         // Border shadow
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_SHADOW, sal_False, &pTmpItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_SHADOW, false, &pTmpItem ) )
         {
             SvxShadowItem aTmpShadow( *((SvxShadowItem*)pTmpItem) );
             aTmpShadow.SetWhich( RES_CHRATR_SHADOW );
@@ -279,7 +279,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     // Evaluate header attributes
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PAGE_HEADERSET,
-            sal_False, &pItem ) )
+            false, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn = (const SfxBoolItem&)rHeaderSet.Get(SID_ATTR_PAGE_ON);
@@ -319,7 +319,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
     // Evaluate footer attributes
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PAGE_FOOTERSET,
-            sal_False, &pItem ) )
+            false, &pItem ) )
     {
         const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn = (const SfxBoolItem&)rFooterSet.Get(SID_ATTR_PAGE_ON);
@@ -360,7 +360,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     // Footnotes
     //
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_FTN_INFO,
-            sal_False, &pItem ) )
+            false, &pItem ) )
         rPageDesc.SetFtnInfo( ((SwPageFtnInfoItem*)pItem)->GetPageFtnInfo() );
 
     // Columns
@@ -368,13 +368,13 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     // Register compliant
 
     if(SFX_ITEM_SET == rSet.GetItemState(
-                            SID_SWREGISTER_MODE, sal_False, &pItem))
+                            SID_SWREGISTER_MODE, false, &pItem))
     {
         sal_Bool bSet = ((const SfxBoolItem*)pItem)->GetValue();
         if(!bSet)
             rPageDesc.SetRegisterFmtColl(0);
         else if(SFX_ITEM_SET == rSet.GetItemState(
-                                SID_SWREGISTER_COLLECTION, sal_False, &pItem))
+                                SID_SWREGISTER_COLLECTION, false, &pItem))
         {
             const OUString& rColl = ((const SfxStringItem*)pItem)->GetValue();
             SwDoc& rDoc = *rMaster.GetDoc();
@@ -421,7 +421,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
     const SfxPoolItem *pBoxInfo;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER,
-                                            sal_True, &pBoxInfo) )
+                                            true, &pBoxInfo) )
         aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
     aBoxInfo.SetTable( sal_False );
@@ -577,12 +577,12 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 
     bool bChanged = false;
     // Page number
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_PARA_PAGENUM, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_PARA_PAGENUM, false, &pItem))
     {
         aPgDesc.SetNumOffset(((SfxUInt16Item*)pItem)->GetValue());
         bChanged = true;
     }
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, sal_False, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, false, &pItem ))
     {
         const OUString& rDescName = ((SvxPageModelItem*)pItem)->GetValue();
         if( !rDescName.isEmpty() )   // No name -> disable PageDesc!
@@ -601,7 +601,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     {
         SfxItemSet aCoreSet(rShell.GetView().GetPool(), RES_PAGEDESC, RES_PAGEDESC );
         rShell.GetCurAttr( aCoreSet );
-        if(SFX_ITEM_SET == aCoreSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+        if(SFX_ITEM_SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
         {
             if( ((SwFmtPageDesc*)pItem)->GetPageDesc() )
             {
@@ -621,7 +621,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     OUString aName;
     ::boost::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
-    switch( rCoreSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+    switch( rCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
     {
     case SFX_ITEM_SET:
         {

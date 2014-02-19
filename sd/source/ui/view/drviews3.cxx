@@ -440,7 +440,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 const SfxPoolItem* pItem;
                 if (rReq.GetArgs()->GetItemState(
-                    SID_ATTR_YEAR2000, sal_True, &pItem) == SFX_ITEM_SET)
+                    SID_ATTR_YEAR2000, true, &pItem) == SFX_ITEM_SET)
                     pFormShell->SetY2KState (
                         static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }

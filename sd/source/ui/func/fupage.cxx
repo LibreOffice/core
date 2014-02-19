@@ -447,7 +447,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             }
 
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) )
+            if( SFX_ITEM_SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) )
             {
                 sal_uInt32 nVal = ((SvxFrameDirectionItem*)pItem)->GetValue();
                 mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
@@ -492,7 +492,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     sal_Bool                bFullSize = pMasterPage->IsBackgroundFullSize();
     sal_uInt16              nPaperBin = mpPage->GetPaperBin();
 
-    if( pArgs->GetItemState(SID_ATTR_PAGE, sal_True, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(SID_ATTR_PAGE, true, &pPoolItem) == SFX_ITEM_SET )
     {
         mpDoc->SetPageNumType(((const SvxPageItem*) pPoolItem)->GetNumType());
 
@@ -505,7 +505,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         mpDrawViewShell->ResetActualPage();
     }
 
-    if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, sal_True, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, true, &pPoolItem) == SFX_ITEM_SET )
     {
         aNewSize = ((const SvxSizeItem*) pPoolItem)->GetSize();
 
@@ -514,7 +514,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
-                            sal_True, &pPoolItem) == SFX_ITEM_SET )
+                            true, &pPoolItem) == SFX_ITEM_SET )
     {
         nLeft = ((const SvxLRSpaceItem*) pPoolItem)->GetLeft();
         nRight = ((const SvxLRSpaceItem*) pPoolItem)->GetRight();
@@ -525,7 +525,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
-                            sal_True, &pPoolItem) == SFX_ITEM_SET )
+                            true, &pPoolItem) == SFX_ITEM_SET )
     {
         nUpper = ((const SvxULSpaceItem*) pPoolItem)->GetUpper();
         nLower = ((const SvxULSpaceItem*) pPoolItem)->GetLower();
@@ -534,12 +534,12 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = sal_True;
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), sal_True, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SFX_ITEM_SET )
     {
         bScaleAll = ((const SfxBoolItem*) pPoolItem)->GetValue();
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2), sal_True, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2), true, &pPoolItem) == SFX_ITEM_SET )
     {
         bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
 
@@ -548,7 +548,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     // Paper Bin
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), sal_True, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SFX_ITEM_SET )
     {
         nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
 

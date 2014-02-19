@@ -214,7 +214,7 @@ void DocumentLockFile::RemoveFile()
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
     aCnt.executeCommand(OUString("delete"),
-        uno::makeAny(sal_Bool(sal_True)));
+        uno::makeAny(true));
 }
 
 } // namespace svt

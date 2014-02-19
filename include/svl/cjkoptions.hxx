@@ -49,20 +49,20 @@ public:
     };
 
     // bDontLoad is for referencing purposes only
-    SvtCJKOptions(sal_Bool bDontLoad = sal_False);
+    SvtCJKOptions(bool bDontLoad = false);
     virtual ~SvtCJKOptions();
 
-    sal_Bool IsCJKFontEnabled() const;
-    sal_Bool IsVerticalTextEnabled() const;
-    sal_Bool IsAsianTypographyEnabled() const;
-    sal_Bool IsJapaneseFindEnabled() const;
-    sal_Bool IsRubyEnabled() const;
-    sal_Bool IsChangeCaseMapEnabled() const;
-    sal_Bool IsDoubleLinesEnabled() const;
+    bool IsCJKFontEnabled() const;
+    bool IsVerticalTextEnabled() const;
+    bool IsAsianTypographyEnabled() const;
+    bool IsJapaneseFindEnabled() const;
+    bool IsRubyEnabled() const;
+    bool IsChangeCaseMapEnabled() const;
+    bool IsDoubleLinesEnabled() const;
 
-    void        SetAll(sal_Bool bSet);
-    sal_Bool    IsAnyEnabled() const;
-    sal_Bool    IsReadOnly(EOption eOption) const;
+    void        SetAll(bool bSet);
+    bool    IsAnyEnabled() const;
+    bool    IsReadOnly(EOption eOption) const;
 };
 
 #endif // INCLUDED_SVL_CJKOPTIONS_HXX

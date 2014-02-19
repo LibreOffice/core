@@ -876,7 +876,7 @@ void SvxFontPrevWindow::AutoCorrectFontColor( void )
 
 static bool GetWhich (const SfxItemSet &rSet, sal_uInt16 nSlot, sal_uInt16 &rWhich)
 {
-    rWhich = rSet.GetPool()->GetWhich( nSlot, sal_True );
+    rWhich = rSet.GetPool()->GetWhich( nSlot, true );
     return rSet.GetItemState(rWhich) >= SFX_ITEM_DEFAULT;
 }
 

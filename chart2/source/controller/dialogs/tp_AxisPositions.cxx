@@ -168,7 +168,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     const SfxPoolItem *pPoolItem = NULL;
 
     //axis line
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_POSITION,sal_True, &pPoolItem)== SFX_ITEM_SET)
+    if(rInAttrs.GetItemState(SCHATTR_AXIS_POSITION,true, &pPoolItem)== SFX_ITEM_SET)
     {
         bool bZero = false;
         sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
@@ -185,7 +185,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
             m_pLB_CrossesAt->SelectEntryPos( nPos );
         CrossesAtSelectHdl( (void*)0 );
 
-        if( rInAttrs.GetItemState(SCHATTR_AXIS_POSITION_VALUE,sal_True, &pPoolItem)== SFX_ITEM_SET || bZero )
+        if( rInAttrs.GetItemState(SCHATTR_AXIS_POSITION_VALUE,true, &pPoolItem)== SFX_ITEM_SET || bZero )
         {
             double fCrossover = 0.0;
             if( !bZero )
@@ -208,7 +208,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     }
 
     // Labels
-    if( rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_POSITION, sal_False, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if( nPos < m_pLB_PlaceLabels->GetEntryCount() )
@@ -220,9 +220,9 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
 
     // Tick marks
     long nTicks=0,nMinorTicks=0;
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,sal_True, &pPoolItem)== SFX_ITEM_SET)
+    if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,true, &pPoolItem)== SFX_ITEM_SET)
         nTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_HELPTICKS,sal_True, &pPoolItem)== SFX_ITEM_SET)
+    if(rInAttrs.GetItemState(SCHATTR_AXIS_HELPTICKS,true, &pPoolItem)== SFX_ITEM_SET)
         nMinorTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
 
     m_pCB_TicksInner->Check(sal_Bool(nTicks&CHAXIS_MARK_INNER));
@@ -231,7 +231,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     m_pCB_MinorOuter->Check(sal_Bool(nMinorTicks&CHAXIS_MARK_OUTER));
 
     // Tick position
-    if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, sal_False, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if( nPos < m_pLB_PlaceTicks->GetEntryCount() )
@@ -276,7 +276,7 @@ void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     m_pED_CrossesAt->UseInputStringForFormatting();
 
     const SfxPoolItem *pPoolItem = NULL;
-    if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_uLong nFmt = (sal_uLong)((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pED_CrossesAt->SetFormatKey( nFmt );

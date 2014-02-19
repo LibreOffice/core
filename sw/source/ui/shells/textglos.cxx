@@ -43,7 +43,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if(pArgs)
-       pArgs->GetItemState(nSlot, sal_False, &pItem );
+       pArgs->GetItemState(nSlot, false, &pItem );
 
     switch( nSlot )
     {
@@ -65,10 +65,10 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 OUString aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 OUString aName;
-                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, false, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 OUString aShortName;
-                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, sal_False, &pItem ))
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, false, &pItem ))
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -101,7 +101,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 OUString aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 OUString aName;
-                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, false, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");

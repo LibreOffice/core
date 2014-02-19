@@ -1178,7 +1178,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     if( bStoreDefTabs )
     {
         const SvxTabStopItem& rDefTab = (const SvxTabStopItem &)
-            pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, sal_False ) );
+            pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, false ) );
         nDefDist = sal_uInt16( rDefTab.maTabStops.front().GetTabPos() );
         const sal_Int32 nPos = nTabs > 0 ? (*this)[nTabs-1].GetTabPos() : 0;
         nCount  = (sal_uInt16)(nPos / nDefDist);

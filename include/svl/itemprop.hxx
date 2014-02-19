@@ -106,7 +106,7 @@ class SVL_DLLPUBLIC SfxItemPropertySet
     SfxItemPropertyMap                                                              m_aMap;
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
 protected:
-    virtual sal_Bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
+    virtual bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
 
 public:
                             SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :

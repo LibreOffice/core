@@ -53,7 +53,7 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
     SwNavigationMgr& aSwNavigationMgr = pSh->GetNavigationMgr();
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, sal_False, &pItem);
+        pArgs->GetItemState(nSlotId, false, &pItem);
     switch (nSlotId)
         {
         case FN_NAVIGATION_BACK:

@@ -58,7 +58,7 @@ public:
                                 {SfxEnumItem::SetValue(nNewVal); }
 
     virtual bool            HasBoolValue() const;
-    virtual sal_Bool            GetBoolValue() const;
+    virtual bool            GetBoolValue() const;
     virtual void            SetBoolValue( sal_Bool bVal );
 
     inline SvxCrossedOutItem& operator=(const SvxCrossedOutItem& rCross)

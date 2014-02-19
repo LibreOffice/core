@@ -385,7 +385,7 @@ sal_Bool SwEditShell::IsTableBoxTextFormat() const
     sal_uInt32 nFmt = 0;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
-        RES_BOXATR_FORMAT, sal_True, &pItem ))
+        RES_BOXATR_FORMAT, true, &pItem ))
     {
         nFmt = ((SwTblBoxNumFormat*)pItem)->GetValue();
         return GetDoc()->GetNumberFormatter()->IsTextFormat( nFmt ) ||

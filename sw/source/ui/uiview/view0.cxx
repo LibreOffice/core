@@ -349,7 +349,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxPoolItem* pAttr=NULL;
 
-    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlot , sal_False, &pAttr ))
+    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlot , false, &pAttr ))
     {
         bSet = ((SfxBoolItem*)pAttr)->GetValue();
         eState = bSet ? STATE_ON : STATE_OFF;

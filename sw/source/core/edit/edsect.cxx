@@ -232,7 +232,7 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
                                     const SfxItemSet& rSet )
 {
     StartAllAction();
-    if(SFX_ITEM_SET == rSet.GetItemState(RES_CNTNT, sal_False))
+    if(SFX_ITEM_SET == rSet.GetItemState(RES_CNTNT, false))
     {
         SfxItemSet aSet(rSet);
         aSet.ClearItem(RES_CNTNT);

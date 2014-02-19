@@ -137,7 +137,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(nSlot, sal_False, &pItem );
+        pArgs->GetItemState(nSlot, false, &pItem );
 
     switch( nSlot )
     {
@@ -479,9 +479,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if(pArgs)
         {
             if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&
-                pArgs->GetItemState(SID_ATTR_COLUMNS, sal_False, &pItem) == SFX_ITEM_SET)
+                pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem) == SFX_ITEM_SET)
                 nCols = ((SfxUInt16Item *)pItem)->GetValue();
-            if(pArgs->GetItemState(SID_MODIFIER, sal_False, &pItem) == SFX_ITEM_SET)
+            if(pArgs->GetItemState(SID_MODIFIER, false, &pItem) == SFX_ITEM_SET)
                 bModifier1 |= KEY_MOD1 == ((SfxUInt16Item *)pItem)->GetValue();
         }
         if(bModifier1 )
@@ -534,13 +534,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
             Point aPos = aMgr.GetPos();
             RndStdIds eAnchor = FLY_AT_PARA;
-            if(pArgs->GetItemState(nSlot, sal_False, &pItem) == SFX_ITEM_SET)
+            if(pArgs->GetItemState(nSlot, false, &pItem) == SFX_ITEM_SET)
                 eAnchor = (RndStdIds)((SfxUInt16Item *)pItem)->GetValue();
-            if(pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem)  == SFX_ITEM_SET)
+            if(pArgs->GetItemState(FN_PARAM_1, false, &pItem)  == SFX_ITEM_SET)
                 aPos = ((SfxPointItem *)pItem)->GetValue();
-            if(pArgs->GetItemState(FN_PARAM_2, sal_False, &pItem)  == SFX_ITEM_SET)
+            if(pArgs->GetItemState(FN_PARAM_2, false, &pItem)  == SFX_ITEM_SET)
                 aSize = ((SvxSizeItem *)pItem)->GetSize();
-            if(pArgs->GetItemState(SID_ATTR_COLUMNS, sal_False, &pItem)  == SFX_ITEM_SET)
+            if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem)  == SFX_ITEM_SET)
             {
                 sal_uInt16 nCols = ((SfxUInt16Item *)pItem)->GetValue();
                 if( !bSingleCol && 1 < nCols )
@@ -765,7 +765,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
                     SvxHyperlinkItem aHLinkItem;
                     const SfxPoolItem* pItem;
-                    if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, sal_False, &pItem))
+                    if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
                     {
                         const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
                         aHLinkItem.SetURL(pINetFmt->GetValue());
@@ -962,14 +962,14 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
     OUString aChars, aFontName;
     if ( pItem )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
             aFontName = pFontItem->GetValue();

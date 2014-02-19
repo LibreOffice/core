@@ -58,7 +58,7 @@ public:
     virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
     virtual bool             HasBoolValue() const;
-    virtual sal_Bool             GetBoolValue() const;
+    virtual bool             GetBoolValue() const;
     virtual void             SetBoolValue(sal_Bool bVal);
 };
 

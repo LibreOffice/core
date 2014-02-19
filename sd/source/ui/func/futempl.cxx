@@ -105,12 +105,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     const SfxPoolItem* pItem;
     sal_uInt16 nFamily = USHRT_MAX;
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY,
-        sal_False, &pItem ))
+        false, &pItem ))
     {
         nFamily = ( (const SfxUInt16Item &) pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
     }
     else if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
-        sal_False, &pItem ))
+        false, &pItem ))
     {
         OUString sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
         if (sFamily == "graphics")
@@ -562,9 +562,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( mpDoc->GetOnlineSpell() )
                         {
                             const SfxPoolItem* pTempItem;
-                            if( SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, sal_False, &pTempItem ) ||
-                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, sal_False, &pTempItem ) ||
-                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, sal_False, &pTempItem ) )
+                            if( SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false, &pTempItem ) ||
+                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pTempItem ) ||
+                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pTempItem ) )
                             {
                                 mpDoc->StopOnlineSpelling();
                                 mpDoc->StartOnlineSpelling();

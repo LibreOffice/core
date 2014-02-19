@@ -434,7 +434,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
                     sal_uInt16 nWhichId = aIter.FirstWhich();
                     while( nWhichId )
                     {
-                        if( SFX_ITEM_SET == pSet->GetItemState( nWhichId, sal_False, &pItem ))
+                        if( SFX_ITEM_SET == pSet->GetItemState( nWhichId, false, &pItem ))
                         {
                             if (nWhichId == nFontId)
                                 pFont = &(item_cast<SvxFontItem>(*pItem));
@@ -2389,7 +2389,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             // create new LRSpace item, based on the current (if present)
             const SfxPoolItem* pPoolItem = NULL;
-            pTmpSet->GetItemState(RES_LR_SPACE, sal_True, &pPoolItem);
+            pTmpSet->GetItemState(RES_LR_SPACE, true, &pPoolItem);
             SvxLRSpaceItem aLRSpace(
                 ( pPoolItem == NULL )
                     ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)

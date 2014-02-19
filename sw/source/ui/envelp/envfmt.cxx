@@ -313,7 +313,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             sal_uInt16 nNewDist;
 
             if( SFX_ITEM_SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
-                sal_False, &pItem ) &&
+                false, &pItem ) &&
                 nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
             {
                 SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );

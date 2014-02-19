@@ -190,11 +190,11 @@ SwUndoDelete::SwUndoDelete(
             {
                 SwRegHistory aRegHist( *pEndTxtNd, pHistory );
                 if( SFX_ITEM_SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
-                        RES_BREAK, sal_False ) )
+                        RES_BREAK, false ) )
                     pEndTxtNd->ResetAttr( RES_BREAK );
                 if( pEndTxtNd->HasSwAttrSet() &&
                     SFX_ITEM_SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
-                        RES_PAGEDESC, sal_False ) )
+                        RES_PAGEDESC, false ) )
                     pEndTxtNd->ResetAttr( RES_PAGEDESC );
             }
         }

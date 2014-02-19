@@ -374,37 +374,37 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     const SfxPoolItem* pItem;
 
     sal_uInt16 nLbPos = SC_VALIDDLG_ALLOW_ANY;
-    if( rArgSet.GetItemState( FID_VALID_MODE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if( rArgSet.GetItemState( FID_VALID_MODE, true, &pItem ) == SFX_ITEM_SET )
         nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
     maLbAllow.SelectEntryPos( nLbPos );
 
     nLbPos = SC_VALIDDLG_DATA_EQUAL;
-    if( rArgSet.GetItemState( FID_VALID_CONDMODE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if( rArgSet.GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SFX_ITEM_SET )
         nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >(
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
     maLbValue.SelectEntryPos( nLbPos );
 
     // *** check boxes ***
     sal_Bool bCheck = sal_True;
-    if( rArgSet.GetItemState( FID_VALID_BLANK, sal_True, &pItem ) == SFX_ITEM_SET )
+    if( rArgSet.GetItemState( FID_VALID_BLANK, true, &pItem ) == SFX_ITEM_SET )
         bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
     maCbAllow.Check( bCheck );
 
     sal_Int32 nListType = ValidListType::UNSORTED;
-    if( rArgSet.GetItemState( FID_VALID_LISTTYPE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if( rArgSet.GetItemState( FID_VALID_LISTTYPE, true, &pItem ) == SFX_ITEM_SET )
         nListType = static_cast< const SfxInt16Item* >( pItem )->GetValue();
     maCbShow.Check( nListType != ValidListType::INVISIBLE );
     maCbSort.Check( nListType == ValidListType::SORTEDASCENDING );
 
     // *** formulas ***
     OUString aFmlaStr;
-    if ( rArgSet.GetItemState( FID_VALID_VALUE1, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_VALUE1, true, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetFirstFormula( aFmlaStr );
 
     aFmlaStr= "";
-    if ( rArgSet.GetItemState( FID_VALID_VALUE2, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_VALUE2, true, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );
 
@@ -727,17 +727,17 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
-    if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, true, &pItem ) == SFX_ITEM_SET )
         pTsbHelp->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
         pTsbHelp->SetState( STATE_NOCHECK );
 
-    if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, true, &pItem ) == SFX_ITEM_SET )
         pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         pEdtTitle->SetText( EMPTY_OUSTRING );
 
-    if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, true, &pItem ) == SFX_ITEM_SET )
         pEdInputHelp->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         pEdInputHelp->SetText( EMPTY_OUSTRING );
@@ -816,22 +816,22 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
-    if ( rArgSet.GetItemState( FID_VALID_SHOWERR, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SFX_ITEM_SET )
         m_pTsbShow->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
         m_pTsbShow->SetState( STATE_CHECK );   // check by default
 
-    if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SFX_ITEM_SET )
         m_pLbAction->SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
     else
         m_pLbAction->SelectEntryPos( 0 );
 
-    if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SFX_ITEM_SET )
         m_pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         m_pEdtTitle->SetText( EMPTY_OUSTRING );
 
-    if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
+    if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SFX_ITEM_SET )
         m_pEdError->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
         m_pEdError->SetText( EMPTY_OUSTRING );

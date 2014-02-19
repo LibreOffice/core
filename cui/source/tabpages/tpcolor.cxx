@@ -437,7 +437,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             else if( *pPageType == PT_COLOR && *pPos == LISTBOX_ENTRY_NOTFOUND )
             {
                 const SfxPoolItem* pPoolItem = NULL;
-                if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
+                if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
                 {
                     m_pLbColorModel->SelectEntryPos( CM_RGB );
 

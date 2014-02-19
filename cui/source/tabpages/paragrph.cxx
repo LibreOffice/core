@@ -145,7 +145,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
     sal_uInt16 nHtmlMode = 0;
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
@@ -391,7 +391,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             rOutSet.Put(*pRegItem);
             bModified = sal_True;
         }
-        else if ( SFX_ITEM_DEFAULT == GetItemSet().GetItemState( _nWhich, sal_False ) )
+        else if ( SFX_ITEM_DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )
             rOutSet.ClearItem(_nWhich);
         delete pRegItem;
     }
@@ -1407,7 +1407,7 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     else
     {
         eState = m_pPageBreakBox->GetState();
-        SfxItemState eModelState = GetItemSet().GetItemState(SID_ATTR_PARA_MODEL, sal_False);
+        SfxItemState eModelState = GetItemSet().GetItemState(SID_ATTR_PARA_MODEL, false);
 
         if ( (eModelState == SFX_ITEM_SET && STATE_CHECK == m_pPageBreakBox->GetState()) ||
              eState != m_pPageBreakBox->GetSavedValue()                ||
@@ -2184,7 +2184,7 @@ sal_Bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBox)
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
-    SfxItemState eState = rSet.GetItemState(_nWhich, sal_True);
+    SfxItemState eState = rSet.GetItemState(_nWhich, true);
     if(!eState || eState == SFX_ITEM_DISABLED )
         rBox.Enable(false);
     else if(eState >= SFX_ITEM_AVAILABLE)

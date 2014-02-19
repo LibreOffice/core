@@ -311,7 +311,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             //set the first used database as default source on the config item
             const SfxPoolItem* pItem = 0;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(
-                   FN_PARAM_DATABASE_PROPERTIES, sal_False, &pItem))
+                   FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
             {
                 //mailmerge has been called from the database beamer
                 uno::Sequence< beans::PropertyValue> aDBValues;
@@ -595,7 +595,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             break;
 
         case SID_ATTR_METRIC:
-        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, sal_False, &pItem))
+        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, false, &pItem))
         {
             FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
             switch( eUnit )
@@ -622,7 +622,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                      bSet;
 
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(
-                        nWhich, sal_False, &pItem ))
+                        nWhich, false, &pItem ))
                     bSet = ((SfxBoolItem*)pItem)->GetValue();
                 else
                     bSet = !pModuleConfig->IsInsTblFormatNum( bWebView );

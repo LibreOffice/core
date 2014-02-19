@@ -1817,7 +1817,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
             SwFmtPageDesc* pNewDesc = 0;
             const SfxPoolItem* pItem;
-            if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+            if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
             {
                 pNewDesc = new SwFmtPageDesc(*((SwFmtPageDesc*)pItem));
             }
@@ -1972,7 +1972,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SfxItemSet& rStyleSet = rBase.GetItemSet();
                     SwFmtRuby* pRuby = 0;
                     const SfxPoolItem* pItem;
-                    if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
+                    if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, true, &pItem ) )
                         pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
                     if(!pRuby)
                         pRuby = new SwFmtRuby(OUString());
@@ -2002,7 +2002,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                     SwFmtDrop* pDrop = 0;
                     const SfxPoolItem* pItem;
-                    if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
+                    if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_PARATR_DROP, true, &pItem ) )
                         pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
                     if(!pDrop)
                         pDrop = new SwFmtDrop();
@@ -2234,7 +2234,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 // Sonderbehandlung RES_PAGEDESC
                 const SfxPoolItem* pItem;
-                if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+                if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState( RES_PAGEDESC, true, &pItem ) )
                 {
                     const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                     if(pDesc)
@@ -2596,10 +2596,10 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                     const SvxSetItem* pSetItem;
                     if(SFX_ITEM_SET == aSet.GetItemState(
                             bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            sal_False, (const SfxPoolItem**)&pSetItem))
+                            false, (const SfxPoolItem**)&pSetItem))
                     {
                         const SfxItemSet& rSet = pSetItem->GetItemSet();
-                        SfxItemState eState = rSet.GetItemState(nResId, sal_False);
+                        SfxItemState eState = rSet.GetItemState(nResId, false);
                         if(SFX_ITEM_SET == eState)
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
                         else
@@ -2957,7 +2957,7 @@ static void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uI
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
     const SfxPoolItem* pItem = 0;
     SfxPoolItem* pNewItem = 0;
-    rSetSet.GetItemState(nRes, sal_True, &pItem);
+    rSetSet.GetItemState(nRes, true, &pItem);
     if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
         pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
     if(pItem)
@@ -3101,7 +3101,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     const SvxSetItem* pSetItem;
                     if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
                             bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            sal_False, (const SfxPoolItem**)&pSetItem))
+                            false, (const SfxPoolItem**)&pSetItem))
                     {
                         lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
 
@@ -3110,7 +3110,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             // Need to add this to the other as well
                             if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
                                         bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
-                                        sal_False, (const SfxPoolItem**)&pSetItem))
+                                        false, (const SfxPoolItem**)&pSetItem))
                                 lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
                         }
                     }
@@ -3219,7 +3219,7 @@ lcl_makeHeaderFooter(
 
     const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
     const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET == rSet.GetItemState(nRes, sal_True, &pItem))
+    if (SFX_ITEM_SET == rSet.GetItemState(nRes, true, &pItem))
     {
         SwFrmFmt *const pHeadFootFmt = (bHeader)
             ? static_cast<SwFmtHeader*>(const_cast<SfxPoolItem*>(pItem))->
@@ -3358,11 +3358,11 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         const SvxSetItem* pSetItem;
                         if(SFX_ITEM_SET == rSet.GetItemState(
                                 bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                sal_False, (const SfxPoolItem**)&pSetItem))
+                                false, (const SfxPoolItem**)&pSetItem))
                         {
                             const SfxItemSet& rTmpSet = pSetItem->GetItemSet();
                             const SfxPoolItem* pItem = 0;
-                            rTmpSet.GetItemState(nRes, sal_True, &pItem);
+                            rTmpSet.GetItemState(nRes, true, &pItem);
                             if(!pItem && nRes != rTmpSet.GetPool()->GetSlotId(nRes))
                                 pItem = &rTmpSet.GetPool()->GetDefaultItem(nRes);
                             if(pItem)

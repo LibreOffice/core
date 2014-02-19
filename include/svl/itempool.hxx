@@ -102,7 +102,7 @@ protected:
 
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
-                                                 sal_Bool bCloneStaticDefaults = sal_False );
+                                                 bool bCloneStaticDefaults = false );
                                     SfxItemPool( const OUString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
                                                  const SfxItemInfo *pItemInfos,
@@ -122,8 +122,8 @@ public:
     void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
     void                            SetDefaults( SfxPoolItem **pDefaults );
-    void                            ReleaseDefaults( sal_Bool bDelete = sal_False );
-    static void                     ReleaseDefaults( SfxPoolItem **pDefaults, sal_uInt16 nCount, sal_Bool bDelete = sal_False );
+    void                            ReleaseDefaults( bool bDelete = false );
+    static void                     ReleaseDefaults( SfxPoolItem **pDefaults, sal_uInt16 nCount, bool bDelete = false );
 
     virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( SfxMapUnit eNewMetric );
@@ -203,10 +203,10 @@ public:
     bool                            IsItemFlag( const SfxPoolItem &rItem, sal_uInt16 nFlag ) const
                                     { return IsItemFlag( rItem.Which(), nFlag ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos );
-    sal_uInt16                      GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
-    sal_uInt16                      GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
-    sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
-    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
+    sal_uInt16                      GetSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;
+    sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
+    sal_uInt16                      GetTrueSlotId( sal_uInt16 nWhich, bool bDeep = true ) const;
 
     void                            SetVersionMap( sal_uInt16 nVer,
                                                    sal_uInt16 nOldStart, sal_uInt16 nOldEnd,

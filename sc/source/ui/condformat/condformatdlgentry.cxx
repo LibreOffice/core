@@ -1238,7 +1238,7 @@ ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCon
     Init();
     FreeResource();
 
-    StartListening(*pDoc->GetStyleSheetPool(), sal_True);
+    StartListening(*pDoc->GetStyleSheetPool(), true);
 
     if(pFormat)
     {

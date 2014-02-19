@@ -51,7 +51,7 @@ class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
 
     void OpenStream();
     void Close();
-    sal_Bool IsValid()
+    bool IsValid()
     {
         return ( m_xStream.is() && m_xInputStream.is() && m_xOutputStream.is() && m_xSeekable.is() && m_xTruncate.is() );
     }

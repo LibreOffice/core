@@ -746,7 +746,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( pArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( ( pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) ) == SFX_ITEM_SET )
+                if ( ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) ) == SFX_ITEM_SET )
                 {
                     const SfxInt32Item* pTypedItem = PTR_CAST( SfxInt32Item, pItem );
                     if ( pTypedItem )
@@ -855,7 +855,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
             case SID_FM_USE_WIZARDS:
                 if  ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                    rSet.Put( SfxVisibilityItem( nWhich, false ) );
                 else if (!GetFormModel())
                     rSet.DisableItem( nWhich );
                 else
@@ -878,7 +878,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_DBGRID:
                 if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
                 {
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                    rSet.Put( SfxVisibilityItem( nWhich, false ) );
                     break;
                 }
                 // NO break!

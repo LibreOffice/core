@@ -61,7 +61,7 @@ void SchLegendPosTabPage::Reset(const SfxItemSet& rInAttrs)
     m_aLegendPositionResources.initFromItemSet(rInAttrs);
 
     const SfxPoolItem* pPoolItem = 0;
-    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SFX_ITEM_SET )
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 }
 

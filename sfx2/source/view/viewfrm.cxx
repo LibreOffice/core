@@ -2255,7 +2255,7 @@ void SfxViewFrame::ExecView_Impl
         {
             const SfxPoolItem *pItem = 0;
             if  (   rReq.GetArgs()
-                &&  SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, sal_False, &pItem )
+                &&  SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, false, &pItem )
                 )
             {
                 const sal_uInt16 nViewId = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
@@ -2980,7 +2980,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                          ( strcmp(pName,"swriter") && strcmp(pName,"scalc") ) )
                     {
                         rSet.DisableItem( nWhich );
-                        rSet.Put(SfxVisibilityItem(nWhich, sal_False));
+                        rSet.Put(SfxVisibilityItem(nWhich, false));
                         break;
                     }
 
@@ -3210,7 +3210,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
             }
             else if ( !moduleHasToolPanels( *pImp ) )
             {
-                rState.Put( SfxVisibilityItem( nSID, sal_False ) );
+                rState.Put( SfxVisibilityItem( nSID, false ) );
             }
             else
             {

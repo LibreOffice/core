@@ -1552,7 +1552,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                     const SfxPoolItem *pItem;
                     if( pCNd && pCNd->HasSwAttrSet() &&
                         SFX_ITEM_SET==pCNd->GetpSwAttrSet()->GetItemState(
-                            RES_PARATR_ADJUST, sal_False, &pItem ) )
+                            RES_PARATR_ADJUST, false, &pItem ) )
                     {
                         eAdjust = ((const SvxAdjustItem *)pItem)
                             ->GetAdjust();
@@ -1599,7 +1599,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
     {
         OSL_ENSURE( pBox->GetSttNd() ||
                 SFX_ITEM_SET!=pFrmFmt->GetAttrSet().GetItemState(
-                                    RES_VERT_ORIENT, sal_False ),
+                                    RES_VERT_ORIENT, false ),
                 "Box ohne Inhalt hat vertikale Ausrichtung" );
         pBox->ChgFrmFmt( (SwTableBoxFmt*)pFrmFmt );
     }
@@ -1665,7 +1665,7 @@ static void ResetLineFrmFmtAttrs( SwFrmFmt *pFrmFmt )
     pFrmFmt->ResetFmtAttr( RES_FRM_SIZE );
     pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
     OSL_ENSURE( SFX_ITEM_SET!=pFrmFmt->GetAttrSet().GetItemState(
-                                RES_VERT_ORIENT, sal_False ),
+                                RES_VERT_ORIENT, false ),
             "Zeile hat vertikale Ausrichtung" );
 }
 
@@ -3013,7 +3013,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
         pCSS1Parser->ParseStyleOption( rStyle, aItemSet, aPropInfo );
         const SfxPoolItem *pItem = 0;
-        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_BACKGROUND, sal_False,
+        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             pBrushItem = new SvxBrushItem( *((const SvxBrushItem *)pItem) );
@@ -3556,13 +3556,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             if( bStyleParsed )
             {
                 if( SFX_ITEM_SET == aItemSet.GetItemState(
-                                        RES_BACKGROUND, sal_False, &pItem ) )
+                                        RES_BACKGROUND, false, &pItem ) )
                 {
                     pCurTable->SetBGBrush( *(const SvxBrushItem *)pItem );
                     aItemSet.ClearItem( RES_BACKGROUND );
                 }
                 if( SFX_ITEM_SET == aItemSet.GetItemState(
-                                        RES_PARATR_SPLIT, sal_False, &pItem ) )
+                                        RES_PARATR_SPLIT, false, &pItem ) )
                 {
                     aItemSet.Put(
                         SwFmtLayoutSplit( ((const SvxFmtSplitItem *)pItem)
@@ -3814,14 +3814,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
 
                     const SfxPoolItem* pItem2;
                     if( SFX_ITEM_SET == pOldTxtNd->GetSwAttrSet()
-                            .GetItemState( RES_PAGEDESC, sal_False, &pItem2 ) &&
+                            .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
                         ((SwFmtPageDesc *)pItem2)->GetPageDesc() )
                     {
                         pFrmFmt->SetFmtAttr( *pItem2 );
                         pOldTxtNd->ResetAttr( RES_PAGEDESC );
                     }
                     if( SFX_ITEM_SET == pOldTxtNd->GetSwAttrSet()
-                            .GetItemState( RES_BREAK, sal_True, &pItem2 ) )
+                            .GetItemState( RES_BREAK, true, &pItem2 ) )
                     {
                         switch( ((SvxFmtBreakItem *)pItem2)->GetBreak() )
                         {

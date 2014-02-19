@@ -187,7 +187,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     while( pItem )
     {
-        if( rItemSet.GetItemState( pItem->Which(), sal_False ) == SFX_ITEM_SET )
+        if( rItemSet.GetItemState( pItem->Which(), false ) == SFX_ITEM_SET )
         {
             if( GetItemProperty( pItem->Which(), aProperty ))
             {
@@ -236,8 +236,8 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
 
     while (nWhich)
     {
-        if ((rSourceSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_SET) &&
-            (rDestSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_SET))
+        if ((rSourceSet.GetItemState(nWhich, true, &pPoolItem) == SFX_ITEM_SET) &&
+            (rDestSet.GetItemState(nWhich, true, &pPoolItem) == SFX_ITEM_SET))
         {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
             {
@@ -247,7 +247,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
                 }
             }
         }
-        else if( rSourceSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_DONTCARE )
+        else if( rSourceSet.GetItemState(nWhich, true, &pPoolItem) == SFX_ITEM_DONTCARE )
             rDestSet.InvalidateItem(nWhich);
 
         nWhich = aIter.NextWhich ();

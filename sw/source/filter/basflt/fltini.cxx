@@ -328,7 +328,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         SwTwips nPageWidth)
 {
         const SfxPoolItem* pItem = 0;
-        if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, sal_True, &pItem ) ||
+        if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
                 MINFLY > ((SwFmtFrmSize*)pItem)->GetWidth() )
         {
                 SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, sal_True));

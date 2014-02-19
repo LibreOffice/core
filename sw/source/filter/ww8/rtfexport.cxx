@@ -1136,10 +1136,10 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
 
     // normal header / footer (without a style)
     const SfxPoolItem* pItem;
-    if( pAktPageDesc->GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False,
+    if( pAktPageDesc->GetLeft().GetAttrSet().GetItemState( RES_HEADER, false,
                 &pItem ) == SFX_ITEM_SET)
         WriteHeaderFooter(*pItem, true);
-    if( pAktPageDesc->GetLeft().GetAttrSet().GetItemState( RES_FOOTER, sal_False,
+    if( pAktPageDesc->GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false,
                 &pItem ) == SFX_ITEM_SET)
         WriteHeaderFooter(*pItem, false);
 
@@ -1149,10 +1149,10 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
         Strm().WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TITLEPG );
         pAktPageDesc = &rPgDsc;
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_HEADER,
-                    sal_False, &pItem ) == SFX_ITEM_SET )
+                    false, &pItem ) == SFX_ITEM_SET )
             WriteHeaderFooter(*pItem, true);
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_FOOTER,
-                    sal_False, &pItem ) == SFX_ITEM_SET )
+                    false, &pItem ) == SFX_ITEM_SET )
             WriteHeaderFooter(*pItem, false);
     }
 

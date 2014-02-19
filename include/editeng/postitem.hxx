@@ -56,7 +56,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual bool            HasBoolValue() const;
-    virtual sal_Bool        GetBoolValue() const;
+    virtual bool        GetBoolValue() const;
     virtual void            SetBoolValue( sal_Bool bVal );
 
     inline SvxPostureItem& operator=(const SvxPostureItem& rPost) {

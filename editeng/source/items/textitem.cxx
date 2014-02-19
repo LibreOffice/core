@@ -600,7 +600,7 @@ bool SvxPostureItem::HasBoolValue() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxPostureItem::GetBoolValue() const
+bool SvxPostureItem::GetBoolValue() const
 {
     return ( (FontItalic)GetValue() >= ITALIC_OBLIQUE );
 }
@@ -630,7 +630,7 @@ bool SvxWeightItem::HasBoolValue() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxWeightItem::GetBoolValue() const
+bool SvxWeightItem::GetBoolValue() const
 {
     return  (FontWeight)GetValue() >= WEIGHT_BOLD;
 }
@@ -1285,7 +1285,7 @@ bool SvxTextLineItem::HasBoolValue() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxTextLineItem::GetBoolValue() const
+bool SvxTextLineItem::GetBoolValue() const
 {
     return  (FontUnderline)GetValue() != UNDERLINE_NONE;
 }
@@ -1515,7 +1515,7 @@ bool SvxCrossedOutItem::HasBoolValue() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxCrossedOutItem::GetBoolValue() const
+bool SvxCrossedOutItem::GetBoolValue() const
 {
     return (FontStrikeout)GetValue() != STRIKEOUT_NONE;
 }
@@ -3513,7 +3513,7 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
                             const SfxItemSet& rSet, sal_uInt16 nId )
 {
     const SfxPoolItem* pI;
-    SfxItemState eSt = rSet.GetItemState( nId, sal_False, &pI );
+    SfxItemState eSt = rSet.GetItemState( nId, false, &pI );
     if( SFX_ITEM_SET != eSt )
         pI = SFX_ITEM_DEFAULT == eSt ? &rSet.Get( nId ) : 0;
     return pI;

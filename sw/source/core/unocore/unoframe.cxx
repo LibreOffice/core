@@ -1874,13 +1874,13 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                         SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                         SfxItemSet aSet(pNoTxt->GetSwAttrSet());
                         aSet.GetItemState(pEntry->nWID);
-                        if(SFX_ITEM_SET == aSet.GetItemState( pEntry->nWID, sal_False ))
+                        if(SFX_ITEM_SET == aSet.GetItemState( pEntry->nWID, false ))
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     }
                 }
                 else
                 {
-                    if(SFX_ITEM_SET == rFmtSet.GetItemState( pEntry->nWID, sal_False ))
+                    if(SFX_ITEM_SET == rFmtSet.GetItemState( pEntry->nWID, false ))
                         pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     else
                         pStates[i] = beans::PropertyState_DEFAULT_VALUE;

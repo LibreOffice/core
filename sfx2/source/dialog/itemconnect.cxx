@@ -49,13 +49,13 @@ sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16
 
 bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
-    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), sal_True ) != SFX_ITEM_UNKNOWN;
+    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), true ) != SFX_ITEM_UNKNOWN;
 }
 
 const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
     sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_DEFAULT) ? rItemSet.GetItem( nWhich, sal_True ) : 0;
+    return (rItemSet.GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT) ? rItemSet.GetItem( nWhich, true ) : 0;
 }
 
 const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
@@ -66,7 +66,7 @@ const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet
 void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, sal_uInt16 nSlot )
 {
     sal_uInt16 nWhich = GetWhichId( rDestSet, nSlot );
-    if( rOldSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_DEFAULT )
+    if( rOldSet.GetItemState( nWhich, false ) == SFX_ITEM_DEFAULT )
         rDestSet.ClearItem( nWhich );
 }
 

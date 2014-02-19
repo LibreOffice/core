@@ -87,7 +87,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     sal_Bool bQuiet = sal_False;
-    if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SEARCH_QUIET, sal_False, &pItem))
+    if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SEARCH_QUIET, false, &pItem))
         bQuiet = ((const SfxBoolItem*) pItem)->GetValue();
 
     sal_Bool bApi = bQuiet | bNoMessage;

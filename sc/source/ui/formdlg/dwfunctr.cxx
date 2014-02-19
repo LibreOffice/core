@@ -138,7 +138,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 
     Link a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
     aPrivatSplit.SetCtrModifiedHdl(a3Link);
-    StartListening( *pBindingsP, sal_True );
+    StartListening( *pBindingsP, true );
 
     Point aTopLeft=aCatBox.GetPosPixel();
     OUString aString("ww");

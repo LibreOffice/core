@@ -100,7 +100,7 @@ public:
     void                    SetPhysical(sal_Bool bPhys);
 
     virtual void            SetHidden( sal_Bool bHidden );
-    virtual sal_Bool        IsHidden( ) const;
+    virtual bool        IsHidden( ) const;
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
 

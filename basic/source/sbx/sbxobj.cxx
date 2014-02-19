@@ -84,7 +84,7 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
         SbxVariableRef& rRef = p->GetRef( i );
         if( rRef->IsBroadcaster() )
         {
-            pObj->EndListening( rRef->GetBroadcaster(), sal_True );
+            pObj->EndListening( rRef->GetBroadcaster(), true );
         }
         // does the element have more then one reference and still a Listener?
         if( rRef->GetRefCount() > 1 )
@@ -419,7 +419,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     pArray->Put( pVar, pArray->Count() );
     SetModified( sal_True );
     // The object listen always
-    StartListening( pVar->GetBroadcaster(), sal_True );
+    StartListening( pVar->GetBroadcaster(), true );
     Broadcast( SBX_HINT_OBJECTCHANGED );
     return pVar;
 }
@@ -443,7 +443,7 @@ SbxObject* SbxObject::MakeObject( const OUString& rName, const OUString& rClass 
         pObjs->Put( pVar, pObjs->Count() );
         SetModified( sal_True );
         // The object listen always
-        StartListening( pVar->GetBroadcaster(), sal_True );
+        StartListening( pVar->GetBroadcaster(), true );
         Broadcast( SBX_HINT_OBJECTCHANGED );
     }
     return pVar;
@@ -472,7 +472,7 @@ void SbxObject::Insert( SbxVariable* pVar )
                 {
                     return;
                 }
-                EndListening( pOld->GetBroadcaster(), sal_True );
+                EndListening( pOld->GetBroadcaster(), true );
                 if( pVar->GetClass() == SbxCLASS_PROPERTY )
                 {
                     if( pOld == pDfltProp )
@@ -482,7 +482,7 @@ void SbxObject::Insert( SbxVariable* pVar )
                 }
             }
         }
-        StartListening( pVar->GetBroadcaster(), sal_True );
+        StartListening( pVar->GetBroadcaster(), true );
         pArray->Put( pVar, nIdx );
         if( pVar->GetParent() != this )
         {
@@ -526,7 +526,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     }
     if( pArray )
     {
-        StartListening( pVar->GetBroadcaster(), sal_True );
+        StartListening( pVar->GetBroadcaster(), true );
         pArray->Put( pVar, pArray->Count() );
         if( pVar->GetParent() != this )
         {
@@ -576,7 +576,7 @@ void SbxObject::Remove( SbxVariable* pVar )
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )
         {
-            EndListening( pVar_->GetBroadcaster(), sal_True );
+            EndListening( pVar_->GetBroadcaster(), true );
         }
         if( (SbxVariable*) pVar_ == pDfltProp )
         {
@@ -606,7 +606,7 @@ static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
         if( pVar )
         {
             pVar->SetParent( pThis );
-            pThis->StartListening( pVar->GetBroadcaster(), sal_True );
+            pThis->StartListening( pVar->GetBroadcaster(), true );
         }
     }
     pArray->Merge( p );

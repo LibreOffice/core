@@ -1339,7 +1339,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
             // list style is applied
             const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
             if ( pAttrSet &&
-                 pAttrSet->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+                 pAttrSet->GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
                 pTNd->ResetAttr( RES_PARATR_NUMRULE );
             else
                 pTNd->SetAttr( aEmptyRule );

@@ -97,9 +97,9 @@ sal_uInt16 SfxEnumItemInterface::GetPosByValue(sal_uInt16 nValue) const
     return USHRT_MAX;
 }
 
-sal_Bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
+bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
 {
-    return sal_True;
+    return true;
 }
 
 // virtual
@@ -109,7 +109,7 @@ bool SfxEnumItemInterface::HasBoolValue() const
 }
 
 // virtual
-sal_Bool SfxEnumItemInterface::GetBoolValue() const
+bool SfxEnumItemInterface::GetBoolValue() const
 {
     return false;
 }
@@ -169,7 +169,7 @@ TYPEINIT1_AUTOFACTORY(SfxBoolItem, SfxPoolItem);
 SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxPoolItem(nWhich)
 {
-    sal_Bool tmp = false;
+    unsigned char tmp = 0;
     rStream.ReadUChar( tmp );
     m_bValue = tmp;
 }
@@ -210,7 +210,7 @@ bool SfxBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 // virtual
 bool SfxBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
-    sal_Bool bTheValue = sal_Bool();
+    bool bTheValue = bool();
     if (rVal >>= bTheValue)
     {
         m_bValue = bTheValue;
@@ -229,7 +229,7 @@ SfxPoolItem * SfxBoolItem::Create(SvStream & rStream, sal_uInt16) const
 // virtual
 SvStream & SfxBoolItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    rStream.WriteUChar( static_cast<sal_Bool>(m_bValue) ); // not bool for serialization!
+    rStream.WriteUChar( m_bValue ); // not bool for serialization!
     return rStream;
 }
 

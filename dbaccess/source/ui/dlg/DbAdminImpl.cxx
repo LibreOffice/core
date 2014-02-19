@@ -220,7 +220,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
         // collecting this in a vector because it has a push_back, in opposite to sequences
 
     // user: DSID_USER -> "user"
-    SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUser, SfxStringItem, DSID_USER, sal_True);
+    SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUser, SfxStringItem, DSID_USER, true);
     if (pUser && pUser->GetValue().getLength())
         aReturn.push_back(
             PropertyValue(  OUString("user"), 0,
@@ -230,13 +230,13 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
     {
         // password: DSID_PASSWORD -> "password"
-        SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+        SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, true);
         OUString sPassword = pPassword ? pPassword->GetValue() : OUString();
-        SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
+        SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
         // if the set does not contain a password, but the item set says it requires one, ask the user
         if ((!pPassword || !pPassword->GetValue().getLength()) && (pPasswordRequired && pPasswordRequired->GetValue()))
         {
-            SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pName, SfxStringItem, DSID_NAME, sal_True);
+            SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pName, SfxStringItem, DSID_NAME, true);
 
             Reference< XModel > xModel( getDataSourceOrModel( m_xDatasource ), UNO_QUERY_THROW );
             ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
@@ -330,7 +330,7 @@ void ODbDataSourceAdministrationHelper::successfullyConnected()
 
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
     {
-        SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+        SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, true);
         if (pPassword && (0 != pPassword->GetValue().getLength()))
         {
             OUString sPassword = pPassword->GetValue();
@@ -446,9 +446,9 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
 
 OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
-    SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
+    SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, true );
     OSL_ENSURE( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
-    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, true);
     OSL_ENSURE(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     return pCollection->getType(pConnectURL->GetValue());
@@ -465,8 +465,8 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
 
     OUString eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
 
-    SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-    SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
+    SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, true);
 
     OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
     OSL_ENSURE(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
@@ -493,9 +493,9 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_MYSQL_NATIVE:
         case  ::dbaccess::DST_MYSQL_JDBC:
             {
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_MYSQL_PORTNUMBER, sal_True);
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, true);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_MYSQL_PORTNUMBER, true);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, true);
                 sNewUrl = lcl_createHostWithPort(pHostName,pPortNumber);
                 OUString sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : OUString();
                 if ( !sDatabaseName.getLength() && pUrlItem )
@@ -512,9 +512,9 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
             break;
         case  ::dbaccess::DST_ORACLE_JDBC:
             {
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_ORACLE_PORTNUMBER, sal_True);
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, true);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_ORACLE_PORTNUMBER, true);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, true);
                 if ( pHostName && pHostName->GetValue().getLength() )
                 {
                     sNewUrl = "@" + lcl_createHostWithPort(pHostName,pPortNumber);
@@ -534,7 +534,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
             break;
         case  ::dbaccess::DST_LDAP:
             {
-                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
+                SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, true);
                 sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue()) + lcl_createHostWithPort(NULL,pPortNumber);
             }
             break;
@@ -1018,7 +1018,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
 
 OUString ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
 {
-    SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
+    SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_DOCUMENT_URL, true);
     OSL_ENSURE(pUrlItem,"Document URL is NULL. -> GPF!");
     return pUrlItem->GetValue();
 }
@@ -1027,8 +1027,8 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 {
     OUString eType = getDatasourceType(_rDest);
 
-    SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-    SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_CONNECTURL, true);
+    SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, true);
 
     OSL_ENSURE(pUrlItem,"Connection URL is NULL. -> GPF!");
     OSL_ENSURE(pTypeCollection, "ODbAdminDialog::getDatasourceType: invalid items in the source set!");

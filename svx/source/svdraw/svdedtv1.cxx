@@ -709,19 +709,19 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
     // bReplaceAll has no effect here
     Rectangle aAllSnapRect(GetMarkedObjRect());
     const SfxPoolItem *pPoolItem=NULL;
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrTransformRef1XItem*)pPoolItem)->GetValue();
         SetRef1(Point(n,GetRef1().Y()));
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrTransformRef1YItem*)pPoolItem)->GetValue();
         SetRef1(Point(GetRef1().X(),n));
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrTransformRef2XItem*)pPoolItem)->GetValue();
         SetRef2(Point(n,GetRef2().Y()));
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SFX_ITEM_SET) {
         long n=((const SdrTransformRef2YItem*)pPoolItem)->GetValue();
         SetRef2(Point(GetRef2().X(),n));
     }
@@ -730,19 +730,19 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
     long nAllWdt=0;  sal_Bool bAllWdt=false;
     long nAllHgt=0;  sal_Bool bAllHgt=false;
     bool bDoIt=false;
-    if (rAttr.GetItemState(SDRATTR_ALLPOSITIONX,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ALLPOSITIONX,true,&pPoolItem)==SFX_ITEM_SET) {
         nAllPosX=((const SdrAllPositionXItem*)pPoolItem)->GetValue();
         bAllPosX=true; bDoIt=true;
     }
-    if (rAttr.GetItemState(SDRATTR_ALLPOSITIONY,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ALLPOSITIONY,true,&pPoolItem)==SFX_ITEM_SET) {
         nAllPosY=((const SdrAllPositionYItem*)pPoolItem)->GetValue();
         bAllPosY=true; bDoIt=true;
     }
-    if (rAttr.GetItemState(SDRATTR_ALLSIZEWIDTH,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ALLSIZEWIDTH,true,&pPoolItem)==SFX_ITEM_SET) {
         nAllWdt=((const SdrAllSizeWidthItem*)pPoolItem)->GetValue();
         bAllWdt=true; bDoIt=true;
     }
-    if (rAttr.GetItemState(SDRATTR_ALLSIZEHEIGHT,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ALLSIZEHEIGHT,true,&pPoolItem)==SFX_ITEM_SET) {
         nAllHgt=((const SdrAllSizeHeightItem*)pPoolItem)->GetValue();
         bAllHgt=true; bDoIt=true;
     }
@@ -754,23 +754,23 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool /*
         if (bAllHgt)  aRect.Bottom()=aAllSnapRect.Top()+nAllHgt;
         SetMarkedObjRect(aRect);
     }
-    if (rAttr.GetItemState(SDRATTR_RESIZEXALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_RESIZEXALL,true,&pPoolItem)==SFX_ITEM_SET) {
         Fraction aXFact=((const SdrResizeXAllItem*)pPoolItem)->GetValue();
         ResizeMarkedObj(aAllSnapRect.TopLeft(),aXFact,Fraction(1,1));
     }
-    if (rAttr.GetItemState(SDRATTR_RESIZEYALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_RESIZEYALL,true,&pPoolItem)==SFX_ITEM_SET) {
         Fraction aYFact=((const SdrResizeYAllItem*)pPoolItem)->GetValue();
         ResizeMarkedObj(aAllSnapRect.TopLeft(),Fraction(1,1),aYFact);
     }
-    if (rAttr.GetItemState(SDRATTR_ROTATEALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ROTATEALL,true,&pPoolItem)==SFX_ITEM_SET) {
         long nAngle=((const SdrRotateAllItem*)pPoolItem)->GetValue();
         RotateMarkedObj(aAllSnapRect.Center(),nAngle);
     }
-    if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,true,&pPoolItem)==SFX_ITEM_SET) {
         long nAngle=((const SdrHorzShearAllItem*)pPoolItem)->GetValue();
         ShearMarkedObj(aAllSnapRect.Center(),nAngle,false);
     }
-    if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,sal_True,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,true,&pPoolItem)==SFX_ITEM_SET) {
         long nAngle=((const SdrVertShearAllItem*)pPoolItem)->GetValue();
         ShearMarkedObj(aAllSnapRect.Center(),nAngle,true);
     }
@@ -937,12 +937,12 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr)
         {
             if(!bOnlyHardAttr)
             {
-                if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
+                if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, false))
                     rAttr.InvalidateItem(nWhich);
                 else
                     rAttr.MergeValue(rSet.Get(nWhich), sal_True);
             }
-            else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False))
+            else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
             {
                 const SfxPoolItem& rItem = rSet.Get(nWhich);
                 rAttr.MergeValue(rItem, sal_True);
@@ -1512,21 +1512,21 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     const SfxPoolItem* pPoolItem=NULL;
 
     // position
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem)) {
         nPosDX=((const SfxInt32Item*)pPoolItem)->GetValue()-aRect.Left();
         bChgPos=true;
     }
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,sal_True,&pPoolItem)){
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem)){
         nPosDY=((const SfxInt32Item*)pPoolItem)->GetValue()-aRect.Top();
         bChgPos=true;
     }
     // size
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem)) {
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
         bChgSiz=true;
         bChgWdh=true;
     }
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem)) {
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
         bChgSiz=true;
         bChgHgt=true;
@@ -1536,21 +1536,21 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // rotation
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ANGLE,true,&pPoolItem)) {
         nRotateAngle=((const SfxInt32Item*)pPoolItem)->GetValue()-nOldRotateAngle;
         bRotate = (nRotateAngle != 0);
     }
 
     // position rotation point x
-    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, sal_True ,&pPoolItem))
+    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_X, true ,&pPoolItem))
         nRotateX = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_X)).GetValue();
 
     // position rotation point y
-    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, sal_True ,&pPoolItem))
+    if(bRotate || SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_ROT_Y, true ,&pPoolItem))
         nRotateY = ((const SfxInt32Item&)rAttr.Get(SID_ATTR_TRANSFORM_ROT_Y)).GetValue();
 
     // shearing
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem)) {
         long nNewShearAngle=((const SfxInt32Item*)pPoolItem)->GetValue();
         if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
         if (nNewShearAngle<-SDRMAXSHEAR) nNewShearAngle=-SDRMAXSHEAR;
@@ -1579,20 +1579,20 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // AutoGrow
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOWIDTH,true,&pPoolItem)) {
         sal_Bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
         aSetAttr.Put(SdrTextAutoGrowWidthItem(bAutoGrow));
         bSetAttr=true;
     }
 
-    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,sal_True,&pPoolItem)) {
+    if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_AUTOHEIGHT,true,&pPoolItem)) {
         sal_Bool bAutoGrow=((const SfxBoolItem*)pPoolItem)->GetValue();
         aSetAttr.Put(SdrTextAutoGrowHeightItem(bAutoGrow));
         bSetAttr=true;
     }
 
     // corner radius
-    if (bEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,sal_True,&pPoolItem)) {
+    if (bEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem)) {
         long nRadius=((SdrEckenradiusItem*)pPoolItem)->GetValue();
         aSetAttr.Put(SdrEckenradiusItem(nRadius));
         bSetAttr=true;
@@ -1670,7 +1670,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     }
 
     // protect position
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, sal_True, &pPoolItem))
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_POS, true, &pPoolItem))
     {
         const bool bProtPos(((const SfxBoolItem*)pPoolItem)->GetValue());
         bool bChanged(false);
@@ -1711,7 +1711,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     if(!bMoveProtect)
     {
         // protect size
-        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, sal_True, &pPoolItem))
+        if(SFX_ITEM_SET == rAttr.GetItemState(SID_ATTR_TRANSFORM_PROTECT_SIZE, true, &pPoolItem))
         {
             const bool bProtSize(((const SfxBoolItem*)pPoolItem)->GetValue());
             bool bChanged(false);

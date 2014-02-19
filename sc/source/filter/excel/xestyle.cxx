@@ -2955,7 +2955,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         XclExpNumFmt* pNumFormat = NULL;
                         const SfxPoolItem *pPoolItem = NULL;
-                        if( rSet.GetItemState( ATTR_VALUE_FORMAT, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+                        if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SFX_ITEM_SET )
                         {
                             sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
                             sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);

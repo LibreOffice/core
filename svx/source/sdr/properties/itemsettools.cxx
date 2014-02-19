@@ -113,7 +113,7 @@ namespace sdr
 
             while(nWhich)
             {
-                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, sal_False, &pItem))
+                if(SFX_ITEM_SET == rSet.GetItemState(nWhich, false, &pItem))
                 {
                     if(pItem->HasMetrics())
                     {

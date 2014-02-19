@@ -39,7 +39,7 @@ namespace { struct ALMutex : public rtl::Static< ::osl::Mutex, ALMutex > {}; }
 
 // class SvtLanguageOptions ----------------------------------------------------
 
-SvtLanguageOptions::SvtLanguageOptions( sal_Bool _bDontLoad )
+SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ALMutex::get() );
@@ -61,57 +61,57 @@ SvtLanguageOptions::~SvtLanguageOptions()
     delete m_pCTLOptions;
 }
 // CJK options -----------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsCJKFontEnabled() const
+bool SvtLanguageOptions::IsCJKFontEnabled() const
 {
     return m_pCJKOptions->IsCJKFontEnabled();
 }
-sal_Bool SvtLanguageOptions::IsVerticalTextEnabled() const
+bool SvtLanguageOptions::IsVerticalTextEnabled() const
 {
     return m_pCJKOptions->IsVerticalTextEnabled();
 }
-sal_Bool SvtLanguageOptions::IsAsianTypographyEnabled() const
+bool SvtLanguageOptions::IsAsianTypographyEnabled() const
 {
     return m_pCJKOptions->IsAsianTypographyEnabled();
 }
-sal_Bool SvtLanguageOptions::IsJapaneseFindEnabled() const
+bool SvtLanguageOptions::IsJapaneseFindEnabled() const
 {
     return m_pCJKOptions->IsJapaneseFindEnabled();
 }
-void SvtLanguageOptions::SetAll( sal_Bool _bSet )
+void SvtLanguageOptions::SetAll( bool _bSet )
 {
     m_pCJKOptions->SetAll( _bSet );
 }
-sal_Bool SvtLanguageOptions::IsAnyEnabled() const
+bool SvtLanguageOptions::IsAnyEnabled() const
 {
     return m_pCJKOptions->IsAnyEnabled();
 }
 // CTL options -----------------------------------------------------------------
-void SvtLanguageOptions::SetCTLFontEnabled( sal_Bool _bEnabled )
+void SvtLanguageOptions::SetCTLFontEnabled( bool _bEnabled )
 {
     m_pCTLOptions->SetCTLFontEnabled( _bEnabled );
 }
-sal_Bool SvtLanguageOptions::IsCTLFontEnabled() const
+bool SvtLanguageOptions::IsCTLFontEnabled() const
 {
     return m_pCTLOptions->IsCTLFontEnabled();
 }
-void SvtLanguageOptions::SetCTLSequenceChecking( sal_Bool _bEnabled )
+void SvtLanguageOptions::SetCTLSequenceChecking( bool _bEnabled )
 {
     m_pCTLOptions->SetCTLSequenceChecking( _bEnabled );
 }
 
-void SvtLanguageOptions::SetCTLSequenceCheckingRestricted( sal_Bool _bEnable )
+void SvtLanguageOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
 {
     m_pCTLOptions->SetCTLSequenceCheckingRestricted( _bEnable );
 }
 
-void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable )
+void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
 {
     m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
 }
 
-sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
+bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
 {
-    sal_Bool bReadOnly = sal_False;
+    bool bReadOnly = false;
     switch(eOption)
     {
         // cjk options

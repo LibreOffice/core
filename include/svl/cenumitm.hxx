@@ -68,7 +68,7 @@ public:
     /// if not included.
     virtual sal_uInt16 GetPosByValue(sal_uInt16 nValue) const;
 
-    virtual sal_Bool IsEnabled(sal_uInt16 nValue) const;
+    virtual bool IsEnabled(sal_uInt16 nValue) const;
 
     virtual sal_uInt16 GetEnumValue() const = 0;
 
@@ -76,7 +76,7 @@ public:
 
     virtual bool HasBoolValue() const;
 
-    virtual sal_Bool GetBoolValue() const;
+    virtual bool GetBoolValue() const;
 
     virtual void SetBoolValue(sal_Bool bValue);
 };

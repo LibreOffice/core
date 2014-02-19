@@ -583,7 +583,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
             const SfxPoolItem * pItem = NULL;
 
             if (pAttrSet && SFX_ITEM_SET ==
-                pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem))
+                pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem))
             {
                 aTmpStr += "(";
                 aTmpStr +=

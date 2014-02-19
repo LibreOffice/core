@@ -900,7 +900,7 @@ throw (beans::UnknownPropertyException)
         break;
     lcl_SwXParagraph_getPropertyStateDEFAULT:
     default:
-        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, sal_False))
+        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, false))
             eRet = beans::PropertyState_DIRECT_VALUE;
         break;
     }

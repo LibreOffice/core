@@ -247,12 +247,12 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
             bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
             nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
@@ -286,11 +286,11 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem* pItem;
 
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SFX_ITEM_SET)
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, sal_False, &pItem);
+        eState = rSet.GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SFX_ITEM_SET )
         {
@@ -407,12 +407,12 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
             bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
             nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
@@ -444,11 +444,11 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SFX_ITEM_SET)
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, sal_False, &pItem);
+        eState = rSet.GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SFX_ITEM_SET )
         {
@@ -604,12 +604,12 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
             bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
             nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
@@ -641,11 +641,11 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SFX_ITEM_SET)
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, sal_False, &pItem);
+        eState = rSet.GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SFX_ITEM_SET )
         {
@@ -834,12 +834,12 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
             bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
             nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
@@ -888,11 +888,11 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SFX_ITEM_SET)
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, sal_False, &pItem);
+        eState = rSet.GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SFX_ITEM_SET )
         {
@@ -1152,12 +1152,12 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     sal_uInt16 nTmpNumLvl = USHRT_MAX;
     if(pExampleSet)
     {
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
             bPreset = ((const SfxBoolItem*)pItem)->GetValue();
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
             nTmpNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
@@ -1209,11 +1209,11 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SFX_ITEM_SET)
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, sal_False, &pItem);
+        eState = rSet.GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SFX_ITEM_SET )
         {
@@ -1293,7 +1293,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     }
 
     SfxObjectShell* pShell;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, sal_False, &pItem )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, false, &pItem )
          || ( 0 != ( pShell = SfxObjectShell::Current()) &&
               0 != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
@@ -2909,12 +2909,12 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
             bPreset = ((const SfxBoolItem*)pItem)->GetValue();
-        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pItem))
+        if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
             nTmpNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
         pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
@@ -2977,11 +2977,11 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
     // in Draw the item exists as WhichId, in Writer only as SlotId
-    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+    SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState != SFX_ITEM_SET)
     {
         nNumItemId = rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        eState = rSet.GetItemState(nNumItemId, sal_False, &pItem);
+        eState = rSet.GetItemState(nNumItemId, false, &pItem);
 
         if( eState != SFX_ITEM_SET )
         {

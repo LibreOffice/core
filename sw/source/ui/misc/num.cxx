@@ -367,7 +367,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     sal_uInt16 nTmpNumLvl =
         pOutlineDlg ? pOutlineDlg->GetActNumLevel() : 0;
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
-    if(pExampleSet && pExampleSet->GetItemState(FN_PARAM_NUM_PRESET, sal_False, &pItem))
+    if(pExampleSet && pExampleSet->GetItemState(FN_PARAM_NUM_PRESET, false, &pItem))
     {
         bPreset = ((const SfxBoolItem*)pItem)->GetValue();
     }
@@ -429,7 +429,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
         pSaveNum = pOutlineDlg->GetNumRule();
         m_pLevelLB->EnableMultiSelection(sal_False);
     }
-    else if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_ACT_NUMBER, sal_False, &pItem))
+    else if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
         pSaveNum = ((SwUINumRuleItem*)pItem)->GetNumRule();
 
     nActNumLvl = SwOutlineTabDialog::GetActNumLevel();

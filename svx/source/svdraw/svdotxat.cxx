@@ -303,7 +303,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         for(std::set<SfxStyleSheet*>::const_iterator it = aStyleSheets.begin(); it != aStyleSheets.end(); ++it) {
             SfxStyleSheet* pStyle=*it;
             // let StartListening see for itself if there's already a listener registered
-            StartListening(*pStyle,sal_True);
+            StartListening(*pStyle,true);
         }
     }
 }

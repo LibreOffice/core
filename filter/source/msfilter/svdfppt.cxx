@@ -5614,7 +5614,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                     if ( pItemSet )
                     {
                         const SfxPoolItem* pFillStyleItem = NULL;
-                        pItemSet->GetItemState( XATTR_FILLSTYLE, sal_False, &pFillStyleItem );
+                        pItemSet->GetItemState( XATTR_FILLSTYLE, false, &pFillStyleItem );
                         if ( pFillStyleItem )
                         {
                             XFillStyle eFillStyle = ((XFillStyleItem*)pFillStyleItem)->GetValue();
@@ -5623,7 +5623,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                 case XFILL_SOLID :
                                 {
                                     const SfxPoolItem* pFillColorItem = NULL;
-                                    pItemSet->GetItemState( XATTR_FILLCOLOR, sal_False, &pFillColorItem );
+                                    pItemSet->GetItemState( XATTR_FILLCOLOR, false, &pFillColorItem );
                                     if ( pFillColorItem )
                                         aDefColor = ((XColorItem*)pFillColorItem)->GetColorValue();
                                 }
@@ -5631,7 +5631,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                                 case XFILL_GRADIENT :
                                 {
                                     const SfxPoolItem* pGradientItem = NULL;
-                                    pItemSet->GetItemState( XATTR_FILLGRADIENT, sal_False, &pGradientItem );
+                                    pItemSet->GetItemState( XATTR_FILLGRADIENT, false, &pGradientItem );
                                     if ( pGradientItem )
                                         aDefColor = ((XFillGradientItem*)pGradientItem)->GetGradientValue().GetStartColor();
                                 }

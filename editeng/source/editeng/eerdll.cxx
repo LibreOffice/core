@@ -89,7 +89,7 @@ GlobalEditData::~GlobalEditData()
     // Destroy DefItems...
     // Or simply keep them, since at end of excecution?!
     if ( ppDefItems )
-        SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, sal_True );
+        SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, true );
 }
 
 SfxPoolItem** GlobalEditData::GetDefItems()

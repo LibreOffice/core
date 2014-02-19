@@ -86,7 +86,7 @@ static void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 
 static void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 {
-    if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, sal_False ))
+    if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, false ))
     {
         if( !rSh.GetDoc()->IsModified() )
             rSet.DisableItem( SID_SAVEDOC );

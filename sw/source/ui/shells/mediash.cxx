@@ -110,7 +110,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
                 {
                     const SfxPoolItem*  pItem;
 
-                    if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, sal_False, &pItem ) ) )
+                    if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
                         pItem = NULL;
 
                     if( pItem )

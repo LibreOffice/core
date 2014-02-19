@@ -98,7 +98,7 @@ OutlineBulletDlg::OutlineBulletDlg(
             OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
             if( pFirstStyleSheet )
-                pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);
+                pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, (const SfxPoolItem**)&pItem);
         }
 
         if( pItem == NULL )
@@ -109,9 +109,9 @@ OutlineBulletDlg::OutlineBulletDlg(
         aInputSet.Put(*pItem, EE_PARA_NUMBULLET);
     }
 
-    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
     {
-        SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,sal_True);
+        SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pItem->GetNumRule();
         if(pRule)
         {
@@ -171,7 +171,7 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     pOutputSet->Put( aSet );
 
     const SfxPoolItem *pItem = NULL;
-    if( SFX_ITEM_SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), sal_False, &pItem ))
+    if( SFX_ITEM_SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
         SdBulletMapper::MapFontsInNumRule( *((SvxNumBulletItem*)pItem)->GetNumRule(), *pOutputSet );
 
@@ -179,9 +179,9 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     }
 
 
-    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
     {
-        SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,sal_True);
+        SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pBulletItem->GetNumRule();
         if(pRule)
             pRule->SetFeatureFlag( NUM_NO_NUMBERS, sal_False );

@@ -201,7 +201,7 @@ public:
     /** putUrl/queryUrl.
     */
     void putUrl   (const OUString &rUrl);
-    sal_Bool queryUrl (const OUString &rUrl);
+    bool queryUrl (const OUString &rUrl);
 };
 
 /*========================================================================
@@ -348,19 +348,19 @@ void INetURLHistory_Impl::putUrl (const OUString &rUrl)
 /*
  * queryUrl.
  */
-sal_Bool INetURLHistory_Impl::queryUrl (const OUString &rUrl)
+bool INetURLHistory_Impl::queryUrl (const OUString &rUrl)
 {
     sal_uInt32 h = crc32 (rUrl);
     sal_uInt16 k = find (h);
     if ((k < capacity()) && (m_pHash[k] == h))
     {
         // Cache hit.
-        return sal_True;
+        return true;
     }
     else
     {
         // Cache miss.
-        return sal_False;
+        return false;
     }
 }
 
@@ -473,7 +473,7 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
 /*
  * QueryUrl_Impl.
  */
-sal_Bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
+bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
 {
     DBG_ASSERT (m_pImpl, "QueryUrl_Impl(): no Implementation");
     if (m_pImpl)
@@ -483,7 +483,7 @@ sal_Bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
 
         return m_pImpl->queryUrl (aHistUrl.GetMainURL(INetURLObject::NO_DECODE));
     }
-    return sal_False;
+    return false;
 }
 
 

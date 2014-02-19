@@ -265,7 +265,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
                     SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
-                                                    nFontWhich, sal_False ) )
+                                                    nFontWhich, false ) )
                 {
                     pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
                                                   aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));

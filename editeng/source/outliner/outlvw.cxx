@@ -1057,7 +1057,7 @@ void OutlinerView::ApplyBulletsNumbering(
                     // Get old bullet space.
                     {
                         const SfxPoolItem* pPoolItem=NULL;
-                        SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, sal_False, &pPoolItem);
+                        SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, false, &pPoolItem);
                         if (eState != SFX_ITEM_SET)
                         {
                             // Use default value when has not contain bullet item.

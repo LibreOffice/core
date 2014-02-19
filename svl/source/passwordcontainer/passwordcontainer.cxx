@@ -81,7 +81,7 @@ static OUString createIndex( vector< OUString > lines )
 static vector< OUString > getInfoFromInd( OUString aInd )
 {
     vector< OUString > aResult;
-    sal_Bool aStart = sal_True;
+    bool aStart = true;
 
     OString line = OUStringToOString( aInd, RTL_TEXTENCODING_ASCII_US );
     const sal_Char* pLine = line.getStr();
@@ -91,7 +91,7 @@ static vector< OUString > getInfoFromInd( OUString aInd )
         if( !aStart )
             pLine += 2;
         else
-            aStart = sal_False;
+            aStart = false;
 
         while( *pLine && !( pLine[0] == '_' && pLine[1] == '_' ))
             if( *pLine != '_' )
@@ -130,16 +130,16 @@ static vector< OUString > getInfoFromInd( OUString aInd )
 }
 
 
-static sal_Bool shorterUrl( OUString& aURL )
+static bool shorterUrl( OUString& aURL )
 {
     sal_Int32 aInd = aURL.lastIndexOf( '/' );
     if( aInd > 0 && aURL.indexOf( "://" ) != aInd-2 )
     {
         aURL = aURL.copy( 0, aInd );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -320,7 +320,7 @@ void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
     sendNames[0] = "HasMaster";
     sendNames[1] = "Master";
 
-    sal_Bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
+    bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
     sendVals[0] <<= bHasMaster;
     sendVals[1] <<= aEncoded;
 
@@ -851,21 +851,21 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
     if( m_aMasterPasswd.isEmpty() && aHandler.is() )
     {
         OUString aEncodedMP;
-        sal_Bool bAskAgain = sal_False;
-        sal_Bool bDefaultPassword = sal_False;
+        bool bAskAgain = false;
+        bool bDefaultPassword = false;
 
         if( !m_pStorageFile->getEncodedMP( aEncodedMP ) )
             aRMode = PasswordRequestMode_PASSWORD_CREATE;
         else if ( aEncodedMP.isEmpty() )
         {
             m_aMasterPasswd = GetDefaultMasterPassword();
-            bDefaultPassword = sal_True;
+            bDefaultPassword = true;
         }
 
         if ( !bDefaultPassword )
         {
             do {
-                bAskAgain = sal_False;
+                bAskAgain = false;
 
                 OUString aPass = RequestPasswordFromUser( aRMode, aHandler );
                 if ( !aPass.isEmpty() )
@@ -882,7 +882,7 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
                         vector< OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
                         if( aRM.empty() || !aPass.equals( aRM[0] ) )
                         {
-                            bAskAgain = sal_True;
+                            bAskAgain = true;
                             aRMode = PasswordRequestMode_PASSWORD_REENTER;
                         }
                         else
@@ -1057,7 +1057,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
 sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw (uno::RuntimeException)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     OUString aEncodedMP;
     uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
     ::osl::MutexGuard aGuard( mMutex );
@@ -1069,7 +1069,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
         {
             // this is a default master password
             // no UI is necessary
-            bResult = sal_True;
+            bResult = true;
         }
         else
         {
@@ -1111,7 +1111,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
 sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw (uno::RuntimeException)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
     ::osl::MutexGuard aGuard( mMutex );
 
@@ -1124,7 +1124,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
             xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         }
 
-        sal_Bool bCanChangePassword = sal_True;
+        bool bCanChangePassword = true;
         // if there is already a stored master password it should be entered by the user before the change happen
         OUString aEncodedMP;
         if( !m_aMasterPasswd.isEmpty() || m_pStorageFile->getEncodedMP( aEncodedMP ) )
@@ -1157,7 +1157,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
                                        aPersistent[nURLInd].UserList[nNameInd].Passwords,
                                        uno::Reference< task::XInteractionHandler >() );
 
-                bResult = sal_True;
+                bResult = true;
             }
         }
     }
@@ -1223,7 +1223,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
 ::sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
     throw ( uno::RuntimeException )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
     ::osl::MutexGuard aGuard( mMutex );
 
@@ -1236,7 +1236,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
             xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         }
 
-        sal_Bool bCanChangePassword = sal_True;
+        bool bCanChangePassword = true;
         // if there is already a stored nondefault master password it should be entered by the user before the change happen
         OUString aEncodedMP;
         if( m_pStorageFile->getEncodedMP( aEncodedMP ) && !aEncodedMP.isEmpty() )
@@ -1266,7 +1266,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
                                        aPersistent[nURLInd].UserList[nNameInd].Passwords,
                                        uno::Reference< task::XInteractionHandler >() );
 
-                bResult = sal_True;
+                bResult = true;
             }
         }
     }

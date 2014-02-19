@@ -428,7 +428,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                 const SfxPoolItem *pBoxInfo;
                 if ( SFX_ITEM_SET == pHFFmt->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
-                                                        sal_True, &pBoxInfo) )
+                                                        true, &pBoxInfo) )
                     aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
                 aBoxInfo.SetTable( sal_False );
@@ -441,17 +441,17 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )
                 {
                     const SfxPoolItem* pItem;
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) ) {
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
                         rView.GetDocShell()->SetModified(true);
                     }
 
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BOX, sal_False, &pItem ) ) {
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
                         rView.GetDocShell()->SetModified(true);
                     }
 
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_SHADOW, sal_False, &pItem ) ) {
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
                         rView.GetDocShell()->SetModified(true);
                     }

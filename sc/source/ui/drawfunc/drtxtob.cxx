@@ -180,7 +180,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -258,7 +258,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const OUString& rName     = pHyper->GetName();
@@ -1061,7 +1061,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  Unterstreichung
 
-    eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE, sal_True );
+    eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE, true );
     if ( eState == SFX_ITEM_DONTCARE )
     {
         rDestSet.InvalidateItem( SID_ULINE_VAL_NONE );

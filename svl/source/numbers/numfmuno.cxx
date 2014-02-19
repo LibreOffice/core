@@ -632,7 +632,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
         bRet = pFormatter->IsCompatible( nOldType, nNewType );

@@ -1097,19 +1097,19 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                                   *pFtnItem, *pEndItem, *pBalanceItem,
                                   *pFrmDirItem, *pLRSpaceItem;
                 SfxItemState eColState = pOutSet->GetItemState(
-                                        RES_COL, sal_False, &pColItem );
+                                        RES_COL, false, &pColItem );
                 SfxItemState eBrushState = pOutSet->GetItemState(
-                                        RES_BACKGROUND, sal_False, &pBrushItem );
+                                        RES_BACKGROUND, false, &pBrushItem );
                 SfxItemState eFtnState = pOutSet->GetItemState(
-                                        RES_FTN_AT_TXTEND, sal_False, &pFtnItem );
+                                        RES_FTN_AT_TXTEND, false, &pFtnItem );
                 SfxItemState eEndState = pOutSet->GetItemState(
-                                        RES_END_AT_TXTEND, sal_False, &pEndItem );
+                                        RES_END_AT_TXTEND, false, &pEndItem );
                 SfxItemState eBalanceState = pOutSet->GetItemState(
-                                        RES_COLUMNBALANCE, sal_False, &pBalanceItem );
+                                        RES_COLUMNBALANCE, false, &pBalanceItem );
                 SfxItemState eFrmDirState = pOutSet->GetItemState(
-                                        RES_FRAMEDIR, sal_False, &pFrmDirItem );
+                                        RES_FRAMEDIR, false, &pFrmDirItem );
                 SfxItemState eLRState = pOutSet->GetItemState(
-                                        RES_LR_SPACE, sal_False, &pLRSpaceItem);
+                                        RES_LR_SPACE, false, &pLRSpaceItem);
 
                 if( SFX_ITEM_SET == eColState ||
                     SFX_ITEM_SET == eBrushState ||
@@ -1354,7 +1354,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
-            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, sal_False, &pItem ) )
+            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 sPassword = ( (SfxStringItem*)pItem )->GetValue();
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
             delete pMedium;
@@ -1505,7 +1505,7 @@ short   SwInsertSectionTabDialog::Ok()
     {
         SfxRequest aRequest( pViewFrm, FN_INSERT_REGION);
         const SfxPoolItem* pCol;
-        if(SFX_ITEM_SET == pOutputItemSet->GetItemState(RES_COL, sal_False, &pCol))
+        if(SFX_ITEM_SET == pOutputItemSet->GetItemState(RES_COL, false, &pCol))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
                 ((const SwFmtCol*)pCol)->GetColumns().size()));
@@ -1822,7 +1822,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             m_sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
-            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, sal_False, &pItem ) )
+            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 m_sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
             m_pFileNameED->SetText( INetURLObject::decode(
                 m_sFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );

@@ -116,7 +116,7 @@ void lcl_MaybeResetAlignToDistro(
     ListBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, _JustEnumType eBlock)
 {
     const SfxPoolItem* pItem;
-    if (rCoreAttrs.GetItemState(nWhichAlign, sal_True, &pItem) != SFX_ITEM_SET)
+    if (rCoreAttrs.GetItemState(nWhichAlign, true, &pItem) != SFX_ITEM_SET)
         // alignment not set.
         return;
 
@@ -126,7 +126,7 @@ void lcl_MaybeResetAlignToDistro(
         // alignment is not 'justify'.  No need to go further.
         return;
 
-    if (rCoreAttrs.GetItemState(nWhichJM, sal_True, &pItem) != SFX_ITEM_SET)
+    if (rCoreAttrs.GetItemState(nWhichJM, true, &pItem) != SFX_ITEM_SET)
         // justification method is not set.
         return;
 
@@ -391,13 +391,13 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
     const SfxPoolItem* pItem;
     SvxCellJustifyMethod eMethodOld = SVX_JUSTIFY_METHOD_AUTO;
     SvxCellJustifyMethod eMethodNew = SVX_JUSTIFY_METHOD_AUTO;
-    if (rOld.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rOld.GetItemState(nWhich, true, &pItem) == SFX_ITEM_SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
         eMethodOld = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     }
 
-    if (rNew.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
+    if (rNew.GetItemState(nWhich, true, &pItem) == SFX_ITEM_SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
         eMethodNew = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());

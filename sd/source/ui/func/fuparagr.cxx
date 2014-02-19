@@ -121,13 +121,13 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         ESelection eSelection = pOutlView->GetSelection();
 
         const SfxPoolItem *pItem = 0;
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART, sal_False, &pItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART, false, &pItem ) )
         {
             const sal_Bool bNewStart = ((SfxBoolItem*)pItem)->GetValue() ? sal_True : sal_False;
             pOutliner->SetParaIsNumberingRestart( eSelection.nStartPara, bNewStart );
         }
 
-        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART_AT, sal_False, &pItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART_AT, false, &pItem ) )
         {
             const sal_Int16 nStartAt = ((SfxInt16Item*)pItem)->GetValue();
             pOutliner->SetNumberingStartValue( eSelection.nStartPara, nStartAt );

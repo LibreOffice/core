@@ -2406,9 +2406,9 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( RES_ATTRSET_CHG == nWhich )
     {
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-            RES_HEADER, sal_False, (const SfxPoolItem**)&pH );
+            RES_HEADER, false, (const SfxPoolItem**)&pH );
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-            RES_FOOTER, sal_False, (const SfxPoolItem**)&pF );
+            RES_FOOTER, false, (const SfxPoolItem**)&pF );
     }
     else if( RES_HEADER == nWhich )
         pH = (SwFmtHeader*)pNew;

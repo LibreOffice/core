@@ -707,7 +707,7 @@ void SfxRequest::Done_Impl
         // get the property as SfxPoolItem
         const SfxPoolItem *pItem;
         sal_uInt16 nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
-        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, sal_False, &pItem ) : SFX_ITEM_UNKNOWN;
+        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, false, &pItem ) : SFX_ITEM_UNKNOWN;
 #ifdef DBG_UTIL
         if ( SFX_ITEM_SET != eState )
         {

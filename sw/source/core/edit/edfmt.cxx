@@ -45,7 +45,7 @@ SwCharFmt* SwEditShell::GetCurCharFmt() const
                                                 RES_TXTATR_CHARFMT );
     const SfxPoolItem* pItem;
     if( GetCurAttr( aSet ) && SFX_ITEM_SET ==
-        aSet.GetItemState( RES_TXTATR_CHARFMT, sal_False, &pItem ) )
+        aSet.GetItemState( RES_TXTATR_CHARFMT, false, &pItem ) )
         pFmt = ((SwFmtCharFmt*)pItem)->GetCharFmt();
 
     return pFmt;

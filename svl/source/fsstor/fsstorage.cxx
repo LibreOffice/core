@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 
 
 // TODO: move to a standard helper
-sal_Bool isLocalFile_Impl( OUString aURL )
+bool isLocalFile_Impl( OUString aURL )
 {
     OUString aSystemPath;
 
@@ -160,7 +160,7 @@ FSStorage::~FSStorage()
     }
 }
 
-sal_Bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
+bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
 {
     INetURLObject aURL( rFolder );
     OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -174,7 +174,7 @@ sal_Bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
                                  aParent ) )
         return ::utl::UCBContentHelper::MakeFolder( aParent, aTitle, aResultContent, false );
 
-    return sal_False;
+    return false;
 }
 
 ::ucbhelper::Content* FSStorage::GetContent()
@@ -248,7 +248,7 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
             while ( xResultSet->next() )
             {
                 OUString aSourceURL( xRow->getString( 1 ) );
-                sal_Bool bIsFolder( xRow->getBoolean(2) );
+                bool bIsFolder( xRow->getBoolean(2) );
 
                 // TODO/LATER: not sure whether the entry name must be encoded
                 OUString aNewEntryName( INetURLObject( aSourceURL ).getName( INetURLObject::LAST_SEGMENT,
@@ -558,7 +558,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
     INetURLObject aFolderURL( m_pImpl->m_aURL );
     aFolderURL.Append( aStorName );
 
-    sal_Bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( !bFolderExists && ::utl::UCBContentHelper::IsDocument( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         throw io::IOException(); // TODO:
 

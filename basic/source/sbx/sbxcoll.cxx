@@ -48,7 +48,7 @@ SbxCollection::SbxCollection( const OUString& rClass )
     }
     Initialize();
     // For Access on itself
-    StartListening( GetBroadcaster(), sal_True );
+    StartListening( GetBroadcaster(), true );
 }
 
 SbxCollection::SbxCollection( const SbxCollection& rColl )

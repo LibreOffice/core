@@ -727,7 +727,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
         }
 
-        eState = pSet->GetItemState( EE_CHAR_KERNING, sal_True );
+        eState = pSet->GetItemState( EE_CHAR_KERNING, true );
         if ( eState == SFX_ITEM_DONTCARE )
         {
             rSet.InvalidateItem(EE_CHAR_KERNING);

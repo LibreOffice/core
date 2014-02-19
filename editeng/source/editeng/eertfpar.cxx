@@ -309,7 +309,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         sal_uInt16 aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
         for (size_t i = 0; i < SAL_N_ELEMENTS(aFntHeightIems); ++i)
         {
-            if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], sal_False, &pItem ))
+            if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], false, &pItem ))
             {
                 sal_uInt32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
                 long nNewHeight;
@@ -321,7 +321,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         }
     }
 
-    if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, sal_False, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, false, &pItem ))
     {
         // die richtige
         long nEsc = ((SvxEscapementItem*)pItem)->GetEsc();

@@ -66,7 +66,7 @@ sal_Bool SdHTMLFilter::Export()
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aParams;
 
     const SfxPoolItem* pItem;
-    if ( pSet->GetItemState( SID_FILTER_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+    if ( pSet->GetItemState( SID_FILTER_DATA, false, &pItem ) == SFX_ITEM_SET )
         ((SfxUnoAnyItem*)pItem)->GetValue() >>= aParams;
 
     delete( new HtmlExport( mrMedium.GetName(), aParams, &mrDocument, &mrDocShell ) );

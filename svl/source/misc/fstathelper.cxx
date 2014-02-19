@@ -30,10 +30,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
-sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
+bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
                                         Date* pDate, Time* pTime )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
@@ -43,7 +43,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
             OUString("DateModified") );
         if( aAny.hasValue() )
         {
-            bRet = sal_True;
+            bRet = true;
             const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
             if( pDate )
                 *pDate = Date( pDT->Day, pDT->Month, pDT->Year );
@@ -59,9 +59,9 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
     return bRet;
 }
 
-sal_Bool FStatHelper::IsDocument( const OUString& rURL )
+bool FStatHelper::IsDocument( const OUString& rURL )
 {
-    sal_Bool bExist = sal_False;
+    bool bExist = false;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,
@@ -75,9 +75,9 @@ sal_Bool FStatHelper::IsDocument( const OUString& rURL )
     return bExist;
 }
 
-sal_Bool FStatHelper::IsFolder( const OUString& rURL )
+bool FStatHelper::IsFolder( const OUString& rURL )
 {
-    sal_Bool bExist = sal_False;
+    bool bExist = false;
     try
     {
         ::ucbhelper::Content aTestContent( rURL,

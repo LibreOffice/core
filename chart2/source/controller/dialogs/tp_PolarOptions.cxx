@@ -74,7 +74,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    if (rInAttrs.GetItemState(SCHATTR_STARTING_ANGLE, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SFX_ITEM_SET)
     {
         long nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pAngleDial->SetRotation( nTmp*100 );
@@ -83,7 +83,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
     {
         m_pFL_StartingAngle->Show(false);
     }
-    if (rInAttrs.GetItemState(SCHATTR_CLOCKWISE, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SFX_ITEM_SET)
     {
         sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCB_Clockwise->Check(bCheck);
@@ -92,7 +92,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
     {
         m_pCB_Clockwise->Show(false);
     }
-    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SFX_ITEM_SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
         m_pCB_IncludeHiddenCells->Check(bVal);

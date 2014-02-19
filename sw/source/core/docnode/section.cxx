@@ -423,7 +423,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             const SfxPoolItem* pItem;
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_PROTECT, sal_False, &pItem ) )
+                        RES_PROTECT, false, &pItem ) )
             {
                 m_Data.SetProtectFlag( static_cast<SvxProtectItem const*>(pItem)
                         ->IsCntntProtected() );
@@ -433,7 +433,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             // --> edit in readonly sections
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_EDIT_IN_READONLY, sal_False, &pItem ) )
+                        RES_EDIT_IN_READONLY, false, &pItem ) )
             {
                 m_Data.SetEditInReadonlyFlag(
                     static_cast<SwFmtEditInReadonly const*>(pItem)->GetValue());
@@ -442,9 +442,9 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             }
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_FTN_AT_TXTEND, sal_False, &pItem ) ||
+                        RES_FTN_AT_TXTEND, false, &pItem ) ||
                 SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_END_AT_TXTEND, sal_False, &pItem ))
+                        RES_END_AT_TXTEND, false, &pItem ))
             {
                     bUpdateFtn = true;
             }
@@ -758,7 +758,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             SfxItemSet* pOldSet = ((SwAttrSetChg*)pOld)->GetChgSet();
             const SfxPoolItem *pItem;
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                                        RES_PROTECT, sal_False, &pItem ))
+                                        RES_PROTECT, false, &pItem ))
             {
                 ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_PROTECT );
@@ -767,7 +767,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             // --> edit in readonly sections
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_EDIT_IN_READONLY, sal_False, &pItem ) )
+                        RES_EDIT_IN_READONLY, false, &pItem ) )
             {
                 ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
@@ -775,14 +775,14 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             }
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                                    RES_FTN_AT_TXTEND, sal_False, &pItem ))
+                                    RES_FTN_AT_TXTEND, false, &pItem ))
             {
                 ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_FTN_AT_TXTEND ), (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_FTN_AT_TXTEND );
                 pOldSet->ClearItem( RES_FTN_AT_TXTEND );
             }
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                                    RES_END_AT_TXTEND, sal_False, &pItem ))
+                                    RES_END_AT_TXTEND, false, &pItem ))
             {
                 ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_END_AT_TXTEND ), (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
@@ -1294,7 +1294,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 {
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == xDocSh->GetMedium()->GetItemSet()->
-                        GetItemState( SID_PASSWORD, sal_False, &pItem ) )
+                        GetItemState( SID_PASSWORD, false, &pItem ) )
                         rSection.SetLinkFilePassword(
                                 ((SfxStringItem*)pItem)->GetValue() );
                 }

@@ -47,7 +47,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-       pArgs->GetItemState(nSlot, sal_False, &pItem );
+       pArgs->GetItemState(nSlot, false, &pItem );
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     Window *pMDI = &pVFrame->GetWindow();

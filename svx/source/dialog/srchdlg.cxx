@@ -1900,7 +1900,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
             for( sal_uInt16 n = 0; n < pList->Count(); ++n )
                 if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
                     SFX_ITEM_SET == aOutSet.GetItemState(
-                        pAItem->pItem->Which(), sal_False, &pItem ) )
+                        pAItem->pItem->Which(), false, &pItem ) )
                 {
                     delete pAItem->pItem;
                     pAItem->pItem = pItem->Clone();

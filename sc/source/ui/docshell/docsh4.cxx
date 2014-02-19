@@ -189,11 +189,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 OUString sTarget;
-                if ( pReqArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SFX_ITEM_SET )
                     sTarget = ((const SfxStringItem*)pItem)->GetValue();
 
                 sal_Bool bIsNewArea = sal_True;         // Default sal_True (keine Nachfrage)
-                if ( pReqArgs->GetItemState( FN_PARAM_2, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SFX_ITEM_SET )
                     bIsNewArea = ((const SfxBoolItem*)pItem)->GetValue();
 
                 // bei Bedarf neuen Datenbankbereich anlegen
@@ -390,7 +390,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 sal_Bool bNewVal;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, sal_True, &pItem ) )
+                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                     bNewVal = ((const SfxBoolItem*)pItem)->GetValue();
                 else
                     bNewVal = !aDocument.GetAutoCalc();     // Toggle fuer Menue
@@ -673,26 +673,26 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 SfxMedium* pMed = NULL;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState( SID_FILE_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState( SID_FILE_NAME, true, &pItem ) == SFX_ITEM_SET &&
                      pItem->ISA(SfxStringItem) )
                 {
                     OUString aFileName =
                         static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     OUString aFilterName;
-                    if ( pReqArgs->GetItemState( SID_FILTER_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
+                    if ( pReqArgs->GetItemState( SID_FILTER_NAME, true, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxStringItem) )
                     {
                         aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     }
                     OUString aOptions;
-                    if ( pReqArgs->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) == SFX_ITEM_SET &&
+                    if ( pReqArgs->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxStringItem) )
                     {
                         aOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     }
                     short nVersion = 0;
-                    if ( pReqArgs->GetItemState( SID_VERSION, sal_True, &pItem ) == SFX_ITEM_SET &&
+                    if ( pReqArgs->GetItemState( SID_VERSION, true, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxInt16Item) )
                     {
                         nVersion = static_cast<const SfxInt16Item*>(pItem)->GetValue();
@@ -812,7 +812,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
@@ -840,7 +840,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_EDIT_SCENARIO:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
@@ -889,7 +889,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_ATTR_YEAR2000 :
         {
             const SfxPoolItem* pItem;
-            if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+            if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
             {
                 if ( pItem->ISA(SfxUInt16Item) )
                 {
@@ -2298,7 +2298,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
             const SfxPoolItem* pItem = NULL;
             SfxItemSet* pSet = pMed->GetItemSet();
             if ( pSet &&
-                    pSet->GetItemState( SID_VERSION, sal_True, &pItem ) == SFX_ITEM_SET &&
+                    pSet->GetItemState( SID_VERSION, true, &pItem ) == SFX_ITEM_SET &&
                     pItem->ISA( SfxInt16Item ) )
             {
                 pImpl->pRequest->AppendItem( *pItem );

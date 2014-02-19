@@ -400,7 +400,7 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich )
     {
         if (pOld && SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-            RES_FRM_SIZE, sal_False, (const SfxPoolItem**)&pNewSize))
+            RES_FRM_SIZE, false, (const SfxPoolItem**)&pNewSize))
         {
             pOldSize = &((SwAttrSetChg*)pOld)->GetChgSet()->GetFrmSize();
         }
@@ -2043,7 +2043,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
 
         // assign color or save "user color"
         if( !pTNd->GetpSwAttrSet() || SFX_ITEM_SET != pTNd->GetpSwAttrSet()->
-            GetItemState( RES_CHRATR_COLOR, sal_False, &pItem ))
+            GetItemState( RES_CHRATR_COLOR, false, &pItem ))
             pItem = 0;
 
         const Color* pOldNumFmtColor = rBox.GetSaveNumFmtColor();
@@ -2166,7 +2166,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
 
         // assign adjustment
         if( bChgAlign && pAttrSet && SFX_ITEM_SET == pAttrSet->GetItemState(
-            RES_PARATR_ADJUST, sal_False, &pItem ) &&
+            RES_PARATR_ADJUST, false, &pItem ) &&
                 SVX_ADJUST_RIGHT == ((SvxAdjustItem*)pItem)->GetAdjust() )
         {
             pTNd->SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
@@ -2174,7 +2174,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
 
         // assign color or save "user color"
         if( !pAttrSet || SFX_ITEM_SET != pAttrSet->
-            GetItemState( RES_CHRATR_COLOR, sal_False, &pItem ))
+            GetItemState( RES_CHRATR_COLOR, false, &pItem ))
             pItem = 0;
 
         const Color* pOldNumFmtColor = rBox.GetSaveNumFmtColor();
@@ -2237,12 +2237,12 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             {
                 const SfxItemSet& rSet = *((SwAttrSetChg*)pNew)->GetChgSet();
                 if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMAT,
-                                    sal_False, (const SfxPoolItem**)&pNewFmt ) )
+                                    false, (const SfxPoolItem**)&pNewFmt ) )
                     nOldFmt = ((SwTblBoxNumFormat&)((SwAttrSetChg*)pOld)->
                             GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
-                rSet.GetItemState( RES_BOXATR_FORMULA, sal_False,
+                rSet.GetItemState( RES_BOXATR_FORMULA, false,
                                     (const SfxPoolItem**)&pNewFml );
-                rSet.GetItemState( RES_BOXATR_VALUE, sal_False,
+                rSet.GetItemState( RES_BOXATR_VALUE, false,
                                     (const SfxPoolItem**)&pNewVal );
             }
             break;

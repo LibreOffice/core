@@ -173,7 +173,7 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
         }
 
     }
-    rStream.WriteInt16( eScannedType ).WriteUChar( sal_Bool(bThousand) ).WriteUInt16( nThousand )
+    rStream.WriteInt16( eScannedType ).WriteUChar( bThousand ).WriteUInt16( nThousand )
            .WriteUInt16( nCntPre ).WriteUInt16( nCntPost ).WriteUInt16( nCntExp );
 }
 
@@ -184,7 +184,7 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
         sStrArray[i] = SvNumberformat::LoadString( rStream );
         rStream.ReadInt16( nTypeArray[i] );
     }
-    sal_Bool bStreamThousand;
+    unsigned char bStreamThousand;
     rStream.ReadInt16( eScannedType ).ReadUChar( bStreamThousand ).ReadUInt16( nThousand )
            .ReadUInt16( nCntPre ).ReadUInt16( nCntPost ).ReadUInt16( nCntExp );
     bThousand = bStreamThousand;
@@ -1702,7 +1702,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     rHdr.StartEntry();
     sal_uInt16 nOp1, nOp2;
     sFormatstring = SvNumberformat::LoadString( rStream );
-    sal_Bool bStreamStandard, bStreamUsed;
+    unsigned char bStreamStandard, bStreamUsed;
     rStream.ReadInt16( eType ).ReadDouble( fLimit1 ).ReadDouble( fLimit2 )
            .ReadUInt16( nOp1 ).ReadUInt16( nOp2 ).ReadUChar( bStreamStandard ).ReadUChar( bStreamUsed );
     bStandard = bStreamStandard;
@@ -1778,7 +1778,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     {
         // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
         sal_uInt16 nId;
-        sal_Bool bStreamCurr;
+        unsigned char bStreamCurr;
         rStream.ReadUInt16( nId );
         switch ( nId )
         {
@@ -1972,7 +1972,7 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     rHdr.StartEntry();
     rStream.WriteUniOrByteString( aFormatstring, rStream.GetStreamCharSet() );
     rStream.WriteInt16( eType ).WriteDouble( fLimit1 ).WriteDouble( fLimit2 ).WriteUInt16( (sal_uInt16) eOp1 ).WriteUInt16( (sal_uInt16) eOp2 )
-           .WriteUChar( sal_Bool(bOldStandard) ).WriteUChar( sal_Bool(bIsUsed) );
+           .WriteUChar( bOldStandard ).WriteUChar( bIsUsed );
     for (sal_uInt16 i = 0; i < 4; i++)
     {
         NumFor[i].Save(rStream);
@@ -1982,7 +1982,7 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     rStream.WriteUInt16( nNewStandardDefined );
     // As of SV_NUMBERFORMATTER_VERSION_NEW_CURR
     rStream.WriteUInt16( nNewCurrencyVersionId );
-    rStream.WriteUChar( sal_Bool(bNewCurrency) );
+    rStream.WriteUChar( bNewCurrency );
     if ( bNewCurrency )
     {
         for ( sal_uInt16 j=0; j<4; j++ )
@@ -1995,7 +1995,7 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     if ( bStandard != bOldStandard )
     {
         rStream.WriteUInt16( nNewStandardFlagVersionId );
-        rStream.WriteUChar( (sal_Bool)bStandard );
+        rStream.WriteUChar( bStandard );
     }
 
     rHdr.EndEntry();

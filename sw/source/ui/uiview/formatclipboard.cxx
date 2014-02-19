@@ -141,10 +141,10 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     const SfxPoolItem* pItem = 0;
     bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
-    bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
+    bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, false, &pItem );
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
-    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False, &pRowItem );
-    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False, &pTableItem );
+    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, false, &pRowItem );
+    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, false, &pTableItem );
 
     if(bBackground)
     {
@@ -166,7 +166,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if(bBorder)
         rSh.SetTabBorders( rSet );
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem) )
         rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
 
     SwFrmFmt* pFrmFmt = rSh.GetTableFmt();
@@ -174,52 +174,52 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     {
         //RES_SHADOW
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), sal_False, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_BREAK
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), sal_False, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_PAGEDESC
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), sal_False, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), sal_False, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_KEEP
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), sal_False, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_FRAMEDIR
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), sal_False, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, sal_False, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, false, &pItem) )
     {
         SvxFrameDirectionItem aDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
         aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pItem)->GetValue());
         rSh.SetBoxDirection(aDirection);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, sal_False, &pItem))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, false, &pItem))
         rSh.SetBoxAlign(((SfxUInt16Item*)(pItem))->GetValue());
 
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pItem) )
         rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));
 }
 }//end anonymous namespace
@@ -432,7 +432,7 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
         for ( sal_uInt16 nWhich = *pRanges; nWhich <= *(pRanges+1); ++nWhich )
         {
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rStyleAttrSet.GetItemState( nWhich, sal_False, &pItem ) )
+            if( SFX_ITEM_SET == rStyleAttrSet.GetItemState( nWhich, false, &pItem ) )
             {
                 rItemVector.push_back( SfxPoolItemSharedPtr( pItem->Clone() ) );
             }
@@ -448,7 +448,7 @@ static void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, const ItemVector
     while( aIter != aEnd )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rTemplateItemSet.GetItemState( (*aIter)->Which(), sal_True, &pItem ) &&
+        if( SFX_ITEM_SET == rTemplateItemSet.GetItemState( (*aIter)->Which(), true, &pItem ) &&
             *pItem == *(*aIter) )
         {
             rTemplateItemSet.ClearItem( (*aIter)->Which() );

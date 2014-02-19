@@ -120,7 +120,7 @@ public:
     // This stores a copy of the rMacro parameter
     SvxMacro& Insert(sal_uInt16 nEvent, const SvxMacro& rMacro);
     // If the entry exists, remove it from the map and release it's storage
-    sal_Bool Erase(sal_uInt16 nEvent);
+    bool Erase(sal_uInt16 nEvent);
 };
 
 
@@ -152,9 +152,9 @@ public:
     inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }
 
     inline const SvxMacro& GetMacro( sal_uInt16 nEvent ) const;
-    inline sal_Bool HasMacro( sal_uInt16 nEvent ) const;
+    inline bool HasMacro( sal_uInt16 nEvent ) const;
            void SetMacro( sal_uInt16 nEvent, const SvxMacro& );
-    inline sal_Bool DelMacro( sal_uInt16 nEvent );
+    inline bool DelMacro( sal_uInt16 nEvent );
 
 private:
     SvxMacroTableDtor aMacroTable;
@@ -171,7 +171,7 @@ inline SvxMacroItem::SvxMacroItem( const SvxMacroItem &rCpy )
     aMacroTable( rCpy.GetMacroTable() )
 {}
 
-inline sal_Bool SvxMacroItem::HasMacro( sal_uInt16 nEvent ) const
+inline bool SvxMacroItem::HasMacro( sal_uInt16 nEvent ) const
 {
     return aMacroTable.IsKeyValid( nEvent );
 }
@@ -179,7 +179,7 @@ inline const SvxMacro& SvxMacroItem::GetMacro( sal_uInt16 nEvent ) const
 {
     return *(aMacroTable.Get(nEvent));
 }
-inline sal_Bool SvxMacroItem::DelMacro( sal_uInt16 nEvent )
+inline bool SvxMacroItem::DelMacro( sal_uInt16 nEvent )
 {
     return aMacroTable.Erase(nEvent);
 }

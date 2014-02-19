@@ -179,15 +179,15 @@ SvxMacro& SvxMacroTableDtor::Insert(sal_uInt16 nEvent, const SvxMacro& rMacro)
 }
 
 // If the entry exists, remove it from the map and release it's storage
-sal_Bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
+bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
 {
     SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
     if ( it != aSvxMacroTable.end())
     {
         aSvxMacroTable.erase(it);
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------

@@ -2079,11 +2079,11 @@ WritingMode SdrTableObj::GetWritingMode() const
     const SfxItemSet &rSet = pStyle->GetItemSet();
     const SfxPoolItem *pItem;
 
-    if ( rSet.GetItemState( SDRATTR_TEXTDIRECTION, sal_False, &pItem ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( SDRATTR_TEXTDIRECTION, false, &pItem ) == SFX_ITEM_SET )
         eWritingMode = static_cast< WritingMode >( static_cast< const SvxWritingModeItem * >( pItem )->GetValue() );
 
     if ( ( eWritingMode != WritingMode_TB_RL ) &&
-         ( rSet.GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) == SFX_ITEM_SET ) )
+         ( rSet.GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) == SFX_ITEM_SET ) )
     {
         if ( static_cast< const SvxFrameDirectionItem * >( pItem )->GetValue() == FRMDIR_HORI_LEFT_TOP )
             eWritingMode = WritingMode_LR_TB;

@@ -122,7 +122,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 
     m_pRbtAxis1->Check(sal_True);
     m_pRbtAxis2->Check(sal_False);
-    if (rInAttrs.GetItemState(SCHATTR_AXIS,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS,true, &pPoolItem) == SFX_ITEM_SET)
     {
         long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
@@ -133,30 +133,30 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
 
     long nTmp;
-    if (rInAttrs.GetItemState(SCHATTR_BAR_GAPWIDTH, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_GAPWIDTH, true, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pMTGap->SetValue(nTmp);
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, true, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pMTOverlap->SetValue(nTmp);
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, true, &pPoolItem) == SFX_ITEM_SET)
     {
         sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCBConnect->Check(bCheck);
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, true, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nAllSeriesAxisIndex = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         m_pCBAxisSideBySide->Disable();
     }
-    if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, true, &pPoolItem) == SFX_ITEM_SET)
     {
         // model property is "group bars per axis", UI feature is the other way
         // round: "show bars side by side"
@@ -171,10 +171,10 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     //missing value treatment
     {
         ::com::sun::star::uno::Sequence < sal_Int32 > aMissingValueTreatments;
-        if( rInAttrs.GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, sal_True, &pPoolItem) == SFX_ITEM_SET )
+        if( rInAttrs.GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, true, &pPoolItem) == SFX_ITEM_SET )
             aMissingValueTreatments =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
 
-        if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,sal_True, &pPoolItem) == SFX_ITEM_SET)
+        if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,true, &pPoolItem) == SFX_ITEM_SET)
         {
             m_pRB_DontPaint->Enable(false);
             m_pRB_AssumeZero->Enable(false);
@@ -206,7 +206,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
 
     // Include hidden cells
-    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SFX_ITEM_SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
         m_pCBIncludeHiddenCells->Check(bVal);

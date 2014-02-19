@@ -354,7 +354,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case  SID_VIEW_DATA_SOURCE_BROWSER:
                 if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                    rSet.Put( SfxVisibilityItem( nWhich, false ) );
                 else
                     rSet.Put( SfxBoolItem( nWhich, GetViewFrame()->HasChildWindow( SID_BROWSER ) ) );
             break;

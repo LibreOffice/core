@@ -418,7 +418,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     rWrt.bTxtAttr = sal_False;
     rWrt.bOutOpts = sal_True;
     const SvxBrushItem *pBrushItem = 0;
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
         pBrushItem = (const SvxBrushItem *)pItem;
     }
@@ -439,12 +439,12 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sal_uInt32 nNumFmt = 0;
     double nValue = 0.0;
     sal_Bool bNumFmt = sal_False, bValue = sal_False;
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
     {
         nNumFmt = ((const SwTblBoxNumFormat *)pItem)->GetValue();
         bNumFmt = sal_True;
     }
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOXATR_VALUE, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOXATR_VALUE, false, &pItem ) )
     {
         nValue = ((const SwTblBoxValue *)pItem)->GetValue();
         bValue = sal_True;

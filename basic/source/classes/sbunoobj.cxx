@@ -3546,7 +3546,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
             // Take us out as listener at once,
             // the values are all constant
             if( pRes->IsBroadcaster() )
-                EndListening( pRes->GetBroadcaster(), sal_True );
+                EndListening( pRes->GetBroadcaster(), true );
         }
     }
     return pRes;

@@ -252,16 +252,16 @@ void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
     pDisabledValues->push_back( nValue );
 }
 
-sal_Bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
+bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
 {
     if ( pDisabledValues )
     {
         for ( size_t i=0; i<pDisabledValues->size(); i++ )
             if ( (*pDisabledValues)[i] == nValue )
-                return sal_False;
+                return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

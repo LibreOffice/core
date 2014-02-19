@@ -81,7 +81,7 @@ protected:
 public:
                                 SfxItemSet( const SfxItemSet& );
 
-                                SfxItemSet( SfxItemPool&, sal_Bool bTotalPoolRanges = sal_False );
+                                SfxItemSet( SfxItemPool&, bool bTotalPoolRanges = false );
                                 SfxItemSet( SfxItemPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
                                 SfxItemSet( SfxItemPool&, USHORT_ARG nWh1, USHORT_ARG nWh2, USHORT_ARG nNull, ... );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
@@ -94,7 +94,7 @@ public:
     sal_uInt16                      TotalCount() const;
 
     virtual const SfxPoolItem&  Get( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True ) const;
-    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
+    const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true,
                                          TypeId aItemType = 0 ) const;
 
     // Which-Wert des Items an der Position nPos erfragen
@@ -102,7 +102,7 @@ public:
 
     // Item-Status erfragen
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
-                                                sal_Bool bSrchInParent = sal_True,
+                                                bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = 0 ) const;
 
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = NULL) const;

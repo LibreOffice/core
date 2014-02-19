@@ -1043,7 +1043,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             {
                             const SfxPoolItem* pItem;
                             if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet()
-                                        .GetItemState( RES_BOX, sal_False, &pItem ))
+                                        .GetItemState( RES_BOX, false, &pItem ))
                             {
                                 SvxBoxItem aBox( *(SvxBoxItem*)pItem );
                                 aBox.SetLine( 0, BOX_LINE_RIGHT );

@@ -814,7 +814,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
                     XML_STYLE_FAMILY_TABLE_COLUMN,
                                               aStyleName, &pAutoItemSet ) &&
             pAutoItemSet &&
-            SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, sal_False,
+            SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
         {
             const SwFmtFrmSize *pSize = ((const SwFmtFrmSize *)pItem);
@@ -2715,11 +2715,11 @@ void SwXMLTableContext::MakeTable()
     {
         const SfxPoolItem *pItem;
         const SvxLRSpaceItem *pLRSpace = 0;
-        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_LR_SPACE, sal_False,
+        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_LR_SPACE, false,
                                                         &pItem ) )
             pLRSpace = (const SvxLRSpaceItem *)pItem;
 
-        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, sal_False,
+        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, false,
                                                         &pItem ) )
         {
             eHoriOrient = ((const SwFmtHoriOrient *)pItem)->GetHoriOrient();
@@ -2749,7 +2749,7 @@ void SwXMLTableContext::MakeTable()
         }
 
         const SwFmtFrmSize *pSize = 0;
-        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, sal_False,
+        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
             pSize = (const SwFmtFrmSize *)pItem;
 

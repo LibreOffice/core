@@ -72,7 +72,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& 
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pObjSh;
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != ( pObjSh = SfxObjectShell::Current()) &&
           0 != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
     {

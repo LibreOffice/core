@@ -1536,9 +1536,9 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     pCurFrameLine   = new ::editeng::SvxBorderLine(&aColBlack, 20,
                             table::BorderLineStyle::SOLID);
     pPivotSource    = new ScArea;
-    StartListening(*GetViewData()->GetDocShell(),sal_True);
-    StartListening(*GetViewFrame(),sal_True);
-    StartListening(*pSfxApp,sal_True);              // #i62045# #i62046# application is needed for Calc's own hints
+    StartListening(*GetViewData()->GetDocShell(),true);
+    StartListening(*GetViewFrame(),true);
+    StartListening(*pSfxApp,true);              // #i62045# #i62046# application is needed for Calc's own hints
 
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
     bool bFirstView = !pFirst
@@ -1890,7 +1890,7 @@ void ScTabViewShell::ExecTbx( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxPoolItem* pItem = NULL;
     if ( pReqArgs )
-        pReqArgs->GetItemState( nSlot, sal_True, &pItem );
+        pReqArgs->GetItemState( nSlot, true, &pItem );
 
     switch ( nSlot )
     {

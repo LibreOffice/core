@@ -213,7 +213,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         {
             sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;
             const SfxPoolItem* pNumLevelItem = NULL;
-            if(SFX_ITEM_SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pNumLevelItem))
+            if(SFX_ITEM_SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pNumLevelItem))
                 nActNumLvl = ((const SfxUInt16Item*)pNumLevelItem)->GetValue();
 
             pNumRuleMgr->SetItems(&aNewAttr);
@@ -307,14 +307,14 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
     //SvxNumBulletItem* pRetItem = NULL;
     const SfxPoolItem* pTmpItem = NULL;
 
-    if(aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem) == SFX_ITEM_SET)
+    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SFX_ITEM_SET)
     {
         return pTmpItem;
     }
     else
     {
         nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
         if (eState == SFX_ITEM_SET)
             return pTmpItem;
         else
@@ -352,7 +352,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
                 OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
                 SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
                 if( pFirstStyleSheet )
-                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);
+                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, (const SfxPoolItem**)&pItem);
             }
 
             if( pItem == NULL )
@@ -362,9 +362,9 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
             {
-                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,sal_True);
+                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
                 SvxNumRule* pLclRule = pBulletItem->GetNumRule();
                 if(pLclRule)
                 {
@@ -376,7 +376,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
                 }
             }
 
-            SfxItemState eItemState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+            SfxItemState eItemState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
             if (eItemState == SFX_ITEM_SET)
                 return pTmpItem;
 

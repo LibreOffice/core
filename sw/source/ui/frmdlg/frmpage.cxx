@@ -877,9 +877,9 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     const SfxPoolItem* pItem = NULL;
     const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
 
-    if (SFX_ITEM_SET == rSet.GetItemState(FN_OLE_IS_MATH, sal_False, &pItem))
+    if (SFX_ITEM_SET == rSet.GetItemState(FN_OLE_IS_MATH, false, &pItem))
         m_bIsMathOLE = ((const SfxBoolItem*)pItem)->GetValue();
-    if (SFX_ITEM_SET == rSet.GetItemState(FN_MATH_BASELINE_ALIGNMENT, sal_False, &pItem))
+    if (SFX_ITEM_SET == rSet.GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
         m_bIsMathBaselineAlignment = ((const SfxBoolItem*)pItem)->GetValue();
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
             && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
@@ -909,7 +909,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         OSL_ENSURE(pSh , "shell not found");
         //OS: only for the variant Insert/Graphic/Properties
-        if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, sal_False, &pItem))
+        if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
             aGrfSize = ((const SvxSizeItem*)pItem)->GetSize();
         else
             pSh->GetGrfSize( aGrfSize );
@@ -2419,7 +2419,7 @@ void SwGrfExtPage::Reset(const SfxItemSet &rSet)
     sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, sal_True, &pItem)
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
         && ((const SfxBoolItem *)pItem)->GetValue() )
     {
         m_pBrowseBT->Enable();
@@ -2438,7 +2438,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     sal_Bool bEnable = sal_False;
     sal_Bool bEnableMirrorRB = sal_False;
 
-    SfxItemState eState = rSet.GetItemState(RES_GRFATR_MIRRORGRF, sal_True, &pItem);
+    SfxItemState eState = rSet.GetItemState(RES_GRFATR_MIRRORGRF, true, &pItem);
     if( SFX_ITEM_UNKNOWN != eState && !bProtCntnt && !bHtmlMode )
     {
         if( SFX_ITEM_SET != eState )
@@ -2483,7 +2483,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         }
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
         if( !rBrush.GetGraphicLink().isEmpty() )
@@ -2752,7 +2752,7 @@ SwFrmURLPage::~SwFrmURLPage()
 void SwFrmURLPage::Reset( const SfxItemSet &rSet )
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_DOCFRAME, sal_True, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_DOCFRAME, true, &pItem))
     {
         TargetList* pList = new TargetList;
         ((const SfxFrameItem*)pItem)->GetFrame()->GetTargetList(*pList);
@@ -2767,7 +2767,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
         delete pList;
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, sal_True, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, true, &pItem ) )
     {
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
         pURLED->SetText( INetURLObject::decode( pFmtURL->GetURL(),
@@ -2916,7 +2916,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         }
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
     {
         pAltNameED->SetText(((const SfxStringItem*)pItem)->GetValue());
         pAltNameED->SaveValue();
@@ -2927,7 +2927,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         // insert graphic - properties
         // bNew is not set, so recognise by selection
         OUString aTmpName1;
-        if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_NAME, sal_False, &pItem))
+        if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_NAME, false, &pItem))
         {
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
@@ -3036,7 +3036,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
             && sDlgType != "PictureDialog" && sDlgType != "ObjectDialog" &&
         SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
-                                        RES_FRAMEDIR, sal_True )) )
+                                        RES_FRAMEDIR, true )) )
     {
         pTextFlowFT->Show();
         pTextFlowLB->Show();

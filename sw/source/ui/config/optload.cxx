@@ -105,7 +105,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     m_pMetricLB->SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pTabFT->Hide();
@@ -218,7 +218,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(sal_False);
     const SfxPoolItem* pItem;
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
         m_pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
 
     SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
@@ -262,7 +262,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
         ::SetFieldUnit(*m_pTabMF, eFieldUnit);
     }
     m_pMetricLB->SaveValue();
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
     {
         m_nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
         m_pTabMF->SetValue(m_pTabMF->Normalize(m_nLastTab), FUNIT_TWIP);
@@ -277,7 +277,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
         m_pUseSquaredPageMode->SaveValue();
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT, false, &pItem))
     {
         bool bUseCharUnit = ((const SfxBoolItem*)pItem)->GetValue();
         m_pUseCharUnit->Check(bUseCharUnit);
@@ -521,7 +521,7 @@ sal_Bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }

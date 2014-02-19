@@ -1842,7 +1842,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 
         while(nWhich)
         {
-            if(SFX_ITEM_SET == pSourceSet->GetItemState(nWhich, sal_False, &pPoolItem))
+            if(SFX_ITEM_SET == pSourceSet->GetItemState(nWhich, false, &pPoolItem))
             {
                 const SfxPoolItem* pItem = pPoolItem;
 

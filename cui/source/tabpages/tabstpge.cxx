@@ -223,7 +223,7 @@ sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
         // the TabStopItem needs to have a DefTab at position 0.
         const SfxPoolItem* pLRSpace;
         // If not in the new set, then maybe in the old one
-        if ( SFX_ITEM_SET != rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), sal_True, &pLRSpace ) )
+        if ( SFX_ITEM_SET != rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
             pLRSpace = GetOldItem( rSet, SID_ATTR_LRSPACE );
 
         if ( pLRSpace && ( (SvxLRSpaceItem*)pLRSpace )->GetTxtFirstLineOfst() < 0 )
@@ -375,7 +375,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 
     long nOffset = 0;
     const SfxPoolItem* pItem = 0;
-    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, sal_True, &pItem )
+    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem )
             == SFX_ITEM_SET )
     {
         nOffset = ( (const SfxInt32Item*)pItem )->GetValue();
@@ -485,7 +485,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     long nOffset = 0;
     const SfxPoolItem* pItem = 0;
 
-    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, sal_True, &pItem ) ==
+    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem ) ==
          SFX_ITEM_SET )
     {
         nOffset = ( (const SfxInt32Item*)pItem )->GetValue();

@@ -115,7 +115,7 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
 {
     const SfxPoolItem* pItem = 0;
 
-    if (m_aSet.GetItemState(FN_SET_FRM_NAME, sal_False, &pItem) == SFX_ITEM_SET)
+    if (m_aSet.GetItemState(FN_SET_FRM_NAME, false, &pItem) == SFX_ITEM_SET)
         m_pOwnSh->SetFlyName(((SfxStringItem *)pItem)->GetValue());
 
     m_pOwnSh->SetModified();
@@ -139,11 +139,11 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
     {
         //JP 6.8.2001: set never an invalid anchor into the core.
         const SfxPoolItem *pGItem, *pItem;
-        if( SFX_ITEM_SET == m_aSet.GetItemState( RES_ANCHOR, sal_False, &pItem ))
+        if( SFX_ITEM_SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
         {
             SfxItemSet aGetSet( *m_aSet.GetPool(), RES_ANCHOR, RES_ANCHOR );
             if( m_pOwnSh->GetFlyFrmAttr( aGetSet ) && 1 == aGetSet.Count() &&
-                SFX_ITEM_SET == aGetSet.GetItemState( RES_ANCHOR, sal_False, &pGItem )
+                SFX_ITEM_SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
                 && ((SwFmtAnchor*)pGItem)->GetAnchorId() ==
                    ((SwFmtAnchor*)pItem)->GetAnchorId() )
                 m_aSet.ClearItem( RES_ANCHOR );

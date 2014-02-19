@@ -277,7 +277,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
             pNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
         }
 
-        if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem ))
+        if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, false, &pItem ))
         {
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
             bool bSet = true;
@@ -304,7 +304,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
             // such that the fly's document coordinates are preserved.
             // If only the alignment changes in the position attributes (text::RelOrientation::FRAME
             // vs. text::RelOrientation::PRTAREA), we also correct the position.
-            if( SFX_ITEM_SET != rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem ))
+            if( SFX_ITEM_SET != rSet.GetItemState( RES_HORI_ORIENT, false, &pItem ))
                 pItem = 0;
 
             SwFmtHoriOrient aOldH( rFmt.GetHoriOrient() );
@@ -325,7 +325,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
                 rSet.Put( aOldH );
             }
 
-            if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem ))
+            if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, false, &pItem ))
                 pItem = 0;
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
 
@@ -370,7 +370,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     // If so, we pass it to a special method, which returns sal_True
     // if the Fly needs to be created anew, because we e.g change the FlyType.
     sal_Int8 const nMakeFrms =
-        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
+        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false ))
              ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, false )
              :  DONTMAKEFRMS;
 
@@ -397,7 +397,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
 
         default:
             if( !IsInvalidItem( aIter.GetCurItem() ) && ( SFX_ITEM_SET !=
-                rFlyFmt.GetAttrSet().GetItemState( nWhich, sal_True, &pItem ) ||
+                rFlyFmt.GetAttrSet().GetItemState( nWhich, true, &pItem ) ||
                 *pItem != *aIter.GetCurItem() ))
                 aTmpSet.Put( *aIter.GetCurItem() );
             break;
@@ -526,7 +526,7 @@ bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
 
         // 1. If not automatic = ignore; else = dispose
         // 2. Dispose of it!
-        if( SFX_ITEM_SET == rNewFmt.GetAttrSet().GetItemState( RES_FRM_SIZE, sal_False ))
+        if( SFX_ITEM_SET == rNewFmt.GetAttrSet().GetItemState( RES_FRM_SIZE, false ))
         {
             rFmt.ResetFmtAttr( RES_FRM_SIZE );
             bFrmSz = true;
@@ -534,7 +534,7 @@ bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
 
         const SfxItemSet* pAsk = pSet;
         if( !pAsk ) pAsk = &rNewFmt.GetAttrSet();
-        if( SFX_ITEM_SET == pAsk->GetItemState( RES_ANCHOR, sal_False, &pItem )
+        if( SFX_ITEM_SET == pAsk->GetItemState( RES_ANCHOR, false, &pItem )
             && ((SwFmtAnchor*)pItem)->GetAnchorId() !=
                 rFmt.GetAnchor().GetAnchorId() )
         {

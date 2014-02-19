@@ -129,7 +129,7 @@ bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, sal_False, &pItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, false, &pItem ))
         {
             rpINetItem->SetMacroTable( ((SvxMacroItem*)pItem)->GetMacroTable() );
             bRet = true;

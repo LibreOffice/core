@@ -437,7 +437,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rpPool->FreezeIdRanges();
 
     // and, finally, the set
-    _rpSet = new SfxItemSet(*_rpPool, sal_True);
+    _rpSet = new SfxItemSet(*_rpPool, true);
 
     return _rpSet;
 }
@@ -454,7 +454,7 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     // delete the pool
     if (_rpPool)
     {
-        _rpPool->ReleaseDefaults(sal_True);
+        _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
         SfxItemPool::Free(_rpPool);
         _rpPool = NULL;

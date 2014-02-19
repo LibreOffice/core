@@ -666,7 +666,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     const SfxPoolItem *pItem;
     SwFmtPageDesc *pFmtPageDesc = 0;
-    if( SFX_ITEM_SET == pItemSet->GetItemState( RES_PAGEDESC, sal_False,
+    if( SFX_ITEM_SET == pItemSet->GetItemState( RES_PAGEDESC, false,
                                                 &pItem ) )
     {
          if( ((SwFmtPageDesc *)pItem)->GetPageDesc() != pPageDesc )

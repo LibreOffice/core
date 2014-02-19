@@ -545,7 +545,7 @@ namespace pcr
         _rpPool->FreezeIdRanges();
 
         // and, finally, the set
-        _rpSet = new SfxItemSet(*_rpPool, sal_True);
+        _rpSet = new SfxItemSet(*_rpPool, true);
 
         return _rpSet;
     }
@@ -565,7 +565,7 @@ namespace pcr
         }
 
         // delete the pool
-        _rpPool->ReleaseDefaults(sal_True);
+        _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
         SfxItemPool::Free(_rpPool);
         _rpPool = NULL;

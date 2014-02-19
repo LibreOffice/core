@@ -187,7 +187,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                      pImp->bInSetItem == (bool) (*ppDefItem)->ISA(SfxSetItem) )
                 {
                     // eigene Kennung, globale Which-Id und Item-Version
-                    sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), sal_False );
+                    sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), false );
                     aWhichIdsRec.NewContent(nSlotId, 0);
                     rStream.WriteUInt16( (*ppDefItem)->Which() );
                     rStream.WriteUInt16( nItemVersion );
@@ -256,7 +256,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                     continue;
 
                 // eigene Kennung, globale Kennung, Version
-                sal_uInt16 nSlotId = GetSlotId( pDefaultItem->Which(), sal_False );
+                sal_uInt16 nSlotId = GetSlotId( pDefaultItem->Which(), false );
                 aDefsRec.NewContent( nSlotId, 0 );
                 rStream.WriteUInt16( pDefaultItem->Which() );
                 rStream.WriteUInt16( nItemVersion );
@@ -1059,7 +1059,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     {
         // Bei einem anders aufgebauten Pool im Stream, mu\s die SlotId
         // aus dem Stream in eine Which-Id gemappt werden k"onnen.
-        sal_uInt16 nMappedWhich = nSlotId ? GetWhich(nSlotId, sal_True) : 0;
+        sal_uInt16 nMappedWhich = nSlotId ? GetWhich(nSlotId, true) : 0;
         if ( IsWhich(nMappedWhich) )
         {
             // gemappte SlotId kann "ubernommen werden
@@ -1479,7 +1479,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
     DBG_ASSERT( !pImp->bInSetItem || !rItem.ISA(SfxSetItem),
                 "SetItem contains ItemSet with SetItem" );
 
-    sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which(), sal_True );
+    sal_uInt16 nSlotId = pPool->GetSlotId( rItem.Which(), true );
     sal_uInt16 nItemVersion = rItem.GetVersion(pImp->mnFileFormatVersion);
     if ( USHRT_MAX == nItemVersion )
         return false;

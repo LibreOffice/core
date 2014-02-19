@@ -398,19 +398,19 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         case MID_SEARCH_CELLTYPE:
             rVal <<= (sal_Int32) nCellType; break;
         case MID_SEARCH_ROWDIRECTION:
-            rVal <<= (sal_Bool) bRowDirection; break;
+            rVal <<= bRowDirection; break;
         case MID_SEARCH_ALLTABLES:
-            rVal <<= (sal_Bool) bAllTables; break;
+            rVal <<= bAllTables; break;
         case MID_SEARCH_SEARCHFILTERED:
-            rVal <<= (sal_Bool) bSearchFiltered; break;
+            rVal <<= bSearchFiltered; break;
         case MID_SEARCH_BACKWARD:
-            rVal <<= (sal_Bool) bBackward; break;
+            rVal <<= bBackward; break;
         case MID_SEARCH_PATTERN:
-            rVal <<= (sal_Bool) bPattern; break;
+            rVal <<= bPattern; break;
         case MID_SEARCH_CONTENT:
-            rVal <<= (sal_Bool) bContent; break;
+            rVal <<= bContent; break;
         case MID_SEARCH_ASIANOPTIONS:
-            rVal <<= (sal_Bool) bAsianOptions; break;
+            rVal <<= bAsianOptions; break;
         case MID_SEARCH_ALGORITHMTYPE:
             rVal <<= (sal_Int16) aSearchOpt.algorithmType; break;
         case MID_SEARCH_FLAGS:

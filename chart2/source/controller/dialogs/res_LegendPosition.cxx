@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem* pPoolItem = NULL;
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Int32 nLegendPosition = ((const SfxInt32Item*)pPoolItem)->GetValue();
         switch( nLegendPosition )
@@ -204,7 +204,7 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
         }
     }
 
-    if( m_pCbxShow && rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( m_pCbxShow && rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbxShow->Check(bShow);

@@ -190,7 +190,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         const SfxPoolItem* pItem;
         if( RET_OK == nRet )
         {
-            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
+            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, false, &pItem ))
             {
                 rReq.AppendItem(*pItem);
                 rReq.Done();
@@ -210,7 +210,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             }
             // If the Dialog was leaved with OK but nothing was chosen then the
             // numbering must be at least activated, if it is not already.
-            else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
+            else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, false, &pItem ))
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();

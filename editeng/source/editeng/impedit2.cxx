@@ -237,7 +237,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
     for ( sal_Int32 n = bKeepParaAttribs ? 1 : 0; n < nParas; n++ )
     {
         if ( aEditDoc[n]->GetStyleSheet() )
-            EndListening( *aEditDoc[n]->GetStyleSheet(), sal_False );
+            EndListening( *aEditDoc[n]->GetStyleSheet(), false );
     }
 
     if ( bKeepParaAttribs )
@@ -2465,7 +2465,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
     {
         aEditDoc.RemoveItemsFromPool(*pNode);
         if ( pNode->GetStyleSheet() )
-            EndListening( *pNode->GetStyleSheet(), sal_False );
+            EndListening( *pNode->GetStyleSheet(), false );
         delete pNode;
     }
 }

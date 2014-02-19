@@ -641,7 +641,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                 const SfxPoolItem* pItem;
                 SvNumberFormatter* pN = pDoc->GetNumberFormatter( sal_False );
                 if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
-                    GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem ) )
+                    GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                 {
                     sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
                     sal_uLong nNewIdx = pN->GetMergeFmtIndex( nOldIdx );

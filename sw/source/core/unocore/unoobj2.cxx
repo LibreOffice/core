@@ -1116,7 +1116,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
     const SfxPoolItem* pItem;
     if (SFX_ITEM_SET == rSet.GetItemState(
             static_cast<sal_uInt16>(bHeader ? RES_HEADER : RES_FOOTER),
-            sal_True, &pItem))
+            true, &pItem))
     {
         SfxPoolItem *const pItemNonConst(const_cast<SfxPoolItem *>(pItem));
         SwFrmFmt *const pHeadFootFmt = (bHeader) ?

@@ -234,7 +234,7 @@ sal_Bool SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlo
     SwPaM aPam( rNd, nStt, rNd, nEnd );
 
     SfxItemPool& rPool = rEditSh.GetDoc()->GetAttrPool();
-    sal_uInt16 nWhich = rPool.GetWhich( nSlotId, sal_False );
+    sal_uInt16 nWhich = rPool.GetWhich( nSlotId, false );
     if( nWhich )
     {
         rItem.SetWhich( nWhich );
@@ -504,7 +504,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                 {
                     const SfxPoolItem* pItem;
                     if( !pDontExpItems || SFX_ITEM_SET != pDontExpItems->
-                        GetItemState( pHt->Which(), sal_False, &pItem ) ||
+                        GetItemState( pHt->Which(), false, &pItem ) ||
                         *pItem != pHt->GetAttr() )
                     {
                         // The attribute was not previously set in this form in the

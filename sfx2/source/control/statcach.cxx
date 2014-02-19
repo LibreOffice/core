@@ -376,7 +376,7 @@ void SfxStateCache::SetVisibleState( sal_Bool bShow )
         }
         else
         {
-            pState = new SfxVisibilityItem( nId, sal_False );
+            pState = new SfxVisibilityItem( nId, false );
             bDeleteItem = sal_True;
         }
 

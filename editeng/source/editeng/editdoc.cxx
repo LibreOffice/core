@@ -920,7 +920,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
                 nSourceWhich = nW;
         }
 
-        if ( rSource.GetItemState( nSourceWhich, sal_False ) == SFX_ITEM_ON )
+        if ( rSource.GetItemState( nSourceWhich, false ) == SFX_ITEM_ON )
         {
             MapUnit eSourceUnit = pSourceUnit ? *pSourceUnit : (MapUnit)pSourcePool->GetMetric( nSourceWhich );
             MapUnit eDestUnit = pDestUnit ? *pDestUnit : (MapUnit)pDestPool->GetMetric( nWhich );
@@ -1812,7 +1812,7 @@ const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 {
     // Hard paragraph attributes take precedence!
     const SfxItemSet* pTakeFrom = &aAttribSet;
-    if ( pStyle && ( aAttribSet.GetItemState( nWhich, sal_False ) != SFX_ITEM_ON  ) )
+    if ( pStyle && ( aAttribSet.GetItemState( nWhich, false ) != SFX_ITEM_ON  ) )
         pTakeFrom = &pStyle->GetItemSet();
 
     return pTakeFrom->Get( nWhich );
@@ -1821,7 +1821,7 @@ const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 {
     bool bHasItem = false;
-    if ( aAttribSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_ON  )
+    if ( aAttribSet.GetItemState( nWhich, false ) == SFX_ITEM_ON  )
         bHasItem = true;
     else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON )
         bHasItem = true;

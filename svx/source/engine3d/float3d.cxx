@@ -497,7 +497,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
     while(nWhich)
     {
-        SfxItemState eState = rAttrs.GetItemState(nWhich, sal_False);
+        SfxItemState eState = rAttrs.GetItemState(nWhich, false);
         if(SFX_ITEM_DONTCARE == eState)
             mpRemember2DAttributes->InvalidateItem(nWhich);
         else if(SFX_ITEM_SET == eState)
@@ -520,7 +520,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
 
     // Segment Number Can be changed? and other states
-    SfxItemState eState = rAttrs.GetItemState( SID_ATTR_3D_INTERN, sal_False, &pItem );
+    SfxItemState eState = rAttrs.GetItemState( SID_ATTR_3D_INTERN, false, &pItem );
     if( SFX_ITEM_SET == eState )
     {
         sal_uInt32 nState = ( ( const SfxUInt32Item* )pItem )->GetValue();
@@ -1666,12 +1666,12 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
         // set LineStyle hard to XLINE_NONE when it's not set so that
         // the default (XLINE_SOLID) is not used for 3d preview
-        if(SFX_ITEM_SET != aSet.GetItemState(XATTR_LINESTYLE, sal_False))
+        if(SFX_ITEM_SET != aSet.GetItemState(XATTR_LINESTYLE, false))
             aSet.Put(XLineStyleItem(XLINE_NONE));
 
         // set FillColor hard to WHITE when it's SFX_ITEM_DONTCARE so that
         // the default (Blue7) is not used for 3d preview
-        if(SFX_ITEM_DONTCARE == aSet.GetItemState(XATTR_FILLCOLOR, sal_False))
+        if(SFX_ITEM_DONTCARE == aSet.GetItemState(XATTR_FILLCOLOR, false))
             aSet.Put(XFillColorItem(OUString(), Color(COL_WHITE)));
 
         aCtlPreview.Set3DAttributes(aSet);
@@ -1719,7 +1719,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
         while(nWhich)
         {
-            SfxItemState eState = mpRemember2DAttributes->GetItemState(nWhich, sal_False);
+            SfxItemState eState = mpRemember2DAttributes->GetItemState(nWhich, false);
             if(SFX_ITEM_DONTCARE == eState)
                 rAttrs.InvalidateItem(nWhich);
             else if(SFX_ITEM_SET == eState)

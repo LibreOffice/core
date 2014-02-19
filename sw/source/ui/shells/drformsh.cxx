@@ -79,7 +79,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
         case SID_HYPERLINK_SETLINK:
         {
         if(pArgs)
-            pArgs->GetItemState(SID_HYPERLINK_SETLINK, sal_False, &pItem);
+            pArgs->GetItemState(SID_HYPERLINK_SETLINK, false, &pItem);
         if(pItem)
         {
             SdrView *pSdrView = rSh.GetDrawView();

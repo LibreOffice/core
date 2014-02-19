@@ -218,7 +218,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
 
     // linken/rechten Rand setzen
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, sal_True, &pItem ) )
+    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
@@ -256,7 +256,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 
     // oberen/unteren Rand setzen
-    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, sal_True, &pItem ) )
+    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;

@@ -491,7 +491,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_FONT,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxFontItem *pFont = (const SvxFontItem *)pItem;
             aSub[SW_LATIN].SetFamily( pFont->GetFamily() );
@@ -501,7 +501,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_LATIN].Font::SetCharSet( pFont->GetCharSet() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_FONTSIZE,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
             aSub[SW_LATIN].SvxFont::SetPropr( 100 );
@@ -511,17 +511,17 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_LATIN].SetSize( aTmpSize );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_POSTURE,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_LATIN].Font::SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_WEIGHT,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_LATIN].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_LANGUAGE,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_LATIN].SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage() );
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_FONT,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxFontItem *pFont = (const SvxFontItem *)pItem;
             aSub[SW_CJK].SetFamily( pFont->GetFamily() );
@@ -531,7 +531,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CJK].Font::SetCharSet( pFont->GetCharSet() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_FONTSIZE,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
             aSub[SW_CJK].SvxFont::SetPropr( 100 );
@@ -541,13 +541,13 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CJK].SetSize( aTmpSize );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_POSTURE,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_CJK].Font::SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_WEIGHT,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_CJK].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_LANGUAGE,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             LanguageType eNewLang = ((SvxLanguageItem*)pItem)->GetLanguage();
             aSub[SW_CJK].SetLanguage( eNewLang );
@@ -557,7 +557,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         }
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONT,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxFontItem *pFont = (const SvxFontItem *)pItem;
             aSub[SW_CTL].SetFamily( pFont->GetFamily() );
@@ -567,7 +567,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CTL].Font::SetCharSet( pFont->GetCharSet() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONTSIZE,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
             aSub[SW_CTL].SvxFont::SetPropr( 100 );
@@ -577,53 +577,53 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CTL].SetSize( aTmpSize );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_POSTURE,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_CTL].Font::SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_WEIGHT,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_CTL].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_LANGUAGE,
-            sal_True, &pItem ))
+            true, &pItem ))
             aSub[SW_CTL].SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage() );
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_UNDERLINE,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             SetUnderline( ((SvxUnderlineItem*)pItem)->GetLineStyle() );
             SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_OVERLINE,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             SetOverline( ((SvxOverlineItem*)pItem)->GetLineStyle() );
             SetOverColor( ((SvxOverlineItem*)pItem)->GetColor() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CROSSEDOUT,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_COLOR,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetColor( ((SvxColorItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_EMPHASIS_MARK,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetEmphasisMark( ((SvxEmphasisMarkItem*)pItem)->GetEmphasisMark() );
 
         SetTransparent( sal_True );
         SetAlign( ALIGN_BASELINE );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CONTOUR,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetOutline( ((SvxContourItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetShadow( ((SvxShadowedItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_RELIEF,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetRelief( (FontRelief)((SvxCharReliefItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetPropWidth(((SvxShadowedItem*)pItem)->GetValue() ? 50 : 100 );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_AUTOKERN,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             if( ((SvxAutoKernItem*)pItem)->GetValue() )
             {
@@ -636,11 +636,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                 SetAutoKern( 0 );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_WORDLINEMODE,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetWordLineMode( ((SvxWordLineModeItem*)pItem)->GetValue() );
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_ESCAPEMENT,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxEscapementItem *pEsc = (const SvxEscapementItem *)pItem;
             SetEscapement( pEsc->GetEsc() );
@@ -648,28 +648,28 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                 SetProportion( pEsc->GetProp() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CASEMAP,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetCaseMap( ((SvxCaseMapItem*)pItem)->GetCaseMap() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_KERNING,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetFixKerning( ((SvxKerningItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_NOHYPHEN,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetNoHyph( ((SvxNoHyphenItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BLINK,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetBlink( ((SvxBlinkItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_ROTATE,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetVertical( ((SvxCharRotateItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
-            sal_True, &pItem ))
+            true, &pItem ))
             pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
-            sal_True, &pItem ))
+            true, &pItem ))
             SetHighlightColor(((SvxBrushItem*)pItem)->GetColor());
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
             SetTopBorder(pBoxItem->GetTop());
@@ -682,7 +682,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOW,
-            sal_True, &pItem ))
+            true, &pItem ))
         {
             const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
             SetShadowColor(pShadowItem->GetColor());
@@ -691,7 +691,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         }
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
-                pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, sal_True, &pTwoLinesItem ))
+                pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, true, &pTwoLinesItem ))
             if ( ((SvxTwoLinesItem*)pTwoLinesItem)->GetValue() )
                 SetVertical( 0 );
     }
@@ -845,17 +845,17 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     SetFixKerning( pAttrSet->GetKerning().GetValue() );
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
-        sal_True, &pItem ))
+        true, &pItem ))
         pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
     else
         pBackColor = NULL;
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
-        sal_True, &pItem ))
+        true, &pItem ))
         SetHighlightColor(((SvxBrushItem*)pItem)->GetColor());
     else
         SetHighlightColor(COL_TRANSPARENT);
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
-        sal_True, &pItem ))
+        true, &pItem ))
     {
         const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
         SetTopBorder(pBoxItem->GetTop());
@@ -880,7 +880,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     }
 
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOW,
-        sal_True, &pItem ))
+        true, &pItem ))
     {
         const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
         SetShadowColor(pShadowItem->GetColor());

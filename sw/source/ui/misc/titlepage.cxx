@@ -36,7 +36,7 @@ namespace
         if (pSh->GetCurAttr( aSet ))
         {
             const SfxPoolItem* pItem(0);
-            if (SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) && pItem)
+            if (SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, true, &pItem ) && pItem)
             {
                 ::boost::optional<sal_uInt16> oNumOffset = ((const SwFmtPageDesc *)pItem)->GetNumOffset();
                 if (oNumOffset)

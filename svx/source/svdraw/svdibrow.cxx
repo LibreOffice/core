@@ -585,7 +585,7 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
 
 bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
 {
-    SfxItemState eState=rSet.GetItemState(nWhich,sal_True,&rpItem);
+    SfxItemState eState=rSet.GetItemState(nWhich,true,&rpItem);
     if (eState==SFX_ITEM_DEFAULT) {
         rpItem=&rSet.Get(nWhich);
     }

@@ -135,21 +135,21 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         pNewChgSet = (SwAttrSetChg*)pNew;
         pOldChgSet = (SwAttrSetChg*)pOld;
         pNewChgSet->GetChgSet()->GetItemState(
-            RES_LR_SPACE, sal_False, (const SfxPoolItem**)&pNewLRSpace );
+            RES_LR_SPACE, false, (const SfxPoolItem**)&pNewLRSpace );
         pNewChgSet->GetChgSet()->GetItemState(
-            RES_UL_SPACE, sal_False, (const SfxPoolItem**)&pNewULSpace );
+            RES_UL_SPACE, false, (const SfxPoolItem**)&pNewULSpace );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_FONTSIZE,
-                        sal_False, (const SfxPoolItem**)&(aFontSizeArr[0]) );
+                        false, (const SfxPoolItem**)&(aFontSizeArr[0]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CJK_FONTSIZE,
-                        sal_False, (const SfxPoolItem**)&(aFontSizeArr[1]) );
+                        false, (const SfxPoolItem**)&(aFontSizeArr[1]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
-                        sal_False, (const SfxPoolItem**)&(aFontSizeArr[2]) );
+                        false, (const SfxPoolItem**)&(aFontSizeArr[2]) );
         // #i70223#, #i84745#
         // check, if attribute set is applied to this paragraph style
         if ( bAssignedToListLevelOfOutlineStyle &&
              pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
         {
-            pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False,
+            pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false,
                                                    (const SfxPoolItem**)&pNewNumRuleItem );
         }
 
@@ -351,7 +351,7 @@ bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
 bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
 {
     const bool bIsNumRuleItemAffected =
-                rSet.GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET;
+                rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET;
     if ( bIsNumRuleItemAffected )
     {
         TxtFmtCollFunc::RemoveFromNumRule( *this );
@@ -439,14 +439,14 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
         const SwTxtFmtColl* pColl = dynamic_cast<const SwTxtFmtColl*>(DerivedFrom());
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SFX_ITEM_SET )
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;
                 break;
             }
 
-            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
             {
                 // paragraph style with the list style found and until now no
                 // indent attributes are found in the paragraph style hierarchy.

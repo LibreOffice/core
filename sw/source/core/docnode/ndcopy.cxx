@@ -512,10 +512,10 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
     {
         // Special cases for Break-Attributes
         const SfxPoolItem* pAttr;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False, &pAttr ) )
+        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pAttr ) )
             aPgBrkSet.Put( *pAttr );
 
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, sal_False, &pAttr ) )
+        if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pAttr ) )
             aPgBrkSet.Put( *pAttr );
     }
 
@@ -1020,12 +1020,12 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     if (pAttrSet != NULL)
                     {
                         const SfxPoolItem * pItem = NULL;
-                        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
+                        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
                         if (SFX_ITEM_SET == aNumRuleState)
                             aNumRuleItem = *((SwNumRuleItem *) pItem);
 
                         aListIdState =
-                            pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
+                            pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
                         if (SFX_ITEM_SET == aListIdState)
                         {
                             aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
@@ -1167,12 +1167,12 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     const SfxPoolItem * pItem = NULL;
 
                     aNumRuleState =
-                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
+                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
                     if (SFX_ITEM_SET == aNumRuleState)
                         aNumRuleItem = *((SwNumRuleItem *) pItem);
 
                     aListIdState =
-                        pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
+                        pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
                     if (SFX_ITEM_SET == aListIdState)
                         aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 }
@@ -1221,9 +1221,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( pSttTxtNd && bCopyCollFmt && pDestTxtNd->HasSwAttrSet() )
             {
                 aBrkSet.Put( *pDestTxtNd->GetpSwAttrSet() );
-                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, sal_False ) )
+                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, false ) )
                     pDestTxtNd->ResetAttr( RES_BREAK );
-                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_PAGEDESC, sal_False ) )
+                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_PAGEDESC, false ) )
                     pDestTxtNd->ResetAttr( RES_PAGEDESC );
             }
 

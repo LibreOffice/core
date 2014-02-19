@@ -917,7 +917,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         GetMedium()->SetUpdatePickList( sal_False );
     else if ( rReq.GetArgs() )
     {
-        SFX_ITEMSET_GET( *rReq.GetArgs(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
+        SFX_ITEMSET_GET( *rReq.GetArgs(), pPicklistItem, SfxBoolItem, SID_PICKLIST, false );
         if ( pPicklistItem )
             GetMedium()->SetUpdatePickList( pPicklistItem->GetValue() );
     }
@@ -974,7 +974,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     if ( !bShow )
                     {
                         rSet.DisableItem( nWhich );
-                        rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                        rSet.Put( SfxVisibilityItem( nWhich, false ) );
                     }
                 }
                 break;
@@ -1007,7 +1007,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     if ( !bShow )
                     {
                         rSet.DisableItem( nWhich );
-                        rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                        rSet.Put( SfxVisibilityItem( nWhich, false ) );
                     }
                 }
                 break;

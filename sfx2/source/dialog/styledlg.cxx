@@ -132,7 +132,7 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
     while ( nWhich )
     {
-        SfxItemState eState = pInSet->GetItemState( nWhich, sal_False );
+        SfxItemState eState = pInSet->GetItemState( nWhich, false );
 
         if ( SFX_ITEM_DEFAULT == eState )
             pExampleSet->ClearItem( nWhich );

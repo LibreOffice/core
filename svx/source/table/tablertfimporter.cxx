@@ -269,7 +269,7 @@ void SdrTableRTFParser::FillTable()
                 if( xCell.is() && xCellInfo.get() )
                 {
                     const SfxPoolItem *pPoolItem = 0;
-                    if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,sal_False,&pPoolItem)==SFX_ITEM_SET)
+                    if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SFX_ITEM_SET)
                         xCell->SetMergedItem( *pPoolItem );
 
                     OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount );

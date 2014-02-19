@@ -367,7 +367,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         {
             const SfxPoolItem *pItem;
             if( SFX_ITEM_SET==pFmt->GetAttrSet().GetItemState(
-                                    RES_PARATR_DROP, sal_True, &pItem ) )
+                                    RES_PARATR_DROP, true, &pItem ) )
             {
                 sal_Bool bPut = sal_True;
                 if( pTemplate )
@@ -376,7 +376,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                     const SfxPoolItem *pRefItem;
                     sal_Bool bRefItemSet =
                         SFX_ITEM_SET==pReferenceFmt->GetAttrSet().GetItemState(
-                                        RES_PARATR_DROP, sal_True, &pRefItem );
+                                        RES_PARATR_DROP, true, &pRefItem );
                     bPut = !bRefItemSet || *pItem!=*pRefItem;
                 }
                 if( bPut )
@@ -657,7 +657,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     if( rInfo.pItemSet &&
         SFX_ITEM_SET == rInfo.pItemSet->GetItemState( RES_PARATR_ADJUST,
-                                                      sal_False, &pItem ) )
+                                                      false, &pItem ) )
     {
         pAdjItem = pItem;
     }
@@ -865,7 +865,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             // export language if it differs from the default language only.
             const SfxPoolItem *pTmpItem;
             if( SFX_ITEM_SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
-                        sal_True, &pTmpItem ) &&
+                        true, &pTmpItem ) &&
                 ((const SvxLanguageItem *)pTmpItem)->GetLanguage() == eLang )
                 rInfo.pItemSet->ClearItem( aWhichIds[i] );
         }
@@ -2108,7 +2108,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             return rHTMLWrt;
         }
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_LR_SPACE, sal_False, &pItem ))
+        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_LR_SPACE, false, &pItem ))
         {
             sal_Int32 nLeft = ((SvxLRSpaceItem*)pItem)->GetLeft();
             sal_Int32 nRight = ((SvxLRSpaceItem*)pItem)->GetRight();
@@ -2152,7 +2152,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             }
         }
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, sal_False, &pItem ))
+        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, false, &pItem ))
         {
             const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
             const editeng::SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
@@ -2197,7 +2197,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         const SfxPoolItem* pItem;
         const SfxItemSet *pItemSet = pNd->GetpSwAttrSet();
         if( pItemSet && pItemSet->Count() &&
-            SFX_ITEM_SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, sal_False, &pItem ) &&
+            SFX_ITEM_SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
             40 == ((const SvxFontHeightItem *)pItem)->GetHeight() )
         {
             // ... ausserdem ist die 2pt Schrift eingestellt ...
@@ -2239,11 +2239,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         if( pItemSet )
         {
             if( SFX_ITEM_SET ==
-                pItemSet->GetItemState( RES_PAGEDESC, sal_True, &pItem ) &&
+                pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
                 ((SwFmtPageDesc *)pItem)->GetPageDesc() )
                 bPageBreakBefore = sal_True;
             else if( SFX_ITEM_SET ==
-                     pItemSet->GetItemState( RES_BREAK, sal_True, &pItem ) )
+                     pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
             {
                 switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
                 {

@@ -95,7 +95,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         const SfxPoolItem *pItem = 0;
         OUString aTmpStr;
         if ( SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_REGION_NAME, sal_True, &pItem) )
+                pSet->GetItemState(FN_PARAM_REGION_NAME, true, &pItem) )
         {
             const OUString sRemoveWhenUniStringIsGone = ((const SfxStringItem *)pItem)->GetValue();
             aTmpStr = rSh.GetUniqueSectionName(&sRemoveWhenUniStringIsGone);
@@ -107,8 +107,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
-        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, sal_False, &pItem)||
-            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, sal_False, &pItem))
+        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, false, &pItem)||
+            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, false, &pItem))
         {
             SwFmtCol aCol;
             SwRect aRect;
@@ -122,20 +122,20 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
                 aSet.Put(aCol);
             }
         }
-        else if(SFX_ITEM_SET == pSet->GetItemState(RES_COL, sal_False, &pItem))
+        else if(SFX_ITEM_SET == pSet->GetItemState(RES_COL, false, &pItem))
         {
             aSet.Put(*pItem);
         }
 
         const sal_Bool bHidden = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_HIDDEN, sal_True, &pItem)?
+            pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
         const sal_Bool bProtect = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_PROTECT, sal_True, &pItem)?
+            pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
         // #114856# edit in readonly sections
         const sal_Bool bEditInReadonly = SFX_ITEM_SET ==
-            pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, sal_True, &pItem)?
+            pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
 
         aSection.SetProtectFlag(bProtect);
@@ -144,16 +144,16 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSection.SetEditInReadonlyFlag(bEditInReadonly);
 
         if(SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_REGION_CONDITION, sal_True, &pItem))
+                pSet->GetItemState(FN_PARAM_REGION_CONDITION, true, &pItem))
             aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
 
         OUString aFile, aSub;
         if(SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_1, sal_True, &pItem))
+                pSet->GetItemState(FN_PARAM_1, true, &pItem))
             aFile = ((const SfxStringItem *)pItem)->GetValue();
 
         if(SFX_ITEM_SET ==
-                pSet->GetItemState(FN_PARAM_3, sal_True, &pItem))
+                pSet->GetItemState(FN_PARAM_3, true, &pItem))
             aSub = ((const SfxStringItem *)pItem)->GetValue();
 
 
@@ -164,7 +164,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             sLinkFileName = comphelper::string::setToken(sLinkFileName, 0, sfx2::cTokenSeparator, aFile);
 
             if(SFX_ITEM_SET ==
-                    pSet->GetItemState(FN_PARAM_2, sal_True, &pItem))
+                    pSet->GetItemState(FN_PARAM_2, true, &pItem))
             {
                 sLinkFileName = comphelper::string::setToken(sLinkFileName, 1, sfx2::cTokenSeparator,
                     ((const SfxStringItem *)pItem)->GetValue());
@@ -215,7 +215,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     const SfxPoolItem* pItem = 0;
     if(pArgs)
-        pArgs->GetItemState(nSlot, sal_False, &pItem);
+        pArgs->GetItemState(nSlot, false, &pItem);
     SwWrtShell& rWrtShell = GetShell();
 
     switch ( nSlot )

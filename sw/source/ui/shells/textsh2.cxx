@@ -99,29 +99,29 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     const SfxPoolItem* pSelectionItem = 0;
 
     // first get the selection of rows to be inserted
-    pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, sal_False, &pSelectionItem);
+    pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, false, &pSelectionItem);
 
     Sequence<Any> aSelection;
     if(pSelectionItem)
         ((SfxUsrAnyItem*)pSelectionItem)->GetValue() >>= aSelection;
 
     // get the data source name
-    pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, sal_False, &pSourceItem);
+    pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, false, &pSourceItem);
     if(pSourceItem)
         ((const SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSourceArg;
 
     // get the command
-    pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, sal_False, &pCommandItem);
+    pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, false, &pCommandItem);
     if(pCommandItem)
         ((const SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommandArg;
 
     // get the command type
-    pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, sal_False, &pCommandTypeItem);
+    pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, false, &pCommandTypeItem);
     if(pCommandTypeItem)
         ((const SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
 
     Reference<XConnection> xConnection;
-    pArgs->GetItemState(FN_DB_CONNECTION_ANY, sal_False, &pConnectionItem);
+    pArgs->GetItemState(FN_DB_CONNECTION_ANY, false, &pConnectionItem);
     if ( pConnectionItem )
         ((const SfxUsrAnyItem*)pConnectionItem)->GetValue() >>= xConnection;
     // may be we even get no connection
@@ -135,7 +135,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
     // get the cursor, we use to travel, may be NULL
     Reference<XResultSet> xCursor;
-    pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, sal_False, &pCursorItem);
+    pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, false, &pCursorItem);
     if ( pCursorItem )
         ((const SfxUsrAnyItem*)pCursorItem)->GetValue() >>= xCursor;
 
@@ -192,8 +192,8 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 const SfxPoolItem* pColumnItem = 0;
                 const SfxPoolItem* pColumnNameItem = 0;
 
-                pArgs->GetItemState(FN_DB_COLUMN_ANY, sal_False, &pColumnItem);
-                pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, sal_False, &pColumnNameItem);
+                pArgs->GetItemState(FN_DB_COLUMN_ANY, false, &pColumnItem);
+                pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, false, &pColumnNameItem);
 
                 OUString sColumnName;
                 if(pColumnNameItem)

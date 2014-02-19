@@ -861,14 +861,14 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
             // won't reflect these changes, and why do we have a model, then ?)
 
             // horizontal justify
-            SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
+            SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, true);
 
             _eJustify = (SvxCellHorJustify)pHorJustify->GetValue();
 
             // format key
             if (_bHasFormat)
             {
-                SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
+                SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, true);
                 _nFormatKey = (sal_Int32)pFormat->GetValue();
             }
             bRet = sal_True;

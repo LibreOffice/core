@@ -242,8 +242,8 @@ namespace dbaui
         if ( bValid )
         {
             // collect some items and some values
-            SFX_ITEMSET_GET( _rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True );
-            SFX_ITEMSET_GET( _rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True );
+            SFX_ITEMSET_GET( _rSet, pNameItem, SfxStringItem, DSID_NAME, true );
+            SFX_ITEMSET_GET( _rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true );
             assert( pUrlItem );
             assert( pNameItem );
             sName = pNameItem->GetValue();
@@ -290,8 +290,8 @@ namespace dbaui
         if ( bValid )
         {
             // collect some items and some values
-            SFX_ITEMSET_GET( _rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True );
-            SFX_ITEMSET_GET( _rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True );
+            SFX_ITEMSET_GET( _rSet, pNameItem, SfxStringItem, DSID_NAME, true );
+            SFX_ITEMSET_GET( _rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, true );
             assert( pUrlItem );
             assert( pNameItem );
             sName = pNameItem->GetValue();

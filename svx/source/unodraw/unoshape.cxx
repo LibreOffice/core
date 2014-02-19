@@ -2013,7 +2013,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
     case SDRATTR_CIRCSTARTANGLE:
     {
         const SfxPoolItem* pPoolItem=NULL;
-        if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,sal_False,&pPoolItem)==SFX_ITEM_SET)
+        if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SFX_ITEM_SET)
         {
             sal_Int32 nAngle = ((SdrCircStartAngleItem*)pPoolItem)->GetValue();
             aAny <<= nAngle;
@@ -2024,7 +2024,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
     case SDRATTR_CIRCENDANGLE:
     {
         const SfxPoolItem* pPoolItem=NULL;
-        if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,sal_False,&pPoolItem)==SFX_ITEM_SET)
+        if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SFX_ITEM_SET)
         {
             sal_Int32 nAngle = ((SdrCircEndAngleItem*)pPoolItem)->GetValue();
             aAny <<= nAngle;
@@ -2113,7 +2113,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
     {
         const SfxItemSet& rSet = mpObj->GetMergedItemSet();
 
-        switch( rSet.GetItemState( pMap->nWID, sal_False ) )
+        switch( rSet.GetItemState( pMap->nWID, false ) )
         {
         case SFX_ITEM_READONLY:
         case SFX_ITEM_SET:

@@ -278,11 +278,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         {
             SfxStyleFamily eFamily = SFX_STYLE_FAMILY_PARA;
             const SfxPoolItem* pFamItem;
-            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, sal_True, &pFamItem ) )
+            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
                 eFamily = (SfxStyleFamily)((const SfxUInt16Item*)pFamItem)->GetValue();
             const SfxPoolItem* pNameItem;
             OUString aStyleName;
-            if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, sal_True, &pNameItem ))
+            if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
                 aStyleName  = ((const SfxStringItem*)pNameItem)->GetValue();
             if ( eFamily == SFX_STYLE_FAMILY_PARA ) // CellStyles
             {
@@ -358,9 +358,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         SfxStyleFamily eFamily = SFX_STYLE_FAMILY_PARA;
         const SfxPoolItem* pFamItem;
-        if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, sal_True, &pFamItem ) )
+        if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, true, &pFamItem ) )
             eFamily = (SfxStyleFamily)((const SfxUInt16Item*)pFamItem)->GetValue();
-        else if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, sal_True, &pFamItem ) )
+        else if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, true, &pFamItem ) )
         {
             OUString sFamily = ((const SfxStringItem*)pFamItem)->GetValue();
             if (sFamily.equalsAscii("CellStyles"))
@@ -379,11 +379,11 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             case SID_STYLE_NEW:
                 {
                     const SfxPoolItem* pNameItem;
-                    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, sal_True, &pNameItem ))
+                    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
                         aStyleName  = ((const SfxStringItem*)pNameItem)->GetValue();
 
                     const SfxPoolItem* pRefItem=NULL;
-                    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_REFERENCE, sal_True, &pRefItem ))
+                    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_REFERENCE, true, &pRefItem ))
                     {
                         if(pRefItem!=NULL)
                             aRefName  = ((const SfxStringItem*)pRefItem)->GetValue();
@@ -428,7 +428,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             case SID_STYLE_NEW_BY_EXAMPLE:
                 {
                     const SfxPoolItem* pNameItem;
-                    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, sal_True, &pNameItem ))
+                    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
                         aStyleName  = ((const SfxStringItem*)pNameItem)->GetValue();
                     pStyleSheet = pStylePool->Find( aStyleName, eFamily );
 
@@ -445,7 +445,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
 
                     if ( SFX_ITEM_SET ==
-                         pArgs->GetItemState( nSlotId, sal_True, &pItem ) )
+                         pArgs->GetItemState( nSlotId, true, &pItem ) )
                     {
                         const SfxStringItem* pStrItem = PTR_CAST(SfxStringItem,pItem);
                         if ( pStrItem )
@@ -1183,7 +1183,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             if ( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( ATTR_VALUE_FORMAT, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) == SFX_ITEM_SET )
                 {
                     // We have to accomplish this using ApplyAttributes()
                     // because we also need the language information to be
@@ -1202,7 +1202,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             if ( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
                 {
                     sal_uInt16 nFormat = ((SfxInt16Item *)pItem)->GetValue();
                     switch(nFormat)
@@ -1284,7 +1284,7 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
             if( pSet )
             {
                 const SfxPoolItem* pItem = NULL;
-                if( pSet->GetItemState(GetPool().GetWhich(nSlot), sal_True, &pItem  ) == SFX_ITEM_SET )
+                if( pSet->GetItemState(GetPool().GetWhich(nSlot), true, &pItem  ) == SFX_ITEM_SET )
                 {
 
                     switch ( nSlot )
@@ -1508,12 +1508,12 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         SvxCellHorJustify        eHorJustify = SVX_HOR_JUSTIFY_STANDARD;
         SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
 
-        if (rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, sal_True,&pItem ) == SFX_ITEM_SET)
+        if (rAttrSet.GetItemState(ATTR_HOR_JUSTIFY, true,&pItem ) == SFX_ITEM_SET)
         {
             pHorJustify = (const SvxHorJustifyItem*)pItem;
             eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
         }
-        if (rAttrSet.GetItemState(ATTR_VER_JUSTIFY, sal_True,&pItem ) == SFX_ITEM_SET)
+        if (rAttrSet.GetItemState(ATTR_VER_JUSTIFY, true,&pItem ) == SFX_ITEM_SET)
         {
             pVerJustify = (const SvxVerJustifyItem*)pItem;
             eVerJustify = SvxCellVerJustify( pVerJustify->GetValue() );
@@ -1801,7 +1801,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     // Border-Items vom Controller auswerten:
                     const SfxPoolItem* pItem = 0;
 
-                    if ( pNewAttrs->GetItemState( ATTR_BORDER, sal_True, &pItem )
+                    if ( pNewAttrs->GetItemState( ATTR_BORDER, true, &pItem )
                          == SFX_ITEM_SET )
                     {
                         //  The SvxFrameToolBoxControl toolbox controller uses a default
@@ -1822,7 +1822,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         rReq.AppendItem( aBoxItem );
                     }
 
-                    if ( pNewAttrs->GetItemState( ATTR_BORDER_INNER, sal_True, &pItem )
+                    if ( pNewAttrs->GetItemState( ATTR_BORDER_INNER, true, &pItem )
                          == SFX_ITEM_SET )
                     {
                         SvxBoxInfoItem aBoxInfoItem( *(const SvxBoxInfoItem*)pItem );
@@ -2179,7 +2179,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     // Unterstreichung
     //------------------------
 
-    eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE, sal_True );
+    eState = rAttrSet.GetItemState( ATTR_FONT_UNDERLINE, true );
     if ( eState == SFX_ITEM_DONTCARE )
     {
         rSet.InvalidateItem( SID_ULINE_VAL_NONE );
@@ -2214,7 +2214,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     bool                     bJustifyStd = false;
     SfxBoolItem              aBoolItem   ( 0, true );
 
-    eState   = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, sal_True,
+    eState   = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, true,
                                         (const SfxPoolItem**)&pHorJustify );
     switch ( eState )
     {
@@ -2283,7 +2283,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     nWhich = 0;
     aBoolItem.SetValue( true );
 
-    eState = rAttrSet.GetItemState( ATTR_VER_JUSTIFY, sal_True,
+    eState = rAttrSet.GetItemState( ATTR_VER_JUSTIFY, true,
                                     (const SfxPoolItem**)&pVerJustify );
 
     switch ( eState )

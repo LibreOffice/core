@@ -573,7 +573,7 @@ void SwDocStyleSheet::SetHidden( sal_Bool bValue )
     }
 }
 
-sal_Bool SwDocStyleSheet::IsHidden( ) const
+bool SwDocStyleSheet::IsHidden( ) const
 {
     sal_Bool bRet = sal_False;
 
@@ -1254,13 +1254,13 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         {
             OSL_ENSURE(pColl, "Where's Collection");
             const SfxPoolItem* pAutoUpdate;
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,sal_False, &pAutoUpdate ))
+            if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
                 pColl->SetAutoUpdateFmt(((const SfxBoolItem*)pAutoUpdate)->GetValue());
             }
 
             const SwCondCollItem* pCondItem;
-            if( SFX_ITEM_SET != rSet.GetItemState( FN_COND_COLL, sal_False,
+            if( SFX_ITEM_SET != rSet.GetItemState( FN_COND_COLL, false,
                 (const SfxPoolItem**)&pCondItem ))
                 pCondItem = 0;
 
@@ -1318,8 +1318,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 pColl = pCColl;
             }
             if ( bResetIndentAttrsAtParagraphStyle &&
-                 rSet.GetItemState( RES_PARATR_NUMRULE, sal_False, 0 ) == SFX_ITEM_SET &&
-                 rSet.GetItemState( RES_LR_SPACE, sal_False, 0 ) != SFX_ITEM_SET &&
+                 rSet.GetItemState( RES_PARATR_NUMRULE, false, 0 ) == SFX_ITEM_SET &&
+                 rSet.GetItemState( RES_LR_SPACE, false, 0 ) != SFX_ITEM_SET &&
                  pColl->GetItemState( RES_LR_SPACE, sal_False, 0 ) == SFX_ITEM_SET )
             {
                 rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
@@ -1330,7 +1330,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             // neither the paragraph style nor the numbering style is used in the document
             // the numbering style will not be saved with the document and the assignment got lost.
             const SfxPoolItem* pNumRuleItem = 0;
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, sal_False, &pNumRuleItem ) )
+            if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pNumRuleItem ) )
             {   // Setting a numbering rule?
                 const OUString sNumRule = ((SwNumRuleItem*)pNumRuleItem)->GetValue();
                 if (!sNumRule.isEmpty())
@@ -1379,7 +1379,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         {
             OSL_ENSURE(pFrmFmt, "Where's FrmFmt");
             const SfxPoolItem* pAutoUpdate;
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,sal_False, &pAutoUpdate ))
+            if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
                 pFrmFmt->SetAutoUpdateFmt(((const SfxBoolItem*)pAutoUpdate)->GetValue());
             }
@@ -1412,7 +1412,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     break;
 
                 const SfxPoolItem* pItem;
-                switch( rSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
+                switch( rSet.GetItemState( SID_ATTR_NUMBERING_RULE, false, &pItem ))
                 {
                 case SFX_ITEM_SET:
                 {

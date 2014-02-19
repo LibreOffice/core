@@ -246,13 +246,13 @@ void NBOTypeMgrBase::StoreMapUnit_impl() {
     if ( pSet )
     {
         const SfxPoolItem* pItem;
-        SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, sal_False, &pItem);
+        SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
         if(eState == SFX_ITEM_SET)
         {
             eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
         } else {
             //sd use different sid for numbering rule
-            eState = pSet->GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem);
+            eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
             if(eState == SFX_ITEM_SET)
             {
                 eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhich(EE_PARA_NUMBULLET));

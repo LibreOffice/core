@@ -41,7 +41,7 @@ void SwView::ExecDlg(SfxRequest &rReq)
 
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState( GetPool().GetWhich(nSlot), sal_False, &pItem );
+        pArgs->GetItemState( GetPool().GetWhich(nSlot), false, &pItem );
 
     switch ( nSlot )
     {

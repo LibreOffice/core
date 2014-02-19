@@ -932,7 +932,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 }
                 sal_Bool bSingleLine = sal_False;
                 const SfxPoolItem* pSingleLine;
-                if( SFX_ITEM_SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, sal_False, &pSingleLine))
+                if( SFX_ITEM_SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, false, &pSingleLine))
                     bSingleLine = ((const SfxBoolItem*)pSingleLine)->GetValue();
                 if ( m_bSetTabRowFromDoc )
                 {

@@ -358,7 +358,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             aSet.Put( aSwOptions );
 
             const SfxPoolItem* pOpenSmartTagOptionsItem = 0;
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_OPEN_SMARTTAGOPTIONS, sal_False, &pOpenSmartTagOptionsItem ) )
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_OPEN_SMARTTAGOPTIONS, false, &pOpenSmartTagOptionsItem ) )
                 aSet.Put( *static_cast<const SfxBoolItem*>(pOpenSmartTagOptionsItem) );
 
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -422,7 +422,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
 
                 if( pArgs && SFX_ITEM_SET ==
-                    pArgs->GetItemState( SID_PRINTPREVIEW, sal_False, &pItem ))
+                    pArgs->GetItemState( SID_PRINTPREVIEW, false, &pItem ))
                     bSet = ((SfxBoolItem*)pItem)->GetValue();
                 else
                     bSet = !bCurrent;
@@ -854,7 +854,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 sal_Int32  nTemplateOutlineLevel = 0;
 
                 OUString aFileName, aTemplateName;
-                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, sal_False, &pItem ) )
+                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, false, &pItem ) )
                 {
                     aFileName = ((const SfxStringItem*)pItem)->GetValue();
                     SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME, false );
@@ -1093,7 +1093,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_ATTR_YEAR2000:
-            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , sal_False, &pItem ))
+            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , false, &pItem ))
             {
                 OSL_ENSURE(pItem->ISA(SfxUInt16Item), "wrong Item");
                 sal_uInt16 nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
@@ -1519,7 +1519,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         {
             const SfxPoolItem* pItem;
             if( ( SFX_ITEM_SET == pMed->GetItemSet()->GetItemState(
-                                            SID_VERSION, sal_False, &pItem ) )
+                                            SID_VERSION, false, &pItem ) )
                     ? (nVersion == ((SfxInt16Item*)pItem)->GetValue())
                     : !nVersion )
             {

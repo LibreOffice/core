@@ -2007,7 +2007,7 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
                 ((SwTxtNode*)pCNd)->GetAttr( aCoreSet, 0, ((SwTxtNode*)pCNd)->GetTxt().getLength());
                 const SvxCharRotateItem * pRotate = NULL;
                 const SfxPoolItem * pRotItem;
-                if ( SFX_ITEM_SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, sal_True, &pRotItem))
+                if ( SFX_ITEM_SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
                 {
                     pRotate = (SvxCharRotateItem*)pRotItem;
                     if(pRotate && pRotate->GetValue() == 900)

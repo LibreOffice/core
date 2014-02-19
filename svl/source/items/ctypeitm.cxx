@@ -71,7 +71,7 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
     rStream.ReadUInt32( nMagic );
     if (nMagic == CNTSTRINGITEM_STREAM_MAGIC)
     {
-        sal_Bool bEncrypted = sal_False;
+        unsigned char bEncrypted = sal_False;
         rStream.ReadUChar( bEncrypted );
         DBG_ASSERT(!bEncrypted,
                    "CntContentTypeItem::Create() reads encrypted data");
@@ -88,7 +88,7 @@ SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
     writeUnicodeString(rStream, GetValue());
-    rStream.WriteUInt32( CNTSTRINGITEM_STREAM_MAGIC ).WriteUChar( sal_Bool(sal_False) );
+    rStream.WriteUInt32( CNTSTRINGITEM_STREAM_MAGIC ).WriteUChar( false );
     return rStream;
 }
 

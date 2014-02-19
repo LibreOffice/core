@@ -162,9 +162,9 @@ namespace sdr
 
         void CleanupFillProperties( SfxItemSet& rItemSet )
         {
-            const bool bFillBitmap = rItemSet.GetItemState(XATTR_FILLBITMAP, sal_False) == SFX_ITEM_SET;
-            const bool bFillGradient = rItemSet.GetItemState(XATTR_FILLGRADIENT, sal_False) == SFX_ITEM_SET;
-            const bool bFillHatch = rItemSet.GetItemState(XATTR_FILLHATCH, sal_False) == SFX_ITEM_SET;
+            const bool bFillBitmap = rItemSet.GetItemState(XATTR_FILLBITMAP, false) == SFX_ITEM_SET;
+            const bool bFillGradient = rItemSet.GetItemState(XATTR_FILLGRADIENT, false) == SFX_ITEM_SET;
+            const bool bFillHatch = rItemSet.GetItemState(XATTR_FILLHATCH, false) == SFX_ITEM_SET;
             if( bFillBitmap || bFillGradient || bFillHatch )
             {
                 const XFillStyleItem* pFillStyleItem = dynamic_cast< const XFillStyleItem* >( rItemSet.GetItem(XATTR_FILLSTYLE) );

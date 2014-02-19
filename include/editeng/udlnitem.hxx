@@ -58,7 +58,7 @@ public:
     void                    SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
     virtual bool            HasBoolValue() const;
-    virtual sal_Bool        GetBoolValue() const;
+    virtual bool        GetBoolValue() const;
     virtual void            SetBoolValue( sal_Bool bVal );
 
     virtual bool            operator==( const SfxPoolItem& ) const;

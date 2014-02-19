@@ -160,7 +160,7 @@ namespace offapp
         sal_Bool bNeedCommit = sal_False;
 
         // the global "enabled" flag
-        SFX_ITEMSET_GET( _rSourceItems, pEnabled, SfxBoolItem, SID_SB_POOLING_ENABLED, sal_True );
+        SFX_ITEMSET_GET( _rSourceItems, pEnabled, SfxBoolItem, SID_SB_POOLING_ENABLED, true );
         if (pEnabled)
         {
             sal_Bool bEnabled = pEnabled->GetValue();
@@ -169,7 +169,7 @@ namespace offapp
         }
 
         // the settings for the single drivers
-        SFX_ITEMSET_GET( _rSourceItems, pDriverSettings, DriverPoolingSettingsItem, SID_SB_DRIVER_TIMEOUTS, sal_True );
+        SFX_ITEMSET_GET( _rSourceItems, pDriverSettings, DriverPoolingSettingsItem, SID_SB_DRIVER_TIMEOUTS, true );
         if (pDriverSettings)
         {
             OConfigurationNode aDriverSettings = aConnectionPoolRoot.openNode(getDriverSettingsNodeName());

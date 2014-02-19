@@ -325,7 +325,7 @@ bool shouldLaunchQuickstart()
         const SfxPoolItem* pItem=0;
         SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
         SFX_APP()->GetOptions(aQLSet);
-        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, sal_False, &pItem);
+        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, false, &pItem);
         if (SFX_ITEM_SET == eState)
             bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
     }
@@ -1507,7 +1507,7 @@ int Desktop::Main()
 #endif
 
         // keep a language options instance...
-        pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
+        pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(true));
 
         css::document::EventObject aEvent;
         aEvent.EventName = "OnStartApp";

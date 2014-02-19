@@ -600,7 +600,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
     const SfxPoolItem*  pItem;
     sal_uInt16              nSlot = rReq.GetSlot();
 
-    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, sal_False, &pItem ))
+    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, false, &pItem ))
         pItem = 0;
 
     switch( nSlot )

@@ -3553,9 +3553,9 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     if( bAttrSetChg )
     {
         const SwAttrSet* pChgSet = ((SwAttrSetChg*)pNew)->GetChgSet();
-        pChgSet->GetItemState( RES_FRM_SIZE, sal_False, &pItem);
+        pChgSet->GetItemState( RES_FRM_SIZE, false, &pItem);
         if ( !pItem )
-            pChgSet->GetItemState( RES_ROW_SPLIT, sal_False, &pItem);
+            pChgSet->GetItemState( RES_ROW_SPLIT, false, &pItem);
     }
     else if ( RES_FRM_SIZE == pNew->Which() || RES_ROW_SPLIT == pNew->Which() )
         pItem = pNew;
@@ -4940,7 +4940,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     const SfxPoolItem *pItem = 0;
 
     if( bAttrSetChg )
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_VERT_ORIENT, sal_False, &pItem);
+        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_VERT_ORIENT, false, &pItem);
     else if ( RES_VERT_ORIENT == pNew->Which() )
         pItem = pNew;
 
@@ -4963,7 +4963,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 
     if ( ( bAttrSetChg &&
-           SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, sal_False ) ) ||
+           SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, false ) ) ||
          RES_PROTECT == pNew->Which() )
     {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -4972,7 +4972,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 
     if ( bAttrSetChg &&
-         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, sal_False, &pItem ) )
+         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
     {
         SetDerivedVert( sal_False );
         CheckDirChange();
@@ -4980,7 +4980,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
     // #i29550#
     if ( bAttrSetChg &&
-         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, sal_False, &pItem ) )
+         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, false, &pItem ) )
     {
         SwFrm* pTmpUpper = GetUpper();
         while ( pTmpUpper->GetUpper() && !pTmpUpper->GetUpper()->IsTabFrm() )

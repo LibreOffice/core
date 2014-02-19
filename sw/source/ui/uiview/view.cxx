@@ -493,7 +493,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
 
             const SfxPoolItem *pItem;
             if ( SFX_ITEM_SET != GetObjectShell()->GetMedium()->GetItemSet()->
-                                    GetItemState( SID_HIDDEN, sal_False, &pItem ) ||
+                                    GetItemState( SID_HIDDEN, false, &pItem ) ||
                  !((SfxBoolItem*)pItem)->GetValue() )
             {
                 GetViewFrame()->GetBindings().ENTERREGISTRATIONS();
@@ -889,8 +889,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         aUsrPref.SetViewVRuler(sal_False);
     }
 
-    StartListening( *pViewFrame, sal_True );
-    StartListening( *pDocSh, sal_True );
+    StartListening( *pViewFrame, true );
+    StartListening( *pDocSh, true );
 
     // Set Zoom-factor from HRuler
     Fraction aZoomFract( aUsrPref.GetZoom(), 100 );

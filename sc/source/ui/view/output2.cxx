@@ -170,7 +170,7 @@ public:
     void    SetShrinkScale( long nScale, sal_uInt8 nScript );
 
     bool    HasCondHeight() const   { return pCondSet && SFX_ITEM_SET ==
-                                        pCondSet->GetItemState( ATTR_FONT_HEIGHT, sal_True ); }
+                                        pCondSet->GetItemState( ATTR_FONT_HEIGHT, true ); }
 
     bool    HasEditCharacters() const;
 
@@ -454,10 +454,10 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 
     sal_uLong nOld = nValueFormat;
     const SfxPoolItem* pFormItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,sal_True,&pFormItem) != SFX_ITEM_SET )
+    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SFX_ITEM_SET )
         pFormItem = &pPattern->GetItem(ATTR_VALUE_FORMAT);
     const SfxPoolItem* pLangItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,sal_True,&pLangItem) != SFX_ITEM_SET )
+    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SFX_ITEM_SET )
         pLangItem = &pPattern->GetItem(ATTR_LANGUAGE_FORMAT);
     nValueFormat = pOutput->mpDoc->GetFormatTable()->GetFormatForLanguageIfBuiltIn(
                     ((SfxUInt32Item*)pFormItem)->GetValue(),

@@ -145,7 +145,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
             SfxItemSet& rSet = pSheet->GetItemSet();
 
             // if autokerning is set in style, override it, ppt has no autokerning
-            if( rSet.GetItemState( EE_CHAR_PAIRKERNING, sal_False ) == SFX_ITEM_SET )
+            if( rSet.GetItemState( EE_CHAR_PAIRKERNING, false ) == SFX_ITEM_SET )
                 rSet.ClearItem( EE_CHAR_PAIRKERNING );
         }
     }

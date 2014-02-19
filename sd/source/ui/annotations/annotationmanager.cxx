@@ -324,7 +324,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
         if( pArgs )
         {
             const SfxPoolItem*  pPoolItem = NULL;
-            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, sal_True, &pPoolItem ) )
+            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, true, &pPoolItem ) )
             {
                 OUString sAuthor( (( const SfxStringItem* ) pPoolItem )->GetValue() );
                 DeleteAnnotationsByAuthor( sAuthor );
@@ -340,7 +340,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
                 if( pArgs )
                 {
                     const SfxPoolItem*  pPoolItem = NULL;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, sal_True, &pPoolItem ) )
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
                         ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
                 }
             }
@@ -444,7 +444,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = NULL;
-        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), sal_True, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
             ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
     }
 

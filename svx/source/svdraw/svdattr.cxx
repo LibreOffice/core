@@ -1081,7 +1081,7 @@ SfxItemPresentation SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentatio
 
 bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return true; }
 
-sal_Bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
+bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
 
 void SdrTextFitToSizeTypeItem::SetBoolValue(sal_Bool bVal) { SetValue(sal::static_int_cast< sal_uInt16 >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE)); }
 

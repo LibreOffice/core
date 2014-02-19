@@ -769,8 +769,8 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if(pSheet)
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
-        if(rSet.GetItemState(EE_CHAR_COLOR,sal_True) == SFX_ITEM_ON)
-            maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,sal_True))->GetValue();
+        if(rSet.GetItemState(EE_CHAR_COLOR,true) == SFX_ITEM_ON)
+            maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,true))->GetValue();
     }
 
     // default background from the background of the master page of the first page

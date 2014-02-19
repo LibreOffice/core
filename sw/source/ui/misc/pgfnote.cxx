@@ -315,7 +315,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     lMaxHeight = rSize.GetSize().Height();
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), false, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -330,7 +330,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_FOOTERSET),
-            sal_False, &pItem ) )
+            false, &pItem ) )
     {
         const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
@@ -344,7 +344,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
         }
     }
 
-    if ( rSet.GetItemState( RES_UL_SPACE , sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( RES_UL_SPACE , false ) == SFX_ITEM_SET )
     {
         const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)rSet.Get( RES_UL_SPACE );
         lMaxHeight -= rUL.GetUpper() + rUL.GetLower();

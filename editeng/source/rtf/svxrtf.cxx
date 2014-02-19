@@ -864,7 +864,7 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
             if( SFX_WHICH_MAX > nWhich &&
-                SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False, &pItem ) &&
+                SFX_ITEM_SET == rSet.GetItemState( nWhich, false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
@@ -878,14 +878,14 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
         const SfxPoolItem* pSItem;
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
-            if( SFX_ITEM_SET == rStyleSet.GetItemState( nWhich, sal_True, &pSItem ))
+            if( SFX_ITEM_SET == rStyleSet.GetItemState( nWhich, true, &pSItem ))
             {
-                if( SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False, &pItem )
+                if( SFX_ITEM_SET == rSet.GetItemState( nWhich, false, &pItem )
                     && *pItem == *pSItem )
                     rSet.ClearItem( nWhich );       // delete
             }
             else if( SFX_WHICH_MAX > nWhich &&
-                    SFX_ITEM_SET == rSet.GetItemState( nWhich, sal_False, &pItem ) &&
+                    SFX_ITEM_SET == rSet.GetItemState( nWhich, false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
@@ -916,7 +916,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 while( true )
                 {
                     if( SFX_ITEM_SET == pAkt->aAttrSet.GetItemState(
-                        pItem->Which(), sal_False, &pGet ) &&
+                        pItem->Which(), false, &pGet ) &&
                         *pItem == *pGet )
                         pOld->aAttrSet.ClearItem( pItem->Which() );
 
@@ -1290,7 +1290,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             do {
                 sal_uInt16 nWhich = aIter.GetCurItem()->Which();
                 if( SFX_ITEM_SET != pTmp->aAttrSet.GetItemState( nWhich,
-                      sal_False, &pItem ) || *pItem != *aIter.GetCurItem() )
+                      false, &pItem ) || *pItem != *aIter.GetCurItem() )
                     aMrgSet.ClearItem( nWhich );
 
                 if( aIter.IsAtEnd() )
@@ -1337,7 +1337,7 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
         SfxItemIter aIter( rDefaults );
         do {
             sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-            if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, sal_False ))
+            if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, false ))
                 aAttrSet.Put( *aIter.GetCurItem() );
 
             if( aIter.IsAtEnd() )
@@ -1350,62 +1350,62 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
 
 RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
 {
-    nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, sal_False );
-    nBgColor = rPool.GetTrueWhich( SID_ATTR_BRUSH_CHAR, sal_False );
-    nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, sal_False );
-    nContour = rPool.GetTrueWhich( SID_ATTR_CHAR_CONTOUR, sal_False );
-    nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, sal_False );
-    nEscapement = rPool.GetTrueWhich( SID_ATTR_CHAR_ESCAPEMENT, sal_False );
-    nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, sal_False );
-    nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, sal_False );
-    nKering = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, sal_False );
-    nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, sal_False );
-    nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, sal_False );
-    nShadowed = rPool.GetTrueWhich( SID_ATTR_CHAR_SHADOWED, sal_False );
-    nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, sal_False );
-    nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, sal_False );
-    nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, sal_False );
-    nWordlineMode = rPool.GetTrueWhich( SID_ATTR_CHAR_WORDLINEMODE, sal_False );
-    nAutoKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_AUTOKERN, sal_False );
+    nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, false );
+    nBgColor = rPool.GetTrueWhich( SID_ATTR_BRUSH_CHAR, false );
+    nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, false );
+    nContour = rPool.GetTrueWhich( SID_ATTR_CHAR_CONTOUR, false );
+    nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, false );
+    nEscapement = rPool.GetTrueWhich( SID_ATTR_CHAR_ESCAPEMENT, false );
+    nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, false );
+    nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, false );
+    nKering = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, false );
+    nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, false );
+    nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, false );
+    nShadowed = rPool.GetTrueWhich( SID_ATTR_CHAR_SHADOWED, false );
+    nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, false );
+    nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, false );
+    nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, false );
+    nWordlineMode = rPool.GetTrueWhich( SID_ATTR_CHAR_WORDLINEMODE, false );
+    nAutoKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_AUTOKERN, false );
 
-    nCJKFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, sal_False );
-    nCJKFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, sal_False );
-    nCJKLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, sal_False );
-    nCJKPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, sal_False );
-    nCJKWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, sal_False );
-    nCTLFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, sal_False );
-    nCTLFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, sal_False );
-    nCTLLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, sal_False );
-    nCTLPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, sal_False );
-    nCTLWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, sal_False );
-    nEmphasis = rPool.GetTrueWhich( SID_ATTR_CHAR_EMPHASISMARK, sal_False );
-    nTwoLines = rPool.GetTrueWhich( SID_ATTR_CHAR_TWO_LINES, sal_False );
+    nCJKFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, false );
+    nCJKFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, false );
+    nCJKLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, false );
+    nCJKPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, false );
+    nCJKWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, false );
+    nCTLFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, false );
+    nCTLFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, false );
+    nCTLLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, false );
+    nCTLPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, false );
+    nCTLWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, false );
+    nEmphasis = rPool.GetTrueWhich( SID_ATTR_CHAR_EMPHASISMARK, false );
+    nTwoLines = rPool.GetTrueWhich( SID_ATTR_CHAR_TWO_LINES, false );
     nRuby = 0; //rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_RUBY, sal_False );
-    nCharScaleX = rPool.GetTrueWhich( SID_ATTR_CHAR_SCALEWIDTH, sal_False );
-    nHorzVert = rPool.GetTrueWhich( SID_ATTR_CHAR_ROTATED, sal_False );
-    nRelief = rPool.GetTrueWhich( SID_ATTR_CHAR_RELIEF, sal_False );
-    nHidden = rPool.GetTrueWhich( SID_ATTR_CHAR_HIDDEN, sal_False );
+    nCharScaleX = rPool.GetTrueWhich( SID_ATTR_CHAR_SCALEWIDTH, false );
+    nHorzVert = rPool.GetTrueWhich( SID_ATTR_CHAR_ROTATED, false );
+    nRelief = rPool.GetTrueWhich( SID_ATTR_CHAR_RELIEF, false );
+    nHidden = rPool.GetTrueWhich( SID_ATTR_CHAR_HIDDEN, false );
 }
 
 RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )
 {
-    nLinespacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, sal_False );
-    nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, sal_False );
-    nTabStop = rPool.GetTrueWhich( SID_ATTR_TABSTOP, sal_False );
-    nHyphenzone = rPool.GetTrueWhich( SID_ATTR_PARA_HYPHENZONE, sal_False );
-    nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, sal_False );
-    nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, sal_False );
-    nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, sal_False );
-    nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, sal_False );
-    nShadow = rPool.GetTrueWhich( SID_ATTR_BORDER_SHADOW, sal_False );
-    nOutlineLvl = rPool.GetTrueWhich( SID_ATTR_PARA_OUTLLEVEL, sal_False );
-    nSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, sal_False );
-    nKeep = rPool.GetTrueWhich( SID_ATTR_PARA_KEEP, sal_False );
-    nFontAlign = rPool.GetTrueWhich( SID_PARA_VERTALIGN, sal_False );
-    nScriptSpace = rPool.GetTrueWhich( SID_ATTR_PARA_SCRIPTSPACE, sal_False );
-    nHangPunct = rPool.GetTrueWhich( SID_ATTR_PARA_HANGPUNCTUATION, sal_False );
-    nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, sal_False );
-    nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False );
+    nLinespacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, false );
+    nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, false );
+    nTabStop = rPool.GetTrueWhich( SID_ATTR_TABSTOP, false );
+    nHyphenzone = rPool.GetTrueWhich( SID_ATTR_PARA_HYPHENZONE, false );
+    nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, false );
+    nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, false );
+    nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, false );
+    nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, false );
+    nShadow = rPool.GetTrueWhich( SID_ATTR_BORDER_SHADOW, false );
+    nOutlineLvl = rPool.GetTrueWhich( SID_ATTR_PARA_OUTLLEVEL, false );
+    nSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, false );
+    nKeep = rPool.GetTrueWhich( SID_ATTR_PARA_KEEP, false );
+    nFontAlign = rPool.GetTrueWhich( SID_PARA_VERTALIGN, false );
+    nScriptSpace = rPool.GetTrueWhich( SID_ATTR_PARA_SCRIPTSPACE, false );
+    nHangPunct = rPool.GetTrueWhich( SID_ATTR_PARA_HANGPUNCTUATION, false );
+    nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, false );
+    nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

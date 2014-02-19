@@ -209,7 +209,7 @@ SfxItemPool::SfxItemPool
 SfxItemPool::SfxItemPool
 (
     const SfxItemPool&  rPool,                  //  von dieser Instanz kopieren
-    sal_Bool                bCloneStaticDefaults    /*  sal_True
+    bool                bCloneStaticDefaults    /*  sal_True
                                                     statische Defaults kopieren
 
                                                     sal_False
@@ -308,7 +308,7 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 
 void SfxItemPool::ReleaseDefaults
 (
-    sal_Bool    bDelete     /*  sal_True
+    bool    bDelete     /*  sal_True
                             l"oscht sowohl das Array als auch die einzelnen
                             statischen Defaults
 
@@ -344,7 +344,7 @@ void SfxItemPool::ReleaseDefaults
 
     sal_uInt16          nCount,     /*  Anzahl der statischen Defaults */
 
-    sal_Bool            bDelete     /*  sal_True
+    bool            bDelete     /*  sal_True
                                     l"oscht sowohl das Array als auch die
                                     einzelnen statischen Defaults
 
@@ -1012,7 +1012,7 @@ sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
+sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const
 {
     if ( !IsSlot(nSlotId) )
         return nSlotId;
@@ -1028,7 +1028,7 @@ sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
+sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, bool bDeep ) const
 {
     if ( !IsWhich(nWhich) )
         return nWhich;
@@ -1047,7 +1047,7 @@ sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
+sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
 {
     if ( !IsSlot(nSlotId) )
         return 0;
@@ -1063,7 +1063,7 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
+sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, bool bDeep ) const
 {
     if ( !IsWhich(nWhich) )
         return 0;

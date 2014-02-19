@@ -1414,7 +1414,7 @@ namespace
         if ( RES_ATTRSET_CHG == nWhich )
         {
             static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
-                GetItemState( RES_ANCHOR, sal_False, (const SfxPoolItem**)&pAnchorFmt );
+                GetItemState( RES_ANCHOR, false, (const SfxPoolItem**)&pAnchorFmt );
         }
         else if ( RES_ANCHOR == nWhich )
         {
@@ -1436,7 +1436,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     {
         // Do not respond to a Reset Anchor !!!!!
         if ( SFX_ITEM_SET ==
-                GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, sal_False ) )
+                GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, false ) )
         {
             // no connect to layout during disconnection
             if ( !mbDisconnectInProgress )
@@ -1487,11 +1487,11 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
              ( RES_ATTRSET_CHG == nWhich &&
                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                           RES_SURROUND, sal_False ) ||
+                           RES_SURROUND, false ) ||
                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                           RES_OPAQUE, sal_False ) ||
+                           RES_OPAQUE, false ) ||
                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                           RES_WRAP_INFLUENCE_ON_OBJPOS, sal_False ) ) ) )
+                           RES_WRAP_INFLUENCE_ON_OBJPOS, false ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
             NotifyBackgrdOfAllVirtObjs( 0L );
@@ -1503,15 +1503,15 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                   RES_FOLLOW_TEXT_FLOW == nWhich ||
                   ( RES_ATTRSET_CHG == nWhich &&
                     ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_LR_SPACE, sal_False ) ||
+                                RES_LR_SPACE, false ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_UL_SPACE, sal_False ) ||
+                                RES_UL_SPACE, false ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_HORI_ORIENT, sal_False ) ||
+                                RES_HORI_ORIENT, false ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_VERT_ORIENT, sal_False ) ||
+                                RES_VERT_ORIENT, false ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_FOLLOW_TEXT_FLOW, sal_False ) ) ) )
+                                RES_FOLLOW_TEXT_FLOW, false ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
             NotifyBackgrdOfAllVirtObjs( 0L );

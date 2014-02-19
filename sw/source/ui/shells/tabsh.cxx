@@ -269,7 +269,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
     SwViewOption aUsrPref( *rSh.GetViewOptions() );
     sal_uInt16 nBackgroundDestination = aUsrPref.GetTblDest();
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, sal_False, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
     {
         nBackgroundDestination = ((SfxUInt16Item*)pItem)->GetValue();
         aUsrPref.SetTblDest((sal_uInt8)nBackgroundDestination);
@@ -278,14 +278,14 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     pItem = 0;
-    bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
+    bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, false, &pItem );
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
-    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False, &pRowItem );
-    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False, &pTableItem );
+    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, false, &pRowItem );
+    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, false, &pTableItem );
     const SfxPoolItem* pSplit = 0;
-    bool bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pSplit );
+    bool bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pSplit );
     const SfxPoolItem* pBoxDirection = 0;
-    bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, sal_False, &pBoxDirection );
+    bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, false, &pBoxDirection );
     if( bBackground || bBorder || bRowSplit || bBoxDirection)
     {
         // The border will be applied to the present selection.
@@ -350,7 +350,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     SwTableRep* pRep = 0;
     SwFrmFmt *pFmt = rSh.GetTableFmt();
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, sal_False, &pItem ))
+    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
         pRep = (SwTableRep*)((const SwPtrItem*)pItem)->GetValue();
 
@@ -392,13 +392,13 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     }
 
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem))
         rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, sal_False, &pItem))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, false, &pItem))
         rSh.SetBoxAlign(((SfxUInt16Item*)(pItem))->GetValue());
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, sal_False, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
 
     // Copy the chosen attributes in the ItemSet.
@@ -417,7 +417,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
             0
         };
     for( const sal_uInt16* pIds = aIds; *pIds; ++pIds )
-        if( SFX_ITEM_SET == rSet.GetItemState( *pIds, sal_False, &pItem))
+        if( SFX_ITEM_SET == rSet.GetItemState( *pIds, false, &pItem))
             aSet.Put( *pItem );
 
     if( aSet.Count() )
@@ -453,7 +453,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
     bool bCallDone = false;
     switch ( nSlot )
     {
@@ -473,7 +473,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const SvxBoxItem& rCoreBox = (const SvxBoxItem&)
                                                     aCoreSet.Get(RES_BOX);
             const SfxPoolItem *pBoxItem = 0;
-            if ( pArgs->GetItemState(RES_BOX, sal_True, &pBoxItem) == SFX_ITEM_SET )
+            if ( pArgs->GetItemState(RES_BOX, true, &pBoxItem) == SFX_ITEM_SET )
             {
                 aBox = *(SvxBoxItem*)pBoxItem;
                 if ( !rReq.IsAPI() )
@@ -486,9 +486,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
-            if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, sal_True, &pBoxItem) == SFX_ITEM_SET)
+            if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, true, &pBoxItem) == SFX_ITEM_SET)
                 aInfo = *(SvxBoxInfoItem*)pBoxItem;
-            else if( pArgs->GetItemState(SDRATTR_TABLE_BORDER_INNER, sal_True, &pBoxItem) == SFX_ITEM_SET )
+            else if( pArgs->GetItemState(SDRATTR_TABLE_BORDER_INNER, true, &pBoxItem) == SFX_ITEM_SET )
             {
                 aInfo = *(SvxBoxInfoItem*)pBoxItem;
                 aInfo.SetWhich(SID_ATTR_BORDER_INNER);
@@ -666,7 +666,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     }
 
                     if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState(
-                        SID_ATTR_NUMBERFORMAT_VALUE, sal_False, &pNumberFormatItem ))
+                        SID_ATTR_NUMBERFORMAT_VALUE, false, &pNumberFormatItem ))
                     {
                         SfxItemSet aBoxFormatSet( *aCoreSet.GetPool(),
                                     RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
@@ -824,7 +824,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if (pItem)
             {
                 nCount = ((const SfxInt16Item* )pItem)->GetValue();
-                if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_INSERT_AFTER, sal_True, &pItem))
+                if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_INSERT_AFTER, true, &pItem))
                     bAfter = ((const SfxBoolItem* )pItem)->GetValue();
             }
             else if( !rReq.IsAPI() )
@@ -1420,7 +1420,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
 
     // Always aquire the language from the current cursor position.
     LanguageType eLang = rSh.GetCurLang();

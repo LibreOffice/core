@@ -344,7 +344,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             const SfxPoolItem* pItem = 0;
             if(pNewAttrs)
-                pNewAttrs->GetItemState(nSlot, sal_False, &pItem);
+                pNewAttrs->GetItemState(nSlot, false, &pItem);
 
             if(pItem)
             {
@@ -399,7 +399,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 {
             const SfxPoolItem* pItem = 0;
             if(pNewAttrs)
-                pNewAttrs->GetItemState(nSlot, sal_False, &pItem );
+                pNewAttrs->GetItemState(nSlot, false, &pItem );
                         if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
                                 pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
                         break;
@@ -558,7 +558,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
-            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, sal_True, &pPoolItem ) )
+            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, true, &pPoolItem ) )
             {
                 if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
@@ -569,7 +569,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                         0 );
 
             sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
-            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, sal_True, &pPoolItem ) )
+            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
                 nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
             if( bLeftToRight )
@@ -732,7 +732,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         eAdjust = SVX_ADJUST_BLOCK;
 
                     if( !pAdjust )
-                        aEditAttr.GetItemState( EE_PARA_JUST, sal_False, &pAdjust);
+                        aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
 
                     if( !pAdjust || IsInvalidItem( pAdjust ))
                         rSet.InvalidateItem( nSlotId ), nSlotId = 0;
@@ -760,7 +760,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         nLSpace = 200;
 
                     if( !pLSpace )
-                        aEditAttr.GetItemState( EE_PARA_SBL, sal_False, &pLSpace );
+                        aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
 
                     if( !pLSpace || IsInvalidItem( pLSpace ))
                         rSet.InvalidateItem( nSlotId ), nSlotId = 0;
@@ -835,7 +835,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
         if(nEEWhich == EE_CHAR_KERNING)
         {
-            SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING, sal_True );
+            SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING, true );
             if ( eState == SFX_ITEM_DONTCARE )
             {
                 rSet.InvalidateItem(EE_CHAR_KERNING);
@@ -915,7 +915,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
         {
             sal_uLong nFormat = 0;
             const SfxPoolItem* pItem;
-            if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
+            if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
                                     pItem->ISA(SfxUInt32Item) )
             {
                 nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -1449,7 +1449,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     sal_uInt16 nId = rReq.GetSlot();
     sal_uInt16 nCnt = 1;
     const SfxPoolItem* pItem=0;
-    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, sal_False, &pItem ) )
+    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ) )
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
     switch( nId )
     {
@@ -1634,7 +1634,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
     OUString sSym;
     OUString sFontName;
@@ -1642,7 +1642,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     {
         sSym = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();

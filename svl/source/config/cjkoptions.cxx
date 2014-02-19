@@ -34,30 +34,30 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define CFG_READONLY_DEFAULT sal_False
+#define CFG_READONLY_DEFAULT false
 
 class SvtCJKOptions_Impl : public utl::ConfigItem
 {
-    sal_Bool        bIsLoaded;
-    sal_Bool        bCJKFont;
-    sal_Bool        bVerticalText;
-    sal_Bool        bAsianTypography;
-    sal_Bool        bJapaneseFind;
-    sal_Bool        bRuby;
-    sal_Bool        bChangeCaseMap;
-    sal_Bool        bDoubleLines;
-    sal_Bool        bEmphasisMarks;
-    sal_Bool        bVerticalCallOut;
+    bool        bIsLoaded;
+    bool        bCJKFont;
+    bool        bVerticalText;
+    bool        bAsianTypography;
+    bool        bJapaneseFind;
+    bool        bRuby;
+    bool        bChangeCaseMap;
+    bool        bDoubleLines;
+    bool        bEmphasisMarks;
+    bool        bVerticalCallOut;
 
-    sal_Bool        bROCJKFont;
-    sal_Bool        bROVerticalText;
-    sal_Bool        bROAsianTypography;
-    sal_Bool        bROJapaneseFind;
-    sal_Bool        bRORuby;
-    sal_Bool        bROChangeCaseMap;
-    sal_Bool        bRODoubleLines;
-    sal_Bool        bROEmphasisMarks;
-    sal_Bool        bROVerticalCallOut;
+    bool        bROCJKFont;
+    bool        bROVerticalText;
+    bool        bROAsianTypography;
+    bool        bROJapaneseFind;
+    bool        bRORuby;
+    bool        bROChangeCaseMap;
+    bool        bRODoubleLines;
+    bool        bROEmphasisMarks;
+    bool        bROVerticalCallOut;
 
 public:
     SvtCJKOptions_Impl();
@@ -67,21 +67,21 @@ public:
     virtual void    Commit();
     void            Load();
 
-    sal_Bool IsLoaded()                         { return bIsLoaded;         }
+    bool IsLoaded()                         { return bIsLoaded;         }
 
-    sal_Bool IsCJKFontEnabled() const           { return bCJKFont;          }
-    sal_Bool IsVerticalTextEnabled() const      { return bVerticalText;     }
-    sal_Bool IsAsianTypographyEnabled() const   { return bAsianTypography;  }
-    sal_Bool IsJapaneseFindEnabled() const      { return bJapaneseFind;     }
-    sal_Bool IsRubyEnabled() const              { return bRuby;             }
-    sal_Bool IsChangeCaseMapEnabled() const     { return bChangeCaseMap;    }
-    sal_Bool IsDoubleLinesEnabled() const       { return bDoubleLines;      }
+    bool IsCJKFontEnabled() const           { return bCJKFont;          }
+    bool IsVerticalTextEnabled() const      { return bVerticalText;     }
+    bool IsAsianTypographyEnabled() const   { return bAsianTypography;  }
+    bool IsJapaneseFindEnabled() const      { return bJapaneseFind;     }
+    bool IsRubyEnabled() const              { return bRuby;             }
+    bool IsChangeCaseMapEnabled() const     { return bChangeCaseMap;    }
+    bool IsDoubleLinesEnabled() const       { return bDoubleLines;      }
 
-    sal_Bool IsAnyEnabled() const {
+    bool IsAnyEnabled() const {
         return  bCJKFont||bVerticalText||bAsianTypography||bJapaneseFind||
                 bRuby||bChangeCaseMap||bDoubleLines||bEmphasisMarks||bVerticalCallOut;   }
-    void    SetAll(sal_Bool bSet);
-    sal_Bool IsReadOnly(SvtCJKOptions::EOption eOption) const;
+    void    SetAll(bool bSet);
+    bool IsReadOnly(SvtCJKOptions::EOption eOption) const;
 };
 
 namespace
@@ -92,16 +92,16 @@ namespace
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
     utl::ConfigItem("Office.Common/I18N/CJK"),
-    bIsLoaded(sal_False),
-    bCJKFont(sal_True),
-    bVerticalText(sal_True),
-    bAsianTypography(sal_True),
-    bJapaneseFind(sal_True),
-    bRuby(sal_True),
-    bChangeCaseMap(sal_True),
-    bDoubleLines(sal_True),
-    bEmphasisMarks(sal_True),
-    bVerticalCallOut(sal_True),
+    bIsLoaded(false),
+    bCJKFont(true),
+    bVerticalText(true),
+    bAsianTypography(true),
+    bJapaneseFind(true),
+    bRuby(true),
+    bChangeCaseMap(true),
+    bDoubleLines(true),
+    bEmphasisMarks(true),
+    bVerticalCallOut(true),
     bROCJKFont(CFG_READONLY_DEFAULT),
     bROVerticalText(CFG_READONLY_DEFAULT),
     bROAsianTypography(CFG_READONLY_DEFAULT),
@@ -118,7 +118,7 @@ SvtCJKOptions_Impl::~SvtCJKOptions_Impl()
 {
 }
 
-void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
+void    SvtCJKOptions_Impl::SetAll(bool bSet)
 {
     if (
         !bROCJKFont          &&
@@ -180,7 +180,7 @@ void SvtCJKOptions_Impl::Load()
         {
             if( pValues[nProp].hasValue() )
             {
-                sal_Bool bValue = *(sal_Bool*)pValues[nProp].getValue();
+                bool bValue = *(sal_Bool*)pValues[nProp].getValue();
                 switch ( nProp )
                 {
                     case 0: { bCJKFont = bValue; bROCJKFont = pROStates[nProp]; } break;
@@ -224,10 +224,10 @@ void SvtCJKOptions_Impl::Load()
 
         if (bAutoEnableCJK)
         {
-            SetAll(sal_True);
+            SetAll(true);
         }
     }
-    bIsLoaded = sal_True;
+    bIsLoaded = true;
 }
 
 void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& )
@@ -359,9 +359,9 @@ void    SvtCJKOptions_Impl::Commit()
     PutProperties(aNames, aValues);
 }
 
-sal_Bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
+bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
 {
-    sal_Bool bReadOnly = CFG_READONLY_DEFAULT;
+    bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
         case SvtCJKOptions::E_CJKFONT : bReadOnly = bROCJKFont; break;
@@ -374,7 +374,7 @@ sal_Bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
         case SvtCJKOptions::E_EMPHASISMARKS : bReadOnly = bROEmphasisMarks; break;
         case SvtCJKOptions::E_VERTICALCALLOUT : bReadOnly = bROVerticalCallOut; break;
         case SvtCJKOptions::E_ALL : if (bROCJKFont || bROVerticalText || bROAsianTypography || bROJapaneseFind || bRORuby || bROChangeCaseMap || bRODoubleLines || bROEmphasisMarks || bROVerticalCallOut)
-                                        bReadOnly = sal_True;
+                                        bReadOnly = true;
                                 break;
     }
     return bReadOnly;
@@ -389,7 +389,7 @@ namespace { struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJ
 
 // class SvtCJKOptions --------------------------------------------------
 
-SvtCJKOptions::SvtCJKOptions(sal_Bool bDontLoad)
+SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( theCJKOptionsMutex::get() );
@@ -415,61 +415,61 @@ SvtCJKOptions::~SvtCJKOptions()
         DELETEZ( pCJKOptions );
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsCJKFontEnabled() const
+bool SvtCJKOptions::IsCJKFontEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsCJKFontEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsVerticalTextEnabled() const
+bool SvtCJKOptions::IsVerticalTextEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsVerticalTextEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsAsianTypographyEnabled() const
+bool SvtCJKOptions::IsAsianTypographyEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsAsianTypographyEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsJapaneseFindEnabled() const
+bool SvtCJKOptions::IsJapaneseFindEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsJapaneseFindEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsRubyEnabled() const
+bool SvtCJKOptions::IsRubyEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsRubyEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsChangeCaseMapEnabled() const
+bool SvtCJKOptions::IsChangeCaseMapEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsChangeCaseMapEnabled();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsDoubleLinesEnabled() const
+bool SvtCJKOptions::IsDoubleLinesEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsDoubleLinesEnabled();
 }
 
-void        SvtCJKOptions::SetAll(sal_Bool bSet)
+void        SvtCJKOptions::SetAll(bool bSet)
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     pCJKOptions->SetAll(bSet);
 }
 
-sal_Bool    SvtCJKOptions::IsAnyEnabled() const
+bool    SvtCJKOptions::IsAnyEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsAnyEnabled();
 }
 
-sal_Bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
+bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsReadOnly(eOption);

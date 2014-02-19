@@ -580,7 +580,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         //muesten. #56977# #55001# #56135#
         const SfxPoolItem *pItem;
         if( GetDepends() && SFX_ITEM_SET == pNode->GetSwAttrSet().
-            GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+            GetItemState( RES_PAGEDESC, true, &pItem ) )
         {
             pNode->ModifyNotification( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
         }
@@ -2473,7 +2473,7 @@ SwNumRule* SwTxtNode::_GetNumRule(bool bInParent) const
         if ( pRet && pRet == GetDoc()->GetOutlineNumRule() &&
              ( !HasSwAttrSet() ||
                SFX_ITEM_SET !=
-                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, sal_False ) ) )
+                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, false ) ) )
         {
             SwTxtFmtColl* pColl = GetTxtColl();
             if ( pColl )
@@ -2569,7 +2569,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
         else
             aClearWhichIds.push_back( RES_PAGEDESC );
 
-        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_BREAK, sal_False ) )
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_BREAK, false ) )
         {
             if ( bNext )
                 pNewAttrSet->ClearItem( RES_BREAK );
@@ -2577,7 +2577,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
                 aClearWhichIds.push_back( RES_BREAK );
             bRemoveFromCache = true;
         }
-        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_KEEP, sal_False ) )
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_KEEP, false ) )
         {
             if ( bNext )
                 pNewAttrSet->ClearItem( RES_KEEP );
@@ -2585,7 +2585,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
                 aClearWhichIds.push_back( RES_KEEP );
             bRemoveFromCache = true;
         }
-        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, sal_False ) )
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, false ) )
         {
             if ( bNext )
                 pNewAttrSet->ClearItem( RES_PARATR_SPLIT );
@@ -2593,7 +2593,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, bool bNext,
                 aClearWhichIds.push_back( RES_PARATR_SPLIT );
             bRemoveFromCache = true;
         }
-        if(SFX_ITEM_SET == pTmpSet->GetItemState(RES_PARATR_NUMRULE, sal_False))
+        if(SFX_ITEM_SET == pTmpSet->GetItemState(RES_PARATR_NUMRULE, false))
         {
             SwNumRule * pRule = GetNumRule();
 
@@ -3542,7 +3542,7 @@ namespace {
                     sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                 }
 
-                if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) ==
+                if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false, &pItem ) ==
                         SFX_ITEM_SET )
                 {
                     // #i70748#
@@ -3821,7 +3821,7 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
 bool SwTxtNode::HasAttrListLevel() const
 {
     return GetpSwAttrSet() &&
-           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, sal_False ) == SFX_ITEM_SET;
+           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, false ) == SFX_ITEM_SET;
 }
 
 int SwTxtNode::GetAttrListLevel() const
@@ -3916,7 +3916,7 @@ void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber 
 bool SwTxtNode::HasAttrListRestartValue() const
 {
     return GetpSwAttrSet() &&
-           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, sal_False ) == SFX_ITEM_SET;
+           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, false ) == SFX_ITEM_SET;
 }
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
 {
@@ -4115,13 +4115,13 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
         bAreListLevelIndentsApplicable = false;
     }
     else if ( HasSwAttrSet() &&
-              GetpSwAttrSet()->GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
+              GetpSwAttrSet()->GetItemState( RES_LR_SPACE, false ) == SFX_ITEM_SET )
     {
         // paragraph has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
     }
     else if ( HasSwAttrSet() &&
-              GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+              GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
     {
         // list style is directly applied to paragraph and paragraph has no
         // hard-set indent attributes
@@ -4136,14 +4136,14 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
         const SwTxtFmtColl* pColl = GetTxtColl();
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SFX_ITEM_SET )
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;
                 break;
             }
 
-            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
             {
                 // paragraph style with the list style found and until now no
                 // indent attributes are found in the paragraph style hierarchy.
@@ -4433,7 +4433,7 @@ namespace {
     {
         const SfxPoolItem* pItem = 0;
         // handle RES_PARATR_NUMRULE
-        if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, false, &pItem ) == SFX_ITEM_SET )
         {
             mrTxtNode.RemoveFromList();
 
@@ -4448,7 +4448,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ID
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ID, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ID, false, &pItem ) == SFX_ITEM_SET )
         {
             const SfxStringItem* pListIdItem =
                                     dynamic_cast<const SfxStringItem*>(pItem);
@@ -4465,7 +4465,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_LEVEL
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_LEVEL, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_LEVEL, false, &pItem ) == SFX_ITEM_SET )
         {
             const SfxInt16Item* pListLevelItem =
                                 dynamic_cast<const SfxInt16Item*>(pItem);
@@ -4476,7 +4476,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ISRESTART
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISRESTART, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISRESTART, false, &pItem ) == SFX_ITEM_SET )
         {
             const SfxBoolItem* pListIsRestartItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
@@ -4487,7 +4487,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_RESTARTVALUE
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_RESTARTVALUE, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_RESTARTVALUE, false, &pItem ) == SFX_ITEM_SET )
         {
             const SfxInt16Item* pListRestartValueItem =
                                 dynamic_cast<const SfxInt16Item*>(pItem);
@@ -4499,7 +4499,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ISCOUNTED
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISCOUNTED, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISCOUNTED, false, &pItem ) == SFX_ITEM_SET )
         {
             const SfxBoolItem* pIsCountedInListItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
@@ -4512,7 +4512,7 @@ namespace {
 
         // #i70748#
         // handle RES_PARATR_OUTLINELEVEL
-        if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, sal_False, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, false, &pItem ) == SFX_ITEM_SET )
         {
             const SfxUInt16Item* pOutlineLevelItem =
                                 dynamic_cast<const SfxUInt16Item*>(pItem);
@@ -4565,7 +4565,7 @@ namespace {
             {
                 const SfxPoolItem* pItem = 0;
                 if ( mrTxtNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
-                                                            sal_True, &pItem )
+                                                            true, &pItem )
                                                                 != SFX_ITEM_SET )
                 {
                     mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
@@ -4662,7 +4662,7 @@ namespace {
             else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
-                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
+                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SFX_ITEM_SET;
                 // #i92898#
                 mbListStyleOrIdReset = true;
             }
@@ -4705,7 +4705,7 @@ namespace {
             else if ( nWhich1 == RES_PARATR_LIST_ID )
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
-                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
+                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SFX_ITEM_SET;
                 // #i92898#
                 mbListStyleOrIdReset = true;
             }
@@ -4764,7 +4764,7 @@ namespace {
                 {
                     bRemoveFromList = bRemoveFromList ||
                         ( mrTxtNode.GetpSwAttrSet() &&
-                          mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET );
+                          mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, false ) == SFX_ITEM_SET );
                     // #i92898#
                     mbListStyleOrIdReset = true;
                 }

@@ -32,7 +32,7 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, sal_False, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
     else
     {
@@ -46,7 +46,7 @@ bool GetApplyCharUnit( const SfxItemSet& rSet )
 {
     bool  bUseCharUnit = false;
     const SfxPoolItem* pItem = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, sal_False, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, false, &pItem ) )
         bUseCharUnit =  ((const SfxBoolItem*)pItem )->GetValue();
     else
     {

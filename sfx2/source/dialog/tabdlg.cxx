@@ -339,7 +339,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
     const SfxItemPool* pPool = rSet.GetPool();
     sal_uInt16 nWh = pPool->GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = 0;
-    rSet.GetItemState( nWh, sal_True, &pItem );
+    rSet.GetItemState( nWh, true, &pItem );
 
     if ( !pItem && nWh != nSlot )
         pItem = &pPool->GetDefaultItem( nWh );

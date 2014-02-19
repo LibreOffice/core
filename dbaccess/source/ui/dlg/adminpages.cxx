@@ -116,9 +116,9 @@ namespace dbaui
 
     void OGenericAdministrationPage::getFlags(const SfxItemSet& _rSet, sal_Bool& _rValid, sal_Bool& _rReadonly)
     {
-        SFX_ITEMSET_GET(_rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, sal_True);
+        SFX_ITEMSET_GET(_rSet, pInvalid, SfxBoolItem, DSID_INVALID_SELECTION, true);
         _rValid = !pInvalid || !pInvalid->GetValue();
-        SFX_ITEMSET_GET(_rSet, pReadonly, SfxBoolItem, DSID_READONLY, sal_True);
+        SFX_ITEMSET_GET(_rSet, pReadonly, SfxBoolItem, DSID_READONLY, true);
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 

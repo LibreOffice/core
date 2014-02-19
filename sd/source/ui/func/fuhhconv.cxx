@@ -169,11 +169,11 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
 
         const bool bHasParent = !pStyle->GetParent().isEmpty();
 
-        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, sal_False ) == SFX_ITEM_SET )
+        if( !bHasParent || rSet.GetItemState( EE_CHAR_LANGUAGE_CJK, false ) == SFX_ITEM_SET )
             rSet.Put( SvxLanguageItem( nTargetLanguage, EE_CHAR_LANGUAGE_CJK ) );
 
         if( pTargetFont &&
-            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, sal_False ) == SFX_ITEM_SET ) )
+            ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, false ) == SFX_ITEM_SET ) )
         {
             // set new font attribute
             SvxFontItem aFontItem( (SvxFontItem&) rSet.Get( EE_CHAR_FONTINFO_CJK ) );

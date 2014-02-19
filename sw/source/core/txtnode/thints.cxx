@@ -844,7 +844,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     do
                     {
                         const SfxPoolItem* pTmpItem = 0;
-                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), sal_False, &pTmpItem ) &&
+                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
                              pTmpItem == pItem )
                         {
                             // Do not clear item if the attribute is set in a character format:
@@ -881,7 +881,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     do
                     {
                         const SfxPoolItem* pTmpItem = 0;
-                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), sal_False, &pTmpItem ) &&
+                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
                              pTmpItem == pItem )
                         {
                             // Do not clear item if the attribute is set in a character format:
@@ -1905,7 +1905,7 @@ bool SwTxtNode::SetAttr(
 
             // check for auto style:
             const SfxPoolItem* pItem;
-            const bool bAutoStyle = SFX_ITEM_SET == aTxtSet.GetItemState( RES_TXTATR_AUTOFMT, sal_False, &pItem );
+            const bool bAutoStyle = SFX_ITEM_SET == aTxtSet.GetItemState( RES_TXTATR_AUTOFMT, false, &pItem );
             if ( bAutoStyle )
             {
                 boost::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFmtAutoFmt*>(pItem)->GetStyleHandle();
@@ -2004,7 +2004,7 @@ static void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
         {
             if( ( nWhich < RES_CHRATR_END ||
                   RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) &&
-                ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, sal_True ) ) )
+                ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, true ) ) )
                 rSet.Put( pCFSet->Get( nWhich ) );
             nWhich = aIter.NextWhich();
         }
@@ -2029,7 +2029,7 @@ static void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAt
             {
                 if( ( nWhich < RES_CHRATR_END ||
                       ( RES_TXTATR_AUTOFMT == rAttr.Which() && RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) ) &&
-                    ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, sal_True ) ) )
+                    ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, true ) ) )
                     rSet.Put( pCFSet->Get( nWhich ) );
                 nWhich = aIter.NextWhich();
             }
@@ -2541,7 +2541,7 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
 
             while( true )
             {
-                if( SFX_ITEM_SET == aNdSet.GetItemState( pItem->Which(), sal_False, &pNdItem ) )
+                if( SFX_ITEM_SET == aNdSet.GetItemState( pItem->Which(), false, &pNdItem ) )
                 {
                     if (*pItem == *pNdItem) // 4
                     {

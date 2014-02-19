@@ -71,7 +71,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
     if(pArgs )
     {
         const SfxPoolItem* pItem;
-        pArgs->GetItemState(nWhich, sal_False, &pItem);
+        pArgs->GetItemState(nWhich, false, &pItem);
         eState =  ((const SfxBoolItem &) pArgs->
                                 Get( nWhich )).GetValue() ? STATE_ON : STATE_OFF;
     }
@@ -335,7 +335,7 @@ SET_LINESPACE:
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetCurAttr(aAdjustSet);
             bool bChgAdjust = false;
-            SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, sal_False);
+            SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, false);
             if(eAdjustState  >= SFX_ITEM_DEFAULT)
             {
                 int eAdjust = (int)(( const SvxAdjustItem& )
@@ -410,7 +410,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
     switch ( nSlot )
     {
         case FN_DROP_CHAR_STYLE_NAME:
@@ -450,7 +450,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 {
                     rSh.StartAction();
                     rSh.StartUndo( UNDO_START );
-                    if ( SFX_ITEM_SET == aSet.GetItemState(HINT_END,sal_False,&pItem) )
+                    if ( SFX_ITEM_SET == aSet.GetItemState(HINT_END,false,&pItem) )
                     {
                         if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
@@ -507,7 +507,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
     int eAdjust = -1;   // Illegal value to recognize DONTCARE.
-    SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, sal_False, &pItem);
+    SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, false, &pItem);
 
     if( SFX_ITEM_DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_ADJUST);
@@ -515,14 +515,14 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
         eAdjust = (int)(( SvxAdjustItem* ) pItem)->GetAdjust();
 
     short nEsc = 0;
-    eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, sal_False, &pItem);
+    eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, false, &pItem);
     if( SFX_ITEM_DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_CHRATR_ESCAPEMENT);
     if( eState >= SFX_ITEM_DEFAULT )
         nEsc = ((SvxEscapementItem* )pItem)->GetEsc();
 
     sal_uInt16 nLineSpace = 0;
-    eState =  aCoreSet.GetItemState(RES_PARATR_LINESPACING, sal_False, &pItem);
+    eState =  aCoreSet.GetItemState(RES_PARATR_LINESPACING, false, &pItem);
     if( SFX_ITEM_DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_LINESPACING);
     if( SFX_ITEM_DEFAULT <= eState &&
@@ -671,7 +671,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     // is the item set?
                     sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
                     if((!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES))) &&
-                    aCoreSet.GetItemState( RES_FRAMEDIR, sal_False ) >= SFX_ITEM_DEFAULT)
+                    aCoreSet.GetItemState( RES_FRAMEDIR, false ) >= SFX_ITEM_DEFAULT)
                     {
                         SvxFrameDirection eFrmDir = (SvxFrameDirection)
                                 ((const SvxFrameDirectionItem& )aCoreSet.Get(RES_FRAMEDIR)).GetValue();

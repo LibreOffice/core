@@ -207,7 +207,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         // Let the destination page descrition point to the source node position,
         // from now on this descriptor is responsible for the content nodes!
         const SfxPoolItem* pItem;
-        rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+        rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt* pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #if OSL_DEBUG_LEVEL > 1
@@ -221,7 +221,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
         // Let the source page description point to zero node position,
         // it loses the responsible and can be destroyed without removing the content nodes.
-        rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+        rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
         pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -231,7 +231,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         {
             // Same procedure for unshared header..
             const SwFmtHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
-            rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+            rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #if OSL_DEBUG_LEVEL > 1
@@ -242,7 +242,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 #endif
             pNewFmt->SetFmtAttr( rSourceLeftHead.GetHeaderFmt()->GetCntnt() );
             delete pNewItem;
-            rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+            rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -252,7 +252,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         {
             // Same procedure for unshared header..
             const SwFmtHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
-            rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+            rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #if OSL_DEBUG_LEVEL > 1
@@ -263,7 +263,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 #endif
             pNewFmt->SetFmtAttr( rSourceFirstMasterHead.GetHeaderFmt()->GetCntnt() );
             delete pNewItem;
-            rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
+            rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -276,7 +276,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     if( rDestFoot.IsActive() )
     {
         const SfxPoolItem* pItem;
-        rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+        rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt *pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
         pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
@@ -288,7 +288,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         const SwFmtCntnt& rFooterDestCntnt = rDestFoot.GetFooterFmt()->GetCntnt();
         (void)rFooterDestCntnt;
 #endif
-        rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+        rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
         pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -304,12 +304,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             (void)rFooterSourceCntnt2;
             (void)rFooterDestCntnt2;
 #endif
-            rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+            rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
-            rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+            rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -325,12 +325,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             (void)rFooterSourceCntnt2;
             (void)rFooterDestCntnt2;
 #endif
-            rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+            rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( rSourceFirstMasterFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
-            rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
+            rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );

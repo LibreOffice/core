@@ -153,7 +153,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
+        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
     OUString aChars;
     Font aFont;
@@ -161,7 +161,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
+        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
         {

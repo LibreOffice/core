@@ -33,7 +33,7 @@ SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxVisibilityItem, 0);
-    sal_Bool bValue = 0;
+    unsigned char bValue = 0;
     rStream.ReadUChar( bValue );
     m_nValue.bVisible = bValue;
 }

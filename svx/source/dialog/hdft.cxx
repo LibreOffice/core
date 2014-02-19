@@ -295,7 +295,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
+             GetItemSet().GetItemState( GetWhich( nId ), false, &pItem ) )
         {
             const SfxItemSet* _pSet;
             _pSet = &( (SvxSetItem*)pItem )->GetItemSet();
@@ -339,7 +339,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), sal_False,
+    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -423,7 +423,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
@@ -558,12 +558,12 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
+             GetItemSet().GetItemState( GetWhich( nId ), false, &pItem ) )
             // if there is one that is already set, then use this
             pBBSet->Put( ( (SvxSetItem*)pItem)->GetItemSet() );
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( nInner, sal_False, &pItem ) )
+             GetItemSet().GetItemState( nInner, false, &pItem ) )
             // The set InfoItem is always required
             pBBSet->Put( *pItem );
     }
@@ -628,7 +628,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
             (const SvxSetItem&)rSet.Get( nWhich, sal_False );
@@ -658,7 +658,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
 
-    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
             (const SvxSetItem&)rSet.Get( nWhich, sal_False );
@@ -773,7 +773,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                                            sal_False,
+                                            false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -813,7 +813,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
-                                            sal_False,
+                                            false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();

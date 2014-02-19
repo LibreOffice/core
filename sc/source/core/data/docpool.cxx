@@ -690,7 +690,7 @@ void ScDocumentPool::CellStyleCreated( const OUString& rName )
 
 SfxItemPool* ScDocumentPool::Clone() const
 {
-    return new SfxItemPool (*this, sal_True);
+    return new SfxItemPool (*this, true);
 }
 
 static SfxItemPresentation lcl_HFPresentation

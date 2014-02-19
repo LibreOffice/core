@@ -1098,7 +1098,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             int nClear = 0;
             MSHORT nCount = rNewSet.Count();
 
-            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FTN, sal_False, &pItem ))
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FTN, false, &pItem ))
             {
                 nPos = *((SwFmtFtn*)pItem)->GetTxtFtn()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
@@ -1107,7 +1107,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 --nCount;
             }
 
-            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FIELD, sal_False, &pItem ))
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FIELD, false, &pItem ))
             {
                 nPos = *((SwFmtFld*)pItem)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
@@ -1126,9 +1126,9 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 --nCount;
             }
             bool bLineSpace = SFX_ITEM_SET == rNewSet.GetItemState(
-                                            RES_PARATR_LINESPACING, sal_False ),
+                                            RES_PARATR_LINESPACING, false ),
                      bRegister  = SFX_ITEM_SET == rNewSet.GetItemState(
-                                            RES_PARATR_REGISTER, sal_False );
+                                            RES_PARATR_REGISTER, false );
             if ( bLineSpace || bRegister )
             {
                 Prepare( bRegister ? PREP_REGISTER : PREP_ADJUST_FRM );
@@ -1158,7 +1158,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     --nCount;
             }
             if ( SFX_ITEM_SET == rNewSet.GetItemState( RES_PARATR_SPLIT,
-                                                       sal_False ))
+                                                       false ))
             {
                 if ( GetPrev() )
                     CheckKeep();
@@ -1168,7 +1168,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 --nCount;
             }
 
-            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_BACKGROUND, sal_False)
+            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_BACKGROUND, false)
                 && !IsFollow() && GetDrawObjs() )
             {
                 SwSortedObjs *pObjs = GetDrawObjs();
@@ -1202,27 +1202,27 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
 
             if ( SFX_ITEM_SET ==
-                 rNewSet.GetItemState( RES_TXTATR_CHARFMT, sal_False ) )
+                 rNewSet.GetItemState( RES_TXTATR_CHARFMT, false ) )
             {
                 lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
                 lcl_SetScriptInval( *this, 0 );
             }
             else if ( SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_LANGUAGE, sal_False ) ||
+                      rNewSet.GetItemState( RES_CHRATR_LANGUAGE, false ) ||
                       SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, sal_False ) ||
+                      rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, false ) ||
                       SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, sal_False ) )
+                      rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, false ) )
                 lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
             else if ( SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_FONT, sal_False ) ||
+                      rNewSet.GetItemState( RES_CHRATR_FONT, false ) ||
                       SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_CJK_FONT, sal_False ) ||
+                      rNewSet.GetItemState( RES_CHRATR_CJK_FONT, false ) ||
                       SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_CTL_FONT, sal_False ) )
+                      rNewSet.GetItemState( RES_CHRATR_CTL_FONT, false ) )
                 lcl_SetScriptInval( *this, 0 );
             else if ( SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_FRAMEDIR, sal_False ) )
+                      rNewSet.GetItemState( RES_FRAMEDIR, false ) )
             {
                 SetDerivedR2L( sal_False );
                 CheckDirChange();

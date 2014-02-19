@@ -1160,7 +1160,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             const SfxPoolItem* pItem;
             SfxItemSet& rStyleSet = GetItemSet();
 
-            if( rStyleSet.GetItemState( pEntry->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+            if( rStyleSet.GetItemState( pEntry->nWID, true, &pItem ) == SFX_ITEM_SET )
                 aSet.Put(  *pItem );
 
             if( !aSet.Count() )
@@ -1242,7 +1242,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
         PropertyState eState;
 
-        switch( rStyleSet.GetItemState( pEntry->nWID, sal_False ) )
+        switch( rStyleSet.GetItemState( pEntry->nWID, false ) )
         {
         case SFX_ITEM_READONLY:
         case SFX_ITEM_SET:

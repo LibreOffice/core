@@ -356,7 +356,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             pIter = new SfxWhichIter( *pSet );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 pTmpItem = NULL;
@@ -367,7 +367,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 
     while( pTmpItem )
     {
-        SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
+        SfxItemState eState = aCmpSet.GetItemState( nWhch, false, &pItem );
         if( SFX_ITEM_DONTCARE == eState || SFX_ITEM_SET == eState )
         {
             sal_uInt16 n;
@@ -470,7 +470,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
         {
             nWhch = pIter->NextWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 break;
@@ -509,7 +509,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
             pIter = new SfxWhichIter( *pSet );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 pTmpItem = NULL;
@@ -520,7 +520,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 
     while( pTmpItem )
     {
-        SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
+        SfxItemState eState = aCmpSet.GetItemState( nWhch, false, &pItem );
         if( SFX_ITEM_DONTCARE == eState || SFX_ITEM_SET == eState )
         {
             sal_uInt16 n;
@@ -621,7 +621,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
         {
             nWhch = pIter->NextWhich();
             while( nWhch &&
-                SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+                SFX_ITEM_SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 break;
@@ -937,7 +937,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
         }
 
         if( SFX_ITEM_SET == pNode->GetSwAttrSet().GetItemState( nWhich,
-            sal_True, &pItem ) && ( !bValue || *pItem == rAttr ) )
+            true, &pItem ) && ( !bValue || *pItem == rAttr ) )
         {
             // FORWARD:  SPoint at the end, GetMark at the beginning of the node
             // BACKWARD: SPoint at the beginning, GetMark at the end of the node
@@ -1190,7 +1190,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             {
                 // reset all that are not set with pool defaults
                 if( !IsInvalidItem( pItem ) && SFX_ITEM_SET !=
-                    pReplSet->GetItemState( pItem->Which(), sal_False ))
+                    pReplSet->GetItemState( pItem->Which(), false ))
                     aSet.Put( pPool->GetDefaultItem( pItem->Which() ));
 
                 if( aIter.IsAtEnd() )

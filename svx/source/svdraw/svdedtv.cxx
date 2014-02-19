@@ -519,7 +519,7 @@ void SdrEditView::CheckPossibilities()
 
                 // may be group object, so get merged ItemSet
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                SfxItemState eState = rSet.GetItemState(XATTR_FILLSTYLE, sal_False);
+                SfxItemState eState = rSet.GetItemState(XATTR_FILLSTYLE, false);
 
                 if(SFX_ITEM_DONTCARE != eState)
                 {

@@ -1396,7 +1396,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
         case OWN_ATTR_TABLEBORDER:
         {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
-            if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, sal_False ) == SFX_ITEM_DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, sal_False ) == SFX_ITEM_DEFAULT) )
+            if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, false ) == SFX_ITEM_DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, false ) == SFX_ITEM_DEFAULT) )
                 return PropertyState_DEFAULT_VALUE;
 
             return PropertyState_DIRECT_VALUE;
@@ -1405,7 +1405,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
         {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
 
-            switch( rSet.GetItemState( pMap->nWID, sal_False ) )
+            switch( rSet.GetItemState( pMap->nWID, false ) )
             {
             case SFX_ITEM_READONLY:
             case SFX_ITEM_SET:

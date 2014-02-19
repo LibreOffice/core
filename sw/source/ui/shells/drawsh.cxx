@@ -202,7 +202,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, sal_False, &pItem);
+        pArgs->GetItemState(nSlotId, false, &pItem);
 
     bool bMirror = true;
 

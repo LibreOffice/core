@@ -590,7 +590,7 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SfxRectangleItem* pRectItem = NULL;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , sal_False, (const SfxPoolItem**) &pRectItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
     {
         const Rectangle aTempRect(pRectItem->GetValue());
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
@@ -1031,7 +1031,7 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SfxRectangleItem* pRectItem = NULL;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , sal_False, (const SfxPoolItem**) &pRectItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
     {
         { // #i75273#
             const Rectangle aTempRect(pRectItem->GetValue());

@@ -65,28 +65,28 @@ public:
     };
 
     // bDontLoad is for referencing purposes only
-    SvtLanguageOptions( sal_Bool _bDontLoad = sal_False );
+    SvtLanguageOptions( bool _bDontLoad = false );
     ~SvtLanguageOptions();
 
     // CJK options
-    sal_Bool    IsCJKFontEnabled() const;
-    sal_Bool    IsVerticalTextEnabled() const;
-    sal_Bool    IsAsianTypographyEnabled() const;
-    sal_Bool    IsJapaneseFindEnabled() const;
-    void        SetAll( sal_Bool _bSet );
-    sal_Bool    IsAnyEnabled() const;
+    bool    IsCJKFontEnabled() const;
+    bool    IsVerticalTextEnabled() const;
+    bool    IsAsianTypographyEnabled() const;
+    bool    IsJapaneseFindEnabled() const;
+    void        SetAll( bool _bSet );
+    bool    IsAnyEnabled() const;
 
     // CTL options
-    void        SetCTLFontEnabled( sal_Bool _bEnabled );
-    sal_Bool    IsCTLFontEnabled() const;
+    void        SetCTLFontEnabled( bool _bEnabled );
+    bool    IsCTLFontEnabled() const;
 
-    void        SetCTLSequenceChecking( sal_Bool _bEnabled );
+    void        SetCTLSequenceChecking( bool _bEnabled );
 
-    void        SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
+    void        SetCTLSequenceCheckingRestricted( bool _bEnable );
 
-    void        SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable );
+    void        SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
 
-    sal_Bool    IsReadOnly(EOption eOption) const;
+    bool    IsReadOnly(EOption eOption) const;
 
     // returns for a language the scripttype
     static sal_uInt16 GetScriptTypeOfLanguage( sal_uInt16 nLang );

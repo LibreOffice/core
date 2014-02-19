@@ -718,41 +718,41 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_
     bIgnoreFontFamily( sal_False )
 {
     // Item-Ids auch initialisieren
-    aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, sal_False );
-    aItemIds.nFontCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, sal_False );
-    aItemIds.nFontCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, sal_False );
-    aItemIds.nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, sal_False );
-    aItemIds.nPostureCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, sal_False );
-    aItemIds.nPostureCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, sal_False );
-    aItemIds.nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, sal_False );
-    aItemIds.nWeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, sal_False );
-    aItemIds.nWeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, sal_False );
-    aItemIds.nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, sal_False );
-    aItemIds.nFontHeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, sal_False );
-    aItemIds.nFontHeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, sal_False );
-    aItemIds.nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, sal_False );
-    aItemIds.nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, sal_False );
-    aItemIds.nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, sal_False );
-    aItemIds.nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, sal_False );
-    aItemIds.nKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, sal_False );
-    aItemIds.nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, sal_False );
-    aItemIds.nBlink = rPool.GetTrueWhich( SID_ATTR_FLASH, sal_False );
+    aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, false );
+    aItemIds.nFontCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, false );
+    aItemIds.nFontCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, false );
+    aItemIds.nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, false );
+    aItemIds.nPostureCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, false );
+    aItemIds.nPostureCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, false );
+    aItemIds.nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, false );
+    aItemIds.nWeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, false );
+    aItemIds.nWeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, false );
+    aItemIds.nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, false );
+    aItemIds.nFontHeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, false );
+    aItemIds.nFontHeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, false );
+    aItemIds.nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, false );
+    aItemIds.nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, false );
+    aItemIds.nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, false );
+    aItemIds.nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, false );
+    aItemIds.nKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, false );
+    aItemIds.nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, false );
+    aItemIds.nBlink = rPool.GetTrueWhich( SID_ATTR_FLASH, false );
 
-    aItemIds.nLineSpacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, sal_False );
-    aItemIds.nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, sal_False );
-    aItemIds.nWidows = rPool.GetTrueWhich( SID_ATTR_PARA_WIDOWS, sal_False );
-    aItemIds.nOrphans = rPool.GetTrueWhich( SID_ATTR_PARA_ORPHANS, sal_False );
-    aItemIds.nFmtSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, sal_False );
+    aItemIds.nLineSpacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, false );
+    aItemIds.nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, false );
+    aItemIds.nWidows = rPool.GetTrueWhich( SID_ATTR_PARA_WIDOWS, false );
+    aItemIds.nOrphans = rPool.GetTrueWhich( SID_ATTR_PARA_ORPHANS, false );
+    aItemIds.nFmtSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, false );
 
-    aItemIds.nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, sal_False );
-    aItemIds.nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, sal_False );
-    aItemIds.nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, sal_False );
-    aItemIds.nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, sal_False );
+    aItemIds.nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, false );
+    aItemIds.nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, false );
+    aItemIds.nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, false );
+    aItemIds.nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, false );
 
-    aItemIds.nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, sal_False );
-    aItemIds.nLanguageCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, sal_False );
-    aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, sal_False );
-    aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, sal_False );
+    aItemIds.nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, false );
+    aItemIds.nLanguageCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, false );
+    aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, false );
+    aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
     aWhichMap.insert( aWhichMap.begin(), 0 );
     SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16 *)&aItemIds,
@@ -2023,7 +2023,7 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     if( bSet )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *((const SvxLRSpaceItem*)pItem) );
@@ -2079,7 +2079,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
         if( nLeft < 0 )
             nLeft = 0;
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *((const SvxLRSpaceItem*)pItem) );
@@ -2135,7 +2135,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
         if( nRight < 0 )
             nRight = 0;
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *((const SvxLRSpaceItem*)pItem) );
@@ -2194,7 +2194,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
     if( bSet )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nULSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
                                                    &pItem ) )
         {
             SvxULSpaceItem aULItem( *((const SvxULSpaceItem*)pItem) );
@@ -2253,7 +2253,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
     if( bSet )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nULSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
                                                    &pItem ) )
         {
             SvxULSpaceItem aULItem( *((const SvxULSpaceItem*)pItem) );
@@ -2357,7 +2357,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
         }
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
                                                    &pItem ) )
         {
             SvxLRSpaceItem aLRItem( *((const SvxLRSpaceItem*)pItem) );
@@ -2386,7 +2386,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
             nMargins[2] = 0;
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nULSpace, sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
                                                    &pItem ) )
         {
             SvxULSpaceItem aULItem( *((const SvxULSpaceItem*)pItem) );

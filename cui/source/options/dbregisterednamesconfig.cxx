@@ -77,7 +77,7 @@ namespace svx
     void DbRegisteredNamesConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
         // the settings for the single drivers
-        SFX_ITEMSET_GET( _rSourceItems, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, sal_True );
+        SFX_ITEMSET_GET( _rSourceItems, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, true );
         if ( !pRegistrations )
             return;
 

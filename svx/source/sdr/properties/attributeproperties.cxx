@@ -437,7 +437,7 @@ namespace sdr
 
                                 while(nWhich)
                                 {
-                                    if(mpItemSet->GetItemState(nWhich, sal_False) == SFX_ITEM_SET)
+                                    if(mpItemSet->GetItemState(nWhich, false) == SFX_ITEM_SET)
                                     {
                                         pNewSet->Put(mpItemSet->Get(nWhich));
                                     }

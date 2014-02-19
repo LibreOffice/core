@@ -288,17 +288,17 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
         return;
 
     const SfxPoolItem *pPoolItem = NULL;
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_ALLOW_DATEAXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_ALLOW_DATEAXIS, true, &pPoolItem) == SFX_ITEM_SET)
         m_bAllowDateAxis = (bool) ((const SfxBoolItem*)pPoolItem)->GetValue();
     m_nAxisType=chart2::AxisType::REALNUMBER;
-    if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, true, &pPoolItem) == SFX_ITEM_SET)
         m_nAxisType = (int) ((const SfxInt32Item*)pPoolItem)->GetValue();
     if( m_nAxisType==chart2::AxisType::DATE && !m_bAllowDateAxis )
         m_nAxisType=chart2::AxisType::CATEGORY;
     if( m_bAllowDateAxis )
     {
         bool bAutoDateAxis = false;
-        if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_DATEAXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
+        if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_DATEAXIS, true, &pPoolItem) == SFX_ITEM_SET)
             bAutoDateAxis = (bool) ((const SfxBoolItem*)pPoolItem)->GetValue();
 
         sal_uInt16 nPos = 0;
@@ -318,66 +318,66 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     m_pCbxAutoOrigin->Check( true );
     m_pCbx_AutoTimeResolution->Check( true );
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MIN,sal_True,&pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MIN,true,&pPoolItem) == SFX_ITEM_SET)
         m_pCbxAutoMin->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_MIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_MIN,true, &pPoolItem) == SFX_ITEM_SET)
     {
         fMin = ((const SvxDoubleItem*)pPoolItem)->GetValue();
         lcl_setValue( *m_pFmtFldMin, fMin );
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MAX,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MAX,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbxAutoMax->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_MAX,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_MAX,true, &pPoolItem) == SFX_ITEM_SET)
     {
         fMax = ((const SvxDoubleItem*)pPoolItem)->GetValue();
         lcl_setValue( *m_pFmtFldMax, fMax );
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_MAIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_MAIN,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbxAutoStepMain->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_MAIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_MAIN,true, &pPoolItem) == SFX_ITEM_SET)
     {
         fStepMain = ((const SvxDoubleItem*)pPoolItem)->GetValue();
         lcl_setValue( *m_pFmtFldStepMain, fStepMain );
         m_pMt_MainDateStep->SetValue( static_cast<sal_Int32>(fStepMain) );
     }
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_HELP,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_STEP_HELP,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbxAutoStepHelp->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_LOGARITHM,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_LOGARITHM,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbxLogarithm->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_REVERSE,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_REVERSE,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbxReverse->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_HELP,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_HELP,true, &pPoolItem) == SFX_ITEM_SET)
     {
         nStepHelp = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pMtStepHelp->SetValue( nStepHelp );
     }
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_ORIGIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_ORIGIN,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbxAutoOrigin->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_ORIGIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_ORIGIN,true, &pPoolItem) == SFX_ITEM_SET)
     {
         fOrigin = ((const SvxDoubleItem*)pPoolItem)->GetValue();
         lcl_setValue( *m_pFmtFldOrigin, fOrigin );
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,true, &pPoolItem) == SFX_ITEM_SET)
         m_pCbx_AutoTimeResolution->Check(((const SfxBoolItem*)pPoolItem)->GetValue());
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_TIME_RESOLUTION,true, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nTimeResolution = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pLB_TimeResolution->SelectEntryPos( m_nTimeResolution );
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_MAIN_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_MAIN_TIME_UNIT,true, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nMainTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pLB_MainTimeUnit->SelectEntryPos( m_nMainTimeUnit );
     }
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_HELP_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_HELP_TIME_UNIT,true, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nHelpTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_pLB_HelpTimeUnit->SelectEntryPos( m_nHelpTimeUnit );
@@ -530,7 +530,7 @@ void ScaleTabPage::SetNumFormat()
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_uLong nFmt = (sal_uLong)((const SfxInt32Item*)pPoolItem)->GetValue();
 

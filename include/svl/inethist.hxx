@@ -47,7 +47,7 @@ class INetURLHistory : public SfxBroadcaster
     static void NormalizeUrl_Impl (INetURLObject &rUrl);
 
     SVL_DLLPUBLIC void PutUrl_Impl   (const INetURLObject &rUrl);
-    SVL_DLLPUBLIC sal_Bool QueryUrl_Impl (const INetURLObject &rUrl);
+    SVL_DLLPUBLIC bool QueryUrl_Impl (const INetURLObject &rUrl);
 
     /** Not implemented.
     */
@@ -61,7 +61,7 @@ public:
 
     /** QueryProtocol.
     */
-    sal_Bool QueryProtocol (INetProtocol eProto) const
+    bool QueryProtocol (INetProtocol eProto) const
     {
         return ((eProto == INET_PROT_FILE ) ||
                 (eProto == INET_PROT_FTP  ) ||
@@ -71,22 +71,22 @@ public:
 
     /** QueryUrl.
     */
-    sal_Bool QueryUrl (const INetURLObject &rUrl)
+    bool QueryUrl (const INetURLObject &rUrl)
     {
         if (QueryProtocol (rUrl.GetProtocol()))
             return QueryUrl_Impl (rUrl);
         else
-            return sal_False;
+            return false;
     }
 
-    sal_Bool QueryUrl (const OUString &rUrl)
+    bool QueryUrl (const OUString &rUrl)
     {
         INetProtocol eProto =
             INetURLObject::CompareProtocolScheme (rUrl);
         if (QueryProtocol (eProto))
             return QueryUrl_Impl (INetURLObject (rUrl));
         else
-            return sal_False;
+            return false;
     }
 
     /** PutUrl.

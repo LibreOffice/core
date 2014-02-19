@@ -74,7 +74,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
     pSdrView->GetModel()->SetChanged(false);
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, sal_False, &pItem);
+        pArgs->GetItemState(nSlotId, false, &pItem);
 
     switch (nSlotId)
     {

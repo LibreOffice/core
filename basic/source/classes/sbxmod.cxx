@@ -575,7 +575,7 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
         pMeth->SetParent( this );
         pMeth->SetFlags( SBX_READ );
         pMethods->Put( pMeth, pMethods->Count() );
-        StartListening( pMeth->GetBroadcaster(), sal_True );
+        StartListening( pMeth->GetBroadcaster(), true );
     }
     // The method is per default valid, because it could be
     // created from the compiler (code generator) as well.
@@ -607,7 +607,7 @@ SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
         pProp->SetFlag( SBX_READWRITE );
         pProp->SetParent( this );
         pProps->Put( pProp, pProps->Count() );
-        StartListening( pProp->GetBroadcaster(), sal_True );
+        StartListening( pProp->GetBroadcaster(), true );
     }
     return pProp;
 }
@@ -626,7 +626,7 @@ SbProcedureProperty* SbModule::GetProcedureProperty( const OUString& rName, SbxD
         pProp->SetFlag( SBX_READWRITE );
         pProp->SetParent( this );
         pProps->Put( pProp, pProps->Count() );
-        StartListening( pProp->GetBroadcaster(), sal_True );
+        StartListening( pProp->GetBroadcaster(), true );
     }
     return pProp;
 }

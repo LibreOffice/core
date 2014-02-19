@@ -96,7 +96,7 @@ SfxItemSet SvxEditEngineForwarder::GetParaAttribs( sal_Int32 nPara ) const
     sal_uInt16 nWhich = EE_PARA_START;
     while( nWhich <= EE_PARA_END )
     {
-        if( aSet.GetItemState( nWhich, sal_True ) != SFX_ITEM_ON )
+        if( aSet.GetItemState( nWhich, true ) != SFX_ITEM_ON )
         {
             if( rEditEngine.HasParaAttrib( nPara, nWhich ) )
                 aSet.Put( rEditEngine.GetParaAttrib( nPara, nWhich ) );

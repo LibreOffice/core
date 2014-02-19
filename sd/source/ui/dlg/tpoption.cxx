@@ -303,7 +303,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
     const SfxPoolItem* pAttr = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , sal_False,
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;

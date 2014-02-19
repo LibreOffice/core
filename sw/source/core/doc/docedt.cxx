@@ -1303,11 +1303,11 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 {
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == pTxtNd->GetpSwAttrSet()->GetItemState(
-                        RES_BREAK, sal_False, &pItem ) )
+                        RES_BREAK, false, &pItem ) )
                         pTxtNd->ResetAttr( RES_BREAK );
                     if( pTxtNd->HasSwAttrSet() &&
                         SFX_ITEM_SET == pTxtNd->GetpSwAttrSet()->GetItemState(
-                        RES_PAGEDESC, sal_False, &pItem ) )
+                        RES_PAGEDESC, false, &pItem ) )
                         pTxtNd->ResetAttr( RES_PAGEDESC );
                 }
 
@@ -1318,10 +1318,10 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                     SfxItemSet aSet( pDoc->GetAttrPool(), aBreakSetRange );
                     const SfxItemSet* pSet = pOldTxtNd->GetpSwAttrSet();
                     if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
-                        sal_False, &pItem ) )
+                        false, &pItem ) )
                         aSet.Put( *pItem );
                     if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,
-                        sal_False, &pItem ) )
+                        false, &pItem ) )
                         aSet.Put( *pItem );
                     if( aSet.Count() )
                         pTxtNd->SetAttr( aSet );
@@ -2493,14 +2493,14 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             const SfxPoolItem *pItem;
             const SfxItemSet* pSet = ((SwCntntNode*)pNd)->GetpSwAttrSet();
             if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,
-                sal_False, &pItem ) )
+                false, &pItem ) )
             {
                 pTableFmt->SetFmtAttr( *pItem );
                 bSavePageDesc = sal_True;
             }
 
             if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
-                sal_False, &pItem ) )
+                false, &pItem ) )
             {
                 pTableFmt->SetFmtAttr( *pItem );
                 bSavePageBreak = sal_True;

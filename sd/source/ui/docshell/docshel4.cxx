@@ -1097,7 +1097,7 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
         OUString aLayoutName;
 
         SfxStringItem* pLayoutItem;
-        if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, sal_False, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
+        if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, false, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
         {
             aLayoutName = pLayoutItem->GetValue();
         }

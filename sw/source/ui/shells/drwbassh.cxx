@@ -105,7 +105,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     pSdrView->GetModel()->SetChanged(false);
     const SfxPoolItem* pItem = 0;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, sal_False, &pItem);
+        pArgs->GetItemState(nSlotId, false, &pItem);
 
     //Special case align by menu
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
@@ -156,7 +156,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         {
                             const SfxPoolItem* pWrapItem;
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            if(SFX_ITEM_SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, sal_False, &pWrapItem))
+                            if(SFX_ITEM_SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, false, &pWrapItem))
                             {
                                 short nLayer = ((const SfxInt16Item*)pWrapItem)->GetValue();
                                 if (nLayer == 1)
@@ -275,9 +275,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             bool bPosCorr =
                                 SFX_ITEM_SET != pOutSet->GetItemState(
-                                    SID_ATTR_TRANSFORM_POS_X, sal_False ) &&
+                                    SID_ATTR_TRANSFORM_POS_X, false ) &&
                                 SFX_ITEM_SET != pOutSet->GetItemState(
-                                    SID_ATTR_TRANSFORM_POS_Y, sal_False );
+                                    SID_ATTR_TRANSFORM_POS_Y, false );
 
                             SfxItemSet aFrmAttrSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
 
@@ -285,7 +285,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             const SfxPoolItem* pAnchorItem;
                             if(SFX_ITEM_SET == pOutSet->GetItemState(
-                                SID_ATTR_TRANSFORM_ANCHOR, sal_False, &pAnchorItem))
+                                SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
                             {
                                 if(!bSingleSelection)
                                     pSh->ChgAnchor(((const SfxInt16Item*)pAnchorItem)
@@ -301,10 +301,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             const SfxPoolItem* pHoriRelation = 0;
                             const SfxPoolItem* pHoriPosition = 0;
                             const SfxPoolItem* pHoriMirror = 0;
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_ORIENT, sal_False, &pHoriOrient);
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_RELATION, sal_False, &pHoriRelation);
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_POSITION, sal_False, &pHoriPosition);
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_MIRROR, sal_False, &pHoriMirror);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_ORIENT, false, &pHoriOrient);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_RELATION, false, &pHoriRelation);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_POSITION, false, &pHoriPosition);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_HORI_MIRROR, false, &pHoriMirror);
                             if(pHoriOrient || pHoriRelation || pHoriPosition || pHoriMirror)
                             {
                                 if(pHoriOrient)
@@ -323,9 +323,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             const SfxPoolItem* pVertOrient = 0;
                             const SfxPoolItem* pVertRelation = 0;
                             const SfxPoolItem* pVertPosition = 0;
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_ORIENT, sal_False, &pVertOrient);
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_RELATION, sal_False, &pVertRelation);
-                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_POSITION, sal_False, &pVertPosition);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_ORIENT, false, &pVertOrient);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_RELATION, false, &pVertRelation);
+                            pOutSet->GetItemState(SID_ATTR_TRANSFORM_VERT_POSITION, false, &pVertPosition);
                             if(pVertOrient || pVertRelation || pVertPosition )
                             {
                                 if(pVertOrient)
@@ -339,7 +339,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 aFrmAttrSet.Put( aVOrient );
                             }
                             const SfxPoolItem* pFollowItem = 0;
-                            pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, sal_False, &pFollowItem);
+                            pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, false, &pFollowItem);
                             if(pFollowItem)
                                 aFrmAttrSet.Put(*pFollowItem);
 

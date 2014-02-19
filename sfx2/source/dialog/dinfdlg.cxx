@@ -670,7 +670,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     if ( pDlg )
         pExSet = pDlg->GetExampleSet();
 
-    if ( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
+    if ( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         pInfo = m_pInfoItem;
     else if ( pItem )
         pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem *)pItem );
@@ -951,7 +951,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
         const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
         const SfxPoolItem* pItem;
 
-        if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
+        if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
             SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
             sal_Bool bUseData = ( STATE_CHECK == m_pUseUserDataCB->GetState() );
@@ -965,7 +965,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
     {
         const SfxItemSet* pExpSet = GetTabDialog()->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
+        if ( pExpSet && SFX_ITEM_SET == pExpSet->GetItemState( SID_DOCINFO, true, &pItem ) )
         {
             SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
             sal_Bool bUseAuthor = bEnableUseUserData && m_pUseUserDataCB->IsChecked();
@@ -1027,7 +1027,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     // determine name
     OUString aName;
     const SfxPoolItem* pItem = 0;
-    if ( SFX_ITEM_SET != rSet.GetItemState( ID_FILETP_TITLE, sal_False, &pItem ) )
+    if ( SFX_ITEM_SET != rSet.GetItemState( ID_FILETP_TITLE, false, &pItem ) )
     {
         INetURLObject aURL(aFile);
         aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
@@ -1044,7 +1044,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     m_pNameED->ClearModifyFlag();
 
     // determine RO-Flag
-    if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, sal_False, &pItem )
+    if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, false, &pItem )
          || !pItem )
         m_pReadOnlyCB->Hide();
     else
@@ -1145,7 +1145,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     const SfxPoolItem* pItem = 0;
     OUString aTitle( GetText() );
     if ( SFX_ITEM_SET !=
-         rItemSet.GetItemState( SID_EXPLORER_PROPS_START, sal_False, &pItem ) )
+         rItemSet.GetItemState( SID_EXPLORER_PROPS_START, false, &pItem ) )
     {
         // File name
         OUString aFile( m_pInfoItem->GetValue() );
@@ -2065,7 +2065,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if ( GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
         if ( SFX_ITEM_SET !=
-                GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
+                GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
             pInfo = &( SfxDocumentInfoItem& )rSet.Get( SID_DOCINFO );
         else
         {
@@ -2530,7 +2530,7 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if ( GetTabDialog() && GetTabDialog()->GetExampleSet() )
     {
         if ( SFX_ITEM_SET !=
-                GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, sal_True, &pItem ) )
+                GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
             pInfo = &( SfxDocumentInfoItem& )rSet.Get( SID_DOCINFO );
         else
         {

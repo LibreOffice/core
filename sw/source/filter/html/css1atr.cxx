@@ -1085,7 +1085,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
     {
         const SfxPoolItem *pRefItem, *pItem;
         bool bItemSet = ( SFX_ITEM_SET ==
-                rItemSet.GetItemState( nWhich, sal_False, &pItem) );
+                rItemSet.GetItemState( nWhich, false, &pItem) );
         bool bRefItemSet;
 
         if( pRefScriptItemSet )
@@ -1108,18 +1108,18 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
             case RES_CHRATR_CTL_POSTURE:
             case RES_CHRATR_CTL_WEIGHT:
                 bRefItemSet = ( SFX_ITEM_SET ==
-                    pRefScriptItemSet->GetItemState( nWhich, sal_True, &pRefItem) );
+                    pRefScriptItemSet->GetItemState( nWhich, true, &pRefItem) );
                 break;
             default:
                 bRefItemSet = ( SFX_ITEM_SET ==
-                    aRefItemSet.GetItemState( nWhich, sal_False, &pRefItem) );
+                    aRefItemSet.GetItemState( nWhich, false, &pRefItem) );
                 break;
             }
         }
         else
         {
             bRefItemSet = ( SFX_ITEM_SET ==
-                aRefItemSet.GetItemState( nWhich, sal_False, &pRefItem) );
+                aRefItemSet.GetItemState( nWhich, false, &pRefItem) );
         }
 
         if( bItemSet )
@@ -1245,19 +1245,19 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
     {
         const SfxPoolItem *pItem = 0, *pItemCJK = 0, *pItemCTL = 0, *pTmp;
         sal_uInt16 nItemCount = 0;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], false,
                                                    &pTmp ) )
         {
             pItem = pTmp;
             nItemCount++;
         }
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i+1], sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i+1], false,
                                                    &pTmp ) )
         {
             pItemCJK = pTmp;
             nItemCount++;
         }
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i+2], sal_False,
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i+2], false,
                                                    &pTmp ) )
         {
             pItemCTL = pTmp;
@@ -1293,7 +1293,7 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
 
     const SfxPoolItem *pItem;
     if( bCheckDropCap &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, sal_True,
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, true,
                 &pItem ) )
     {
         const SwFmtDrop *pDrop = (const SwFmtDrop *)pItem;
@@ -1702,7 +1702,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // Drop-Caps ausgeben
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, sal_False, &pItem ))
+    if( SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, false, &pItem ))
     {
         OUString sOut( aSelector );
         sOut += ":" + OStringToOUString( sCSS1_first_letter, RTL_TEXTENCODING_ASCII_US );
@@ -1883,13 +1883,13 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     // Export der Absatz-Vorlagen beruecksichtigt.
 
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, sal_False,
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                &pItem ) )
     {
         OutCSS1_SvxBrush( rWrt, *pItem, CSS1_BACKGROUND_PAGE );
     }
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_False,
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, false,
                                                &pItem ))
     {
         OutCSS1_SvxBox( rWrt, *pItem );
@@ -2169,9 +2169,9 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
     {
         const SvxLRSpaceItem *pLRItem = 0;
         const SvxULSpaceItem *pULItem = 0;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, sal_True ) )
+        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, true ) )
             pLRItem = &aLRItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, sal_True ) )
+        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, true ) )
             pULItem = &aULItem;
         if( pLRItem || pULItem )
             OutCSS1_SvxULSpace_SvxLRSpace( *this, pULItem, pLRItem );
@@ -2183,7 +2183,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         const SfxPoolItem* pItem;
         if( nFrmOpts & HTML_FRMOPT_S_NOBORDER )
             OutCSS1_SvxBox( *this, rFrmFmt.GetBox() );
-        else if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOX, sal_True, &pItem ) )
+        else if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BOX, true, &pItem ) )
             OutCSS1_SvxBox( *this, *pItem );
     }
 
@@ -2206,13 +2206,13 @@ void SwHTMLWriter::OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt )
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_TABLE );
 
     if( IsHTMLMode( HTMLMODE_PRINT_EXT ) )
         OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( *this, rItemSet, sal_False );
 
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_LAYOUT_SPLIT, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_LAYOUT_SPLIT, false, &pItem ) )
         OutCSS1_SwFmtLayoutSplit( *this, *pItem );
 
     if( !bFirstCSS1Property )
@@ -2238,7 +2238,7 @@ void SwHTMLWriter::OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwF
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
-    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         OutCSS1_SvxBrush( *this, *pItem, CSS1_BACKGROUND_SECTION );
 
     if (pCol)

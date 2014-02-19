@@ -105,7 +105,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if (nNewId == SID_INSERT_DRAW && pArgs)
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( SID_INSERT_DRAW, sal_True, &pItem ) == SFX_ITEM_SET &&
+        if ( pArgs->GetItemState( SID_INSERT_DRAW, true, &pItem ) == SFX_ITEM_SET &&
              pItem->ISA( SvxDrawToolItem ) )
         {
             SvxDrawToolEnum eSel = (SvxDrawToolEnum)((const SvxDrawToolItem*)pItem)->GetValue();
@@ -142,7 +142,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nNewId == SID_FM_CREATE_CONTROL && pArgs )
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, sal_True, &pItem ) == SFX_ITEM_SET &&
+        if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, true, &pItem ) == SFX_ITEM_SET &&
              pItem->ISA( SfxUInt16Item ) )
             nNewFormId = ((const SfxUInt16Item*)pItem)->GetValue();
     }
@@ -151,7 +151,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( pArgs )
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( nNewId, sal_True, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
+        if ( pArgs->GetItemState( nNewId, true, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
             sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
     bool bSwitchCustom = ( !sStringItemValue.isEmpty() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );

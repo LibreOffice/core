@@ -58,9 +58,9 @@ static const sal_uInt32 SFX_ITEMS_DEFAULT=  0xfffffffe;
 // UNO3 shortcuts
 
 // warning, if there is no boolean inside the any this will always return the value false
-inline sal_Bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
+inline bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
 {
-    sal_Bool nValue = sal_False;
+    bool nValue = false;
     if( rValue.hasValue() )
     {
         if( rValue.getValueType() == ::getCppuBooleanType() )
@@ -78,7 +78,7 @@ inline sal_Bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
     return nValue;
 }
 
-inline ::com::sun::star::uno::Any Bool2Any( sal_Bool bValue )
+inline ::com::sun::star::uno::Any Bool2Any( bool bValue )
 {
     return ::com::sun::star::uno::Any( &bValue, ::getCppuBooleanType() );
 }

@@ -1098,7 +1098,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
-                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
@@ -1171,7 +1171,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             sal_Bool bOptInit = false;
 
             if ( pSet && SFX_ITEM_SET ==
-                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 aOptions.ReadFromString( ((const SfxStringItem*)pItem)->GetValue() );
                 bOptInit = sal_True;
@@ -1237,7 +1237,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
-                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
@@ -1278,7 +1278,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SfxItemSet*  pSet = rMedium.GetItemSet();
                 const SfxPoolItem* pItem;
                 if ( pSet && SFX_ITEM_SET ==
-                     pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                     pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
                 {
                     sItStr = ((const SfxStringItem*)pItem)->GetValue();
                 }
@@ -1403,7 +1403,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     SfxItemSet*  pSet = rMedium.GetItemSet();
                     const SfxPoolItem* pItem;
                     if ( pSet && SFX_ITEM_SET ==
-                         pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                         pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
                     {
                         OUString aFilterOption = (static_cast<const SfxStringItem*>(pItem))->GetValue();
                         lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert);
@@ -2235,7 +2235,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             {
                 SfxItemSet* pItemSet = rMed.GetItemSet();
                 const SfxPoolItem* pItem = 0;
-                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, sal_True, &pItem ) == SFX_ITEM_SET )
+                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, true, &pItem ) == SFX_ITEM_SET )
                 {
                     bDoSave = ScWarnPassword::WarningOnPassword( rMed );
                     // #i42858# remove password from medium (warn only one time)
@@ -2279,7 +2279,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
-                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
@@ -2309,7 +2309,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
         SfxItemSet* pSet = rMed.GetItemSet();
         const SfxPoolItem* pItem;
         if ( pSet && SFX_ITEM_SET ==
-             pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+             pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         {
             sCharSet = ((const SfxStringItem*)pItem)->GetValue();
         }
@@ -2376,7 +2376,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
-                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
+                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }

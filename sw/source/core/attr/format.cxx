@@ -319,7 +319,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     default:
         {
             // attribute is defined in this format
-            if( SFX_ITEM_SET == aSet.GetItemState( nWhich, sal_False ))
+            if( SFX_ITEM_SET == aSet.GetItemState( nWhich, false ))
             {
                 // DropCaps might come into this block
                 OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify was sent without sender" );

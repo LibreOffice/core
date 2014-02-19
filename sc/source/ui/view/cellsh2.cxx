@@ -413,17 +413,17 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aSortParam.bInplace = true;             // from Basic always
 
                         const SfxPoolItem* pItem;
-                        if ( pArgs->GetItemState( SID_SORT_BYROW, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_BYROW, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bByRow = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_HASHEADER, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_HASHEADER, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bHasHeader = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_CASESENS, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_CASESENS, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bCaseSens = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bNaturalSort = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_ATTRIBS, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bIncludePattern = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_USERDEF, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_USERDEF, true, &pItem ) == SFX_ITEM_SET )
                         {
                             sal_uInt16 nUserIndex = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                             aSortParam.bUserDef = ( nUserIndex != 0 );
@@ -432,25 +432,25 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         }
 
                         SCCOLROW nField0 = 0;
-                        if ( pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SFX_ITEM_SET )
                             nField0 = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                         aSortParam.maKeyState[0].bDoSort = ( nField0 != 0 );
                         aSortParam.maKeyState[0].nField = nField0 > 0 ? (nField0-1) : 0;
-                        if ( pArgs->GetItemState( FN_PARAM_2, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.maKeyState[0].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         SCCOLROW nField1 = 0;
-                        if ( pArgs->GetItemState( FN_PARAM_3, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_3, true, &pItem ) == SFX_ITEM_SET )
                             nField1 = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                         aSortParam.maKeyState[1].bDoSort = ( nField1 != 0 );
                         aSortParam.maKeyState[1].nField = nField1 > 0 ? (nField1-1) : 0;
-                        if ( pArgs->GetItemState( FN_PARAM_4, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_4, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.maKeyState[1].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         SCCOLROW nField2 = 0;
-                        if ( pArgs->GetItemState( FN_PARAM_5, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_5, true, &pItem ) == SFX_ITEM_SET )
                             nField2 = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                         aSortParam.maKeyState[2].bDoSort = ( nField2 != 0 );
                         aSortParam.maKeyState[2].nField = nField2 > 0 ? (nField2-1) : 0;
-                        if ( pArgs->GetItemState( FN_PARAM_6, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_6, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.maKeyState[2].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                         // subtotal when needed new
@@ -590,7 +590,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET ==
-                        pReqArgs->GetItemState( SCITEM_QUERYDATA, sal_True, &pItem ) )
+                        pReqArgs->GetItemState( SCITEM_QUERYDATA, true, &pItem ) )
                 {
                     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(*pItem);
 
@@ -645,7 +645,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET ==
-                        pReqArgs->GetItemState( SCITEM_PIVOTDATA, sal_True, &pItem ) )
+                        pReqArgs->GetItemState( SCITEM_PIVOTDATA, true, &pItem ) )
                 {
                     SCTAB nCurTab = GetViewData()->GetTabNo();
                     SCTAB nRefTab = GetViewData()->GetRefTabNo();
@@ -858,11 +858,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     {
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
-                        if ( pOutSet->GetItemState( FID_VALID_MODE, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SFX_ITEM_SET )
                             eMode = (ScValidationMode) ((const SfxAllEnumItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_CONDMODE, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SFX_ITEM_SET )
                             eOper = (ScConditionMode) ((const SfxAllEnumItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_VALUE1, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_VALUE1, true, &pItem ) == SFX_ITEM_SET )
                         {
                             OUString aTemp1 = ((const SfxStringItem*)pItem)->GetValue();
                             if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
@@ -879,7 +879,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             else
                                 aExpr1 = aTemp1;
                         }
-                        if ( pOutSet->GetItemState( FID_VALID_VALUE2, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_VALUE2, true, &pItem ) == SFX_ITEM_SET )
                         {
                             OUString aTemp2 = ((const SfxStringItem*)pItem)->GetValue();
                             if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
@@ -897,25 +897,25 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 aExpr2 = aTemp2;
                         }
 
-                        if ( pOutSet->GetItemState( FID_VALID_BLANK, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_BLANK, true, &pItem ) == SFX_ITEM_SET )
                             bBlank = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_LISTTYPE, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_LISTTYPE, true, &pItem ) == SFX_ITEM_SET )
                             nListType = ((const SfxInt16Item*)pItem)->GetValue();
 
-                        if ( pOutSet->GetItemState( FID_VALID_SHOWHELP, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_SHOWHELP, true, &pItem ) == SFX_ITEM_SET )
                             bShowHelp = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_HELPTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_HELPTITLE, true, &pItem ) == SFX_ITEM_SET )
                             aHelpTitle = ((const SfxStringItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_HELPTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_HELPTEXT, true, &pItem ) == SFX_ITEM_SET )
                             aHelpText = ((const SfxStringItem*)pItem)->GetValue();
 
-                        if ( pOutSet->GetItemState( FID_VALID_SHOWERR, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SFX_ITEM_SET )
                             bShowError = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_ERRSTYLE, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SFX_ITEM_SET )
                             eErrStyle = (ScValidErrorStyle) ((const SfxAllEnumItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_ERRTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SFX_ITEM_SET )
                             aErrTitle = ((const SfxStringItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SFX_ITEM_SET )
                             aErrText = ((const SfxStringItem*)pItem)->GetValue();
 
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );

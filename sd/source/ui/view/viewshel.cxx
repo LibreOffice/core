@@ -754,14 +754,14 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 {
     const SfxPoolItem* pTmpItem = NULL;
 
-    if(aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem) == SFX_ITEM_SET)
+    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SFX_ITEM_SET)
     {
         return pTmpItem;
     }
     else
     {
         nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
         if (eState == SFX_ITEM_SET)
             return pTmpItem;
         else
@@ -799,7 +799,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                 OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
                 SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
                 if( pFirstStyleSheet )
-                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);
+                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, (const SfxPoolItem**)&pItem);
             }
 
             if( pItem == NULL )
@@ -807,9 +807,9 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,sal_True) == SFX_ITEM_ON )
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
             {
-                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,sal_True);
+                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
                 SvxNumRule* pRule = pBulletItem->GetNumRule();
                 if(pRule)
                 {
@@ -821,7 +821,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                 }
             }
 
-            SfxItemState eNumState = aNewAttr.GetItemState(nNumItemId, sal_False, &pTmpItem);
+            SfxItemState eNumState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
             if (eNumState == SFX_ITEM_SET)
                 return pTmpItem;
 

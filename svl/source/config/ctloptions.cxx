@@ -255,7 +255,7 @@ void SvtCTLOptions_Impl::Load()
     DBG_ASSERT( aROStates.getLength() == rPropertyNames.getLength(), "GetReadOnlyStates failed" );
     if ( aValues.getLength() == rPropertyNames.getLength() && aROStates.getLength() == rPropertyNames.getLength() )
     {
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
         sal_Int32 nValue = 0;
 
         for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )

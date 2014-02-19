@@ -146,7 +146,7 @@ bool Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rN
 
     // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, false ) )
     {
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
@@ -194,7 +194,7 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
     // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, false ) )
     {
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
@@ -978,7 +978,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
         if (GetNodes().IsDocNodes() && IsTxtNode() && pOldValue)
         {
             if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
-                RES_CHRATR_HIDDEN, sal_False ) )
+                RES_CHRATR_HIDDEN, false ) )
             {
                 ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
             }
@@ -1388,7 +1388,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
     }
 
     const SfxPoolItem* pFnd = 0;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, sal_False, &pFnd ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, false, &pFnd ) )
     {
         OSL_ENSURE( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
         const SwFmtAutoFmt* pTmp = static_cast<const SwFmtAutoFmt*>(pFnd);
@@ -1417,7 +1417,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // the string is empty.
             const SfxPoolItem* pNameItem = 0;
             if ( 0 != GetCondFmtColl() ||
-                 SFX_ITEM_SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, sal_False, &pNameItem ) ||
+                 SFX_ITEM_SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, false, &pNameItem ) ||
                  static_cast<const SfxStringItem*>(pNameItem)->GetValue().isEmpty() )
                 AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
             else
@@ -1434,7 +1434,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
     // If Modify is locked, do not send any Modifys
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
-           SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, sal_False ) ) )
+           SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, false ) ) )
     {
         // Some special treatment for Attributes
         bRet = AttrSetHandleHelper::Put( mpAttrSet, *this, rSet );
@@ -1622,7 +1622,7 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
     if( pCondColl && pCondColl->GetRegisteredIn() )
     {
         if( !GetpSwAttrSet() || ( SFX_ITEM_SET != GetpSwAttrSet()->GetItemState(
-                    nWhich, sal_False, &pFnd ) && bInParents ))
+                    nWhich, false, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
     // undo change of issue #i51029#

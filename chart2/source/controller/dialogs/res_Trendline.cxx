@@ -113,7 +113,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_CURVE_NAME, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_CURVE_NAME, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         OUString aName = static_cast< const SfxStringItem* >(pPoolItem)->GetValue();
         m_pEE_Name->SetText(aName);
@@ -123,7 +123,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_pEE_Name->SetText("");
     }
 
-    SfxItemState aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem );
+    SfxItemState aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem );
     m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
@@ -134,7 +134,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         }
     }
 
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_DEGREE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_DEGREE, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Int32 nDegree = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         m_pNF_Degree->SetValue( nDegree );
@@ -144,7 +144,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_pNF_Degree->SetValue( 2 );
     }
 
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_PERIOD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_PERIOD, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Int32 nPeriod = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         m_pNF_Period->SetValue( nPeriod );
@@ -155,27 +155,27 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
 
     double nValue = 0.0;
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
     }
     lcl_setValue( *m_pFmtFld_ExtrapolateForward, nValue );
 
     nValue = 0.0;
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
     }
     lcl_setValue( *m_pFmtFld_ExtrapolateBackward, nValue );
 
     nValue = 0.0;
-    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, true, &pPoolItem ) == SFX_ITEM_SET )
     {
         nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
     }
     lcl_setValue( *m_pFmtFld_InterceptValue, nValue );
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SET_INTERCEPT, sal_True, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SET_INTERCEPT, true, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCB_SetIntercept->EnableTriState( sal_True );
@@ -188,7 +188,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_pCB_SetIntercept->Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, sal_True, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, true, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCB_ShowEquation->EnableTriState( sal_True );
@@ -201,7 +201,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_pCB_ShowEquation->Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, sal_True, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, true, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCB_ShowCorrelationCoeff->EnableTriState( sal_True );

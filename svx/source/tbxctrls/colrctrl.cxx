@@ -277,7 +277,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     SetSize();
     aColorSet.Show();
-    StartListening( *_pBindings, sal_True );
+    StartListening( *_pBindings, true );
 }
 
 

@@ -112,7 +112,7 @@ void SdModule::Execute(SfxRequest& rReq)
             // automatic spell checker
             const SfxPoolItem* pItem;
             if( pSet && SFX_ITEM_SET == pSet->GetItemState(
-                        SID_AUTOSPELL_CHECK, sal_False, &pItem ) )
+                        SID_AUTOSPELL_CHECK, false, &pItem ) )
             {
                 sal_Bool bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
                 // save at document:
@@ -129,7 +129,7 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_ATTR_METRIC:
         {
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_METRIC, sal_True, &pItem ) )
+            if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_METRIC, true, &pItem ) )
             {
                 FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
                 switch( eUnit )
@@ -168,9 +168,9 @@ void SdModule::Execute(SfxRequest& rReq)
             const SfxPoolItem* pItem;
             if( pSet &&
                 (
-                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_LANGUAGE, sal_False, &pItem ) ||
-                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, sal_False, &pItem ) ||
-                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, sal_False, &pItem )
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_LANGUAGE, false, &pItem ) ||
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ) ||
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem )
                 )
               )
             {

@@ -461,7 +461,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             const SfxPoolItem* pItem = 0;
             if(pNewAttrs)
-                pNewAttrs->GetItemState(nSlot, sal_False, &pItem);
+                pNewAttrs->GetItemState(nSlot, false, &pItem);
 
             if(pItem)
             {
@@ -519,7 +519,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
-            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, sal_True, &pPoolItem ) )
+            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, true, &pPoolItem ) )
             {
                 if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
@@ -530,7 +530,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         0 );
 
             sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
-            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, sal_True, &pPoolItem ) )
+            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
                 nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
             if( bLeftToRight )
@@ -653,7 +653,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 ASK_ADJUST:
             {
                 if( !pAdjust )
-                    aEditAttr.GetItemState( EE_PARA_JUST, sal_False, &pAdjust);
+                    aEditAttr.GetItemState( EE_PARA_JUST, false, &pAdjust);
 
                 if( !pAdjust || IsInvalidItem( pAdjust ))
                     rSet.InvalidateItem( nSlotId ), nSlotId = 0;
@@ -710,7 +710,7 @@ ASK_ADJUST:
 ASK_LINESPACE:
             {
                 if( !pLSpace )
-                    aEditAttr.GetItemState( EE_PARA_SBL, sal_False, &pLSpace );
+                    aEditAttr.GetItemState( EE_PARA_SBL, false, &pLSpace );
 
                 if( !pLSpace || IsInvalidItem( pLSpace ))
                     rSet.InvalidateItem( nSlotId ), nSlotId = 0;

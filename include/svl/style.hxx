@@ -134,7 +134,7 @@ public:
     bool     IsUserDefined() const
            { return ( nMask & SFXSTYLEBIT_USERDEF) != 0; }
 
-    virtual sal_Bool IsHidden() const { return bHidden; }
+    virtual bool IsHidden() const { return bHidden; }
     virtual void SetHidden( sal_Bool bValue );
 
     virtual sal_uLong GetHelpId( OUString& rFile );

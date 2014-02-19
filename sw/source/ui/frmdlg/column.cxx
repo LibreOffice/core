@@ -609,7 +609,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     if(m_pBalanceColsCB->IsVisible())
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE, sal_False, &pItem ))
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE, false, &pItem ))
             m_pBalanceColsCB->Check(!((const SwFmtNoBalancedColumns*)pItem)->GetValue());
         else
             m_pBalanceColsCB->Check( sal_True );

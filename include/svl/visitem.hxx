@@ -35,7 +35,7 @@ class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    explicit SfxVisibilityItem(sal_uInt16 which = 0, sal_Bool bVisible = sal_True):
+    explicit SfxVisibilityItem(sal_uInt16 which = 0, bool bVisible = true):
         SfxPoolItem(which)
     {
         m_nValue.bVisible = bVisible;
@@ -77,9 +77,9 @@ public:
 
     virtual OUString GetValueTextByVal(sal_Bool bTheValue) const;
 
-    sal_Bool GetValue() const { return m_nValue.bVisible; }
+    bool GetValue() const { return m_nValue.bVisible; }
 
-    void SetValue(sal_Bool bVisible) { m_nValue.bVisible = bVisible; }
+    void SetValue(bool bVisible) { m_nValue.bVisible = bVisible; }
 };
 
 #endif // INCLUDED_SVL_VISITEM_HXX

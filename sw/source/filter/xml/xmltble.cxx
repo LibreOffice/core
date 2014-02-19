@@ -208,13 +208,13 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, false, &pItem ) )
         pFrmSize = (const SwFmtFrmSize *)pItem;
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_ROW_SPLIT, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_ROW_SPLIT, false, &pItem ) )
         pRowSplit = (const SwFmtRowSplit *)pItem;
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         pBrush = (const SvxBrushItem *)pItem;
 
     // empty styles have not to be exported
@@ -231,7 +231,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         const SvxBrushItem *pTestBrush = 0;
         const SwFrmFmt *pTestFmt = *i;
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
-        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_FRM_SIZE, sal_False,
+        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_FRM_SIZE, false,
                                                   &pItem ) )
         {
             if( !pFrmSize )
@@ -245,7 +245,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
                 continue;
         }
 
-        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_BACKGROUND, sal_False,
+        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_BACKGROUND, false,
                                                   &pItem ) )
         {
             if( !pBrush )
@@ -259,7 +259,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
                 continue;
         }
 
-        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_ROW_SPLIT, sal_False,
+        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_ROW_SPLIT, false,
                                                   &pItem ) )
         {
             if( !pRowSplit )
@@ -334,21 +334,21 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
 
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, sal_False,
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, false,
                                                &pItem ) )
         pVertOrient = (const SwFmtVertOrient *)pItem;
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
         pBrush = (const SvxBrushItem *)pItem;
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_False, &pItem ) )
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, false, &pItem ) )
         pBox = (const SvxBoxItem *)pItem;
 
     if ( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOXATR_FORMAT,
-                                                sal_False, &pItem ) )
+                                                false, &pItem ) )
         pNumFmt = (const SwTblBoxNumFormat *)pItem;
     if ( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRAMEDIR,
-                                                sal_False, &pItem ) )
+                                                false, &pItem ) )
         pFrameDir = (const SvxFrameDirectionItem *)pItem;
 
     // empty styles have not to be exported
@@ -372,7 +372,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         const SvxFrameDirectionItem *pTestFrameDir = 0;
         const SwFrmFmt* pTestFmt = *i;
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
-        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_VERT_ORIENT, sal_False,
+        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_VERT_ORIENT, false,
                                                   &pItem ) )
         {
             if( !pVertOrient )
@@ -386,7 +386,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
                 continue;
         }
 
-        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_BACKGROUND, sal_False,
+        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_BACKGROUND, false,
                                                   &pItem ) )
         {
             if( !pBrush )
@@ -400,7 +400,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
                 continue;
         }
 
-        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_BOX, sal_False, &pItem ) )
+        if( SFX_ITEM_SET == rTestSet.GetItemState( RES_BOX, false, &pItem ) )
         {
             if( !pBox )
                 break;
@@ -414,7 +414,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         }
 
         if ( SFX_ITEM_SET == rTestSet.GetItemState( RES_BOXATR_FORMAT,
-                                                sal_False, &pItem ) )
+                                                false, &pItem ) )
         {
             if( !pNumFmt )
                 break;
@@ -429,7 +429,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         }
 
         if ( SFX_ITEM_SET == rTestSet.GetItemState( RES_FRAMEDIR,
-                                                sal_False, &pItem ) )
+                                                false, &pItem ) )
         {
             if( !pFrameDir )
                 break;

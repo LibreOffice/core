@@ -510,7 +510,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     const SfxPoolItem* pPoolItem;
 
     if ( SFX_ITEM_SET ==
-         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, sal_False, &pPoolItem ) )
+         rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, false, &pPoolItem ) )
         m_pAutoCB->Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
     m_pAutoCB->SaveValue();
 }

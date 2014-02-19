@@ -426,7 +426,7 @@ namespace SwLangHelper
         LanguageType nLang = LANGUAGE_SYSTEM;
 
         const SfxPoolItem *pItem = 0;
-        SfxItemState nState = aSet.GetItemState( nLangWhichId, sal_True, &pItem );
+        SfxItemState nState = aSet.GetItemState( nLangWhichId, true, &pItem );
         if (nState > SFX_ITEM_DEFAULT && pItem)
         {
             // the item is set and can be used

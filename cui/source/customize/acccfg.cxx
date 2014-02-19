@@ -1444,7 +1444,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     RadioHdl(0);
 
     const SfxPoolItem* pMacroItem=0;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, sal_True, &pMacroItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, true, &pMacroItem ) )
     {
         m_pMacroInfoItem = PTR_CAST( SfxMacroInfoItem, pMacroItem );
         pGroupLBox->SelectMacro( m_pMacroInfoItem );
@@ -1452,11 +1452,11 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     else
     {
         const SfxPoolItem* pStringItem=0;
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, sal_True, &pStringItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, true, &pStringItem ) )
             m_pStringItem = PTR_CAST( SfxStringItem, pStringItem );
 
         const SfxPoolItem* pFontItem=0;
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, sal_True, &pFontItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, true, &pFontItem ) )
             m_pFontItem = PTR_CAST( SfxStringItem, pFontItem );
     }
 }

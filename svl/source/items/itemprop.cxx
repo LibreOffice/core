@@ -172,9 +172,9 @@ SfxItemPropertySet::~SfxItemPropertySet()
 {
 }
 
-sal_Bool SfxItemPropertySet::FillItem(SfxItemSet&, sal_uInt16, sal_Bool) const
+bool SfxItemPropertySet::FillItem(SfxItemSet&, sal_uInt16, sal_Bool) const
 {
-    return sal_False;
+    return false;
 }
 
 void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
@@ -183,7 +183,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rSet.GetItemState( rEntry.nWID, sal_True, &pItem );
+    SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     // return item values as uno::Any
@@ -243,7 +243,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     // get the SfxPoolItem
     const SfxPoolItem* pItem = 0;
     SfxPoolItem *pNewItem = 0;
-    SfxItemState eState = rSet.GetItemState( rEntry.nWID, sal_True, &pItem );
+    SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     //maybe there's another way to find an Item
@@ -295,7 +295,7 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
     sal_uInt16 nWhich = rEntry.nWID;
 
     // item state holen
-    SfxItemState eState = rSet.GetItemState( nWhich, sal_False );
+    SfxItemState eState = rSet.GetItemState( nWhich, false );
     // item-Wert als UnoAny zurueckgeben
     if(eState == SFX_ITEM_DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
@@ -319,7 +319,7 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
 
     // item holen
     const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rSet.GetItemState( nWhich, sal_False, &pItem );
+    SfxItemState eState = rSet.GetItemState( nWhich, false, &pItem );
     if(!pItem && nWhich != rSet.GetPool()->GetSlotId(nWhich))
         pItem = &rSet.GetPool()->GetDefaultItem(nWhich);
     // item-Wert als UnoAny zurueckgeben

@@ -92,7 +92,7 @@ namespace sdr
 
                 while(nWhich)
                 {
-                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, sal_False))
+                    if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, false))
                     {
                         mpItemSet->InvalidateItem(nWhich);
                     }

@@ -158,7 +158,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
     // Get item
     const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
+    SfxItemState eState = rSet.GetItemState( pMap->nWID, true, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
     // Put UnoAny in the item value
@@ -228,7 +228,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if(aSet.Count())
     {
         const SfxPoolItem* pItem = NULL;
-        SfxItemState eState = aSet.GetItemState( pMap->nWID, sal_True, &pItem );
+        SfxItemState eState = aSet.GetItemState( pMap->nWID, true, &pItem );
         if(eState >= SFX_ITEM_DEFAULT && pItem)
         {
             pItem->QueryValue( aVal, nMemberId );

@@ -905,7 +905,7 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
         // recalculated.
         // Save formulas always in plain text.
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BOXATR_FORMULA, sal_True, &pItem ))
+        if( SFX_ITEM_SET == pSet->GetItemState( RES_BOXATR_FORMULA, true, &pItem ))
         {
             pSet->ClearItem( RES_BOXATR_VALUE );
             if( pSwTable && bSaveFormula )
@@ -2164,19 +2164,19 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
-                sal_False, &pItem ))
+                false, &pItem ))
         {
             bNewFmt = sal_True;
             nNewFmtIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
         }
         if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
-                sal_False, &pItem ))
+                false, &pItem ))
         {
             bNewFml = sal_True;
             aNewFml = ((SwTblBoxFormula*)pItem)->GetFormula();
         }
         if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
-                sal_False, &pItem ))
+                false, &pItem ))
         {
             bNewValue = sal_True;
             fNewNum = ((SwTblBoxValue*)pItem)->GetValue();

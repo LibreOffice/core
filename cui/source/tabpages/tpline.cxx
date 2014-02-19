@@ -1094,7 +1094,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     sal_Bool bEnable=sal_True;
     sal_Bool bIgnoreGraphic=sal_False;
     sal_Bool bIgnoreSize=sal_False;
-    if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),sal_True,&pPoolItem) == SFX_ITEM_SET)
+    if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),true,&pPoolItem) == SFX_ITEM_SET)
     {
         nSymType=((const SfxInt32Item *)pPoolItem)->GetValue();
     }
@@ -1176,7 +1176,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         delete pView;
         delete pModel;
     }
-    if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH),sal_True,&pPoolItem) == SFX_ITEM_SET)
+    if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH),true,&pPoolItem) == SFX_ITEM_SET)
     {
         const Graphic* pGraphic = ((const SvxBrushItem *)pPoolItem)->GetGraphic();
         if( pGraphic )
@@ -1195,7 +1195,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         }
     }
 
-    if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),sal_True,&pPoolItem) == SFX_ITEM_SET)
+    if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),true,&pPoolItem) == SFX_ITEM_SET)
     {
         aSymbolSize = ((const SvxSizeItem *)pPoolItem)->GetSize();
     }
