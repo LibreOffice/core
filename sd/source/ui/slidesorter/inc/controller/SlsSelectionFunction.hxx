@@ -135,8 +135,6 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    bool mbIsDeselectionPending;
-
     /** Remember the slide where the shift key was pressed and started a
         multiselection via keyboard.
     */
