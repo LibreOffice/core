@@ -31,7 +31,14 @@ public:
 class Test : public test::BootstrapFixture
 {
 public:
+    struct RangeNameDef
+    {
+        const char* mpName;
+        const char* mpExpr;
+        sal_uInt16 mnIndex;
+    };
 
+    static bool insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const RangeNameDef* pEnd);
     static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
     static void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
@@ -160,6 +167,7 @@ public:
 
     void testFuncParam();
     void testNamedRange();
+    void testInsertNameList();
     void testCSV();
     void testMatrix();
     void testEnterMixedMatrix();
@@ -377,6 +385,7 @@ public:
     CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
+    CPPUNIT_TEST(testInsertNameList);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testEnterMixedMatrix);

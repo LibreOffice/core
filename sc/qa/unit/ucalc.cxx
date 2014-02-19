@@ -1729,9 +1729,7 @@ void Test::testFuncParam()
 
 void Test::testNamedRange()
 {
-    struct {
-        const char* pName; const char* pExpr; sal_uInt16 nIndex;
-    } aNames[] = {
+    RangeNameDef aNames[] = {
         { "Divisor",  "$Sheet1.$A$1:$A$1048576", 1 },
         { "MyRange1", "$Sheet1.$A$1:$A$100",     2 },
         { "MyRange2", "$Sheet1.$B$1:$B$100",     3 },
@@ -1742,31 +1740,22 @@ void Test::testNamedRange()
 
     m_pDoc->SetValue (0, 0, 0, 101);
 
-    ScAddress aA1(0, 0, 0);
-    ScRangeName* pNewRanges = new ScRangeName();
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
-    {
-        ScRangeData* pNew = new ScRangeData(
-            m_pDoc,
-            OUString::createFromAscii(aNames[i].pName),
-            OUString::createFromAscii(aNames[i].pExpr),
-            aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
-        pNew->SetIndex(aNames[i].nIndex);
-        bool bSuccess = pNewRanges->insert(pNew);
-        CPPUNIT_ASSERT_MESSAGE ("insertion failed", bSuccess);
-    }
+    bool bSuccess = insertRangeNames(m_pDoc, aNames, aNames + SAL_N_ELEMENTS(aNames));
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
+
+    ScRangeName* pNewRanges = m_pDoc->GetRangeName();
+    CPPUNIT_ASSERT(pNewRanges);
 
     // Make sure the index lookup does the right thing.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
-        const ScRangeData* p = pNewRanges->findByIndex(aNames[i].nIndex);
+        const ScRangeData* p = pNewRanges->findByIndex(aNames[i].mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed.", p);
         OUString aName = p->GetName();
-        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(aNames[i].pName));
+        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(aNames[i].mpName));
     }
 
     // Test usage in formula expression.
-    m_pDoc->SetRangeName(pNewRanges);
     m_pDoc->SetString (1, 0, 0, OUString("=A1/Divisor"));
     m_pDoc->CalcAll();
 
@@ -1780,13 +1769,45 @@ void Test::testNamedRange()
     // Make sure the index lookup still works.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
     {
-        const ScRangeData* p = pCopiedRanges->findByIndex(aNames[i].nIndex);
+        const ScRangeData* p = pCopiedRanges->findByIndex(aNames[i].mnIndex);
         CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed with the copied instance.", p);
         OUString aName = p->GetName();
-        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].pName));
+        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].mpName));
     }
 
     m_pDoc->SetRangeName(NULL); // Delete the names.
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testInsertNameList()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    RangeNameDef aNames[] = {
+        { "MyRange1", "$Test.$A$1:$A$100", 1 },
+        { "MyRange2", "$Test.$B$1:$B$100", 2 },
+        { "MyRange3", "$Test.$C$1:$C$100", 3 }
+    };
+
+    bool bSuccess = insertRangeNames(m_pDoc, aNames, aNames + SAL_N_ELEMENTS(aNames));
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert range names.", bSuccess);
+
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScAddress aPos(1,1,0);
+    rDocFunc.InsertNameList(aPos, true);
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i, aPos.IncRow())
+    {
+        OUString aName = m_pDoc->GetString(aPos);
+        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aNames[i].mpName), aName);
+        ScAddress aExprPos = aPos;
+        aExprPos.IncCol();
+        OUString aExpr = m_pDoc->GetString(aExprPos);
+        OUString aExpected = "=";
+        aExpected += OUString::createFromAscii(aNames[i].mpExpr);
+        CPPUNIT_ASSERT_EQUAL(aExpected, aExpr);
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
@@ -5843,6 +5864,30 @@ void Test::testMixData()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,1,0));
 
     m_pDoc->DeleteTab(0);
+}
+
+bool Test::insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const RangeNameDef* pEnd)
+{
+    ScAddress aA1(0, 0, 0);
+    ScRangeName* pNewRanges = new ScRangeName();
+    for (; p != pEnd; ++p)
+    {
+        ScRangeData* pNew = new ScRangeData(
+            pDoc,
+            OUString::createFromAscii(p->mpName),
+            OUString::createFromAscii(p->mpExpr),
+            aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
+        pNew->SetIndex(p->mnIndex);
+        bool bSuccess = pNewRanges->insert(pNew);
+        if (!bSuccess)
+        {
+            cerr << "Insertion failed." << endl;
+            return false;
+        }
+    }
+
+    pDoc->SetRangeName(pNewRanges);
+    return true;
 }
 
 void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
