@@ -749,8 +749,8 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
         {
             AccessibleStringWrap aStringWrap( *pOutDev, aBulletInfo.aFont, aBulletInfo.aText );
 
-            if( aStringWrap.GetCharacterBounds( aIndex.GetBulletOffset(), aRect ) )
-                aRect.Move( aBulletInfo.aBounds.Left(), aBulletInfo.aBounds.Top() );
+            aStringWrap.GetCharacterBounds( aIndex.GetBulletOffset(), aRect );
+            aRect.Move( aBulletInfo.aBounds.Left(), aBulletInfo.aBounds.Top() );
         }
     }
     else
@@ -773,10 +773,8 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
 
                 Rectangle aStartRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
 
-                if( !aStringWrap.GetCharacterBounds( aIndex.GetFieldOffset(), aRect ) )
-                    aRect = aStartRect;
-                else
-                    aRect.Move( aStartRect.Left(), aStartRect.Top() );
+                aStringWrap.GetCharacterBounds( aIndex.GetFieldOffset(), aRect );
+                aRect.Move( aStartRect.Left(), aStartRect.Top() );
             }
         }
     }

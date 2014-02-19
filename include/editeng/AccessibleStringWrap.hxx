@@ -41,7 +41,7 @@ public:
 
     EDITENG_DLLPUBLIC AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText );
 
-    EDITENG_DLLPUBLIC sal_Bool GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect );
+    EDITENG_DLLPUBLIC void GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect );
     EDITENG_DLLPUBLIC sal_Int32 GetIndexAtPoint( const Point& rPoint );
 
 private:

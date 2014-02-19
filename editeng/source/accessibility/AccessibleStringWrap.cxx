@@ -38,7 +38,7 @@ AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, 
 {
 }
 
-sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect )
+void AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& rRect )
 {
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
@@ -70,8 +70,6 @@ sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& 
         rRect = Rectangle( Point(-rRect.Top(), rRect.Left()),
                            Point(-rRect.Bottom(), rRect.Right()));
     }
-
-    return sal_True;
 }
 
 sal_Int32 AccessibleStringWrap::GetIndexAtPoint( const Point& rPoint )
