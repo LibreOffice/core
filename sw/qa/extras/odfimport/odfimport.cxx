@@ -10,6 +10,7 @@
 
 #if !defined(MACOSX) && !defined(WNT)
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
@@ -435,6 +436,16 @@ DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
     // always 'go to next/previous change'.
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_NEXT_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 2));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 1));
+}
+
+DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")
+{
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 1), "TextField");
+    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
+    // Make sure we test the right annotation.
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "Looses: bold");
+    // Formatting was lost: the second text portion was NORMAL, not BOLD.
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 2), "CharWeight"));
 }
 
 #endif
