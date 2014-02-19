@@ -1787,6 +1787,8 @@ DECLARE_OOXMLIMPORT_TEST(testOleAnchor, "ole-anchor.docx")
 {
     // This was AS_CHARACTER, even if the VML style explicitly contains "position:absolute".
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+    // This was DYNAMIC, even if the default is THROUGHT and there is no w10:wrap element in the bugdoc.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeCapitalization, "dml-groupshape-capitalization.docx")

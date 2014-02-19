@@ -1233,7 +1233,18 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
                         uno::makeAny(xGraphic));
         uno::Reference<beans::XPropertySet> xReplacementProperties(pOLEHandler->getShape(), uno::UNO_QUERY);
         if (xReplacementProperties.is())
-            xOLEProperties->setPropertyValue("AnchorType", xReplacementProperties->getPropertyValue("AnchorType"));
+        {
+            OUString pProperties[] = {
+                OUString("AnchorType"),
+                OUString("Surround"),
+                OUString("HoriOrient"),
+                OUString("HoriOrientPosition"),
+                OUString("VertOrient"),
+                OUString("VertOrientPosition")
+            };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pProperties); ++i)
+                xOLEProperties->setPropertyValue(pProperties[i], xReplacementProperties->getPropertyValue(pProperties[i]));
+        }
         else
             // mimic the treatment of graphics here.. it seems anchoring as character
             // gives a better ( visually ) result
