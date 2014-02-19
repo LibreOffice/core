@@ -42,7 +42,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
     OUString aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
-    sal_Bool bTransparentFlagValid  :1;
     sal_Bool bInSwapIn              :1;
 
     sal_Bool bGraphicArrived        :1;
