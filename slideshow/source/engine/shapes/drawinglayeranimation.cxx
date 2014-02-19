@@ -746,10 +746,13 @@ ActivityImpl::ActivityImpl(
       mpParentDrawShape(pParentDrawShape),
       mpListener( new IntrinsicAnimationListener(*this) ),
       maTimer(rContext.mrEventQueue.getTimer()),
+      mfRotationAngle(0.0),
       mbIsShapeAnimated(false),
       mbIsDisposed(false),
       mbIsActive(true),
       meAnimKind(drawing::TextAnimationKind_NONE),
+      mbVisibleWhenStopped(false),
+      mbVisibleWhenStarted(false),
       mnStartTime(0L)
 {
     // get doctreenode:
