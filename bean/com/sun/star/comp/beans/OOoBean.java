@@ -1483,7 +1483,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 }
                 catch ( java.lang.InterruptedException aExc )
                 {
-                    dbgPrint("EventListener(" + aTag + ") interupted.");
+                    dbgPrint("EventListener(" + aTag + ") interrupted.");
                     // thread can be ended by EvendListener.end();
                     break;
                 }

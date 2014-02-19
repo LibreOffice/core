@@ -245,7 +245,7 @@ extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 
     //do the mozilla event loop
     MNS_XPCOM_EventLoop();
-    //we are interupted
+    //we are interrupted
 
     if (sServiceManager)
     {
