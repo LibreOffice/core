@@ -4465,7 +4465,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if ( nFormatId )
     {
         pScMod->SetInExecuteDrop( true );   // #i28468# prevent error messages from PasteDataFormat
-        bPasteIsDrop = sal_True;
+        bPasteIsDrop = true;
         bDone = pViewData->GetView()->PasteDataFormat(
                     nFormatId, rEvt.maDropEvent.Transferable, nPosX, nPosY, &aLogicPos, bIsLink );
         bPasteIsDrop = false;
@@ -4541,7 +4541,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
             sal_uLong nFormatId = lcl_GetDropFormatId( xTransferable, true );
             if ( nFormatId )
             {
-                bPasteIsDrop = sal_True;
+                bPasteIsDrop = true;
                 pViewData->GetView()->PasteDataFormat( nFormatId, xTransferable, nPosX, nPosY, &aLogicPos );
                 bPasteIsDrop = false;
             }
