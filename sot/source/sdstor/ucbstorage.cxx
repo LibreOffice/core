@@ -2715,7 +2715,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
         }
     }
 
-    if ( pElement && !pElement->m_bIsFolder )
+    if ( !pElement->m_bIsFolder )
     {
         // check if stream is already created
         if ( pElement->m_xStream.Is() )
