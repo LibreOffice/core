@@ -2385,7 +2385,8 @@ Size Menu::ImplCalcSize( Window* pWin )
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
     {
-        nMinMenuItemHeight = 16;
+        if ( 16 > nMinMenuItemHeight )
+            nMinMenuItemHeight = 16;
         for ( size_t i = pItemList->size(); i; )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( --i );
