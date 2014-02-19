@@ -20,18 +20,13 @@
 #ifndef INCLUDED_EDITENG_OUTLOBJ_HXX
 #define INCLUDED_EDITENG_OUTLOBJ_HXX
 
-//////////////////////////////////////////////////////////////////////////////
-
 #include <editeng/paragraphdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
 #include <rsc/rscsfx.hxx>
-#include <tools/solar.h>
 
 class EditTextObject;
 class ImplOutlinerParaObject;
-
-//////////////////////////////////////////////////////////////////////////////
 
 class EDITENG_DLLPUBLIC OutlinerParaObject
 {
@@ -83,8 +78,6 @@ public:
     void SetStyleSheets(sal_uInt16 nLevel, const OUString rNewName,
         const SfxStyleFamily& rNewFamily);
 };
-
-//////////////////////////////////////////////////////////////////////////////
 
 #endif
 
