@@ -22,7 +22,6 @@
 #include <limits>
 #include <osl/process.h>
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 #include <tools/lineend.hxx>
 #include <tools/errinf.hxx>
 #include <tools/ref.hxx>
