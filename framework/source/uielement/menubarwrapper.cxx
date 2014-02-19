@@ -33,7 +33,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <tools/solar.h>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
@@ -49,9 +48,7 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-
 //  XInterface, XTypeProvider
-
 DEFINE_XINTERFACE_11    (   MenuBarWrapper                                                    ,
                             UIConfigElementWrapperBase                                        ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider          ),
