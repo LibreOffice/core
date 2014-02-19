@@ -476,7 +476,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xInputStream; // allow readonly access only
-        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+        aArgs[1] <<= true; // do not create copy
 
         uno::Reference< container::XNameContainer > xResultNameContainer(
             m_xFactory->createInstanceWithArguments(

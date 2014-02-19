@@ -2156,7 +2156,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if( !pElement->m_xStream.Is() || pElement->m_xStream->Clear() )
                         {
-                            pContent->executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
+                            pContent->executeCommand( OUString("delete"), makeAny( true ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else
@@ -2189,7 +2189,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             // OLE storage should be stored encrytped, if the storage uses encryption
                             pElement->m_xStream->m_aContentType = "application/vnd.sun.star.oleobject";
                             Any aValue;
-                            aValue <<= (sal_Bool)sal_True;
+                            aValue <<= true;
                             pElement->m_xStream->m_pContent->setPropertyValue("Encrypted", aValue );
                         }
 
