@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -133,7 +132,7 @@ sal_Int32 ScViewUtil::GetTransliterationType( sal_uInt16 nSlotID )
     return nType;
 }
 
-sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
+bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument )
 {
@@ -233,7 +232,7 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
@@ -339,12 +338,12 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
 }
 
 
-sal_Bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
+bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame,
                                  SvxFontItem&       rNewFont,
                                  OUString&          rString )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
@@ -360,7 +359,7 @@ sal_Bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                 rString  = pItem->GetValue();
             if ( pFontItem )
                 rNewFont = SvxFontItem( pFontItem->GetFamily(), pFontItem->GetFamilyName(), pFontItem->GetStyleName(), pFontItem->GetPitch(), pFontItem->GetCharSet(), rNewFont.Which() );
-            bRet = sal_True;
+            bRet = true;
         }
         delete pDlg;
     }
@@ -412,7 +411,7 @@ void ScUpdateRect::SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
     nNewEndY = nY2;
 }
 
-sal_Bool ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
+bool ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
 {
     if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
          nNewStartY == nOldStartY && nNewEndY == nOldEndY )
@@ -456,7 +455,7 @@ sal_Bool ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

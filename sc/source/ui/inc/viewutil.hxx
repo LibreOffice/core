@@ -40,12 +40,12 @@ enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 class SC_DLLPUBLIC ScViewUtil
 {
 public:
-    static sal_Bool ExecuteCharMap( const SvxFontItem&  rOldFont,
+    static bool ExecuteCharMap( const SvxFontItem&  rOldFont,
                                 SfxViewFrame&       rFrame,
                                 SvxFontItem&        rNewFont,
                                 OUString&           rString );
 
-    static sal_Bool IsActionShown( const ScChangeAction& rAction,
+    static bool IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument );
 
@@ -84,7 +84,7 @@ private:
 public:
             ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-    sal_Bool    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+    bool    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 };
 
 #endif
