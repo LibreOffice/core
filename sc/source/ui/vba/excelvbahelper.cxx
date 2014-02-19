@@ -189,7 +189,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     }
 }
 
-void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
+void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
     sal_Bool bAsLink(false), bOtherDoc(false);

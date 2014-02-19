@@ -43,7 +43,7 @@ void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_I
 void implnCopy( const css::uno::Reference< css::frame::XModel>& xModel );
 void implnPaste ( const css::uno::Reference< css::frame::XModel>& xModel );
 void implnCut( const css::uno::Reference< css::frame::XModel>& xModel );
-void implnPasteSpecial( const css::uno::Reference< css::frame::XModel>& xModel, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose);
+void implnPasteSpecial( const css::uno::Reference< css::frame::XModel>& xModel, sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bTranspose);
 ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
 ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
 ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
