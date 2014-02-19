@@ -115,7 +115,7 @@ bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoMakeOutline( &rDocShell,
                                         nStartCol,nStartRow,nTab,nEndCol,nEndRow,nTab,
-                                        pUndoTab, bColumns, sal_True ) );
+                                        pUndoTab, bColumns, true ) );
         }
 
         if (pDoc->IsStreamValid(nTab))
@@ -465,7 +465,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoOutlineBlock( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                        pUndoDoc, pUndoTab, sal_True ) );
+                                        pUndoDoc, pUndoTab, true ) );
         }
 
         //  Spalten
@@ -658,7 +658,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDoOutline( &rDocShell,
                                     nStart, nEnd, nTab, pUndoDoc,       //! start und end berechnen
-                                    bColumns, nLevel, nEntry, sal_True ) );
+                                    bColumns, nLevel, nEntry, true ) );
     }
 
     pEntry->SetHidden(false);

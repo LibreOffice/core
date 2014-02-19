@@ -567,7 +567,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
 
             GetUndoManager()->AddUndoAction(
                     new ScUndoConsolidate( this, aDestArea, rParam, pUndoDoc,
-                                            sal_True, nInsertCount, pUndoTab, pUndoData ) );
+                                            true, nInsertCount, pUndoTab, pUndoData ) );
         }
         else
         {

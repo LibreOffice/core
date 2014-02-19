@@ -48,8 +48,8 @@ public:
                     TYPEINFO();
                     ScUndoDoOutline( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
-                            ScDocument* pNewUndoDoc, sal_Bool bNewColumns,
-                            sal_uInt16 nNewLevel, sal_uInt16 nNewEntry, sal_Bool bNewShow );
+                            ScDocument* pNewUndoDoc, bool bNewColumns,
+                            sal_uInt16 nNewLevel, sal_uInt16 nNewEntry, bool bNewShow );
     virtual         ~ScUndoDoOutline();
 
     virtual void    Undo();
@@ -64,10 +64,10 @@ private:
     SCCOLROW        nEnd;
     SCTAB           nTab;
     ScDocument*     pUndoDoc;
-    sal_Bool            bColumns;
-    sal_uInt16          nLevel;
-    sal_uInt16          nEntry;
-    sal_Bool            bShow;
+    bool            bColumns;
+    sal_uInt16      nLevel;
+    sal_uInt16      nEntry;
+    bool            bShow;
 };
 
 
@@ -79,7 +79,7 @@ public:
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScOutlineTable* pNewUndoTab,
-                            sal_Bool bNewColumns, sal_Bool bNewMake );
+                            bool bNewColumns, bool bNewMake );
     virtual         ~ScUndoMakeOutline();
 
     virtual void    Undo();
@@ -93,8 +93,8 @@ private:
     ScAddress       aBlockStart;
     ScAddress       aBlockEnd;
     ScOutlineTable* pUndoTable;
-    sal_Bool            bColumns;
-    sal_Bool            bMake;
+    bool            bColumns;
+    bool            bMake;
 };
 
 
@@ -105,7 +105,7 @@ public:
                     ScUndoOutlineLevel( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
-                            sal_Bool bNewColumns, sal_uInt16 nNewLevel );
+                            bool bNewColumns, sal_uInt16 nNewLevel );
     virtual         ~ScUndoOutlineLevel();
 
     virtual void    Undo();
@@ -121,8 +121,8 @@ private:
     SCTAB           nTab;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
-    sal_Bool            bColumns;
-    sal_uInt16          nLevel;
+    bool            bColumns;
+    sal_uInt16      nLevel;
 };
 
 
@@ -134,7 +134,7 @@ public:
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                             ScDocument* pNewUndoDoc, ScOutlineTable* pNewUndoTab,
-                            sal_Bool bNewShow );
+                            bool bNewShow );
     virtual         ~ScUndoOutlineBlock();
 
     virtual void    Undo();
@@ -149,7 +149,7 @@ private:
     ScAddress       aBlockEnd;
     ScDocument*     pUndoDoc;
     ScOutlineTable* pUndoTable;
-    sal_Bool            bShow;
+    bool            bShow;
 };
 
 
@@ -255,7 +255,7 @@ private:
     ScSortParam     aSortParam;
     ScDocument*     pUndoDoc;
     ScDBCollection* pUndoDB;                // due to source and target range
-    sal_Bool            bDestArea;
+    bool            bDestArea;
     ScRange         aDestRange;
 };
 
@@ -267,7 +267,7 @@ public:
                     ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScQueryParam& rParam, ScDocument* pNewUndoDoc,
                             ScDBCollection* pNewUndoDB, const ScRange* pOld,
-                            sal_Bool bSize, const ScRange* pAdvSrc );
+                            bool bSize, const ScRange* pAdvSrc );
     virtual         ~ScUndoQuery();
 
     virtual void    Undo();
@@ -285,9 +285,9 @@ private:
     ScDBCollection* pUndoDB;                // due to source and target range
     ScRange         aOldDest;
     ScRange         aAdvSource;
-    sal_Bool            bIsAdvanced;
-    sal_Bool            bDestArea;
-    sal_Bool            bDoSize;
+    bool            bIsAdvanced;
+    bool            bDestArea;
+    bool            bDoSize;
 };
 
 
@@ -363,7 +363,7 @@ private:
     ScDBData*       pUndoDBData;
     ScDBData*       pRedoDBData;
     SCCOL           nFormulaCols;
-    sal_Bool            bRedoFilled;
+    bool            bRedoFilled;
 };
 
 
@@ -397,7 +397,7 @@ private:
     ScDBCollection* pUndoDB;
     ScRange         aOldQuery;
     ScRange         aNewQuery;
-    sal_Bool            bQuerySize;
+    bool            bQuerySize;
 };
 
 
@@ -408,7 +408,7 @@ public:
                     ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                            sal_Bool bMove );
+                            bool bMove );
     virtual         ~ScUndoDataPilot();
 
     virtual void    Undo();
@@ -423,7 +423,7 @@ private:
     ScDocument*     pNewUndoDoc;
     ScDPObject*     pOldDPObject;
     ScDPObject*     pNewDPObject;
-    sal_Bool            bAllowMove;
+    bool            bAllowMove;
 };
 
 
@@ -433,7 +433,7 @@ public:
                         TYPEINFO();
                         ScUndoConsolidate( ScDocShell* pNewDocShell,
                                 const ScArea& rArea, const ScConsolidateParam& rPar,
-                                ScDocument* pNewUndoDoc, sal_Bool bReference,
+                                ScDocument* pNewUndoDoc, bool bReference,
                                 SCROW nInsCount, ScOutlineTable* pTab,
                                 ScDBData* pData );
     virtual             ~ScUndoConsolidate();
@@ -449,7 +449,7 @@ private:
     ScArea              aDestArea;
     ScDocument*         pUndoDoc;
     ScConsolidateParam  aParam;
-    sal_Bool                bInsRef;
+    bool                bInsRef;
     SCSIZE              nInsertCount;
     ScOutlineTable*     pUndoTab;
     ScDBData*           pUndoData;
@@ -500,7 +500,7 @@ public:
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                                 sal_uInt16 nNewFlags,
                                 ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
-                                sal_Bool bRedoIsFilled = true
+                                bool bRedoIsFilled = true
                                  );
     virtual     ~ScUndoDataForm();
 
@@ -515,14 +515,14 @@ private:
     boost::scoped_ptr<ScMarkData> mpMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
-    sal_uInt16          nFlags;
-    ScRefUndoData*      pRefUndoData;
-    ScRefUndoData*      pRefRedoData;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
-    sal_Bool            bRedoFilled;
+    sal_uInt16      nFlags;
+    ScRefUndoData*  pRefUndoData;
+    ScRefUndoData*  pRefRedoData;
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
+    bool            bRedoFilled;
 
-    void            DoChange( const sal_Bool bUndo );
+    void            DoChange( const bool bUndo );
     void            SetChangeTrack();
 };
 
