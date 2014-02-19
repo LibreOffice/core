@@ -131,7 +131,7 @@ struct SvxPosSizeStatusBarControl_Impl
 
     This implementation-structure of the class SvxPosSizeStatusBarControl
     is done for the un-linking of the changes of the exported interface such as
-    the toning down of symbols that are visible externaly.
+    the toning down of symbols that are visible externally.
 
     One instance exists for each SvxPosSizeStatusBarControl-instance
     during it's life time

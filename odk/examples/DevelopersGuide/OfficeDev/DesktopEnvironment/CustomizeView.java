@@ -246,7 +246,7 @@ public class CustomizeView extends    JPanel
 
         /**
          * callback for disposing events
-         * Internaly we save a reference to an office frame.
+         * Internally we save a reference to an office frame.
          * Of course he can die and inform us then. We should react
          * and forget his reference.
          *
