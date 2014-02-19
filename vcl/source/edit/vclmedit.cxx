@@ -561,6 +561,14 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
             ImpUpdateSrollBarVis(pVclMultiLineEdit->GetStyle());
             pVclMultiLineEdit->Modify();
         }
+        else if( rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED )
+        {
+            pVclMultiLineEdit->SelectionChanged();
+        }
+        else if( rTextHint.GetId() == TEXT_HINT_VIEWCARETCHANGED )
+        {
+            pVclMultiLineEdit->CaretChanged();
+        }
     }
 }
 
@@ -1051,6 +1059,16 @@ void VclMultiLineEdit::Modify()
 
     if ( pUpdateDataTimer )
         pUpdateDataTimer->Start();
+}
+
+void VclMultiLineEdit::SelectionChanged()
+{
+    CallEventListeners(VCLEVENT_EDIT_SELECTIONCHANGED);
+}
+
+void VclMultiLineEdit::CaretChanged()
+{
+    CallEventListeners(VCLEVENT_EDIT_CARETCHANGED);
 }
 
 IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl)

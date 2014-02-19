@@ -1659,6 +1659,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
                 break;
             }
         case TEXT_HINT_VIEWSELECTIONCHANGED:
+        case TEXT_HINT_VIEWCARETCHANGED:
             {
                 ::osl::MutexGuard aInternalGuard(GetMutex());
                 if (!isAlive())

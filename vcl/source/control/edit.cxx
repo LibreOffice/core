@@ -2642,13 +2642,13 @@ void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
                     ImplInvalidateOrRepaint();
                 ImplShowCursor();
 
-                sal_Bool bCaret = sal_False, bSelection = sal_False;
+                bool bCaret = false, bSelection = false;
                 long nB=aNew.Max(), nA=aNew.Min(),oB=aTemp.Max(), oA=aTemp.Min();
                 long nGap = nB-nA, oGap = oB-oA;
                 if (nB != oB)
-                    bCaret = sal_True;
+                    bCaret = true;
                 if (nGap != 0 || oGap != 0)
-                    bSelection = sal_True;
+                    bSelection = true;
 
                 if (bSelection)
                 {

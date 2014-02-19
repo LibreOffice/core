@@ -1293,13 +1293,16 @@ AddressMultiLineEdit::~AddressMultiLineEdit()
     EndListening(*GetTextEngine());
 }
 
-void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if(rHint.ISA(TextHint) &&
-            static_cast<const TextHint&>(rHint).GetId() == TEXT_HINT_VIEWSELECTIONCHANGED &&
-            m_aSelectionLink.IsSet())
+    if (m_aSelectionLink.IsSet() && rHint.ISA(TextHint))
     {
-        m_aSelectionLink.Call(this);
+        const TextHint& rTextHint = static_cast<const TextHint&>(rHint);
+        if (rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED ||
+            rTextHint.GetId() == TEXT_HINT_VIEWCARETCHANGED)
+        {
+            m_aSelectionLink.Call(this);
+        }
     }
 }
 

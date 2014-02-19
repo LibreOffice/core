@@ -63,6 +63,8 @@ public:
                     virtual ~VclMultiLineEdit();
 
 
+    void            SelectionChanged();
+    void            CaretChanged();
     virtual void    Modify();
     virtual void    UpdateData();
 

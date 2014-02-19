@@ -121,6 +121,7 @@ inline sal_Bool TextSelection::operator != ( const TextSelection& rSel ) const
 
 #define TEXT_HINT_VIEWSCROLLED          100
 #define TEXT_HINT_VIEWSELECTIONCHANGED  101
+#define TEXT_HINT_VIEWCARETCHANGED      102
 
 class VCL_DLLPUBLIC TextHint : public SfxSimpleHint
 {

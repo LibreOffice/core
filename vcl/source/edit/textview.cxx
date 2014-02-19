@@ -463,10 +463,24 @@ void TextView::ImpHighlight( const TextSelection& rSel )
 
 void TextView::ImpSetSelection( const TextSelection& rSelection )
 {
-    if ( rSelection != mpImpl->maSelection )
+    if (rSelection != mpImpl->maSelection)
     {
+        bool bCaret = false, bSelection = false;
+        const TextPaM &rEnd = rSelection.GetEnd();
+        const TextPaM &rOldEnd = mpImpl->maSelection.GetEnd();
+        bool bGap = rSelection.HasRange(), bOldGap = mpImpl->maSelection.HasRange();
+        if (rEnd != rOldEnd)
+            bCaret = true;
+        if (bGap || bOldGap)
+            bSelection = true;
+
         mpImpl->maSelection = rSelection;
-        mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_VIEWSELECTIONCHANGED ) );
+
+        if (bSelection)
+            mpImpl->mpTextEngine->Broadcast(TextHint(TEXT_HINT_VIEWSELECTIONCHANGED));
+
+        if (bCaret)
+            mpImpl->mpTextEngine->Broadcast(TextHint(TEXT_HINT_VIEWCARETCHANGED));
     }
 }
 
