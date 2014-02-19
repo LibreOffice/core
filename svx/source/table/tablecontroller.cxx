@@ -2775,7 +2775,7 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
             const sal_Int32 nLastRow = std::min( aEnd.mnRow + 2, nRowCount );
             const sal_Int32 nLastCol = std::min( aEnd.mnCol + 2, nColCount );
 
-            rBoxInfoItem.SetValid( sal_uInt8( ~0 ), sal_False );
+            rBoxInfoItem.SetValid( sal_uInt8( ~0 ), false );
             LinesState aLinesState( rBoxItem, rBoxInfoItem );
 
             /* Here we go through all the selected cells (enhanced by

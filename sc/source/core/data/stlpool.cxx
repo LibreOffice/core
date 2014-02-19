@@ -415,13 +415,13 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
     aBoxItem.SetDistance( 10 ); // 0.2mm
-    aBoxInfoItem.SetValid( VALID_TOP, sal_True );
-    aBoxInfoItem.SetValid( VALID_BOTTOM, sal_True );
-    aBoxInfoItem.SetValid( VALID_LEFT, sal_True );
-    aBoxInfoItem.SetValid( VALID_RIGHT, sal_True );
-    aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
+    aBoxInfoItem.SetValid( VALID_TOP, true );
+    aBoxInfoItem.SetValid( VALID_BOTTOM, true );
+    aBoxInfoItem.SetValid( VALID_LEFT, true );
+    aBoxInfoItem.SetValid( VALID_RIGHT, true );
+    aBoxInfoItem.SetValid( VALID_DISTANCE, true );
     aBoxInfoItem.SetTable( false );
-    aBoxInfoItem.SetDist ( sal_True );
+    aBoxInfoItem.SetDist ( true );
 
     pHFSetItem = new SvxSetItem( ((SvxSetItem&)pSet->Get( ATTR_PAGE_HEADERSET ) ) );
     pHFSet = &(pHFSetItem->GetItemSet());

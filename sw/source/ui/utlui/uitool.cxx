@@ -108,7 +108,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
     rSh.GetCrsr();                  //So that GetCrsrCnt() returns the right thing
     aBoxInfo.SetTable          (rSh.IsTableMode() && rSh.GetCrsrCnt() > 1);
         // Always show the distance field
-    aBoxInfo.SetDist           ((sal_Bool) sal_True);
+    aBoxInfo.SetDist           (true);
         // Set minimal size in tables and paragraphs
     aBoxInfo.SetMinDist        (rSh.IsTableMode() || rSh.GetSelectionType() & (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL));
         // Set always the default distance
@@ -424,11 +424,11 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
                                             true, &pBoxInfo) )
         aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
-    aBoxInfo.SetTable( sal_False );
+    aBoxInfo.SetTable( false );
         // Show always the distance field
-    aBoxInfo.SetDist( sal_True);
+    aBoxInfo.SetDist( true);
         // Set minimal size in tables and paragraphs
-    aBoxInfo.SetMinDist( sal_False );
+    aBoxInfo.SetMinDist( false );
         // Set always the default distance
     aBoxInfo.SetDefDist( MIN_BORDER_DIST );
         // Single lines can have only in tables DontCare-Status

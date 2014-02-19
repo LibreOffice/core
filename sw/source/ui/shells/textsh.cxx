@@ -591,7 +591,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             // Delete minimum size in columns.
             SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
             const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
-            aBoxInfo.SetMinDist(sal_False);
+            aBoxInfo.SetMinDist(false);
             aBoxInfo.SetDefDist(rBox.GetDistance(BOX_LINE_LEFT));
             aSet.Put(aBoxInfo);
 

@@ -632,7 +632,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     if( m_pLeftMF->IsVisible() )
     {
         // #i40405# enable distance controls for next dialog call
-        aBoxInfoItem.SetDist( sal_True );
+        aBoxInfoItem.SetDist( true );
 
         if( !mbUseMarginItem )
         {
@@ -675,10 +675,10 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_TOP  ), BOX_LINE_TOP);
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_BOTTOM), BOX_LINE_BOTTOM);
                     }
-                    aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
+                    aBoxInfoItem.SetValid( VALID_DISTANCE, true );
                 }
                 else
-                    aBoxInfoItem.SetValid( VALID_DISTANCE, sal_False );
+                    aBoxInfoItem.SetValid( VALID_DISTANCE, false );
             }
         }
     }

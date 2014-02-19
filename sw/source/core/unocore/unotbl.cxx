@@ -3942,7 +3942,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-                    aBoxInfo.SetValid(0xff, sal_False);
+                    aBoxInfo.SetValid(0xff, false);
                     sal_uInt8 nValid = 0;
                     switch(pEntry->nMemberId & ~CONVERT_TWIPS)
                     {
@@ -3957,7 +3957,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                             nValid = VALID_DISTANCE;
                         break;
                     }
-                    aBoxInfo.SetValid(nValid, sal_True);
+                    aBoxInfo.SetValid(nValid, true);
 
 
                     aSet.Put(aBoxInfo);

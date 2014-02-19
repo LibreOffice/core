@@ -984,7 +984,7 @@ void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBo
     rInner.SetValid( VALID_HORI,     rBorder.IsHorizontalLineValid );
     rInner.SetValid( VALID_VERT,     rBorder.IsVerticalLineValid );
     rInner.SetValid( VALID_DISTANCE, rBorder.IsDistanceValid );
-    rInner.SetTable( sal_True );
+    rInner.SetTable( true );
 }
 }
 

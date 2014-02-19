@@ -432,9 +432,9 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                                                         true, &pBoxInfo) )
                     aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
-                aBoxInfo.SetTable( sal_False );
-                aBoxInfo.SetDist( sal_True);
-                aBoxInfo.SetMinDist( sal_False );
+                aBoxInfo.SetTable( false );
+                aBoxInfo.SetDist( true);
+                aBoxInfo.SetMinDist( false );
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );
                 aBoxInfo.SetValid( VALID_DISABLE );
                 aSet.Put( aBoxInfo );

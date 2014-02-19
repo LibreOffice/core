@@ -3850,7 +3850,7 @@ static sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
         {
             const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
-            nTmpTopSpace = rBoxItem.CalcLineSpace( BOX_LINE_TOP, sal_True );
+            nTmpTopSpace = rBoxItem.CalcLineSpace( BOX_LINE_TOP, true );
         }
         nTopSpace  = std::max( nTopSpace, nTmpTopSpace );
     }
@@ -3895,7 +3895,7 @@ static sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
         {
             const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
-            nTmpBottomLineSize = rBoxItem.CalcLineSpace( BOX_LINE_BOTTOM, sal_True ) -
+            nTmpBottomLineSize = rBoxItem.CalcLineSpace( BOX_LINE_BOTTOM, true ) -
                                  rBoxItem.GetDistance( BOX_LINE_BOTTOM );
         }
         nBottomLineSize = std::max( nBottomLineSize, nTmpBottomLineSize );

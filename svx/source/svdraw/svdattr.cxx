@@ -320,9 +320,9 @@ SdrItemPool::SdrItemPool(
 
     SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem( SDRATTR_TABLE_BORDER_INNER );
 
-    pBoxInfoItem->SetTable( sal_True );
-    pBoxInfoItem->SetDist( sal_True);        // always show margin field
-    pBoxInfoItem->SetValid( VALID_DISABLE, sal_True ); // some lines may have DontCare state only in tables
+    pBoxInfoItem->SetTable( true );
+    pBoxInfoItem->SetDist( true);        // always show margin field
+    pBoxInfoItem->SetValid( VALID_DISABLE, true ); // some lines may have DontCare state only in tables
 
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );

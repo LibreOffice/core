@@ -1703,7 +1703,7 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
 }
 
 // -----------------------------------------------------------------------
-table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConvert)
+table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, bool bConvert)
 {
     table::BorderLine2 aLine;
     if(pLine)
@@ -1813,13 +1813,13 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool bConvert)
 {
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, sal_True);
 }
 
-sal_Bool
-SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+bool
+SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, bool bConvert)
 {
     SvxBorderStyle const nStyle =
         (rLine.LineStyle < 0 || BORDER_LINE_STYLE_MAX < rLine.LineStyle)
@@ -2469,7 +2469,7 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, sal_uInt16 nLine )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine ) const
+sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, bool bIgnoreLine ) const
 {
     SvxBorderLine* pTmp = 0;
     sal_uInt16 nDist = 0;
@@ -2514,7 +2514,7 @@ SvxBoxInfoItem::SvxBoxInfoItem( const sal_uInt16 nId ) :
     mbEnableVer( false ),
     nDefDist( 0 )
 {
-    bDist = bMinDist = sal_False;
+    bDist = bMinDist = false;
     ResetFlags();
 }
 

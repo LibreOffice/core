@@ -181,7 +181,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     aBoxInfo.SetTable          ((rSh.IsTableMode() && rSh.GetCrsrCnt() > 1) ||
                                     !bTableSel);
         // Always show distance field.
-    aBoxInfo.SetDist           ((sal_Bool) sal_True);
+    aBoxInfo.SetDist           (true);
         // Set minimum size in tables and paragraphs.
     aBoxInfo.SetMinDist( !bTableSel || rSh.IsTableMode() ||
                             rSh.GetSelectionType() &
@@ -494,8 +494,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 aInfo.SetWhich(SID_ATTR_BORDER_INNER);
             }
 
-            aInfo.SetTable( sal_True );
-            aInfo.SetValid( VALID_DISABLE, sal_False );
+            aInfo.SetTable( true );
+            aInfo.SetValid( VALID_DISABLE, false );
 
 
 // The attributes of all lines will be read and the strongest wins.

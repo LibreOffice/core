@@ -1452,8 +1452,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     aBorderInner.SetValid( VALID_RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
     aBorderInner.SetValid( VALID_HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
     aBorderInner.SetValid( VALID_VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-    aBorderInner.SetValid( VALID_DISTANCE, sal_True );
-    aBorderInner.SetValid( VALID_DISABLE, sal_False );
+    aBorderInner.SetValid( VALID_DISTANCE,  true );
+    aBorderInner.SetValid( VALID_DISABLE,   false );
 
     if ( IsInPopupMode() )
         EndPopupMode();

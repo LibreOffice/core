@@ -657,15 +657,15 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 
         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
             // table variant, when multiple table cells are selected
-        aBoxInfo.SetTable( sal_True );
+        aBoxInfo.SetTable( true );
             // always show gap field
-        aBoxInfo.SetDist( sal_True);
+        aBoxInfo.SetDist( true);
             // set minimum size in tables and paragraphs
-        aBoxInfo.SetMinDist( sal_False );
+        aBoxInfo.SetMinDist( false );
             // always set default-gap
         aBoxInfo.SetDefDist( MIN_BORDER_DIST );
             // Single lines can have DontCare-status only in tables
-        aBoxInfo.SetValid( VALID_DISABLE, sal_True );
+        aBoxInfo.SetValid( VALID_DISABLE, true );
         pTblSet->Put( aBoxInfo );
 
         SwGetCurColNumPara aPara;

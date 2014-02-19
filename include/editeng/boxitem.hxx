@@ -105,10 +105,10 @@ public:
 
     // Line width plus Space plus inward distance
     // bIgnoreLine = TRUE -> Also return distance, when no Line is set
-    sal_uInt16  CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine = sal_False ) const;
-    static com::sun::star::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, sal_Bool bConvert );
-    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, sal_Bool bConvert);
-    static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, sal_Bool bConvert);
+    sal_uInt16  CalcLineSpace( sal_uInt16 nLine, bool bIgnoreLine = false ) const;
+    static com::sun::star::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
+    static bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
+    static bool LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
 };
 
 inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
@@ -156,8 +156,8 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
      forth to the dialogue.
     */
 
-    sal_Bool    bDist      :1;  // TRUE, Unlock Distance.
-    sal_Bool    bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
+    bool        bDist      :1;  // TRUE, Unlock Distance.
+    bool        bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
 
     sal_uInt8   nValidFlags;    // 0000 0000
                                 // 0000 0001 VALID_TOP
@@ -200,24 +200,24 @@ public:
     //The Pointers are being copied!
     void                    SetLine( const editeng::SvxBorderLine* pNew, sal_uInt16 nLine );
 
-    sal_Bool    IsTable() const             { return mbEnableHor && mbEnableVer; }
-    void    SetTable( sal_Bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
+    bool    IsTable() const             { return mbEnableHor && mbEnableVer; }
+    void    SetTable( bool bNew )       { mbEnableHor = mbEnableVer = bNew; }
 
     inline bool         IsHorEnabled() const { return mbEnableHor; }
     inline void         EnableHor( bool bEnable ) { mbEnableHor = bEnable; }
     inline bool         IsVerEnabled() const { return mbEnableVer; }
     inline void         EnableVer( bool bEnable ) { mbEnableVer = bEnable; }
 
-    sal_Bool    IsDist() const              { return bDist; }
-    void    SetDist( sal_Bool bNew )        { bDist = bNew; }
-    sal_Bool    IsMinDist() const           { return bMinDist; }
-    void    SetMinDist( sal_Bool bNew )     { bMinDist = bNew; }
+    bool    IsDist() const              { return bDist; }
+    void    SetDist( bool bNew )        { bDist = bNew; }
+    bool    IsMinDist() const           { return bMinDist; }
+    void    SetMinDist( bool bNew )     { bMinDist = bNew; }
     sal_uInt16  GetDefDist() const          { return nDefDist; }
     void    SetDefDist( sal_uInt16 nNew )   { nDefDist = nNew; }
 
-    sal_Bool                    IsValid( sal_uInt8 nValid ) const
+    bool                    IsValid( sal_uInt8 nValid ) const
                                 { return ( nValidFlags & nValid ) == nValid; }
-    void                    SetValid( sal_uInt8 nValid, sal_Bool bValid = sal_True )
+    void                    SetValid( sal_uInt8 nValid, bool bValid = true )
                                 { bValid ? ( nValidFlags |= nValid )
                                          : ( nValidFlags &= ~nValid ); }
     void                    ResetFlags();

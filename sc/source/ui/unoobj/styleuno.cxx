@@ -1464,8 +1464,8 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             // (same content as in ScStyleSheet::GetItemSet, to control the dialog)
             SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
             aBoxInfoItem.SetTable( false );
-            aBoxInfoItem.SetDist( sal_True );
-            aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
+            aBoxInfoItem.SetDist( true );
+            aBoxInfoItem.SetValid( VALID_DISTANCE, true );
             rSet.Put( aBoxInfoItem );
 
             pDocShell->PageStyleModified( aStyleName, true );

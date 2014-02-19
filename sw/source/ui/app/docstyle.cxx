@@ -1124,12 +1124,12 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
         case SFX_STYLE_FAMILY_FRAME:
             {
                 SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-                aBoxInfo.SetTable( sal_False );
-                aBoxInfo.SetDist( sal_True );   // always show gap field
-                aBoxInfo.SetMinDist( sal_True );// set minimum size in tables and paragraphs
+                aBoxInfo.SetTable( false );
+                aBoxInfo.SetDist( true );   // always show gap field
+                aBoxInfo.SetMinDist( true );// set minimum size in tables and paragraphs
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );// always set Default-Gap
                     // Single lines can only have DontCare-Status in tables
-                aBoxInfo.SetValid( VALID_DISABLE, sal_True );
+                aBoxInfo.SetValid( VALID_DISABLE, true );
 
                 if( nFamily == SFX_STYLE_FAMILY_CHAR )
                 {

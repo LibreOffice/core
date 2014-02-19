@@ -194,8 +194,8 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
                         aBoxInfoItem.SetTable( false );
-                        aBoxInfoItem.SetDist( sal_True );
-                        aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
+                        aBoxInfoItem.SetDist( true );
+                        aBoxInfoItem.SetValid( VALID_DISTANCE, true );
 
                         aPageItem.SetLandscape( false );
 

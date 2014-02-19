@@ -220,8 +220,8 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_HORI);
     pGlobalBorderInnerAttr->SetLine(NULL, BOXINFO_LINE_VERT);
-    pGlobalBorderInnerAttr->SetTable(sal_True);
-    pGlobalBorderInnerAttr->SetDist(sal_True);
+    pGlobalBorderInnerAttr->SetTable(true);
+    pGlobalBorderInnerAttr->SetDist(true);
     pGlobalBorderInnerAttr->SetMinDist(false);
 
     ppPoolDefaults = new SfxPoolItem*[ATTR_ENDINDEX-ATTR_STARTINDEX+1];
