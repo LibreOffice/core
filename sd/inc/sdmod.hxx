@@ -125,7 +125,6 @@ protected:
     SvxSearchItem*          pSearchItem;
     SvNumberFormatter*      pNumberFormatter;
     SvStorageRef            xOptionStorage;
-    sal_Bool                    bAutoSave;
     sal_Bool                    bWaterCan;
     SfxErrorHandler*        mpErrorHdl;
     /** This device is used for printer independent layout.  It is virtual
