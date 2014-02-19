@@ -17,6 +17,7 @@
 SmRtfExport::SmRtfExport(const SmNode* pIn)
     : SmWordExportBase(pIn)
     , m_pBuffer(0)
+    , m_nEncoding(RTL_TEXTENCODING_DONTKNOW)
 {
 }
 
