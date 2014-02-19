@@ -819,7 +819,7 @@ void ScUndoCut::Redo()
     ScDocument* pDoc = pDocShell->GetDocument();
     EnableDrawAdjust( pDoc, false );                //! include in ScBlockUndo?
     DoChange( false );
-    EnableDrawAdjust( pDoc, sal_True );                 //! include in ScBlockUndo?
+    EnableDrawAdjust( pDoc, true );                 //! include in ScBlockUndo?
     EndRedo();
 }
 
@@ -1078,7 +1078,7 @@ void ScUndoPaste::Redo()
     ScDocument* pDoc = pDocShell->GetDocument();
     EnableDrawAdjust( pDoc, false );                //! include in ScBlockUndo?
     DoChange( false );
-    EnableDrawAdjust( pDoc, sal_True );                 //! include in ScBlockUndo?
+    EnableDrawAdjust( pDoc, true );                 //! include in ScBlockUndo?
     EndRedo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
@@ -1333,7 +1333,7 @@ void ScUndoDragDrop::Redo()
     ShowTable( aDestRange.aStart.Tab() );
 
     RedoSdrUndoAction( pDrawUndo );             //! include in ScBlockUndo?
-    EnableDrawAdjust( pDoc, sal_True );             //! include in ScBlockUndo?
+    EnableDrawAdjust( pDoc, true );             //! include in ScBlockUndo?
 
     EndRedo();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );

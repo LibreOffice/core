@@ -195,7 +195,7 @@ void ScBlockUndo::EndUndo()
     if (eMode == SC_UNDO_AUTOHEIGHT)
         AdjustHeight();
 
-    EnableDrawAdjust( pDocShell->GetDocument(), sal_True );
+    EnableDrawAdjust( pDocShell->GetDocument(), true );
     DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
 
     ShowBlock();
@@ -426,7 +426,7 @@ void ScMoveUndo::EndUndo()
     if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
         UndoRef();
 
-    EnableDrawAdjust( pDocShell->GetDocument(), sal_True );
+    EnableDrawAdjust( pDocShell->GetDocument(), true );
 
     ScSimpleUndo::EndUndo();
 }
