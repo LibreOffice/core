@@ -91,7 +91,6 @@ class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
     bool bSmoothScroll  :1;
     //visual aids
     bool bCrosshair     :1;
-    bool bHandles       :1;
     //display
     bool bTable             :1;
     bool bGraphic           :1;
