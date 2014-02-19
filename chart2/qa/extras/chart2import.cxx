@@ -33,6 +33,7 @@ public:
     void testPPTXChartSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
+    void testChartFileOpen();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -44,6 +45,7 @@ public:
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
+    CPPUNIT_TEST(testChartFileOpen);
 /*
  *  Disabling Impress Uts.
  *  ChartTest::tearDown() calls dispose of mxComponent
@@ -279,6 +281,11 @@ void Chart2ImportTest::testODPChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
 
+}
+
+void Chart2ImportTest::testChartFileOpen()
+{
+  load("/chart2/qa/extras/data/docx/", "barChart.docx");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
