@@ -773,7 +773,7 @@ void ScDPSource::FilterCacheByPageDimensions()
             // there is at least one invisible item.  Add this filter criterion to the mix.
             aCriteria.push_back(aFilter);
 
-        if (!pDim || !pDim->HasSelectedPage())
+        if (!pDim->HasSelectedPage())
             continue;
 
         const ScDPItemData& rData = pDim->GetSelectedData();
