@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "swabstdlg.hxx"
 
@@ -37,20 +38,22 @@ extern "C" SwAbstractDialogFactory* SwCreateDialogFactory();
 
 SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
 {
-#ifndef DISABLE_DYNLOADING
     SwFuncPtrCreateDialogFactory fp = 0;
+#if HAVE_FEATURE_DESKTOP
+#ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
     static const OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory"));
+#else
+    fp = SwCreateDialogFactory();
+#endif
+#endif
     if ( fp )
         return fp();
     return 0;
-#else
-    return SwCreateDialogFactory();
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,12 +20,11 @@
 $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
-	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
-		Executable_tiledrendering) \
+	$(call gb_Helper_optional,DESKTOP,Executable_tiledrendering) \
 	Library_msword \
 	Library_sw \
 	Library_swd \
-	Library_swui \
+	$(call gb_Helper_optional,DESKTOP,Library_swui) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sw,\

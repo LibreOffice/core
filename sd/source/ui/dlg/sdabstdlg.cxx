@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "sdabstdlg.hxx"
 
@@ -38,19 +39,21 @@ extern "C" SdAbstractDialogFactory* SdCreateDialogFactory();
 
 SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 {
-#ifndef DISABLE_DYNLOADING
     SdFuncPtrCreateDialogFactory fp = 0;
+#if HAVE_FEATURE_DESKTOP
+#ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
     static const OUString sLibName(::vcl::unohelper::CreateLibraryName("sdui", sal_True));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
         fp = ( SdAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" );
+#else
+    fp = SdCreateDialogFactory();
+#endif
+#endif
     if ( fp )
         return fp();
     return 0;
-#else
-    return SdCreateDialogFactory();
-#endif
 }
 
 

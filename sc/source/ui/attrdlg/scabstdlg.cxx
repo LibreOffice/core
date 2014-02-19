@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "scabstdlg.hxx"
 
@@ -38,8 +39,9 @@ extern "C" ScAbstractDialogFactory* ScCreateDialogFactory();
 
 ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 {
-#ifndef DISABLE_DYNLOADING
     ScFuncPtrCreateDialogFactory fp = 0;
+#if HAVE_FEATURE_DESKTOP
+#ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
 
     OUStringBuffer aStrBuf;
@@ -49,12 +51,13 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( ScAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );
+#else
+    fp = ScCreateDialogFactory();
+#endif
+#endif
     if ( fp )
         return fp();
     return 0;
-#else
-    return ScCreateDialogFactory();
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
