@@ -36,7 +36,11 @@ struct AutoTextGroup
     OUString    sShortNames;  // by 0x0A separated short names
     DateTime    aDateModified;
 
-    AutoTextGroup() : aDateModified( DateTime::EMPTY ) {}
+    AutoTextGroup()
+        : nCount(0)
+        , aDateModified(DateTime::EMPTY)
+    {
+    }
 };
 
 
