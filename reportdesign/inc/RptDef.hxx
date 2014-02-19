@@ -25,7 +25,6 @@
 #include <map>
 
 #include "dllapi.h"
-#include <tools/solar.h>
 #include <svx/svdobj.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
@@ -102,7 +101,6 @@ typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
 REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId);
 REPORTDESIGN_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle> getUsedStyle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport);
 
-// -----------------------------------------------------------------------------
 template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const OUString& _sPropertyName)
 {
     T nReturn = T();
@@ -110,7 +108,6 @@ template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference
     xProp->getPropertyValue(_sPropertyName) >>= nReturn;
     return nReturn;
 }
-// -----------------------------------------------------------------------------
 template<typename T> void setStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const OUString& _sPropertyName,const T& _aValue)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp(getUsedStyle(_xReport),::com::sun::star::uno::UNO_QUERY);
