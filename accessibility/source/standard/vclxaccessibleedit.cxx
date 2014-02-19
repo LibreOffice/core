@@ -77,33 +77,30 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             SetText( implGetText() );
         }
         break;
-        case VCLEVENT_EDIT_SELECTIONCHANGED:
+        case VCLEVENT_EDIT_CARETCHANGED:
         {
             sal_Int32 nOldCaretPosition = m_nCaretPosition;
-            sal_Int32 nOldSelectionStart = m_nSelectionStart;
-
             m_nCaretPosition = getCaretPosition();
-            m_nSelectionStart = getSelectionStart();
 
             Window* pWindow = GetWindow();
-            if ( pWindow && pWindow->HasChildPathFocus() )
+            if (pWindow && pWindow->HasChildPathFocus())
             {
-                if ( m_nCaretPosition != nOldCaretPosition )
+                if (m_nCaretPosition != nOldCaretPosition)
                 {
                     Any aOldValue, aNewValue;
-                    aOldValue <<= (sal_Int32) nOldCaretPosition;
-                    aNewValue <<= (sal_Int32) m_nCaretPosition;
+                    aOldValue <<= nOldCaretPosition;
+                    aNewValue <<= m_nCaretPosition;
                     NotifyAccessibleEvent( AccessibleEventId::CARET_CHANGED, aOldValue, aNewValue );
                 }
-
-                // #i104470# VCL only has SELECTION_CHANGED, but UAA distinguishes between SELECTION_CHANGED and CARET_CHANGED
-                sal_Bool bHasSelection = ( m_nSelectionStart != m_nCaretPosition );
-                sal_Bool bHadSelection = ( nOldSelectionStart != nOldCaretPosition );
-                if ( ( bHasSelection != bHadSelection ) || ( bHasSelection && ( ( m_nCaretPosition != nOldCaretPosition ) || ( m_nSelectionStart != nOldSelectionStart ) ) ) )
-                {
-                    NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
-                }
-
+            }
+        }
+        break;
+        case VCLEVENT_EDIT_SELECTIONCHANGED:
+        {
+            Window* pWindow = GetWindow();
+            if (pWindow && pWindow->HasChildPathFocus())
+            {
+                NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
             }
         }
         break;
