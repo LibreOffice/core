@@ -3499,8 +3499,8 @@ static ScRange lcl_MakeDropRange( SCCOL nPosX, SCROW nPosY, SCTAB nTab, const Sc
 
 //--------------------------------------------------------
 
-extern sal_Bool bPasteIsDrop;       // viewfun4 -> move to header
-extern sal_Bool bPasteIsMove;       // viewfun7 -> move to header
+extern bool bPasteIsDrop;       // viewfun4 -> move to header
+extern bool bPasteIsMove;       // viewfun7 -> move to header
 
 //--------------------------------------------------------
 
