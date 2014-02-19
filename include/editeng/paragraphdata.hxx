@@ -20,10 +20,8 @@
 #ifndef INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 #define INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 
-#include <tools/solar.h>
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
 // Only for internal use, oder some kind like hPara for the few
 // functions where you need it outside ( eg. moving paragraphs... )
 //
@@ -53,11 +51,7 @@ public:
     sal_Int16 getDepth() const { return nDepth; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
-
 typedef ::std::vector< ParagraphData > ParagraphDataVector;
-
-//////////////////////////////////////////////////////////////////////////////
 
 #endif // INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 
