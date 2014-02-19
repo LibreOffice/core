@@ -666,11 +666,6 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
     {
         unsigned int nOuterStreamLen = m_pStream->m_nEndOffset - m_pStream->m_nBeginOffset;
         *ppStream = static_cast<char*>(rtl_allocateMemory( nOuterStreamLen ));
-        if( ! ppStream )
-        {
-            *pBytes = 0;
-            return false;
-        }
         unsigned int nRead = rContext.readOrigBytes( m_pStream->m_nBeginOffset, nOuterStreamLen, *ppStream );
         if( nRead != nOuterStreamLen )
         {
