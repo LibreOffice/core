@@ -22,7 +22,6 @@
 #include <tools/toolsdllapi.h>
 #include <sal/config.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 
 typedef long (*PSTUB)( void*, void* );
 

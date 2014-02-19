@@ -20,8 +20,6 @@
 #define INCLUDED_TOOLS_CONTNR_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
-
 #include <limits.h>
 
 #define CONTAINER_APPEND            ULONG_MAX

@@ -20,10 +20,6 @@
 #ifndef INCLUDED_TOOLS_ERRCODE_HXX
 #define INCLUDED_TOOLS_ERRCODE_HXX
 
-#ifndef __RSC
-#include <tools/solar.h>
-#endif
-
 /*
 
 01234567012345670123456701234567

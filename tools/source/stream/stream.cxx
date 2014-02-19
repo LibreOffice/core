@@ -31,6 +31,7 @@
 #include <osl/endian.h>
 
 #include <comphelper/string.hxx>
+#include <comphelper/fileformat.h>
 
 #define SWAPNIBBLES(c)      \
 unsigned char nSwapTmp=c;   \

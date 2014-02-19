@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_DATETIME_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
