@@ -37,9 +37,9 @@ class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHe
 {
 private:
     ScViewData*     pViewData;
-    sal_uInt16          nMouseClickPageId;      /// Last page ID after mouse button down/up
-    sal_uInt16          nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
-    sal_Bool            bErrorShown;
+    sal_uInt16      nMouseClickPageId;      /// Last page ID after mouse button down/up
+    sal_uInt16      nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
+    bool            bErrorShown;
 
     void            DoDrag( const Region& rRegion );
 
@@ -74,7 +74,7 @@ public:
     void            UpdateInputContext();
     void            UpdateStatus();
 
-    void            SetSheetLayoutRTL( sal_Bool bSheetRTL );
+    void            SetSheetLayoutRTL( bool bSheetRTL );
 };
 
 

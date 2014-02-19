@@ -395,7 +395,7 @@ void ScTabControl::UpdateStatus()
     }
 }
 
-void ScTabControl::SetSheetLayoutRTL( sal_Bool bSheetRTL )
+void ScTabControl::SetSheetLayoutRTL( bool bSheetRTL )
 {
     SetEffectiveRTL( bSheetRTL );
     nSelPageIdByMouse = TabBar::PAGE_NOT_FOUND;
@@ -619,7 +619,7 @@ long ScTabControl::AllowRenaming()
         }
         else
         {
-            bErrorShown = sal_True;
+            bErrorShown = true;
             pViewSh->ErrorMessage( STR_INVALIDTABNAME );
             bErrorShown = false;
             nRet = TABBAR_RENAMING_NO;
