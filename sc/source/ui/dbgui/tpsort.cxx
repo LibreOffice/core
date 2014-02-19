@@ -776,7 +776,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
     if ( pDlg )
     {
-        if ( m_pBtnHeader->IsChecked() != (pDlg->GetHeaders() ? 1 : 0) )
+        if ( m_pBtnHeader->IsChecked() != pDlg->GetHeaders() )
         {
             m_pBtnHeader->Check( pDlg->GetHeaders() );
         }
