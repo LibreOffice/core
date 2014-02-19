@@ -99,7 +99,7 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
        //  (because everything combined is an attribute, and also only
        //   everything combined as DontCare can be available - #38543#)
 
-        bProtect = sal_True;
+        bProtect = true;
         bHideForm = bHideCell = bHidePrint = false;
     }
     else
@@ -170,7 +170,7 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
 {
     TriState eState = pBox->GetState();
     if ( eState == STATE_DONTKNOW )
-        bDontCare = sal_True;                           // everything combined at DontCare
+        bDontCare = true;                           // everything combined at DontCare
     else
     {
         bDontCare = false;                          // DontCare from everywhere

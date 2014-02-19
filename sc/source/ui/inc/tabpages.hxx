@@ -48,12 +48,12 @@ private:
     TriStateBox*    m_pBtnHideFormula;
     TriStateBox*    m_pBtnHidePrint;
                                         // current status:
-    sal_Bool        bTriEnabled;        //  if before - DontCare
-    sal_Bool        bDontCare;          //  all in  TriState
-    sal_Bool        bProtect;           //  secure individual settings for TriState
-    sal_Bool        bHideForm;
-    sal_Bool        bHideCell;
-    sal_Bool        bHidePrint;
+    bool            bTriEnabled;        //  if before - DontCare
+    bool            bDontCare;          //  all in  TriState
+    bool            bProtect;           //  secure individual settings for TriState
+    bool            bHideForm;
+    bool            bHideCell;
+    bool            bHidePrint;
 
     // Handler:
     DECL_LINK( ButtonClickHdl, TriStateBox* pBox );
