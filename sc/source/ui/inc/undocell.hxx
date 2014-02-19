@@ -50,7 +50,7 @@ public:
                     ScUndoCursorAttr( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
-                            const ScPatternAttr* pApplyPat, sal_Bool bAutomatic );
+                            const ScPatternAttr* pApplyPat, bool bAutomatic );
     virtual         ~ScUndoCursorAttr();
 
     virtual void    Undo();
@@ -74,7 +74,7 @@ private:
     ScPatternAttr*  pApplyPattern;
     ::boost::shared_ptr<EditTextObject> pOldEditData;
     ::boost::shared_ptr<EditTextObject> pNewEditData;
-    sal_Bool            bIsAutomatic;
+    bool            bIsAutomatic;
 
     void            DoChange( const ScPatternAttr* pWhichPattern, const ::boost::shared_ptr<EditTextObject>& pEditData ) const;
 };
@@ -113,7 +113,7 @@ public:
 private:
     ValuesType maOldValues;
 
-    OUString maNewString;
+    OUString  maNewString;
     boost::scoped_ptr<EditTextObject> mpNewEditData;
     sal_uLong mnEndChangeAction;
     ScAddress maPos;
@@ -144,7 +144,7 @@ private:
     ScAddress       aPos;
     ScCellValue maOldCell;
     double          nValue;
-    sal_uLong           nEndChangeAction;
+    sal_uLong       nEndChangeAction;
 
     void            SetChangeTrack();
 };
@@ -180,7 +180,7 @@ public:
                     TYPEINFO();
                     ScUndoPageBreak( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                            sal_Bool bNewColumn, sal_Bool bNewInsert );
+                            bool bNewColumn, bool bNewInsert );
     virtual         ~ScUndoPageBreak();
 
     virtual void    Undo();
@@ -194,10 +194,10 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    sal_Bool            bColumn;        // Column or row break
-    sal_Bool            bInsert;        // Insert or Delete
+    bool            bColumn;        // Column or row break
+    bool            bInsert;        // Insert or Delete
 
-    void            DoChange( sal_Bool bInsert ) const;
+    void            DoChange( bool bInsert ) const;
 };
 
 class ScUndoPrintZoom: public ScSimpleUndo
@@ -217,12 +217,12 @@ public:
 
 private:
     SCTAB           nTab;
-    sal_uInt16          nOldScale;
-    sal_uInt16          nOldPages;
-    sal_uInt16          nNewScale;
-    sal_uInt16          nNewPages;
+    sal_uInt16      nOldScale;
+    sal_uInt16      nOldPages;
+    sal_uInt16      nNewScale;
+    sal_uInt16      nNewPages;
 
-    void            DoChange( sal_Bool bUndo );
+    void            DoChange( bool bUndo );
 };
 
 class ScUndoThesaurus: public ScSimpleUndo
@@ -250,9 +250,9 @@ private:
     EditTextObject* pUndoTObject;       //      at Edit cell
     OUString        aRedoStr;
     EditTextObject* pRedoTObject;
-    sal_uLong           nEndChangeAction;
+    sal_uLong       nEndChangeAction;
 
-    void            DoChange( sal_Bool bUndo, const OUString& rStr,
+    void            DoChange( bool bUndo, const OUString& rStr,
                                 const EditTextObject* pTObj );
     void SetChangeTrack( const ScCellValue& rOldCell );
 };
@@ -342,9 +342,9 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    sal_Bool            bIsDelete;
+    bool            bIsDelete;
     ScDetOpList*    pOldList;
-    sal_uInt16          nAction;
+    sal_uInt16      nAction;
     ScAddress       aPos;
     SdrUndoAction*  pDrawUndo;
 };
@@ -371,7 +371,7 @@ private:
     ScRangeName*    pNewRanges;
     SCTAB           mnTab;
 
-    void            DoChange( sal_Bool bUndo );
+    void            DoChange( bool bUndo );
 };
 
 namespace sc {

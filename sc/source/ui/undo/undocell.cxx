@@ -81,7 +81,7 @@ TYPEINIT1(ScUndoRangeNames, ScSimpleUndo);
 ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
-            const ScPatternAttr* pApplyPat, sal_Bool bAutomatic ) :
+            const ScPatternAttr* pApplyPat, bool bAutomatic ) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
     nRow( nNewRow ),
@@ -136,9 +136,9 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
     }
 
     const SfxItemSet& rApplySet = pApplyPattern->GetItemSet();
-    sal_Bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW, sal_True ) != SFX_ITEM_DEFAULT ||
+    bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW, sal_True ) != SFX_ITEM_DEFAULT ||
                        rApplySet.GetItemState( ATTR_CONDITIONAL, sal_True ) != SFX_ITEM_DEFAULT );
-    sal_Bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY, sal_True ) != SFX_ITEM_DEFAULT );
+    bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY, sal_True ) != SFX_ITEM_DEFAULT );
 
     sal_uInt16 nFlags = SC_PF_TESTMERGE;
     if (bPaintExt)
@@ -498,7 +498,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
 
 ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-            sal_Bool bNewColumn, sal_Bool bNewInsert ) :
+            bool bNewColumn, bool bNewInsert ) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
     nRow( nNewRow ),
@@ -526,7 +526,7 @@ OUString ScUndoPageBreak::GetComment() const
         ) );
 }
 
-void ScUndoPageBreak::DoChange( sal_Bool bInsertP ) const
+void ScUndoPageBreak::DoChange( bool bInsertP ) const
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
@@ -596,7 +596,7 @@ OUString ScUndoPrintZoom::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_PRINTSCALE );
 }
 
-void ScUndoPrintZoom::DoChange( sal_Bool bUndo )
+void ScUndoPrintZoom::DoChange( bool bUndo )
 {
     sal_uInt16 nScale = bUndo ? nOldScale : nNewScale;
     sal_uInt16 nPages = bUndo ? nOldPages : nNewPages;
@@ -620,7 +620,7 @@ void ScUndoPrintZoom::DoChange( sal_Bool bUndo )
 void ScUndoPrintZoom::Undo()
 {
     BeginUndo();
-    DoChange(sal_True);
+    DoChange(true);
     EndUndo();
 }
 
@@ -699,7 +699,7 @@ void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
         nEndChangeAction = 0;
 }
 
-void ScUndoThesaurus::DoChange( sal_Bool bUndo, const OUString& rStr,
+void ScUndoThesaurus::DoChange( bool bUndo, const OUString& rStr,
             const EditTextObject* pTObj )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -752,7 +752,7 @@ void ScUndoThesaurus::DoChange( sal_Bool bUndo, const OUString& rStr,
 void ScUndoThesaurus::Undo()
 {
     BeginUndo();
-    DoChange( sal_True, aUndoStr, pUndoTObject );
+    DoChange( true, aUndoStr, pUndoTObject );
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
@@ -1039,7 +1039,7 @@ OUString ScUndoRangeNames::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_RANGENAMES );
 }
 
-void ScUndoRangeNames::DoChange( sal_Bool bUndo )
+void ScUndoRangeNames::DoChange( bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->CompileNameFormula( true );   // CreateFormulaString
@@ -1067,7 +1067,7 @@ void ScUndoRangeNames::DoChange( sal_Bool bUndo )
 void ScUndoRangeNames::Undo()
 {
     BeginUndo();
-    DoChange( sal_True );
+    DoChange( true );
     EndUndo();
 }
 
