@@ -2661,7 +2661,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     }
     aParams->ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
 
-    pImp->bPasswd = aParams && SFX_ITEM_SET == aParams->GetItemState(SID_PASSWORD);
+    pImp->bPasswd = SFX_ITEM_SET == aParams->GetItemState(SID_PASSWORD);
 
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
