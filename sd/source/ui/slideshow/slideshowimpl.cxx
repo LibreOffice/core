@@ -521,6 +521,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mbRehearseTimings(false)
 , mbDesignMode(false)
 , mbIsPaused(false)
+, mbWasPaused(false)
 , mbInputFreeze(false)
 , mbActive(sal_False)
 , maPresSettings( pDoc->getPresentationSettings() )

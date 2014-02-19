@@ -369,7 +369,6 @@ private:
     bool            mbSlideBorderVisible;
     bool            mbSetOnlineSpelling;
     bool            mbDisposed;
-    bool            mbMouseIsDrawing;
     bool            mbAutoSaveWasOn;
     bool            mbRehearseTimings;
     bool            mbDesignMode;
