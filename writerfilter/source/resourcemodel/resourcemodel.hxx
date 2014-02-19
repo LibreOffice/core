@@ -19,7 +19,6 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace writerfilter {
-class WW8TableManager;
 class WW8BinaryObjHandler : public BinaryObj
 {
 public:
