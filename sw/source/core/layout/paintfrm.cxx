@@ -2394,8 +2394,8 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
             break;
 
         const SwLineEntrySet& rEntrySet = (*aIter).second;
-        SwLineEntrySetConstIter aSetIter = rEntrySet.begin();
-        while ( aSetIter != rEntrySet.end() )
+        for (SwLineEntrySetConstIter aSetIter = rEntrySet.begin();
+                 aSetIter != rEntrySet.end(); ++aSetIter)
         {
             const SwLineEntry& rEntry = *aSetIter;
             const svx::frame::Style& rEntryStyle( (*aSetIter).maAttribute );
@@ -2528,6 +2528,12 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
                 aPaintStart.Y() -= nTwipYCorr;
                 aPaintEnd.Y()   -= nTwipYCorr;
 
+                if (::rtl::math::approxEqual(aStyles[0].Prim(), 0.0) &&
+                    ::rtl::math::approxEqual(aStyles[0].Secn(), 0.0))
+                {
+                    continue; // fdo#75118 do not paint zero-width lines
+                }
+
                 // Here comes the painting stuff: Thank you, DR, great job!!!
                 if ( bHori )
                 {
@@ -2562,8 +2568,6 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
                     );
                 }
             }
-
-            ++aSetIter;
         }
 
         ++aIter;
