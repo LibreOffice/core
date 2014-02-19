@@ -752,7 +752,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
     if (!bNoMrowContainer &&
-        (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION)))
+        (nSize > 1 || pNode->GetType() == NEXPRESSION))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
 
     for (sal_uInt16 i = 0; i < nSize; i++)
