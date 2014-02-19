@@ -516,7 +516,7 @@ sal_uInt16 SvxBorderLine::GetDistance() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
+bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
 {
     return ( ( aColor    == rCmp.aColor )            &&
              ( m_nWidth == rCmp.m_nWidth )           &&
@@ -616,7 +616,7 @@ Color SvxBorderLine::GetColorGap( ) const
 OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       SfxMapUnit eDestUnit,
                                       const IntlWrapper* pIntl,
-                                      sal_Bool bMetricStr) const
+                                      bool bMetricStr) const
 {
     static const sal_uInt16 aStyleIds[] =
     {

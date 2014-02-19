@@ -131,11 +131,11 @@ namespace editeng {
         void            SetBorderLineStyle( SvxBorderStyle nNew );
         void            ScaleMetrics( long nMult, long nDiv );
 
-        sal_Bool            operator==( const SvxBorderLine &rCmp ) const;
+        bool            operator==( const SvxBorderLine &rCmp ) const;
 
         OUString        GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
                                         const IntlWrapper* pIntl,
-                                        sal_Bool bMetricStr = sal_False ) const;
+                                        bool bMetricStr = false ) const;
 
         bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 

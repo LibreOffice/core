@@ -2154,7 +2154,7 @@ SfxItemPresentation SvxBoxItem::GetPresentation
                 if( pTop && pBottom && pLeft && pRight &&
                     *pTop == *pBottom && *pTop == *pLeft && *pTop == *pRight )
                 {
-                    rText += pTop->GetValueString( eCoreUnit, ePresUnit, pIntl, sal_True ) + cpDelimTmp;
+                    rText += pTop->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) + cpDelimTmp;
                 }
                 else
                 {
@@ -2162,28 +2162,28 @@ SfxItemPresentation SvxBoxItem::GetPresentation
                     {
                         rText = rText +
                                 EE_RESSTR(RID_SVXITEMS_BORDER_TOP) +
-                                pTop->GetValueString( eCoreUnit, ePresUnit, pIntl, sal_True ) +
+                                pTop->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
                                 cpDelimTmp;
                     }
                     if ( pBottom )
                     {
                         rText = rText +
                                 EE_RESSTR(RID_SVXITEMS_BORDER_BOTTOM) +
-                                pBottom->GetValueString( eCoreUnit, ePresUnit, pIntl, sal_True ) +
+                                pBottom->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
                                 cpDelimTmp;
                     }
                     if ( pLeft )
                     {
                         rText = rText +
                                 EE_RESSTR(RID_SVXITEMS_BORDER_LEFT) +
-                                pLeft->GetValueString( eCoreUnit, ePresUnit, pIntl, sal_True ) +
+                                pLeft->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
                                 cpDelimTmp;
                     }
                     if ( pRight )
                     {
                         rText = rText +
                                 EE_RESSTR(RID_SVXITEMS_BORDER_RIGHT) +
-                                pRight->GetValueString( eCoreUnit, ePresUnit, pIntl, sal_True ) +
+                                pRight->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
                                 cpDelimTmp;
                     }
                 }
