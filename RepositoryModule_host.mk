@@ -184,11 +184,11 @@ endef
 ifeq (,$(filter-out all,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
 	scfilt scopencl \
-	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
+	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 	sc msword \
 	$(call gb_Helper_optional,DESKTOP,swui) \
 	sw sd \
-	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	writerfilter cui chartcontroller chartcore oox svx \
 	$(if $(MERGELIBS),merged,svxcore) \
 	xo sfx fwk svt vcl \
