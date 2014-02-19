@@ -212,7 +212,7 @@ private:
     ListBox                     maLbValue;
     FixedText                   maFtMin;
     formula::RefEdit            maEdMin;
-    MultiLineEdit               maEdList;       /// Entries for explicit list
+    VclMultiLineEdit            maEdList;       /// Entries for explicit list
     FixedText                   maFtMax;
     formula::RefEdit            maEdMax;
     FixedText                   maFtHint;       /// Hint text for cell range validity.

@@ -1186,7 +1186,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
 
 //-----------------------------------------------------------------------
 SentenceEditWindow_Impl::SentenceEditWindow_Impl(Window * pParent, WinBits nBits)
-    : MultiLineEdit(pParent, nBits)
+    : VclMultiLineEdit(pParent, nBits)
     , m_nErrorStart(0)
     , m_nErrorEnd(0)
     , m_bIsUndoEditMode(false)
@@ -1541,7 +1541,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         else
             bChange = false;
     }
-    return bChange || MultiLineEdit::PreNotify(rNEvt);
+    return bChange || VclMultiLineEdit::PreNotify(rNEvt);
 }
 
 //-----------------------------------------------------------------------

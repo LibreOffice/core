@@ -56,9 +56,9 @@ namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
 // ------------------------------------------------------------------
-class SentenceEditWindow_Impl : public MultiLineEdit
+class SentenceEditWindow_Impl : public VclMultiLineEdit
 {
-    using MultiLineEdit::SetText;
+    using VclMultiLineEdit::SetText;
 
 private:
     std::set< sal_uInt16 >      m_aIgnoreErrorsAt;
