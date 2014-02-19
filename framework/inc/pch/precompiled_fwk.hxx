@@ -322,7 +322,6 @@
 #include <tools/gen.hxx>
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>

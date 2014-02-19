@@ -22,19 +22,18 @@
 #include <rsctools.hxx>
 #include <rscerror.h>
 
-/****************** C L A S S E S ****************************************/
 class RscTypCont;
-/*********** R s c F i l e I n s t ***************************************/
 
 #define READBUFFER_MAX  256
+
 class RscFileInst
 {
     ERRTYPE             aFirstError;// Erster Fehler
     sal_uInt32          nErrorLine; // Zeile des ersten Fehlers
     sal_uInt32          nErrorPos;  // Position des ersten Fehlers
     sal_uInt32          nLineNo;    // Zeile in der Eingabedatei
-    sal_uLong           lFileIndex; // Index auf Eingabedatei
-    sal_uLong           lSrcIndex;  // Index auf Basisdatei
+    sal_uIntPtr         lFileIndex; // Index auf Eingabedatei
+    sal_uIntPtr         lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
     sal_uInt32          nInputBufLen; // Laenge des Lesepuffers
@@ -49,13 +48,13 @@ class RscFileInst
 public:
     RscTypCont *        pTypCont;
     void        Init();  // ctor initialisieren
-                RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
-                         sal_uLong lFileIndex, FILE * fFile );
+                RscFileInst( RscTypCont * pTC, sal_uIntPtr lIndexSrc,
+                         sal_uIntPtr lFileIndex, FILE * fFile );
                 ~RscFileInst();
     bool        IsEof() const { return bEof; }
-    void        SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
-    sal_uLong   GetFileIndex()                { return( lFileIndex );  }
-    sal_uLong   GetSrcIndex()                 { return( lSrcIndex );   }
+    void        SetFileIndex( sal_uIntPtr lFIndex ) { lFileIndex = lFIndex;  }
+    sal_uIntPtr   GetFileIndex()                { return( lFileIndex );  }
+    sal_uIntPtr   GetSrcIndex()                 { return( lSrcIndex );   }
     void        SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
     sal_uInt32  GetLineNo()                   { return( nLineNo );     }
     sal_uInt32  GetScanPos()                  { return( nScanPos );    }
@@ -74,7 +73,6 @@ public:
     sal_uInt32  GetErrorPos()                 { return nErrorPos;      }
 };
 
-/******************* F u n c t i o n *************************************/
 void IncludeParser( RscFileInst * pFileInst );
 ERRTYPE parser( RscFileInst * pFileInst );
 

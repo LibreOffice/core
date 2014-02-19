@@ -16,11 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/types.h>
+
 #ifndef _RSCERROR_H
 #define _RSCERROR_H
 
-/****************** D E F I N I T I O N S ********************************/
-/******************* R e t u r n   E r r o r s         *******************/
+// Return errors
 #define ERR_OK              0xFFFFFFFF
 
 #define ERR_ERROR           0x0100
@@ -100,7 +102,7 @@ public:
     void Clear(){ nError = ERR_OK; }
 };
 
-/****************** R s c E r r o r **************************************/
+// Rsc Error
 class RscId;
 class RscTop;
 

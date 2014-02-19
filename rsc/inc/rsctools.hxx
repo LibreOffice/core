@@ -27,44 +27,44 @@ class  RscPtrPtr;
 #endif
 #include <stdio.h>
 #include <vector>
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
+#include <osl/endian.h>
 
-/******************* T y p e s *******************************************/
 // Zeichensatz
 enum COMPARE { LESS = -1, EQUAL = 0, GREATER = 1 };
 
 enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 
-/******************* M A K R O S *****************************************/
 #define ALIGNED_SIZE( nSize )                               \
             (nSize + sizeof( void * ) -1) / sizeof( void * ) * sizeof( void * )
-/******************* F u n c t i o n   F o r w a r d s *******************/
+
+// Function Forwards
 OString GetTmpFileName();
+
 bool Append(const OString &rDestFile, const OString &rSourceFile);
+
 bool Append(FILE * fDest, OString &raSourceFile);
+
 OString OutputFile(const OString &rInput, const char * ext);
+
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      sal_uInt32 nArgc );
+
 void RscExit( sal_uInt32 nExit );
 
-/********* A n s i - F u n c t i o n   F o r w a r d s *******************/
+// Ansi-Function Forwards
 int rsc_strnicmp( const char *string1, const char *string2, size_t count );
 int rsc_stricmp( const char *string1, const char *string2 );
 char* rsc_strdup( const char* );
 
-/****************** C L A S S E S ****************************************/
-
 typedef ::std::vector< OString* > RscStrList;
 
-/*********** R s c C h a r ***********************************************/
 class RscChar
 {
 public:
     static char * MakeUTF8( char * pStr, sal_uInt16 nTextEncoding );
 };
 
-/****************** R s c P t r P t r ************************************/
 class RscPtrPtr
 {
     sal_uInt32  nCount;
@@ -82,7 +82,6 @@ public:
     void **         GetBlock(){ return( pMem ); };
 };
 
-/****************** R s c W r i t e R c **********************************/
 class RscWriteRc
 {
     sal_uInt32          nLen;

@@ -28,7 +28,6 @@
 #define CGM_EXPORT_IMPRESS  0x00000100
 #define CGM_EXPORT_META     0x00000200
 
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include "cgmtypes.hxx"

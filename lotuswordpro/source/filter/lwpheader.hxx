@@ -53,10 +53,10 @@
  *
  *
  ************************************************************************/
-/*************************************************************************
+/*
  * @file
  *  For LWP filter architecture prototype
- ************************************************************************/
+ */
 
 #ifndef _LWPHEADERS_HXX
 #define _LWPHEADERS_HXX
@@ -71,7 +71,6 @@
 #include <string>
 
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>

@@ -23,8 +23,6 @@
 #include <macros/generic.hxx>
 #include <stdtypes.h>
 
-#include <tools/solar.h>
-
 namespace framework
 {
 
