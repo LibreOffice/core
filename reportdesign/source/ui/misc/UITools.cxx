@@ -661,7 +661,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
         new SvxShadowedItem(sal_False,ITEMID_SHADOWED),
         new SvxWordLineModeItem(sal_False,ITEMID_WORDLINEMODE),
-        new SvxContourItem(sal_False,ITEMID_CONTOUR),
+        new SvxContourItem(false,ITEMID_CONTOUR),
         new SvxCrossedOutItem(STRIKEOUT_NONE,ITEMID_CROSSEDOUT),
         new SvxUnderlineItem(UNDERLINE_NONE,ITEMID_UNDERLINE),
 

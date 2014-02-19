@@ -124,7 +124,7 @@ TYPEINIT1_FACTORY(SvxCrossedOutItem, SfxEnumItem, new SvxCrossedOutItem(STRIKEOU
 TYPEINIT1_FACTORY(SvxShadowedItem, SfxBoolItem, new SvxShadowedItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxAutoKernItem, SfxBoolItem, new SvxAutoKernItem(false, 0));
 TYPEINIT1_FACTORY(SvxWordLineModeItem, SfxBoolItem, new SvxWordLineModeItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxContourItem, SfxBoolItem, new SvxContourItem(false, 0));
 TYPEINIT1_FACTORY(SvxPropSizeItem, SfxUInt16Item, new SvxPropSizeItem(100, 0));
 TYPEINIT1_FACTORY(SvxColorItem, SfxPoolItem, new SvxColorItem(0));
 TYPEINIT1_FACTORY(SvxCharSetColorItem, SvxColorItem, new SvxCharSetColorItem(0));
@@ -1810,7 +1810,7 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
 
 // class SvxContourItem --------------------------------------------------
 
-SvxContourItem::SvxContourItem( const sal_Bool bContoured, const sal_uInt16 nId ) :
+SvxContourItem::SvxContourItem( const bool bContoured, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bContoured )
 {
 }

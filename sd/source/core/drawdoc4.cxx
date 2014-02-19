@@ -208,7 +208,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
 
-    rISet.Put(SvxContourItem(sal_False, EE_CHAR_OUTLINE ));
+    rISet.Put(SvxContourItem(false, EE_CHAR_OUTLINE ));
     rISet.Put(SvxShadowedItem(sal_False, EE_CHAR_SHADOW ));
     rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
     rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
