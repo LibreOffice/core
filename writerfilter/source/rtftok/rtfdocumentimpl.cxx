@@ -3864,7 +3864,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     switch (nKeyword)
     {
         case RTF_ASPALPHA:
-            m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PFAutoSpaceDE, pBoolValue);
+            m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_autoSpaceDE, pBoolValue);
             break;
         case RTF_DELETED:
         case RTF_REVISED:

@@ -1224,15 +1224,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         rContext->Insert( PROP_PARA_ORPHANS, aVal );
     }
     break;  // sprmPFWidowControl
-    case NS_sprm::LN_PFOverflowPunct: ;  // sprmPFOverflowPunct - hanging punctuation
+    case NS_ooxml::LN_CT_PPrBase_overflowPunct:
         rContext->Insert(PROP_PARA_IS_HANGING_PUNCTUATION, uno::makeAny( nIntValue ? false : true ));
         break;
-    case NS_sprm::LN_PFTopLinePunct:
-        break;  // sprmPFTopLinePunct
-    case NS_sprm::LN_PFAutoSpaceDE:
-        break;  // sprmPFAutoSpaceDE
-    case NS_sprm::LN_PFAutoSpaceDN:
-        break;  // sprmPFAutoSpaceDN
+    case NS_ooxml::LN_CT_PPrBase_topLinePunct:
+        break;
+    case NS_ooxml::LN_CT_PPrBase_autoSpaceDE:
+        break;
+    case NS_ooxml::LN_CT_PPrBase_autoSpaceDN:
+        break;
     case NS_sprm::LN_PWAlignFont:
         {
             sal_Int16 nAlignment = 0;

@@ -22351,10 +22351,10 @@
       <element name="suppressAutoHyphens" tokenid="ooxml:CT_PPrBase_suppressAutoHyphens"/>
       <element name="kinsoku" tokenid="ooxml:CT_PPrBase_kinsoku"/>
       <element name="wordWrap" tokenid="ooxml:CT_PPrBase_wordWrap"/>
-      <element name="overflowPunct" tokenid="sprm:PFOverflowPunct"/>
-      <element name="topLinePunct" tokenid="sprm:PFTopLinePunct"/>
-      <element name="autoSpaceDE" tokenid="sprm:PFAutoSpaceDE"/>
-      <element name="autoSpaceDN" tokenid="sprm:PFAutoSpaceDN"/>
+      <element name="overflowPunct" tokenid="ooxml:CT_PPrBase_overflowPunct"/>
+      <element name="topLinePunct" tokenid="ooxml:CT_PPrBase_topLinePunct"/>
+      <element name="autoSpaceDE" tokenid="ooxml:CT_PPrBase_autoSpaceDE"/>
+      <element name="autoSpaceDN" tokenid="ooxml:CT_PPrBase_autoSpaceDN"/>
       <element name="bidi" tokenid="sprm:PFBiDi"/>
       <element name="adjustRightInd" tokenid="ooxml:CT_PPrBase_adjustRightInd"/>
       <element name="snapToGrid" tokenid="ooxml:CT_PPrBase_snapToGrid"/>
