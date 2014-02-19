@@ -230,8 +230,6 @@ public:
     sal_uInt16 mnShowPage;
     sal_Bool mbDocPreview;
 
-    sal_uLong mnTemplate;
-
     OUString maPageListFile;
 
     void UpdatePreview( sal_Bool bDocPreview );
