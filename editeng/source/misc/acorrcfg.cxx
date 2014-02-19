@@ -40,12 +40,12 @@ using namespace com::sun::star::uno;
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
     aSwConfig(*this),
-    bFileRel(sal_True),
-    bNetRel(sal_True),
-    bAutoTextTip(sal_True),
-    bAutoTextPreview(sal_False),
-    bAutoFmtByInput(sal_True),
-    bSearchInAllCategories(sal_False)
+    bFileRel(true),
+    bNetRel(true),
+    bAutoTextTip(true),
+    bAutoTextPreview(false),
+    bAutoFmtByInput(true),
+    bSearchInAllCategories(false)
 {
     SvtPathOptions aPathOpt;
     OUString sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
@@ -68,8 +68,8 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     }
     pAutoCorrect = new SvxAutoCorrect( sSharePath, sUserPath );
 
-    aBaseConfig.Load(sal_True);
-    aSwConfig.Load(sal_True);
+    aBaseConfig.Load(true);
+    aSwConfig.Load(true);
 }
 
 SvxAutoCorrCfg::~SvxAutoCorrCfg()
@@ -122,7 +122,7 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
     return aNames;
 }
 
-void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
+void SvxBaseAutoCorrCfg::Load(bool bInit)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -325,7 +325,7 @@ void SvxBaseAutoCorrCfg::Commit()
 
 void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
 {
-    Load(sal_False);
+    Load(false);
 }
 
 Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
@@ -388,7 +388,7 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
     return aNames;
 }
 
-void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
+void SvxSwAutoCorrCfg::Load(bool bInit)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -644,7 +644,7 @@ void SvxSwAutoCorrCfg::Commit()
 
 void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
-    Load(sal_False);
+    Load(false);
 }
 
 namespace

@@ -33,7 +33,7 @@ public:
     SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rParent);
     ~SvxBaseAutoCorrCfg();
 
-    void                    Load(sal_Bool bInit);
+    void                    Load(bool bInit);
     virtual void            Commit();
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
@@ -48,7 +48,7 @@ public:
     SvxSwAutoCorrCfg(SvxAutoCorrCfg& rParent);
     ~SvxSwAutoCorrCfg();
 
-    void                    Load(sal_Bool bInit);
+    void                    Load(bool bInit);
     virtual void            Commit();
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
@@ -67,13 +67,13 @@ class EDITENG_DLLPUBLIC SvxAutoCorrCfg
     SvxSwAutoCorrCfg        aSwConfig;
 
     // Flags for Autotext:
-    sal_Bool    bFileRel;
-    sal_Bool    bNetRel;
+    bool    bFileRel;
+    bool    bNetRel;
     // Help tip for Autotext as you type
-    sal_Bool    bAutoTextTip;
-    sal_Bool    bAutoTextPreview;
-    sal_Bool    bAutoFmtByInput;
-    sal_Bool    bSearchInAllCategories;
+    bool    bAutoTextTip;
+    bool    bAutoTextPreview;
+    bool    bAutoFmtByInput;
+    bool    bSearchInAllCategories;
 
 public:
     void        SetModified()
@@ -92,23 +92,23 @@ public:
     // the pointer is transferred to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
-    sal_Bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }
-    void SetAutoFmtByInput( sal_Bool bSet ) { bAutoFmtByInput = bSet;aSwConfig.SetModified();}
+    bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }
+    void SetAutoFmtByInput( bool bSet ) { bAutoFmtByInput = bSet;aSwConfig.SetModified();}
 
-    sal_Bool IsSaveRelFile() const          { return bFileRel; }
-    void SetSaveRelFile( sal_Bool bSet )    { bFileRel = bSet; aSwConfig.SetModified(); }
+    bool IsSaveRelFile() const          { return bFileRel; }
+    void SetSaveRelFile( bool bSet )    { bFileRel = bSet; aSwConfig.SetModified(); }
 
-    sal_Bool IsSaveRelNet() const           { return bNetRel; }
-    void SetSaveRelNet( sal_Bool bSet )     { bNetRel = bSet; aSwConfig.SetModified();}
+    bool IsSaveRelNet() const           { return bNetRel; }
+    void SetSaveRelNet( bool bSet )     { bNetRel = bSet; aSwConfig.SetModified();}
 
-    sal_Bool IsAutoTextPreview() const {return bAutoTextPreview;}
-    void     SetAutoTextPreview(sal_Bool bSet) {bAutoTextPreview = bSet; aSwConfig.SetModified();}
+    bool IsAutoTextPreview() const {return bAutoTextPreview;}
+    void SetAutoTextPreview(bool bSet) {bAutoTextPreview = bSet; aSwConfig.SetModified();}
 
-    sal_Bool IsAutoTextTip() const          { return bAutoTextTip; }
-    void SetAutoTextTip(sal_Bool bSet )     { bAutoTextTip = bSet;aSwConfig.SetModified();}
+    bool IsAutoTextTip() const          { return bAutoTextTip; }
+    void SetAutoTextTip(bool bSet )     { bAutoTextTip = bSet;aSwConfig.SetModified();}
 
-    sal_Bool IsSearchInAllCategories() const        { return bSearchInAllCategories;}
-    void SetSearchInAllCategories(sal_Bool bSet )   { bSearchInAllCategories = bSet; aSwConfig.SetModified(); }
+    bool IsSearchInAllCategories() const        { return bSearchInAllCategories;}
+    void SetSearchInAllCategories(bool bSet )   { bSearchInAllCategories = bSet; aSwConfig.SetModified(); }
 
     SvxAutoCorrCfg();
     virtual ~SvxAutoCorrCfg();

@@ -667,7 +667,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_AUTO:
         {
             SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-            sal_Bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
+            bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
             if( bSet != rACfg.IsAutoFmtByInput() )
             {
                 rACfg.SetAutoFmtByInput( bSet );
