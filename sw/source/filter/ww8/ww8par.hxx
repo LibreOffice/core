@@ -640,7 +640,6 @@ public:
 
     sal_uInt16 hpsCheckBox;
     sal_uInt16 nChecked;
-    sal_uInt16 nDefaultChecked;
 
     OUString sTitle;
     OUString sDefault;
