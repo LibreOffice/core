@@ -337,18 +337,18 @@ typedef enum {
 struct WinMtfFillStyle
 {
     Color               aFillColor;
-    sal_Bool            bTransparent;
+    bool                bTransparent;
     WinMtfFillStyleType aType;
     Bitmap              aBmp;
 
     WinMtfFillStyle()
         : aFillColor(Color(COL_BLACK))
-        , bTransparent(sal_False)
+        , bTransparent(false)
         , aType(FillStyleSolid)
     {
     }
 
-    WinMtfFillStyle( const Color& rColor, sal_Bool bTrans = sal_False )
+    WinMtfFillStyle(const Color& rColor, bool bTrans = false)
         : aFillColor(rColor)
         , bTransparent(bTrans)
         , aType(FillStyleSolid)
@@ -356,19 +356,20 @@ struct WinMtfFillStyle
     }
 
     WinMtfFillStyle(Bitmap& rBmp)
-        : aType(FillStylePattern)
+        : bTransparent(false)
+        , aType(FillStylePattern)
         , aBmp(rBmp)
     {
     }
 
-    sal_Bool operator==( const WinMtfFillStyle& rStyle )
+    bool operator==( const WinMtfFillStyle& rStyle )
         {
             return (  ( aFillColor == rStyle.aFillColor )
                    && ( bTransparent == rStyle.bTransparent )
                    && ( aType == rStyle.aType )
                    );
         }
-    sal_Bool operator==( WinMtfFillStyle* pStyle )
+    bool operator==( WinMtfFillStyle* pStyle )
         {
             return (  ( aFillColor == pStyle->aFillColor )
                    && ( bTransparent == pStyle->bTransparent )
