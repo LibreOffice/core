@@ -69,7 +69,7 @@ class GbuildParser:
     srcdirpattern = re.compile('^SRCDIR = (.*)')
     builddirpattern = re.compile('^BUILDDIR = (.*)')
     instdirpattern = re.compile('^INSTDIR = (.*)')
-    binpathpattern = re.compile('LS = (.*)ls(.exe)?')
+    binpathpattern = re.compile('^LS = (.*)ls(.exe)?')
     libpattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Library_(.*)\.mk\', line [0-9]*\):')
     exepattern = re.compile('#  [a-z]+ to execute \(from [\'`](.*)/Executable_(.*)\.mk\', line [0-9]*\):')
     includepattern = re.compile('# INCLUDE := (.*)')
@@ -556,27 +556,59 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\"; cd %(location)s && %(makecmd)s -rs ' + targets + '"';
 
+    class Project:
+        def __init__(self, guid, target, project_path):
+            self.guid = guid
+            self.target = target
+            self.path = project_path
+
     def emit(self):
+        all_projects = []
         for location in self.target_by_location:
-            projects = dict()
+            projects = []
             module = location.split('/')[-1]
-            project_directory = os.path.join(self.solution_directory, module)
+            module_directory = os.path.join(self.solution_directory, module)
             for target in self.target_by_location[location]:
-                project_guid = self.write_project(project_directory, target)
-                projects[project_guid] = target
-            self.write_solution(os.path.join(project_directory, '%s.sln' % module), module, projects)
+                project_path = os.path.join(module_directory, '%s.vcxproj' % target.name)
+                project_guid = self.write_project(project_path, target)
+                p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
+                projects.append(p)
+            self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
+            all_projects += projects
+
+        self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
 
     nmake_project_guid = '8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942'
 
-    def write_solution(self, solution_path, name, projects):
-        print('Solution %s:' % name, end='')
+    def get_project_directory(self, target):
+        return os.path.join(self.solution_directory, target.location.split('/')[-1])
+
+    def get_dependency_libs(self, linked_libs, projects):
+        dependency_libs = {}
+        for linked_lib in linked_libs:
+            for project in projects:
+                if project.target.name == linked_lib:
+                    dependency_libs[project.guid] = project
+        return dependency_libs
+
+    def write_solution(self, solution_path, projects):
+        print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
-            for guid, target in projects.items():
+            for project in projects:
+                target = project.target
                 print(' %s' % target.name, end='')
-                f.write('Project("{%s}") = "%s", "%s.vcxproj", "{%s}"\n' %
+                module = target.location.split('/')[-1]
+                proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
+                f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
-                        target.short_name(), target.name, guid))
+                        target.short_name(), proj_path, project.guid))
+                libs_in_solution = self.get_dependency_libs(target.linked_libs, projects)
+                if libs_in_solution:
+                    f.write('\tProjectSection(ProjectDependencies) = postProject\n')
+                    for lib_guid in libs_in_solution.keys():
+                        f.write('\t\t{%(guid)s} = {%(guid)s}\n' % { 'guid': lib_guid})
+                    f.write('\tEndProjectSection\n')
                 f.write('EndProject\n')
             f.write('Global\n')
             platform = 'Win32'
@@ -586,9 +618,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('\tEndGlobalSection\n')
             f.write('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\n')
             # Specifies project configurations for solution configuration
-            for proj_guid in projects:
+            for project in projects:
                 for cfg in self.configurations:
-                    params = {'guid': proj_guid, 'sol_cfg': cfg, 'proj_cfg': cfg, 'platform': platform}
+                    params = {'guid': project.guid, 'sol_cfg': cfg, 'proj_cfg': cfg, 'platform': platform}
                     f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.ActiveCfg = %(proj_cfg)s|%(platform)s\n' % params)
                     # Build.0 is basically 'Build checkbox' in configuration manager
                     f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n'  % params)
@@ -596,10 +628,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('EndGlobal\n')
         print('')
 
-    def write_project(self, project_dir, target):
+    def write_project(self, project_path, target):
         # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
-        project_path = os.path.join(project_dir, '%s.vcxproj' % target.name)
-        os.makedirs(project_dir, exist_ok = True)
+        os.makedirs(os.path.dirname(project_path), exist_ok = True)
         project_guid = str(uuid.uuid4()).upper()
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
