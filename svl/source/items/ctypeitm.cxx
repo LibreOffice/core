@@ -71,8 +71,8 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
     rStream.ReadUInt32( nMagic );
     if (nMagic == CNTSTRINGITEM_STREAM_MAGIC)
     {
-        unsigned char bEncrypted = sal_False;
-        rStream.ReadUChar( bEncrypted );
+        bool bEncrypted = false;
+        rStream.ReadCharAsBool( bEncrypted );
         DBG_ASSERT(!bEncrypted,
                    "CntContentTypeItem::Create() reads encrypted data");
     }

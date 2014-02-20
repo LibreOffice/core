@@ -308,6 +308,7 @@ public:
     SvStream&       ReadSChar( signed char& rChar );
     SvStream&       ReadChar( char& rChar );
     SvStream&       ReadUChar( unsigned char& rChar );
+    SvStream&       ReadCharAsBool( bool& rBool );
     SvStream&       ReadFloat( float& rFloat );
     SvStream&       ReadDouble( double& rDouble );
     SvStream&       ReadStream( SvStream& rStream );

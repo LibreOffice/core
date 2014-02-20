@@ -184,8 +184,8 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
         sStrArray[i] = SvNumberformat::LoadString( rStream );
         rStream.ReadInt16( nTypeArray[i] );
     }
-    unsigned char bStreamThousand;
-    rStream.ReadInt16( eScannedType ).ReadUChar( bStreamThousand ).ReadUInt16( nThousand )
+    bool bStreamThousand;
+    rStream.ReadInt16( eScannedType ).ReadCharAsBool( bStreamThousand ).ReadUInt16( nThousand )
            .ReadUInt16( nCntPre ).ReadUInt16( nCntPost ).ReadUInt16( nCntExp );
     bThousand = bStreamThousand;
 }
@@ -1702,9 +1702,9 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     rHdr.StartEntry();
     sal_uInt16 nOp1, nOp2;
     sFormatstring = SvNumberformat::LoadString( rStream );
-    unsigned char bStreamStandard, bStreamUsed;
+    bool bStreamStandard, bStreamUsed;
     rStream.ReadInt16( eType ).ReadDouble( fLimit1 ).ReadDouble( fLimit2 )
-           .ReadUInt16( nOp1 ).ReadUInt16( nOp2 ).ReadUChar( bStreamStandard ).ReadUChar( bStreamUsed );
+           .ReadUInt16( nOp1 ).ReadUInt16( nOp2 ).ReadCharAsBool( bStreamStandard ).ReadCharAsBool( bStreamUsed );
     bStandard = bStreamStandard;
     bIsUsed = bStreamUsed;
     NfHackConversion eHackConversion = NF_CONVERT_NONE;
@@ -1795,7 +1795,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             }
             break;
         case nNewStandardFlagVersionId :
-            rStream.ReadUChar( bStreamStandard ); // the real standard flag
+            rStream.ReadCharAsBool( bStreamStandard ); // the real standard flag
             bStandard = bStreamStandard;
             break;
         default:

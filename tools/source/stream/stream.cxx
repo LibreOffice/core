@@ -1004,6 +1004,30 @@ SvStream& SvStream::ReadUChar( unsigned char& r )
     return *this;
 }
 
+SvStream& SvStream::ReadCharAsBool( bool& r )
+{
+    if( (bIoRead || !bIsConsistent) &&
+        sizeof(char) <= nBufFree )
+    {
+        SAL_WARN_IF(
+            *pBufPos > 1, "tools.stream", unsigned(*pBufPos) << " not 0/1");
+        r = *pBufPos != 0;
+        nBufActualPos += sizeof(char);
+        pBufPos += sizeof(char);
+        nBufFree -= sizeof(char);
+    }
+    else
+    {
+        unsigned char c;
+        if (Read(&c, 1) == 1)
+        {
+            SAL_WARN_IF(c > 1, "tools.stream", unsigned(c) << " not 0/1");
+            r = c != 0;
+        }
+    }
+    return *this;
+}
+
 SvStream& SvStream::ReadFloat(float& r)
 {
     float n = 0;

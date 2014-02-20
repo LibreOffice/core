@@ -169,8 +169,8 @@ TYPEINIT1_AUTOFACTORY(SfxBoolItem, SfxPoolItem);
 SfxBoolItem::SfxBoolItem(sal_uInt16 const nWhich, SvStream & rStream)
     : SfxPoolItem(nWhich)
 {
-    unsigned char tmp = 0;
-    rStream.ReadUChar( tmp );
+    bool tmp = false;
+    rStream.ReadCharAsBool( tmp );
     m_bValue = tmp;
 }
 
