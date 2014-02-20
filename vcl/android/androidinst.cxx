@@ -20,6 +20,7 @@
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <touch/touch.h>
+#include <vcl/settings.hxx>
 
 #define LOGTAG "LibreOffice/androidinst"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
