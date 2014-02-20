@@ -359,7 +359,6 @@ public:
 private:
     std::queue<QueueEntry>* aQueueNext;
     std::queue<QueueEntry>* aQueueCur;
-    std::queue<QueueEntry>* aQref;
 
     Export& aExport;
     bool bStart;

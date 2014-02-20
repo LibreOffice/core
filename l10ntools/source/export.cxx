@@ -1253,7 +1253,7 @@ void ParserQueue::Push( const QueueEntry& aEntry )
             bLastWasM = bCurrentIsM;
             // next -> current
             bCurrentIsM = bNextIsM;
-            aQref = aQueueCur;
+            std::queue<QueueEntry>* aQref = aQueueCur;
             aQueueCur = aQueueNext;
             aQueueNext = aQref;
 
@@ -1265,7 +1265,7 @@ void ParserQueue::Push( const QueueEntry& aEntry )
             bLastWasM = bCurrentIsM;
             // next -> current
             bCurrentIsM = bNextIsM;
-            aQref = aQueueCur;
+            std::queue<QueueEntry>* aQref = aQueueCur;
             aQueueCur = aQueueNext;
             aQueueNext = aQref;
         }
@@ -1278,7 +1278,7 @@ void ParserQueue::Close(){
     // next -> current
     bLastWasM = bCurrentIsM;
     bCurrentIsM = bNextIsM;
-    aQref = aQueueCur;
+    std::queue<QueueEntry>* aQref = aQueueCur;
     aQueueCur = aQueueNext;
     aQueueNext = aQref;
     bNextIsM = false;
