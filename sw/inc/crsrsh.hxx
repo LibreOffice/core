@@ -236,6 +236,8 @@ private:
         sal_uInt16 eFlags = SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
         sal_Bool bIdleEnd = sal_False );
 
+    SAL_DLLPRIVATE void MoveCrsrToNum();
+
     SAL_DLLPRIVATE void _ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing );
 
     /** Mark a certain list level of a certain list

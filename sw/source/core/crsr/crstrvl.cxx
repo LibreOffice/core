@@ -67,83 +67,55 @@
 
 using namespace ::com::sun::star;
 
+void SwCrsrShell::MoveCrsrToNum()
+{
+    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    if( ActionPend() )
+        return;
+    SET_CURR_SHELL( this );
+    // try to set cursor onto this position, at half of the char-
+    // SRectangle's height
+    Point aPt( m_pCurCrsr->GetPtPos() );
+    SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
+                                                m_pCurCrsr->GetPoint() );
+    pFrm->GetCharRect( m_aCharRect, *m_pCurCrsr->GetPoint() );
+    pFrm->Calc();
+    if( pFrm->IsVertical() )
+    {
+        aPt.setX(m_aCharRect.Center().getX());
+        aPt.setY(pFrm->Frm().Top() + m_nUpDownX);
+    }
+    else
+    {
+        aPt.setY(m_aCharRect.Center().getY());
+        aPt.setX(pFrm->Frm().Left() + m_nUpDownX);
+    }
+    pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
+    if ( !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
+    {
+        UpdateCrsr(SwCrsrShell::UPDOWN |
+                SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
+                SwCrsrShell::READONLY );
+    }
+}
+
 /// go to next/previous point on the same level
 bool SwCrsrShell::GotoNextNum()
 {
-    bool bRet = GetDoc()->GotoNextNum( *m_pCurCrsr->GetPoint() );
-    if( bRet )
-    {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
-        if( !ActionPend() )
-        {
-            SET_CURR_SHELL( this );
-            // try to set cursor onto this position, at half of the char-
-            // SRectangle's height
-            Point aPt( m_pCurCrsr->GetPtPos() );
-            SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
-                                                        m_pCurCrsr->GetPoint() );
-            pFrm->GetCharRect( m_aCharRect, *m_pCurCrsr->GetPoint() );
-            pFrm->Calc();
-            if( pFrm->IsVertical() )
-            {
-                aPt.setX(m_aCharRect.Center().getX());
-                aPt.setY(pFrm->Frm().Top() + m_nUpDownX);
-            }
-            else
-            {
-                aPt.setY(m_aCharRect.Center().getY());
-                aPt.setX(pFrm->Frm().Left() + m_nUpDownX);
-            }
-            pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
-            bRet = !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
-            if( bRet )
-                UpdateCrsr(SwCrsrShell::UPDOWN |
-                        SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                        SwCrsrShell::READONLY );
-        }
-    }
-    return bRet;
+    if (!GetDoc()->GotoNextNum( *m_pCurCrsr->GetPoint() ))
+        return false;
+    MoveCrsrToNum();
+    return true;
 }
 
 bool SwCrsrShell::GotoPrevNum()
 {
-    bool bRet = GetDoc()->GotoPrevNum( *m_pCurCrsr->GetPoint() );
-    if( bRet )
-    {
-        SwCallLink aLk( *this ); // watch Crsr-Moves
-        SwCrsrSaveState aSaveState( *m_pCurCrsr );
-        if( !ActionPend() )
-        {
-            SET_CURR_SHELL( this );
-            // try to set cursor onto this position, at half of the char-
-            // SRectangle's height
-            Point aPt( m_pCurCrsr->GetPtPos() );
-            SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->getLayoutFrm( GetLayout(), &aPt,
-                                                        m_pCurCrsr->GetPoint() );
-            pFrm->GetCharRect( m_aCharRect, *m_pCurCrsr->GetPoint() );
-            pFrm->Calc();
-            if( pFrm->IsVertical() )
-            {
-                aPt.setX(m_aCharRect.Center().getX());
-                aPt.setY(pFrm->Frm().Top() + m_nUpDownX);
-            }
-            else
-            {
-                aPt.setY(m_aCharRect.Center().getY());
-                aPt.setX(pFrm->Frm().Left() + m_nUpDownX);
-            }
-            pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
-            bRet = !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
-            if( bRet )
-                UpdateCrsr(SwCrsrShell::UPDOWN |
-                        SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                        SwCrsrShell::READONLY );
-        }
-    }
-    return bRet;
+    if (!GetDoc()->GotoPrevNum( *m_pCurCrsr->GetPoint() ))
+        return false;
+    MoveCrsrToNum();
+    return true;
 }
 
 /// jump from content to header
