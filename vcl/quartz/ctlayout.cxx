@@ -368,9 +368,8 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
 
     long nPixWidth = GetTextWidth();
     if( pDXArray ) {
-        // initialize the result array
-        for( int i = 0; i < mnCharCount; ++i)
-            pDXArray[i] = 0;
+        // prepare the sub-pixel accurate logical-width array
+        ::std::vector<float> aWidthVector( mnCharCount );
         // handle each glyph run
         CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
         const int nRunCount = CFArrayGetCount( aGlyphRuns );
@@ -388,8 +387,17 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
             CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
             for( int i = 0; i != nGlyphCount; ++i ) {
                 const int nRelIdx = aIndexVec[i];
-                pDXArray[ nRelIdx ] += lrint(aSizeVec[i].width);
+                aWidthVector[nRelIdx] += aSizeVec[i].width;
             }
+        }
+
+        // convert the sub-pixel accurate array into classic pDXArray integers
+        float fWidthSum = 0.0;
+        sal_Int32 nOldDX = 0;
+        for( int i = 0; i < mnCharCount; ++i) {
+            const sal_Int32 nNewDX = rint( fWidthSum += aWidthVector[i]);
+            pDXArray[i] = nNewDX - nOldDX;
+            nOldDX = nNewDX;
         }
     }
 
