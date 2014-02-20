@@ -891,6 +891,7 @@ void ScInterpreter::ScCount()
             }
             break;
             case svDouble    :
+                GetDouble();
                 nCount++;
                 nFuncFmtType = NUMBERFORMAT_NUMBER;
                 break;
