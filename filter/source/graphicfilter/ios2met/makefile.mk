@@ -44,6 +44,9 @@ SLOFILES =  $(SLO)$/ios2met.obj
 SHL1TARGET=     ime$(DLLPOSTFIX)
 SHL1IMPLIB=     ios2met
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS+=   $(CPPULIB)
+.ENDIF
 
 SHL1LIBS=       $(SLB)$/ios2met.lib # $(LB)$/rtftoken.lib
 

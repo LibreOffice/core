@@ -48,6 +48,9 @@ EXCEPTIONSNOOPTFILES=	$(SLO)$/itiff.obj
 SHL1TARGET=     iti$(DLLPOSTFIX)
 SHL1IMPLIB=     itiff
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS+=   $(CPPULIB)
+.ENDIF
 SHL1LIBS=       $(SLB)$/itiff.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"

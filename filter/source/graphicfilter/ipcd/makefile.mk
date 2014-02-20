@@ -44,6 +44,9 @@ SLOFILES =  $(SLO)$/ipcd.obj
 SHL1TARGET=     icd$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcd
 SHL1STDLIBS=    $(SVTOOLLIB) $(VCLLIB) $(TOOLSLIB) $(SALLIB)
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS+=   $(CPPULIB)
+.ENDIF
 SHL1LIBS=       $(SLB)$/ipcd.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
