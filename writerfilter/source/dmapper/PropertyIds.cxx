@@ -376,6 +376,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TOC_NEW_LINE: sName = "TOCNewLine"; break;
             case PROP_TOC_PARAGRAPH_OUTLINE_LEVEL   :   sName = "TOCParagraphOutlineLevel"; break;
             case PROP_CHAR_THEME_COLOR_TINT         :   sName = "CharThemeColorTint"; break;
+            case PROP_CHAR_GLOW_TEXT_EFFECT         :   sName = "CharGlowTextEffect"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

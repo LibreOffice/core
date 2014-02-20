@@ -62,6 +62,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <filter/msfilter/util.hxx>
 
+#include <TextEffectsHandler.hxx>
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
 #include <GraphicHelpers.hxx>
@@ -2339,6 +2340,24 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_tblEnd:
         m_pImpl->m_nTableDepth--;
+    break;
+    case NS_ooxml::LN_glow_glow:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
+        {
+            TextEffectsHandlerPtr pTextEffectsHandlerPtr( new TextEffectsHandler );
+            sal_Bool bEnableTempGrabBag = !pTextEffectsHandlerPtr->isInteropGrabBagEnabled();
+            if( bEnableTempGrabBag )
+                pTextEffectsHandlerPtr->enableInteropGrabBag( "glow" );
+
+            pProperties->resolve(*pTextEffectsHandlerPtr);
+
+            rContext->Insert(PROP_CHAR_GLOW_TEXT_EFFECT,  pTextEffectsHandlerPtr->getInteropGrabBag().Value, true, CHAR_GRAB_BAG);
+            if(bEnableTempGrabBag)
+                pTextEffectsHandlerPtr->disableInteropGrabBag();
+        }
+    }
     break;
     default:
         {
