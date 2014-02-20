@@ -1334,7 +1334,7 @@ AC_ARG_WITH(gnu-cp,
 
 AC_ARG_WITH(external-tar,
     AS_HELP_STRING([--with-external-tar=<TARFILE PATH>],
-        [Specify path to tarfiles manually.]),
+        [Specify path to tarfiles manually.  A relative path will be converted to an absolute one.]),
     TARFILE_LOCATION=$withval ,
 )
 
@@ -4729,6 +4729,9 @@ if test -z "$TARFILE_LOCATION"; then
         ln -s "$SRC_ROOT/external/tarballs" "$SRC_ROOT/src"
     fi
     TARFILE_LOCATION="$SRC_ROOT/external/tarballs"
+else
+    # -m: make an absolute path, regardless of if it currently exists
+    TARFILE_LOCATION="$(readlink -m '$TARFILE_LOCATION')"
 fi
 AC_SUBST(TARFILE_LOCATION)
 
