@@ -21,9 +21,9 @@
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 
-TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(false, 0));
 
-SvxCharHiddenItem::SvxCharHiddenItem( const sal_Bool bHidden, const sal_uInt16 nId ) :
+SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId ) :
     SfxBoolItem( nId, bHidden )
 {
 }
