@@ -28,7 +28,6 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,png,\
 	UnpackedTarball/png/pngrtran \
 	UnpackedTarball/png/pngrutil \
 	UnpackedTarball/png/pngset \
-	UnpackedTarball/png/pngtest \
 	UnpackedTarball/png/pngtrans \
 	UnpackedTarball/png/pngwio \
 	UnpackedTarball/png/pngwrite \
