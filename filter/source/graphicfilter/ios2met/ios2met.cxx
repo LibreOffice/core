@@ -210,16 +210,15 @@ struct OSPalette {
 };
 
 struct OSArea {
-    OSArea * pSucc;
-    sal_uInt8 nFlags;
+    OSArea    * pSucc;
+    sal_uInt8   nFlags;
     PolyPolygon aPPoly;
-    sal_Bool bClosed;
-    Color      aCol;
-    Color      aBgCol;
-    RasterOp   eMix;
-    RasterOp   eBgMix;
-    sal_Bool       bFill;
-    OSArea(){} ~OSArea(){}
+    sal_Bool    bClosed;
+    Color       aCol;
+    Color       aBgCol;
+    RasterOp    eMix;
+    RasterOp    eBgMix;
+    sal_Bool    bFill;
 };
 
 struct OSPath
@@ -227,37 +226,32 @@ struct OSPath
     OSPath*     pSucc;
     sal_uInt32  nID;
     PolyPolygon aPPoly;
-    sal_Bool        bClosed;
-    sal_Bool        bStroke;
-
-                OSPath(){}
-                ~OSPath(){}
+    sal_Bool    bClosed;
+    sal_Bool    bStroke;
 };
 
 struct OSFont {
-    OSFont * pSucc;
+    OSFont *  pSucc;
     sal_uLong nID;
-    Font aFont;
-    OSFont(){} ~OSFont(){}
+    Font     aFont;
 };
 
 struct OSBitmap {
     OSBitmap * pSucc;
-    sal_uLong nID;
-    Bitmap aBitmap;
+    sal_uLong  nID;
+    Bitmap     aBitmap;
 
     // required during reading of the bitmap:
     SvStream * pBMP; // pointer to temporary Windows-BMP file or NULL
     sal_uInt32 nWidth, nHeight;
     sal_uInt16 nBitsPerPixel;
-    sal_uLong nMapPos;
-    OSBitmap(){} ~OSBitmap(){}
+    sal_uLong  nMapPos;
 };
 
 struct OSAttr {
-    OSAttr * pSucc;
+    OSAttr *   pSucc;
     sal_uInt16 nPushOrder;
-    sal_uInt8 nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
+    sal_uInt8  nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
 
     Color    aLinCol;
     Color    aLinBgCol;
@@ -308,7 +302,6 @@ struct OSAttr {
 //  sal_uInt8     nTxtAlignHor,nTxtAlignVer;
 //  //...    aViewTransform;
 //  //...    aViewWindow;
-    OSAttr(){} ~OSAttr(){}
 };
 
 class OS2METReader {
@@ -317,16 +310,16 @@ private:
 
     long ErrorCode;
 
-    SvStream    * pOS2MET;               // the OS2MET file to be read
+    SvStream      * pOS2MET;             // the OS2MET file to be read
     VirtualDevice * pVirDev;             // here the drawing methods are being called
                                          // While doing this a recording in the GDIMetaFile
                                          // will take place.
-    sal_uLong         nOrigPos;          // initial position  in pOS2MET
-    sal_uInt16        nOrigNumberFormat; // initial number format of pOS2MET
-    Rectangle aBoundingRect;             // bounding rectangle as stored in the file
-    Rectangle aCalcBndRect;              // bounding rectangle calculated on our own
-    MapMode aGlobMapMode;                // resolution of the picture
-    sal_Bool bCoord32;
+    sal_uLong       nOrigPos;            // initial position  in pOS2MET
+    sal_uInt16      nOrigNumberFormat;   // initial number format of pOS2MET
+    Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
+    Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
+    MapMode         aGlobMapMode;        // resolution of the picture
+    sal_Bool        bCoord32;
 
     OSPalette  * pPaletteStack;
 
@@ -366,13 +359,13 @@ private:
     Color GetPaletteColor(sal_uInt32 nIndex);
 
 
-    sal_Bool        IsLineInfo();
+    sal_Bool    IsLineInfo();
     void        DrawPolyLine( const Polygon& rPolygon );
     void        DrawPolygon( const Polygon& rPolygon );
     void        DrawPolyPolygon( const PolyPolygon& rPolygon );
-    sal_uInt16      ReadBigEndianWord();
-    sal_uLong       ReadBigEndian3BytesLong();
-    sal_uLong       ReadLittleEndian3BytesLong();
+    sal_uInt16  ReadBigEndianWord();
+    sal_uLong   ReadBigEndian3BytesLong();
+    sal_uLong   ReadLittleEndian3BytesLong();
     long        ReadCoord(sal_Bool b32);
     Point       ReadPoint( const sal_Bool bAdjustBoundRect = sal_True );
     RasterOp    OS2MixToRasterOp(sal_uInt8 nMix);
