@@ -5690,6 +5690,11 @@ AC_SUBST(COMPILER_PLUGINS)
 AC_SUBST(CLANGDIR)
 AC_SUBST(CLANGBUILD)
 
+# Plugin to help linker.
+# Add something like LD_PLUGIN=/usr/lib64/LLVMgold.so to your autogen.input.
+# This makes --enable-lto build with clang work.
+AC_SUBST(LD_PLUGIN)
+
 dnl ===================================================================
 dnl Set the MinGW sys-root
 dnl ===================================================================
