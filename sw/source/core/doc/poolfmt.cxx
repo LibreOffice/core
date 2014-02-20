@@ -1284,7 +1284,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
         }
         break;
    case RES_POOLCHR_VERT_NUM:
-            aSet.Put( SvxCharRotateItem( 900, sal_False, RES_CHRATR_ROTATE ) );
+            aSet.Put( SvxCharRotateItem( 900, false, RES_CHRATR_ROTATE ) );
     break;
 
     case RES_POOLFRM_FRAME:

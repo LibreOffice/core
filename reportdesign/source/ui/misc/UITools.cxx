@@ -347,7 +347,7 @@ namespace
         _rItemSet.Put(SvxEmphasisMarkItem(static_cast<FontEmphasisMark>(_rxReportControlFormat->getCharEmphasis()),ITEMID_EMPHASISMARK));
         _rItemSet.Put(SvxCharReliefItem(static_cast<FontRelief>(_rxReportControlFormat->getCharRelief()),ITEMID_CHARRELIEF));
         _rItemSet.Put(SvxColorItem(::Color(_rxReportControlFormat->getCharColor()),ITEMID_COLOR));
-        _rItemSet.Put(SvxCharRotateItem(_rxReportControlFormat->getCharRotation(),sal_False,ITEMID_CHARROTATE));
+        _rItemSet.Put(SvxCharRotateItem(_rxReportControlFormat->getCharRotation(),false,ITEMID_CHARROTATE));
         _rItemSet.Put(SvxCharScaleWidthItem(_rxReportControlFormat->getCharScaleWidth(),ITEMID_CHARSCALE_W));
 
         SvxHorJustifyItem aHorJustifyItem(ITEMID_HORJUSTIFY);
@@ -675,7 +675,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxBlinkItem(false,ITEMID_BLINK),
         new SvxEmphasisMarkItem(EMPHASISMARK_NONE,ITEMID_EMPHASISMARK),
         new SvxTwoLinesItem(sal_True,0,0,ITEMID_TWOLINES),
-        new SvxCharRotateItem(0,sal_False,ITEMID_CHARROTATE),
+        new SvxCharRotateItem(0,false,ITEMID_CHARROTATE),
         new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
         new SvxCharReliefItem(RELIEF_NONE,ITEMID_CHARRELIEF),
         new SvxCharHiddenItem(sal_False,ITEMID_CHARHIDDEN),

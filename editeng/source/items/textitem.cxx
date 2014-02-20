@@ -139,7 +139,7 @@ TYPEINIT1_FACTORY(SvxBlinkItem, SfxBoolItem, new SvxBlinkItem(false, 0));
 TYPEINIT1_FACTORY(SvxEmphasisMarkItem, SfxUInt16Item, new SvxEmphasisMarkItem(EMPHASISMARK_NONE, 0));
 TYPEINIT1_FACTORY(SvxTwoLinesItem, SfxPoolItem, new SvxTwoLinesItem(sal_True, 0, 0, 0));
 TYPEINIT1_FACTORY(SvxScriptTypeItem, SfxUInt16Item, new SvxScriptTypeItem);
-TYPEINIT1_FACTORY(SvxCharRotateItem, SfxUInt16Item, new SvxCharRotateItem(0, sal_False, 0));
+TYPEINIT1_FACTORY(SvxCharRotateItem, SfxUInt16Item, new SvxCharRotateItem(0, false, 0));
 TYPEINIT1_FACTORY(SvxCharScaleWidthItem, SfxUInt16Item, new SvxCharScaleWidthItem(100, 0));
 TYPEINIT1_FACTORY(SvxCharReliefItem, SfxEnumItem, new SvxCharReliefItem(RELIEF_NONE, 0));
 TYPEINIT1_FACTORY(SvxRsidItem, SfxUInt32Item, new SvxRsidItem(0, 0));
@@ -3130,7 +3130,7 @@ sal_uInt16 SvxTwoLinesItem::GetVersion( sal_uInt16 nFFVer ) const
 *************************************************************************/
 
 SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
-                                       sal_Bool bFitIntoLine,
+                                       bool bFitIntoLine,
                                        const sal_uInt16 nW )
     : SfxUInt16Item( nW, nValue ), bFitToLine( bFitIntoLine )
 {

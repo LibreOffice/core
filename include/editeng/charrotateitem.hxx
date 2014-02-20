@@ -35,12 +35,12 @@
 
 class EDITENG_DLLPUBLIC SvxCharRotateItem : public SfxUInt16Item
 {
-    sal_Bool bFitToLine;
+    bool bFitToLine;
 public:
     TYPEINFO();
 
     SvxCharRotateItem( sal_uInt16 nValue /*= 0*/,
-                       sal_Bool bFitIntoLine /*= sal_False*/,
+                       bool bFitIntoLine /*= false*/,
                        const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -69,11 +69,11 @@ public:
     // our currently only degree values
     void SetTopToBotton()                   { SetValue( 2700 ); }
     void SetBottomToTop()                   { SetValue(  900 ); }
-    sal_Bool IsTopToBotton() const          { return 2700 == GetValue(); }
-    sal_Bool IsBottomToTop() const          { return  900 == GetValue(); }
+    bool IsTopToBotton() const              { return 2700 == GetValue(); }
+    bool IsBottomToTop() const              { return  900 == GetValue(); }
 
-    sal_Bool IsFitToLine() const            { return bFitToLine; }
-    void SetFitToLine( sal_Bool b )         { bFitToLine = b; }
+    bool IsFitToLine() const                { return bFitToLine; }
+    void SetFitToLine( bool b )             { bFitToLine = b; }
 };
 
 #endif
