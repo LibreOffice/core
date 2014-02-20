@@ -120,7 +120,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 #endif
                     debug_printf("osl_loadModule error %s", szError);
 
-#ifndef OSL_DEBUG_LEVEL
+#if (OSL_DEBUG_LEVEL==0) || !defined(OSL_DEBUG_LEVEL)
                     WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
                         szError, "Critical error: DosLoadModule failed",
                         0, MB_ERROR | MB_OK | MB_MOVEABLE);
