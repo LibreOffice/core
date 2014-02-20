@@ -5317,8 +5317,36 @@
   </namespace>
   <namespace name="w14" file="w14.rng">
     <start name="glow"/>
-    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-      <include href="dml-baseTypes.rng"/>
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2010/wordml" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" attributeFormDefault="qualified">
+
+      <define name="ST_PositiveCoordinate">
+        <data type="long">
+          <xs:documentation>Positive Coordinate</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">27273042316900</param>
+        </data>
+      </define>
+
+      <define name="ST_HexColorRGB">
+        <data type="hexBinary">
+          <xs:documentation>Hexadecimal Color Value</xs:documentation>
+          <param name="length">3</param>
+        </data>
+      </define>
+
+      <define name="ST_PositiveFixedPercentage">
+        <empty/>
+      </define>
+
+      <define name="ST_PositivePercentage">
+        <empty/>
+      </define>
+
+      <define name="ST_Percentage">
+        <data type="int">
+          <xs:documentation>Percentage</xs:documentation>
+        </data>
+      </define>
 
       <define name="ST_SchemeColorVal">
         <choice>
@@ -5463,8 +5491,14 @@
       <value name="accent5" tokenid="ooxml:ST_SchemeColorVal_accent5">accent5</value>
       <value name="accent6" tokenid="ooxml:ST_SchemeColorVal_accent6">accent6</value>
     </resource>
+    <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
+    <resource name="ST_HexColorRGB" resource="Hex"/>
+    <resource name="ST_PositivePercentage" resource="Value">
+      <action name="characters" action="positivePercentage"/>
+    </resource>
+    <resource name="ST_Percentage" resource="Integer" generated="yes"/>
 
-    <resource name="EG_ColorTransform" resource="Properties" tag="paragraph">
+    <resource name="EG_ColorTransform" resource="Properties" tag="character">
       <element name="tint" tokenid="ooxml:EG_ColorTransform_tint"/>
       <element name="shade" tokenid="ooxml:EG_ColorTransform_shade"/>
       <element name="alpha" tokenid="ooxml:EG_ColorTransform_alpha"/>
@@ -5476,29 +5510,29 @@
       <element name="lumOff" tokenid="ooxml:EG_ColorTransform_lumOff"/>
       <element name="lumMod" tokenid="ooxml:EG_ColorTransform_lumMod"/>
     </resource>
-    <resource name="EG_ColorChoice" resource="Properties" tag="paragraph">
+    <resource name="EG_ColorChoice" resource="Properties" tag="character">
       <element name="srgbClr" tokenid="ooxml:EG_ColorChoice_srgbClr"/>
       <element name="schemeClr" tokenid="ooxml:EG_ColorChoice_schemeClr"/>
     </resource>
-    <resource name="CT_Glow" resource="Properties" tag="paragraph">
+    <resource name="CT_Glow" resource="Properties" tag="character">
       <attribute name="rad" tokenid="ooxml:CT_Glow_rad"/>
     </resource>
-    <resource name="CT_SRgbColor" resource="Properties" tag="paragraph">
+    <resource name="CT_SRgbColor" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_SRgbColor_val"/>
     </resource>
-    <resource name="CT_SchemeColor" resource="Properties" tag="paragraph">
+    <resource name="CT_SchemeColor" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_SchemeColor_val"/>
     </resource>
-    <resource name="CT_PositiveFixedPercentage" resource="Properties" tag="paragraph">
+    <resource name="CT_PositiveFixedPercentage" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_PositiveFixedPercentage_val"/>
     </resource>
-    <resource name="CT_PositivePercentage" resource="Properties" tag="paragraph">
+    <resource name="CT_PositivePercentage" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_PositivePercentage_val"/>
     </resource>
-    <resource name="CT_Percentage" resource="Properties" tag="paragraph">
+    <resource name="CT_Percentage" resource="Properties" tag="character">
       <attribute name="val" tokenid="ooxml:CT_Percentage_val"/>
     </resource>
-    <resource name="glow" resource="Properties" tag="paragraph">
+    <resource name="glow" resource="Properties" tag="character">
       <element name="glow" tokenid="ooxml:glow_glow"/>
     </resource>
   </namespace>
