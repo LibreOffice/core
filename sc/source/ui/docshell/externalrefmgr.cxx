@@ -1300,7 +1300,7 @@ IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
 
 // ============================================================================
 
-static FormulaToken* convertToToken( ScRefCellValue& rCell )
+static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRefCellValue& rCell )
 {
     if (rCell.hasEmptyValue())
     {
@@ -1312,7 +1312,11 @@ static FormulaToken* convertToToken( ScRefCellValue& rCell )
     {
         case CELLTYPE_EDIT:
         case CELLTYPE_STRING:
-            return new formula::FormulaStringToken(rCell.getString(NULL));
+        {
+            OUString aStr = rCell.getString(pSrcDoc);
+            svl::SharedString aSS = pHostDoc->GetSharedStringPool().intern(aStr);
+            return new formula::FormulaStringToken(aSS);
+        }
         case CELLTYPE_VALUE:
             return new formula::FormulaDoubleToken(rCell.mfValue);
         case CELLTYPE_FORMULA:
@@ -1342,13 +1346,20 @@ static FormulaToken* convertToToken( ScRefCellValue& rCell )
 template<class T>
 struct ColumnBatch
 {
+    ScDocument* mpHostDoc;
+    ScDocument* mpSrcDoc;
+
     std::vector<T> maStorage;
     CellType meType1;
     CellType meType2;
     SCROW mnRowStart;
 
-    ColumnBatch(CellType eType1, CellType eType2) :
-        meType1(eType1), meType2(eType2), mnRowStart(-1) {}
+    ColumnBatch( ScDocument* pHostDoc, ScDocument* pSrcDoc, CellType eType1, CellType eType2 ) :
+        mpHostDoc(pHostDoc),
+        mpSrcDoc(pSrcDoc),
+        meType1(eType1),
+        meType2(eType2),
+        mnRowStart(-1) {}
 
     void update(ScRefCellValue& raCell, const SCCOL nCol, const SCROW nRow, ScMatrixRef& xMat)
     {
@@ -1380,7 +1391,8 @@ struct ColumnBatch
 template<>
 inline svl::SharedString ColumnBatch<svl::SharedString>::getValue(ScRefCellValue& rCell) const
 {
-    return svl::SharedString(rCell.getString(NULL));
+    OUString aStr = rCell.getString(mpSrcDoc);
+    return mpHostDoc->GetSharedStringPool().intern(aStr);
 }
 
 template<class T>
@@ -1402,7 +1414,7 @@ inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 }
 
 static ScTokenArray* convertToTokenArray(
-    ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
+    ScDocument* pHostDoc, ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1448,8 +1460,8 @@ static ScTokenArray* convertToTokenArray(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
         ScRefCellValue aCell;
-        ColumnBatch<svl::SharedString> aStringBatch(CELLTYPE_STRING, CELLTYPE_EDIT);
-        ColumnBatch<double> aDoubleBatch(CELLTYPE_VALUE, CELLTYPE_VALUE);
+        ColumnBatch<svl::SharedString> aStringBatch(pHostDoc, pSrcDoc, CELLTYPE_STRING, CELLTYPE_EDIT);
+        ColumnBatch<double> aDoubleBatch(pHostDoc, pSrcDoc, CELLTYPE_VALUE, CELLTYPE_VALUE);
 
         for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
@@ -1483,6 +1495,7 @@ static ScTokenArray* convertToTokenArray(
                         else
                         {
                             svl::SharedString aStr = pFCell->GetString();
+                            aStr = pHostDoc->GetSharedStringPool().intern(aStr.getString());
                             xMat->PutString(aStr, nC, nR);
                         }
                     }
@@ -2033,7 +2046,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
     // Get the cell from src doc, and convert it into a token.
     ScRefCellValue aCell;
     aCell.assign(*pSrcDoc, rPos);
-    ScExternalRefCache::TokenRef pToken(convertToToken(aCell));
+    ScExternalRefCache::TokenRef pToken(convertToToken(mpDoc, pSrcDoc, aCell));
 
     if (!pToken.get())
     {
@@ -2086,7 +2099,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray.reset(convertToTokenArray(pSrcDoc, aRange, aCacheData));
+    pArray.reset(convertToTokenArray(mpDoc, pSrcDoc, aRange, aCacheData));
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;
