@@ -483,9 +483,9 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     //SOT_FORMATSTR_ID_DIALOG_60
     m_TranslTable.push_back(FormatEntry("application/vnd.sun.xml.dialog", "Dialog 6.0", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_BMP
-    m_TranslTable.push_back(FormatEntry("image/bmp", "Windows Bitmap", NULL, 49657 /* ID for "image/bmp" CF_INVALID*/, CPPUTYPE_DEFAULT));
+    m_TranslTable.push_back(FormatEntry("image/bmp", "Windows Bitmap", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_PNG
-    m_TranslTable.push_back(FormatEntry("image/png", "PNG", NULL, 49656 /* ID for "image/png" CF_INVALID*/, CPPUTYPE_DEFAULT));
+    m_TranslTable.push_back(FormatEntry("image/png", "PNG", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_DUMMY3
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dummy3;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SOT_FORMATSTR_ID_DUMMY4
