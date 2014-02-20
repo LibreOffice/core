@@ -4636,13 +4636,12 @@ dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
 if test -n "$enable_werror" -a "$enable_werror" != "no"; then
-    EXTERNAL_WARNINGS_NOT_ERRORS="FALSE"
+    ENABLE_WERROR="TRUE"
     AC_MSG_RESULT([yes])
 else
-    EXTERNAL_WARNINGS_NOT_ERRORS="TRUE"
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(EXTERNAL_WARNINGS_NOT_ERRORS)
+AC_SUBST(ENABLE_WERROR)
 
 dnl Set the ASSERT_ALWAYS_ABORT variable. (Activate --enable-assert-always-abort)
 dnl ===================================================================

@@ -244,7 +244,7 @@ gb_PCHWARNINGS = \
 gb_STDLIBS := \
 	advapi32.lib \
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+ifneq ($(ENABLE_WERROR),)
 gb_CFLAGS_WERROR := -WX
 gb_CXXFLAGS_WERROR := -WX
 endif

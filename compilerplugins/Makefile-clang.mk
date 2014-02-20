@@ -32,7 +32,7 @@ CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
 
 QUIET=$(if $(VERBOSE)$(verbose),,@)
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+ifneq ($(ENABLE_WERROR),)
 CLANGWERROR := -Werror
 endif
 

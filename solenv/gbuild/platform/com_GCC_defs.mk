@@ -92,7 +92,7 @@ gb_CXXFLAGS_COMMON += -fvisibility-inlines-hidden
 endif
 endif
 
-ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+ifneq ($(ENABLE_WERROR),)
 gb_CFLAGS_WERROR := -Werror
 gb_CXXFLAGS_WERROR := -Werror
 endif
