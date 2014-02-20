@@ -1333,9 +1333,9 @@ AC_ARG_WITH(gnu-cp,
 ,)
 
 AC_ARG_WITH(external-tar,
-    AS_HELP_STRING([--with-external-tar=<TARFILE PATH>],
-        [Specify path to tarfiles manually.]),
-    TARFILE_LOCATION=$withval ,
+    AS_HELP_STRING([--with-external-tar=<TARFILE_PATH>],
+        [Specify an absolute path of where to find (and store) tarfiles.]),
+    TARFILE_LOCATION=$withval,
 )
 
 AC_ARG_WITH(referenced-git,
@@ -4729,6 +4729,13 @@ if test -z "$TARFILE_LOCATION"; then
         ln -s "$SRC_ROOT/external/tarballs" "$SRC_ROOT/src"
     fi
     TARFILE_LOCATION="$SRC_ROOT/external/tarballs"
+else
+    # It turns out that there is no simple portable method to get an absolute
+    # canonical path.  We can't assume GNU's readlink on every machine, so
+    # we can't use the convenient 'readlink -m "$TARFILE"' approach.  Alas.
+    if test "/" != "${TARFILE_LOCATION:0:1}"; then
+        AC_MSG_ERROR([--with-external-tar requires an absolute path.]);
+    fi
 fi
 AC_SUBST(TARFILE_LOCATION)
 
