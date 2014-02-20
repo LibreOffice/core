@@ -104,7 +104,6 @@ TextEffectsHandler::~TextEffectsHandler()
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 {
-    OUString sValue = aValue.getString();
     sal_Int32 nValue = aValue.getInt();
     switch(aName)
     {
