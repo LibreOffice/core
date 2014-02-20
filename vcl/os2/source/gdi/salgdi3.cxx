@@ -1541,7 +1541,7 @@ sal_Bool Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         {
             // TODO: remap notdef glyph if needed
             // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
-            sal_uInt32 aGlyphIdx = pGlyphIds[i] & GF_IDXMASK;
+            sal_uInt32 aGlyphId = pGlyphIds[i] & GF_IDXMASK;
             if( pGlyphIds[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
                 aGlyphId = pImplFontCharMap->GetGlyphIndex( aGlyphId );
             if( (pGlyphIds[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
