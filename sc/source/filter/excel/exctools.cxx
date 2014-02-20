@@ -63,6 +63,7 @@ RootData::RootData( void )
 
     pIR = NULL;
     pER = NULL;
+    pColRowBuff = NULL;
 }
 
 RootData::~RootData()
