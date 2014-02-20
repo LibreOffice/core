@@ -1446,27 +1446,15 @@ DummyChart::~DummyChart()
 void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
     throw( beans::PropertyVetoException, uno::RuntimeException )
 {
-#if 0
-    DummyXShape::setSize(aSize);
-    mpWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
-    pWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
-#else
-
-    SAL_WARN("chart2.opengl", "DummyChart::setSize()---aSize.Width = " << aSize.Width << ", aSize.Height = " << aSize.Height);
-//    DummyXShape::setSize(aSize);
-//    mpWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
-//    pWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
+    SAL_INFO("chart2.opengl", "DummyChart::setSize()---aSize.Width = " << aSize.Width << ", aSize.Height = " << aSize.Height);
     int width = aSize.Width / OPENGL_SCALE_VALUE;
     int height = aSize.Height / OPENGL_SCALE_VALUE;
-    width = (width + 3) & ~3;
-    height = (height + 3) & ~3;
     mpWindow->SetSizePixel(Size(width, height));
     pWindow->SetSizePixel(Size(width, height));
     DummyXShape::setSize(awt::Size(0,0));
     m_GLRender.SetWidth(width);
     m_GLRender.SetHeight(height);
-    SAL_WARN("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);
-#endif
+    SAL_INFO("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);
 }
 
 void DummyChart::render()
