@@ -1328,7 +1328,9 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     // missing map entry for property <PageToogle>
                     { OUString(UNO_NAME_PAGE_TOGGLE), RES_HORI_ORIENT,      cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
                     { OUString(UNO_NAME_RELATIVE_HEIGHT), RES_FRM_SIZE,     cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE, MID_FRMSIZE_REL_HEIGHT },
+                    { OUString(UNO_NAME_RELATIVE_HEIGHT_RELATION), RES_FRM_SIZE, cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_FRMSIZE_REL_HEIGHT_RELATION },
                     { OUString(UNO_NAME_RELATIVE_WIDTH), RES_FRM_SIZE,      cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH  },
+                    { OUString(UNO_NAME_RELATIVE_WIDTH_RELATION), RES_FRM_SIZE, cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH_RELATION },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
