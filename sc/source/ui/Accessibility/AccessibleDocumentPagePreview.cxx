@@ -527,7 +527,7 @@ private:
 };
 
 ScIAccessibleViewForwarder::ScIAccessibleViewForwarder()
-    : mbValid(false)
+    : mpViewShell(NULL), mpAccDoc(NULL), mbValid(false)
 {
 }
 
