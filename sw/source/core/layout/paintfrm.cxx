@@ -2596,7 +2596,8 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             aPaintStart.Y() -= nTwipYCorr;
             aPaintEnd.Y()   -= nTwipYCorr;
 
-            if (aStyles[0].Prim() <= 0 && aStyles[0].Secn() <= 0)
+            if (::rtl::math::approxEqual(aStyles[0].Prim(), 0.0) &&
+                ::rtl::math::approxEqual(aStyles[0].Secn(), 0.0))
             {
                 continue; // fdo#75118 do not paint zero-width lines
             }
