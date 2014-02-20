@@ -283,7 +283,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
 {
     EESpellState eState = EE_SPELL_OK;
     if( FindNextConversionCell() )
-        eState = rEditView.StartSpeller( static_cast< sal_Bool >( sal_True ) );
+        eState = rEditView.StartSpeller( true );
 
     OSL_ENSURE( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
     if( eState == EE_SPELL_NOLANGUAGE )
@@ -392,7 +392,7 @@ void ScTextConversionEngine::ConvertAll( EditView& rEditView )
     {
         rEditView.StartTextConversion(
             maConvParam.GetSourceLang(), maConvParam.GetTargetLang(), maConvParam.GetTargetFont(),
-            maConvParam.GetOptions(), maConvParam.IsInteractive(), sal_True );
+            maConvParam.GetOptions(), maConvParam.IsInteractive(), true );
         // #i34769# restore initial cursor position
         RestoreCursorPos();
     }

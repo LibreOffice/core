@@ -1814,7 +1814,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
     {
         SdrView *pSdrView = rSh.GetDrawView();
         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), sal_False );
+        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), false );
     }
     else
     {

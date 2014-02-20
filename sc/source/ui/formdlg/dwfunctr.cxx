@@ -907,7 +907,7 @@ void ScFunctionDockWin::DoEnter()
                 if(nArgs>0)
                 {
                     pHdl->InsertFunction(aString);
-                    pEdView->InsertText(aArgStr,sal_True);
+                    pEdView->InsertText(aArgStr,true);
                     ESelection  aESel=pEdView->GetSelection();
                     aESel.nEndPos = aESel.nStartPos + aFirstArgStr.getLength();
                     pEdView->SetSelection(aESel);

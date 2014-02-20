@@ -98,21 +98,21 @@ public:
     void            Invalidate();
     Pair            Scroll( long nHorzScroll, long nVertScroll, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
-    void            ShowCursor( sal_Bool bGotoCursor = sal_True, sal_Bool bForceVisCursor = sal_True );
+    void            ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true );
     void            HideCursor();
 
     void            SetSelectionMode( EESelectionMode eMode );
 
-    void            SetReadOnly( sal_Bool bReadOnly );
-    sal_Bool            IsReadOnly() const;
+    void            SetReadOnly( bool bReadOnly );
+    bool            IsReadOnly() const;
 
-    sal_Bool            HasSelection() const;
+    bool            HasSelection() const;
     ESelection      GetSelection() const;
     void            SetSelection( const ESelection& rNewSel );
-    sal_Bool            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    bool            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
 
-    sal_Bool            IsInsertMode() const;
-    void            SetInsertMode( sal_Bool bInsert );
+    bool            IsInsertMode() const;
+    void            SetInsertMode( bool bInsert );
 
     void            ReplaceSelected( const OUString& rStr );
     OUString        GetSelected();
@@ -134,13 +134,13 @@ public:
 
     Cursor*         GetCursor() const;
 
-    void            InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
+    void            InsertText( const OUString& rNew, bool bSelect = false );
 
-    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
+    bool            PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin = NULL );
 
-    sal_Bool            MouseButtonUp( const MouseEvent& rMouseEvent );
-    sal_Bool            MouseButtonDown( const MouseEvent& rMouseEvent );
-    sal_Bool            MouseMove( const MouseEvent& rMouseEvent );
+    bool            MouseButtonUp( const MouseEvent& rMouseEvent );
+    bool            MouseButtonDown( const MouseEvent& rMouseEvent );
+    bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
     void            Cut();
@@ -159,11 +159,11 @@ public:
     const SfxItemSet&   GetEmptyItemSet();
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
-    void                RemoveAttribs( sal_Bool bRemoveParaAttribs = sal_False, sal_uInt16 nWhich = 0 );
+    void                RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0 );
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
-    void                RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs = sal_False );
+    void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs = false );
 
-    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -173,12 +173,12 @@ public:
 
     EditTextObject* CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );
-    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, sal_Bool bUseSpecial );
+    void            InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > GetTransferable();
 
     // An EditView, so that when TRUE the update will be free from flickering:
-    void            SetEditEngineUpdateMode( sal_Bool bUpdate );
+    void            SetEditEngineUpdateMode( bool bUpdate );
     void            ForceUpdate();
 
     const SfxStyleSheet* GetStyleSheet() const;
@@ -189,20 +189,20 @@ public:
 
     void            CompleteAutoCorrect( Window* pFrameWin = NULL );
 
-    EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
+    EESpellState    StartSpeller( bool bMultipleDoc = false );
     EESpellState    StartThesaurus();
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
-    sal_Bool        HasConvertibleTextPortion( LanguageType nLang );
+    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    bool            HasConvertibleTextPortion( LanguageType nLang );
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
-    sal_Bool        IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
-    sal_Bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
-    sal_Bool        IsShapeParaFocusable();
-    sal_Bool        WrongSpelledBreakPara(sal_Int32 nPara, sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex);
+    bool            IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
+    bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
+    bool            IsShapeParaFocusable();
+    bool            WrongSpelledBreakPara(sal_Int32 nPara, sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex);
     void            ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
     void                InsertField( const SvxFieldItem& rFld );
@@ -213,12 +213,12 @@ public:
     const SvxFieldItem* GetFieldAtSelection() const;
 
     void            SetInvalidateMore( sal_uInt16 nPixel );
-    sal_uInt16          GetInvalidateMore() const;
+    sal_uInt16      GetInvalidateMore() const;
 
     // grows or shrinks the font height for the current selection
     void            ChangeFontSize( bool bGrow, const FontList* pList );
 
-    static bool ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList );
+    static bool     ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList );
 
     OUString        GetSurroundingText() const;
     Selection       GetSurroundingTextSelection() const;

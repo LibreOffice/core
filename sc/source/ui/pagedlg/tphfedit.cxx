@@ -249,7 +249,7 @@ void ScEditWindow::Paint( const Rectangle& rRect )
     pEdView->Paint( rRect );
 
     if( HasFocus() )
-        pEdView->ShowCursor(sal_True,sal_True);
+        pEdView->ShowCursor(true,true);
 }
 
 // -----------------------------------------------------------------------
@@ -310,7 +310,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 
 void ScEditWindow::GetFocus()
 {
-    pEdView->ShowCursor(sal_True,sal_True);
+    pEdView->ShowCursor(true,true);
     pActiveEdWnd = this;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;

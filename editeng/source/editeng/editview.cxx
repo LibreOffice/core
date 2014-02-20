@@ -193,12 +193,12 @@ void EditView::Invalidate()
     }
 }
 
-void EditView::SetReadOnly( sal_Bool bReadOnly )
+void EditView::SetReadOnly( bool bReadOnly )
 {
     pImpEditView->bReadOnly = bReadOnly;
 }
 
-sal_Bool EditView::IsReadOnly() const
+bool EditView::IsReadOnly() const
 {
     return pImpEditView->bReadOnly;
 }
@@ -236,7 +236,7 @@ void EditView::SetSelection( const ESelection& rESel )
     pImpEditView->DrawSelection();
     pImpEditView->SetEditSelection( aNewSelection );
     pImpEditView->DrawSelection();
-    sal_Bool bGotoCursor = pImpEditView->DoAutoScroll();
+    bool bGotoCursor = pImpEditView->DoAutoScroll();
     ShowCursor( bGotoCursor );
 }
 
@@ -253,7 +253,7 @@ ESelection EditView::GetSelection() const
     return aSelection;
 }
 
-sal_Bool EditView::HasSelection() const
+bool EditView::HasSelection() const
 {
     return pImpEditView->HasSelection();
 }
@@ -331,7 +331,7 @@ Cursor* EditView::GetCursor() const
     return pImpEditView->pCursor;
 }
 
-void EditView::InsertText( const OUString& rStr, sal_Bool bSelect )
+void EditView::InsertText( const OUString& rStr, bool bSelect )
 {
 
     EditEngine* pEE = PIMPE;
@@ -360,22 +360,22 @@ void EditView::InsertText( const OUString& rStr, sal_Bool bSelect )
     pEE->FormatAndUpdate( this );
 }
 
-sal_Bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
+bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, Window* pFrameWin )
 {
     return pImpEditView->PostKeyEvent( rKeyEvent, pFrameWin );
 }
 
-sal_Bool EditView::MouseButtonUp( const MouseEvent& rMouseEvent )
+bool EditView::MouseButtonUp( const MouseEvent& rMouseEvent )
 {
     return pImpEditView->MouseButtonUp( rMouseEvent );
 }
 
-sal_Bool EditView::MouseButtonDown( const MouseEvent& rMouseEvent )
+bool EditView::MouseButtonDown( const MouseEvent& rMouseEvent )
 {
     return pImpEditView->MouseButtonDown( rMouseEvent );
 }
 
-sal_Bool EditView::MouseMove( const MouseEvent& rMouseEvent )
+bool EditView::MouseMove( const MouseEvent& rMouseEvent )
 {
     return pImpEditView->MouseMove( rMouseEvent );
 }
@@ -385,14 +385,14 @@ void EditView::Command( const CommandEvent& rCEvt )
     pImpEditView->Command( rCEvt );
 }
 
-void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
+void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 {
 
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
         // The control word is more important:
         if ( !pImpEditView->DoAutoScroll() )
-            bGotoCursor = sal_False;
+            bGotoCursor = false;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
     }
 }
@@ -421,7 +421,7 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
     PIMPE->FormatAndUpdate( this );
 }
 
-void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
+void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
 {
 
     pImpEditView->DrawSelection();
@@ -441,7 +441,7 @@ void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
     PIMPE->FormatAndUpdate( this );
 }
 
-void EditView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void EditView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
 
     pImpEditView->DrawSelection();
@@ -475,7 +475,7 @@ void EditView::Redo()
     PIMPE->Redo( this );
 }
 
-sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
@@ -490,7 +490,7 @@ sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextForm
     }
 
     pImpEditView->SetEditSelection( aNewSel );
-    sal_Bool bGotoCursor = pImpEditView->DoAutoScroll();
+    bool bGotoCursor = pImpEditView->DoAutoScroll();
     ShowCursor( bGotoCursor );
 
     return rInput.GetError();
@@ -600,7 +600,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     PIMPE->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, sal_Bool bUseSpecial )
+void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial )
 {
     PIMPE->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();
@@ -613,7 +613,7 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
     PIMPE->FormatAndUpdate( this );
 }
 
-void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
+void EditView::SetEditEngineUpdateMode( bool bUpdate )
 {
     PIMPEE->SetUpdateMode( bUpdate, this );
 }
@@ -646,12 +646,12 @@ const SfxStyleSheet* EditView::GetStyleSheet() const
     return const_cast< EditView* >( this )->GetStyleSheet();
 }
 
-sal_Bool EditView::IsInsertMode() const
+bool EditView::IsInsertMode() const
 {
     return pImpEditView->IsInsertMode();
 }
 
-void EditView::SetInsertMode( sal_Bool bInsert )
+void EditView::SetInsertMode( bool bInsert )
 {
     pImpEditView->SetInsertMode( bInsert );
 }
@@ -692,7 +692,7 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
     }
 }
 
-EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
+EESpellState EditView::StartSpeller( bool bMultipleDoc )
 {
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
@@ -711,7 +711,7 @@ EESpellState EditView::StartThesaurus()
 
 void EditView::StartTextConversion(
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
-        sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
+        sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
     PIMPEE->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
 }
@@ -722,9 +722,9 @@ sal_Int32 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
     return PIMPEE->StartSearchAndReplace( this, rSearchItem );
 }
 
-sal_Bool EditView::IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong )
+bool EditView::IsCursorAtWrongSpelledWord( bool bMarkIfWrong )
 {
-    sal_Bool bIsWrong = sal_False;
+    bool bIsWrong = false;
     if ( !HasSelection() )
     {
         EditPaM aPaM = pImpEditView->GetEditSelection().Max();
@@ -733,7 +733,7 @@ sal_Bool EditView::IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong )
     return bIsWrong;
 }
 
-sal_Bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong )
+bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong )
 {
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
     aPos = pImpEditView->GetDocPos( aPos );
@@ -1021,15 +1021,15 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     }
 }
 
-sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
+bool EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     EditSelection aCurSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
     aCurSel = PIMPE->SelectWord(aCurSel.Max(), nWordType);
     pImpEditView->SetEditSelection( aCurSel );
     pImpEditView->DrawSelection();
-    ShowCursor( sal_True, sal_False );
-    return aCurSel.HasRange() ? sal_True : sal_False;
+    ShowCursor( true, false );
+    return aCurSel.HasRange();
 }
 
 void EditView::InsertField( const SvxFieldItem& rFld )

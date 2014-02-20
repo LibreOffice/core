@@ -1490,7 +1490,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
         aCurSel.Min() = aCurSel.Max();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
-        pEditView->ShowCursor( sal_True, sal_False );
+        pEditView->ShowCursor( true, false );
     }
     EESpellState eState = pSpellInfo->eState;
     delete pSpellInfo;
@@ -1615,7 +1615,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
         aCurSel.Min() = aCurSel.Max();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
-        pEditView->ShowCursor( sal_True, sal_False );
+        pEditView->ShowCursor( true, false );
     }
     delete pConvInfo;
     pConvInfo = 0;
@@ -1817,7 +1817,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     pEditView->pImpEditView->DrawSelection();
     pEditView->pImpEditView->SetEditSelection( aCurSel );
     pEditView->pImpEditView->DrawSelection();
-    pEditView->ShowCursor( sal_True, sal_False );
+    pEditView->ShowCursor( true, false );
 
     rConvTxt = aRes;
     if ( !rConvTxt.isEmpty() )
@@ -1887,7 +1887,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     pEditView->pImpEditView->DrawSelection();
     pEditView->pImpEditView->SetEditSelection( aCurSel );
     pEditView->pImpEditView->DrawSelection();
-    pEditView->ShowCursor( sal_True, sal_False );
+    pEditView->ShowCursor( true, false );
     return xSpellAlt;
 }
 
@@ -2490,7 +2490,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
         pEditView->InsertText( pDlg->GetWord() );
-        pEditView->ShowCursor( sal_True, sal_False );
+        pEditView->ShowCursor( true, false );
     }
 
     delete pDlg;
@@ -2555,7 +2555,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
         else
         {
             pEditView->pImpEditView->DrawSelection();
-            pEditView->ShowCursor( sal_True, sal_False );
+            pEditView->ShowCursor( true, false );
         }
     }
     return nFound;
@@ -2582,14 +2582,14 @@ sal_Bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEdi
     {
         // First, set the minimum, so the whole word is in the visible range.
         pEditView->pImpEditView->SetEditSelection( aFoundSel.Min() );
-        pEditView->ShowCursor( sal_True, sal_False );
+        pEditView->ShowCursor( true, false );
         pEditView->pImpEditView->SetEditSelection( aFoundSel );
     }
     else
         pEditView->pImpEditView->SetEditSelection( aSel.Max() );
 
     pEditView->pImpEditView->DrawSelection();
-    pEditView->ShowCursor( sal_True, sal_False );
+    pEditView->ShowCursor( true, false );
     return bFound;
 }
 

@@ -551,7 +551,7 @@ void ScInputWindow::Select()
                     pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
                     pScMod->InputChanged(pView);
                     SetOkCancelMode();
-                    pView->SetEditEngineUpdateMode(sal_True);
+                    pView->SetEditEngineUpdateMode(true);
                 }
             }
             break;
@@ -636,7 +636,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
             if ( bDoEdit )
                 SetOkCancelMode();          // nicht, wenn gleich hinterher Enter/Cancel
 
-            pView->SetEditEngineUpdateMode(sal_True);
+            pView->SetEditEngineUpdateMode(true);
         }
     }
 }
@@ -1569,7 +1569,7 @@ void ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
 
     if (pEditView)
     {
-        pEditView->SetEditEngineUpdateMode( sal_True );
+        pEditView->SetEditEngineUpdateMode( true );
         pEditView->MouseButtonDown( rMEvt );
     }
 }

@@ -431,7 +431,7 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
             pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
 
             if ( pImpEditEngine->GetUpdateMode() && pImpEditEngine->GetActiveView() )
-                pImpEditEngine->pActiveView->ShowCursor( sal_False, sal_False );
+                pImpEditEngine->pActiveView->ShowCursor( false, false );
         }
     }
 }
@@ -1448,7 +1448,7 @@ void EditEngine::SetUpdateMode( sal_Bool bUpdate )
 {
     pImpEditEngine->SetUpdateMode( bUpdate );
     if ( pImpEditEngine->pActiveView )
-        pImpEditEngine->pActiveView->ShowCursor( sal_False, sal_False );
+        pImpEditEngine->pActiveView->ShowCursor( false, false );
 }
 
 sal_Bool EditEngine::GetUpdateMode() const

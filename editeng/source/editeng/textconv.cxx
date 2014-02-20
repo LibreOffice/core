@@ -548,7 +548,7 @@ void TextConvWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttri
         OUString aSelTxt1( m_pEditView->GetSelected() );
 #endif
         // replace old text and select new text
-        m_pEditView->InsertText( rNewText, sal_True );
+        m_pEditView->InsertText( rNewText, true );
 #ifdef DEBUG
         OUString aSelTxt2( m_pEditView->GetSelected() );
 #endif

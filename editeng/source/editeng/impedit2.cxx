@@ -324,7 +324,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
             pView->pImpEditView->DrawSelection();
             pView->pImpEditView->SetEditSelection( aNewSelection );
             pView->pImpEditView->DrawSelection();
-            pView->ShowCursor( sal_True, sal_True );
+            pView->ShowCursor( true, true );
         }
         else if ( rMEvt.GetClicks() == 3 )
         {
@@ -337,7 +337,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
             pView->pImpEditView->DrawSelection();
             pView->pImpEditView->SetEditSelection( aNewSelection );
             pView->pImpEditView->DrawSelection();
-            pView->ShowCursor( sal_True, sal_True );
+            pView->ShowCursor( true, true );
         }
     }
     return sal_True;

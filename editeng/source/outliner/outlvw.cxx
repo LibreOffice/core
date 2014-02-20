@@ -211,7 +211,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                                     ESelection aTmpSel(nTemp,0,nTemp,0);
                                     pEditView->SetSelection( aTmpSel );
                                 }
-                                pEditView->ShowCursor( sal_True, sal_True );
+                                pEditView->ShowCursor( true, true );
                                 pOwner->UndoActionEnd( OLUNDO_INSERT );
                                 bKeyProcessed = sal_True;
                             }
@@ -229,7 +229,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                         // Position the cursor
                         ESelection aTmpSel(nTemp,0,nTemp,0);
                         pEditView->SetSelection( aTmpSel );
-                        pEditView->ShowCursor( sal_True, sal_True );
+                        pEditView->ShowCursor( true, true );
                         pOwner->UndoActionEnd( OLUNDO_INSERT );
                         bKeyProcessed = sal_True;
                     }
@@ -564,7 +564,7 @@ void OutlinerView::Indent( short nDiff )
 
     if ( bUpdate )
     {
-        pEditView->SetEditEngineUpdateMode( sal_True );
+        pEditView->SetEditEngineUpdateMode( true );
         pEditView->ShowCursor();
     }
 
@@ -660,11 +660,11 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
     sal_uInt16 nSize = ImpInitPaste( nStart );
     pEditView->InsertText( rParaObj.GetTextObject() );
     ImpPasted( nStart, nParaCount, nSize);
-    pEditView->SetEditEngineUpdateMode( sal_True );
+    pEditView->SetEditEngineUpdateMode( true );
 
     pOwner->UndoActionEnd( OLUNDO_INSERT );
 
-    pEditView->ShowCursor( sal_True, sal_True );
+    pEditView->ShowCursor( true, true );
 }
 
 
@@ -698,9 +698,9 @@ void OutlinerView::PasteSpecial()
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
         }
 
-        pEditView->SetEditEngineUpdateMode( sal_True );
+        pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
-        pEditView->ShowCursor( sal_True, sal_True );
+        pEditView->ShowCursor( true, true );
     }
 }
 
@@ -1509,7 +1509,7 @@ void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const OUStri
 
     // replace word ...
     rEditView.InsertText( rSynonmText );
-    rEditView.ShowCursor( sal_True, sal_False );
+    rEditView.ShowCursor( true, false );
 }
 
 
