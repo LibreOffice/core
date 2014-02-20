@@ -1401,8 +1401,8 @@ AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
         [Specify package format(s) for LibreOffice installation sets. The
          implicit --without-package-format leads to no installation sets being
-         generated. Possible values: aix, archive, bsd, deb, dmg, inst,
-         installed, msi, native, osx, pkg, portable, rpm, setld, and tardist.
+         generated. Possible values: aix, archive, bsd, deb, dmg,
+         installed, msi, native, osx, pkg, portable, rpm, and setld.
          Example: --with-package-format='deb rpm']),
 ,)
 
@@ -4451,14 +4451,13 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
+        aix | bsd | deb | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
 aix - AIX software distribution
 bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 deb - Debian software distribution
-inst or tardist - IRIX software distribution
 osx - MacOS X software distribution
 pkg - Solaris software distribution
 rpm - RedHat software distribution
@@ -7257,7 +7256,7 @@ if test "$enable_epm" = "yes"; then
 else
     for i in $PKGFORMAT; do
         case "$i" in
-        aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable)
+        aix | bsd | deb | osx | pkg | rpm | setld | native | portable)
             AC_MSG_ERROR(
                 [--with-package-format='$PKGFORMAT' requires --enable-epm])
             ;;
