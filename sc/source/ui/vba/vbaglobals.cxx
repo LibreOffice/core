@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
 
 #include <sal/macros.h>
@@ -288,14 +287,12 @@ ScVbaGlobals::getServiceNames()
         return aServiceNames;
 }
 
-namespace globals
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+ScVbaGlobals_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaGlobals, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaGlobals",
-    "ooo.vba.excel.Globals" );
+    return cppu::acquire(new ScVbaGlobals(arguments, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

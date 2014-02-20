@@ -26,7 +26,8 @@
       constructor="ScVbaEventsHelper_get_implementation">
     <service name="com.sun.star.script.vba.VBASpreadsheetEventProcessor"/>
   </implementation>
-  <implementation name="ScVbaGlobals">
+  <implementation name="ScVbaGlobals"
+      constructor="ScVbaGlobals_get_implementation">
     <service name="ooo.vba.excel.Globals"/>
   </implementation>
   <implementation name="ScVbaHyperlink">

@@ -46,10 +46,6 @@ namespace window
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-namespace globals
-{
-extern sdecl::ServiceDecl const serviceDecl;
-}
 namespace hyperlink
 {
 extern sdecl::ServiceDecl const serviceDecl;
@@ -66,7 +62,7 @@ extern "C"
         registry::XRegistryKey * pRegistryKey )
     {
     void* pRet =  component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
+            pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
     return pRet;
     }
 }
