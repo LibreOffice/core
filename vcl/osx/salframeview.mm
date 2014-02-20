@@ -23,6 +23,7 @@
 #include "tools/helpers.hxx"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
+#include <vcl/settings.hxx>
 
 #include "osx/salinst.h"
 #include "quartz/salgdi.h"

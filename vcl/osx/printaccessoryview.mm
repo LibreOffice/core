@@ -26,6 +26,7 @@
 #include "vcl/virdev.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"
+#include <vcl/settings.hxx>
 
 #include "osx/printview.h"
 #include "osx/salinst.h"

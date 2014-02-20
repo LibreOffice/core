@@ -31,6 +31,8 @@
 #include "quartz/utils.h"
 #include "ctfonts.hxx"
 
+#include <vcl/settings.hxx>
+
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
 
