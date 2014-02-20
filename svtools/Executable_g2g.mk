@@ -42,6 +42,11 @@ $(eval $(call gb_Executable_add_linked_libs,g2g,\
     vos3 \
     $(gb_STDLIBS) \
 ))
+ifeq ($(OS),OS2)
+$(eval $(call gb_Executable_add_linked_libs,g2g,\
+    cppu \
+))
+endif
 
 ifneq ($(USE_SYSTEM_STL),YES)
 ifeq ($(PRODUCT),)
