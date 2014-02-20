@@ -116,6 +116,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
     :m_bBookmarkSelection( sal_False )
+    ,m_pStream(NULL)
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
