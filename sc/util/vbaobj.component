@@ -22,7 +22,8 @@
   <implementation name="ScVbaApplication">
     <service name="ooo.vba.excel.Application"/>
   </implementation>
-  <implementation name="ScVbaEventsHelper">
+  <implementation name="ScVbaEventsHelper"
+      constructor="ScVbaEventsHelper_get_implementation">
     <service name="com.sun.star.script.vba.VBASpreadsheetEventProcessor"/>
   </implementation>
   <implementation name="ScVbaGlobals">
@@ -31,7 +32,8 @@
   <implementation name="ScVbaHyperlink">
     <service name="ooo.vba.excel.Hyperlink"/>
   </implementation>
-  <implementation name="ScVbaTextFrame">
+  <implementation name="ScVbaTextFrame"
+      constructor="ScVbaTextFrame_get_implementation">
     <service name="ooo.vba.excel.TextFrame"/>
   </implementation>
   <implementation name="ScVbaWindow">

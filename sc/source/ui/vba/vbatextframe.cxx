@@ -58,14 +58,12 @@ ScVbaTextFrame::getServiceNames()
     return aServiceNames;
 }
 
-namespace textframe
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+ScVbaTextFrame_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::vba_service_class_<ScVbaTextFrame, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaTextFrame",
-    "ooo.vba.excel.TextFrame" );
+    return cppu::acquire(new ScVbaTextFrame(arguments, context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

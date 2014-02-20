@@ -35,7 +35,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/eventcfg.hxx>
-#include <vbahelper/helperdecl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -898,18 +897,12 @@ uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< uno::Any >& rArgs
     return uno::Any( xWindow );
 }
 
-// ============================================================================
-
-namespace vbaeventshelper
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+ScVbaEventsHelper_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &arguments)
 {
-namespace sdecl = comphelper::service_decl;
-sdecl::class_<ScVbaEventsHelper, sdecl::with_args<true> > serviceImpl;
-extern sdecl::ServiceDecl const serviceDecl(
-    serviceImpl,
-    "ScVbaEventsHelper",
-    "com.sun.star.script.vba.VBASpreadsheetEventProcessor" );
+    return cppu::acquire(new ScVbaEventsHelper(arguments, context));
 }
-
-// ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
