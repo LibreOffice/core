@@ -249,7 +249,7 @@ struct ParagraphInfos
         , nFirstLineHeight( 0 )
         , nFirstLineTextHeight ( 0 )
         , nFirstLineMaxAscent( 0 )
-        , bValid( 0 )
+        , bValid( false )
         {}
     sal_uInt16  nParaHeight;
     sal_uInt16  nLines;
@@ -261,7 +261,7 @@ struct ParagraphInfos
     sal_uInt16  nFirstLineTextHeight;
     sal_uInt16  nFirstLineMaxAscent;
 
-    sal_Bool    bValid; // A query during formatting is not valid!
+    bool        bValid; // A query during formatting is not valid!
 };
 
 struct EECharAttrib
