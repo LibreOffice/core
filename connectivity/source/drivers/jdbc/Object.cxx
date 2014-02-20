@@ -30,7 +30,7 @@
 
 #include <comphelper/logging.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -172,14 +172,14 @@ namespace
 
         if ( _pEnvironment->IsInstanceOf( jThrow, java_sql_SQLException_BASE::st_getMyClass() ) )
         {
-            ::std::auto_ptr< java_sql_SQLException_BASE > pException( new java_sql_SQLException_BASE( _pEnvironment, jThrow ) );
+            boost::scoped_ptr< java_sql_SQLException_BASE > pException( new java_sql_SQLException_BASE( _pEnvironment, jThrow ) );
             _out_rException = SQLException( pException->getMessage(), _rxContext,
                 pException->getSQLState(), pException->getErrorCode(), Any() );
             return true;
         }
         else if ( _pEnvironment->IsInstanceOf( jThrow, java_lang_Throwable::st_getMyClass() ) )
         {
-            ::std::auto_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
+            boost::scoped_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
 #if OSL_DEBUG_LEVEL > 0
             pThrow->printStackTrace();
 #endif

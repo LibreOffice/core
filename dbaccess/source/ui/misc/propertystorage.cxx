@@ -23,7 +23,8 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 
-#include <memory>
+#include <cassert>
+#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {
@@ -61,7 +62,8 @@ namespace dbaui
                 // TODO: one could throw an IllegalArgumentException here - finally, this method
                 // is (to be) used from within an XPropertySet::setPropertyValue implementation,
                 // where this would be the appropriate reaction on wrong value types
-                ::std::auto_ptr< ITEMTYPE > pClone( dynamic_cast< ITEMTYPE* >( pTypedItem->Clone() ) );
+                boost::scoped_ptr< ITEMTYPE > pClone( dynamic_cast< ITEMTYPE* >( pTypedItem->Clone() ) );
+                assert(pClone.get());
                 pClone->SetValue( aValue );
                 _rSet.Put( *pClone );
                 return true;

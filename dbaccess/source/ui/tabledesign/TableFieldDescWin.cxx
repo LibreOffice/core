@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include "dbaccess_helpid.hrc"
 #include "moduledbu.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25
@@ -70,21 +70,15 @@ OTableFieldDescWin::~OTableFieldDescWin()
     m_pHeader->Hide();
 
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pGenPage);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pGenPage);
         m_pGenPage = NULL;
     }
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pHeader);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pHeader);
         m_pHeader = NULL;
     }
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pHelpBar);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pHelpBar);
         m_pHelpBar = NULL;
     }
 }

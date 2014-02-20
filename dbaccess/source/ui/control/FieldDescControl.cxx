@@ -50,7 +50,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/string.hxx>
 #include "UITools.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include "dbu_control.hrc"
 #include "dbu_tbl.hrc"
 #include <osl/diagnose.h>
@@ -212,15 +212,11 @@ OFieldDescControl::~OFieldDescControl()
 {
 
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pVertScroll);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pVertScroll);
         m_pVertScroll    = NULL;
     }
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<Window> aTemp(m_pHorzScroll);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        boost::scoped_ptr<Window> aTemp(m_pHorzScroll);
         m_pHorzScroll    = NULL;
     }
     if ( m_bAdded )

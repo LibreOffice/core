@@ -21,7 +21,7 @@
 #include <tools/debug.hxx>
 #include <svtools/svmedit.hxx>
 #include "dbaccess_helpid.hrc"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
 // class OTableDesignHelpBar
@@ -37,7 +37,7 @@ OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
 
 OTableDesignHelpBar::~OTableDesignHelpBar()
 {
-    ::std::auto_ptr<Window> aTemp(m_pTextWin);
+    boost::scoped_ptr<Window> aTemp(m_pTextWin);
     m_pTextWin = NULL;
 }
 
