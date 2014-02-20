@@ -551,24 +551,6 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_hashCode(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_hashCode_WithLength(
         const sal_Unicode * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
-/** Return a hash code (64bit) for a string.
-
-    It is not allowed to store the hash code persistently, because later
-    versions could return other hash codes.
-
-    @param str
-    a string.  Need not be null-terminated, but must be at least as long as
-    the specified len.
-
-    @param len
-    the length of the string.
-
-    @return
-    a hash code for the given string.
- */
-SAL_DLLPUBLIC sal_uInt64 SAL_CALL rtl_ustr_hashCode64_WithLength(
-        const sal_Unicode * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
-
 /** Search for the first occurrence of a character within a string.
 
     The string must be null-terminated.

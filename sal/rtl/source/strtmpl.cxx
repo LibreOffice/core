@@ -272,72 +272,18 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode )( const IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 
-sal_uInt64 SAL_CALL IMPL_RTL_STRNAME( hashCode64_WithLength )( const IMPL_RTL_STRCODE* pStr,
-                                                               sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
-{
-    sal_uInt64 nHash = 0;
-
-    for( sal_Int32 i = 0; i < nLen; i++ )
-        nHash = (nHash << 5) - nHash + *pStr++;
-    return nHash;
-}
-
-/* ----------------------------------------------------------------------- */
-
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCODE* pStr,
                                                             sal_Int32 nLen )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int32 h = nLen;
-
-    if ( nLen < 256 )
+    sal_uInt32 h = static_cast<sal_uInt32>(nLen);
+    while ( nLen > 0 )
     {
-        while ( nLen > 0 )
-        {
-            h = (h*37) + IMPL_RTL_USTRCODE( *pStr );
-            pStr++;
-            nLen--;
-        }
+        h = (h*37U) + IMPL_RTL_USTRCODE( *pStr );
+        pStr++;
+        nLen--;
     }
-    else
-    {
-        sal_Int32               nSkip;
-        const IMPL_RTL_STRCODE* pEndStr = pStr+nLen-5;
-
-        /* only sample some characters */
-        /* the first 3, some characters between, and the last 5 */
-        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
-        pStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
-        pStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
-        pStr++;
-
-        if ( nLen < 32 )
-            nSkip = nLen / 4;
-        else
-            nSkip = nLen / 8;
-        nLen -= 8;
-        while ( nLen > 0 )
-        {
-            h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
-            pStr += nSkip;
-            nLen -= nSkip;
-        }
-
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
-        pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
-        pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
-        pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
-        pEndStr++;
-        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
-    }
-
-    return h;
+    return static_cast<sal_Int32>(h);
 }
 
 /* ----------------------------------------------------------------------- */
