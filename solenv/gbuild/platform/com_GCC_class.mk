@@ -72,11 +72,14 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CC) \
 		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
 		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		-c $(2) \
 		-I$(dir $(2)) \
 		$(INCLUDE) \
-		$(gb_COMPILER_PLUGINS) \
 		)
 endef
 
@@ -113,11 +116,14 @@ $(call gb_Helper_abbreviate_dirs,\
         ICECC=no CCACHE_DISABLE=1 \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		-c $(2) \
 		-I$(dir $(2)) \
 		$(INCLUDE) \
-		$(gb_COMPILER_PLUGINS) \
 		)
 endef
 
