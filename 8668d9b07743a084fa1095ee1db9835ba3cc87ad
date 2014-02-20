@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a890539_2d048d14",
+        "filename": "rsc/inc/rscpar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-02-20T20:34:42Z",
+      "side": 1,
+      "message": "please don\u0027t use sal_uIntPtr to replace sal_uLong.\n\nafter grepping around for a couple of minutes, it turns out these come (via RscFileTab) from UniqueIndexImpl which internally stores these as sal_uInt32 but erroneously provides them as sal_uIntPtr in its public interface... \n\nsome opportunity for cleanup there, to consistently use sal_uInt32 in UniqueIndexImpl and all its clients.",
+      "revId": "8668d9b07743a084fa1095ee1db9835ba3cc87ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
