@@ -132,7 +132,10 @@ void OuterThread::run(void)
 
 
 AffineBridge::AffineBridge(void)
-    : m_innerThreadId(0),
+    : m_message      (CB_DONE),
+      m_pCallee      (0),
+      m_pParam       (0),
+      m_innerThreadId(0),
       m_pInnerThread (NULL),
       m_enterCount   (0),
       m_outerThreadId(0),
