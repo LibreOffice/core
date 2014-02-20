@@ -38,6 +38,8 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 
 ScAddInAsync::ScAddInAsync() :
     SvtBroadcaster(),
+    pDocs( NULL ),
+    mpFuncData( NULL ),
     nHandle( 0 )
 {   // nur fuer aSeekObj !
 }
