@@ -124,14 +124,14 @@ public:
     inline const Color& GetColorSecn() const { return maColorSecn; }
     inline const Color& GetColorGap() const { return maColorGap; }
     inline bool         UseGapColor() const { return mbUseGapColor; }
-    inline double       Prim() const { return mnPrim; }
-    inline double       Dist() const { return mnDist; }
-    inline double       Secn() const { return mnSecn; }
+    inline double       Prim() const { return mfPrim; }
+    inline double       Dist() const { return mfDist; }
+    inline double       Secn() const { return mfSecn; }
     double Scale() const;
     inline editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
-    inline double       GetWidth() const { return mnPrim + mnDist + mnSecn; }
+    inline double       GetWidth() const { return mfPrim + mfDist + mfSecn; }
 
     /** Sets the frame style to invisible state. */
     void                Clear();
@@ -165,9 +165,9 @@ private:
     Color               maColorGap;
     bool                mbUseGapColor;
     RefMode             meRefMode;  /// Reference point handling for this frame border.
-    double              mnPrim;     /// Width of primary (single, left, or top) line.
-    double              mnDist;     /// Distance between primary and secondary line.
-    double              mnSecn;     /// Width of secondary (right or bottom) line.
+    double              mfPrim;     /// Width of primary (single, left, or top) line.
+    double              mfDist;     /// Distance between primary and secondary line.
+    double              mfSecn;     /// Width of secondary (right or bottom) line.
     double              mfScale;
     editeng::SvxBorderStyle      mnType;
 };

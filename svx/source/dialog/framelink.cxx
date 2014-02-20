@@ -1176,16 +1176,16 @@ void Style::Clear()
 
 void Style::Set( double nP, double nD, double nS )
 {
-    /*  nP  nD  nS  ->  mnPrim  mnDist  mnSecn
+    /*  nP  nD  nS  ->  mfPrim  mfDist  mfSecn
         --------------------------------------
         any any 0       nP      0       0
         0   any >0      nS      0       0
         >0  0   >0      nP      0       0
         >0  >0  >0      nP      nD      nS
      */
-    mnPrim = rtl::math::round(nP ? nP : nS, 2);
-    mnDist = rtl::math::round((nP && nS) ? nD : 0, 2);
-    mnSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
+    mfPrim = rtl::math::round(nP ? nP : nS, 2);
+    mfDist = rtl::math::round((nP && nS) ? nD : 0, 2);
+    mfSecn = rtl::math::round((nP && nD) ? nS : 0, 2);
 }
 
 void Style::Set( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS )
@@ -1219,29 +1219,29 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
         // Enlarge the style if distance is too small due to rounding losses.
         double nPixWidth = SCALEVALUE( nPrim + nDist + nSecn );
         if( nPixWidth > GetWidth() )
-            mnDist = nPixWidth - mnPrim - mnSecn;
+            mfDist = nPixWidth - mfPrim - mfSecn;
         // Shrink the style if it is too thick for the control.
         while( GetWidth() > nMaxWidth )
         {
             // First decrease space between lines.
-            if( mnDist )
-                --mnDist;
+            if (mfDist)
+                --mfDist;
             // Still too thick? Decrease the line widths.
             if( GetWidth() > nMaxWidth )
             {
-                if( rtl::math::approxEqual(mnPrim, 0.0) && rtl::math::approxEqual(mnPrim, mnSecn) )
+                if (rtl::math::approxEqual(mfPrim, 0.0) && rtl::math::approxEqual(mfPrim, mfSecn))
                 {
                     // Both lines equal - decrease both to keep symmetry.
-                    --mnPrim;
-                    --mnSecn;
+                    --mfPrim;
+                    --mfSecn;
                 }
                 else
                 {
                     // Decrease each line for itself
-                    if( mnPrim )
-                        --mnPrim;
-                    if( (GetWidth() > nMaxWidth) && !rtl::math::approxEqual(mnSecn, 0.0) )
-                        --mnSecn;
+                    if (mfPrim)
+                        --mfPrim;
+                    if ((GetWidth() > nMaxWidth) && !rtl::math::approxEqual(mfSecn, 0.0))
+                        --mfSecn;
                 }
             }
         }
@@ -1261,8 +1261,8 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
 
 Style& Style::MirrorSelf()
 {
-    if( mnSecn )
-        std::swap( mnPrim, mnSecn );
+    if (mfSecn)
+        std::swap( mfPrim, mfSecn );
     if( meRefMode != REFMODE_CENTERED )
         meRefMode = (meRefMode == REFMODE_BEGIN) ? REFMODE_END : REFMODE_BEGIN;
     return *this;
