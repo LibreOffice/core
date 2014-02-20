@@ -529,14 +529,18 @@ DBG_NAME(FormulaCompiler)
 FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
         pArr( &rArr ),
+        pCode( NULL ),
         pStack( NULL ),
-        nRecursion(0),
+        eLastOp( ocPush ),
+        nRecursion( 0 ),
         nNumFmt( NUMBERFORMAT_UNDEFINED ),
+        pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
         bCorrected( false ),
         bCompileForFAP( false ),
-        bIgnoreErrors( false )
+        bIgnoreErrors( false ),
+        glSubTotal( false )
 
 {
     DBG_CTOR(FormulaCompiler, NULL);
