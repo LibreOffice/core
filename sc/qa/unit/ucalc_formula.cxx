@@ -1734,6 +1734,34 @@ void Test::testFuncCOLUMN()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncCOUNT()
+{
+    m_pDoc->InsertTab(0, "Formula");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 2); // A1
+    m_pDoc->SetValue(ScAddress(0,1,0), 4); // A2
+    m_pDoc->SetValue(ScAddress(0,2,0), 6); // A3
+
+    ScAddress aPos(1,0,0);
+    m_pDoc->SetString(aPos, "=COUNT(A1:A3)");
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=COUNT(A1:A3;2)");
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=COUNT(A1:A3;2;4)");
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString(aPos, "=COUNT(A1:A3;2;4;6)");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncROW()
 {
     m_pDoc->InsertTab(0, "Formula");

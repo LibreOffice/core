@@ -119,6 +119,7 @@ public:
     void testFormulaRefUpdateNamedExpression();
     void testMultipleOperations();
     void testFuncCOLUMN();
+    void testFuncCOUNT();
     void testFuncROW();
     void testFuncSUM();
     void testFuncPRODUCT();
@@ -358,6 +359,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNamedExpression);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
+    CPPUNIT_TEST(testFuncCOUNT);
     CPPUNIT_TEST(testFuncROW);
     CPPUNIT_TEST(testFuncSUM);
     CPPUNIT_TEST(testFuncPRODUCT);
