@@ -38,6 +38,7 @@ public:
         sal_uInt16 mnIndex;
     };
 
+    static ScDocShell* findLoadedDocShellByName(const OUString& rName);
     static bool insertRangeNames(ScDocument* pDoc, const RangeNameDef* p, const RangeNameDef* pEnd);
     static void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption);
     static void clearRange(ScDocument* pDoc, const ScRange& rRange);
@@ -136,6 +137,9 @@ public:
     void testFuncIFERROR();
     void testFuncGETPIVOTDATA();
     void testFuncGETPIVOTDATALeafAccess();
+
+    void testExternalRef();
+    void testExternalRefFunctions();
 
     void testCopyToDocument();
     /**
@@ -245,8 +249,6 @@ public:
     void testCellCopy();
     void testSheetCopy();
     void testSheetMove();
-    void testExternalRef();
-    void testExternalRefFunctions();
     void testDataArea();
     void testAutofilter();
     void testCopyPaste();
@@ -376,6 +378,8 @@ public:
     CPPUNIT_TEST(testFuncIFERROR);
     CPPUNIT_TEST(testFuncGETPIVOTDATA);
     CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
+    CPPUNIT_TEST(testExternalRef);
+    CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
@@ -410,8 +414,6 @@ public:
     CPPUNIT_TEST(testCellCopy);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
-    CPPUNIT_TEST(testExternalRef);
-    CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testGraphicsOnSheetMove);
