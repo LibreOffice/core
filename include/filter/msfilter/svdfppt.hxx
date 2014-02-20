@@ -1230,7 +1230,19 @@ struct ImplPPTTextObj
 
     sal_uInt32                  mnTextFlags;
 
-    explicit ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry ) : mrPersistEntry ( rPersistEntry ) {};
+    explicit ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry )
+        : mnRefCount(0)
+        , mnShapeId(0)
+        , mnShapeMaster(0)
+        , mpPlaceHolderAtom(NULL)
+        , mnInstance(0)
+        , mnDestinationInstance(0)
+        , meShapeType(mso_sptMin)
+        , mnCurrentObject(0)
+        , mnParagraphCount(0)
+        , mpParagraphList(NULL)
+        , mrPersistEntry ( rPersistEntry )
+        , mnTextFlags(0) {};
 };
 
 class MSFILTER_DLLPUBLIC PPTTextObj
