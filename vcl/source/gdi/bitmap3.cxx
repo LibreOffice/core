@@ -1306,10 +1306,10 @@ sal_Bool Bitmap::ImplScaleSuper(
         boost::scoped_array<long> pMapFX(new long[ nDstW ]);
         boost::scoped_array<long> pMapFY(new long[ nDstH ]);
         sal_uInt8 cR0, cG0, cB0, cR1, cG1, cB1;
-        long nStartX = 0 , nStartY = 0;
-        long nEndX = nDstW - 1L;
-        long nEndY = nDstH - 1L;
-        long nMax = 1 << 7L;
+        const long nStartX = 0, nStartY = 0;
+        const long nEndX = nDstW - 1L;
+        const long nEndY = nDstH - 1L;
+        const long nMax = 1 << 7L;
 
         if( pAcc && pWAcc )
         {
