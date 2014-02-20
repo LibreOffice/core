@@ -2988,6 +2988,37 @@ void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument* pExtDoc)
     CPPUNIT_ASSERT_EQUAL(1.2, pDoc->GetValue(ScAddress(0,0,0)));
 }
 
+void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument* pExtDoc)
+{
+    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    Test::clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    // Populate the external document.
+    pExtDoc->SetString(ScAddress(0,0,0), "A1");
+    pExtDoc->SetString(ScAddress(0,1,0), "A2");
+    pExtDoc->SetString(ScAddress(0,2,0), "A3");
+    pExtDoc->SetString(ScAddress(0,3,0), "A4");
+    pExtDoc->SetString(ScAddress(0,4,0), "A5");
+
+    pExtDoc->SetString(ScAddress(1,0,0), "B1");
+    pExtDoc->SetString(ScAddress(1,1,0), "B2");
+    pExtDoc->SetString(ScAddress(1,2,0), "B3");
+    pExtDoc->SetString(ScAddress(1,3,0), "B4");
+    pExtDoc->SetString(ScAddress(1,4,0), "B5");
+
+    // Put formula in the source document.
+
+    pDoc->SetString(ScAddress(0,0,0), "A2");
+
+    // Sort order TRUE
+    pDoc->SetString(ScAddress(1,0,0), "=VLOOKUP(A1;'file:///extdata.fake'#Data.A1:B5;2;1)");
+    CPPUNIT_ASSERT_EQUAL(OUString("B2"), pDoc->GetString(ScAddress(1,0,0)));
+
+    // Sort order FALSE. It should return the same result.
+    pDoc->SetString(ScAddress(1,0,0), "=VLOOKUP(A1;'file:///extdata.fake'#Data.A1:B5;2;0)");
+    CPPUNIT_ASSERT_EQUAL(OUString("B2"), pDoc->GetString(ScAddress(1,0,0)));
+}
+
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
@@ -3003,6 +3034,8 @@ void Test::testExternalRefFunctions()
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
     CPPUNIT_ASSERT_MESSAGE("file name registration has somehow failed.",
                            pFileName && pFileName->equals(aExtDocName));
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
     // Populate the external source document.
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
@@ -3036,7 +3069,6 @@ void Test::testExternalRefFunctions()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         m_pDoc->SetString(0, 0, 0, OUString::createFromAscii(aChecks[i].pFormula));
-        m_pDoc->CalcAll();
         m_pDoc->GetValue(0, 0, 0, val);
         CPPUNIT_ASSERT_MESSAGE("unexpected result involving external ranges.", val == aChecks[i].fResult);
     }
@@ -3044,6 +3076,7 @@ void Test::testExternalRefFunctions()
     pRefMgr->clearCache(nFileId);
     testExtRefFuncT(m_pDoc, pExtDoc);
     testExtRefFuncOFFSET(m_pDoc, pExtDoc);
+    testExtRefFuncVLOOKUP(m_pDoc, pExtDoc);
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
