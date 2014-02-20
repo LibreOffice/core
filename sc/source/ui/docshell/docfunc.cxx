@@ -1107,7 +1107,7 @@ bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
 
         // #i61702# if the content isn't accessed, there's no need to set the UpdateMode again
         if ( bUpdateMode && !bLoseContent )
-            rEngine.SetUpdateMode(sal_True);
+            rEngine.SetUpdateMode(true);
     }
     else
     {

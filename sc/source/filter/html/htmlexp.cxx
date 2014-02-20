@@ -1188,7 +1188,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
     if ( bFields )
     {
         sal_Bool bOldUpdateMode = rEngine.GetUpdateMode();
-        rEngine.SetUpdateMode( sal_True );      // no portions if not formatted
+        rEngine.SetUpdateMode( true );      // no portions if not formatted
         for ( sal_Int32 nPar=0; nPar < nParas; nPar++ )
         {
             if ( nPar > 0 )

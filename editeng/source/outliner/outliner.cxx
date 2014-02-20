@@ -97,7 +97,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
     else
     {
         sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-        pEditEngine->SetUpdateMode( sal_False );
+        pEditEngine->SetUpdateMode( false );
         ImplBlockInsertionCallbacks( sal_True );
         pPara = new Paragraph( nDepth );
         pParaList->Insert( pPara, nAbsPos );
@@ -418,7 +418,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     DBG_ASSERT(pPara,"SetText:No Para");
 
     sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditEngine->SetUpdateMode( false );
     ImplBlockInsertionCallbacks( sal_True );
 
     sal_Int32 nPara = pParaList->GetAbsPos( pPara );
@@ -579,7 +579,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 {
 
     sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditEngine->SetUpdateMode( false );
 
     sal_Bool bUndo = pEditEngine->IsUndoEnabled();
     EnableUndo( sal_False );
@@ -616,7 +616,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     Paragraph* pPara;
 
     sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditEngine->SetUpdateMode( false );
 
     ImplBlockInsertionCallbacks( sal_True );
     sal_Int32 nPara;
@@ -763,7 +763,7 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, sal_Bool bCreat
     if( !IsInUndo() )
     {
         sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-        pEditEngine->SetUpdateMode( sal_False );
+        pEditEngine->SetUpdateMode( false );
 
         sal_Bool bUndo = bCreateUndo && IsUndoEnabled();
         if ( bUndo && bUndoAction )
@@ -1131,7 +1131,7 @@ sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16
     EnableUndo( sal_False );
 
     sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditEngine->SetUpdateMode( false );
 
     Clear();
 
@@ -1173,7 +1173,7 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
 {
 
     sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditEngine->SetUpdateMode( false );
 
     Paragraph* pLastConverted = NULL;
     for( sal_Int32 nPara = nFirstPara; nPara <= nLastPara; nPara++ )
@@ -1212,7 +1212,7 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 {
 
     sal_Bool bUpdate = pEditEngine->GetUpdateMode();
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditEngine->SetUpdateMode( false );
 
     const sal_Int32 nStart = nStartPara;
 
@@ -1984,7 +1984,7 @@ void Outliner::Clear()
 void Outliner::SetFlatMode( sal_Bool bFlat )
 {
 
-    if( bFlat != pEditEngine->IsFlatMode() )
+    if( bFlat != (pEditEngine->IsFlatMode() ? 1 : 0) )
     {
         for ( sal_Int32 nPara = pParaList->GetParagraphCount(); nPara; )
             pParaList->GetParagraph( --nPara )->aBulSize.Width() = -1;

@@ -134,9 +134,9 @@ public:
 private:
     ImpEditEngine*  pImpEditEngine;
 
-                    EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
-    EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
-    EDITENG_DLLPRIVATE sal_uInt8        PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
+    EDITENG_DLLPRIVATE                 EditEngine( const EditEngine& );
+    EDITENG_DLLPRIVATE EditEngine&     operator=( const EditEngine& );
+    EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
 
     EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
     EDITENG_DLLPRIVATE void CheckIdleFormatter();
@@ -195,24 +195,24 @@ public:
     void            SetRefMapMode( const MapMode& rMapMode );
     MapMode         GetRefMapMode();
 
-    void            SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool        GetUpdateMode() const;
-    void            SetUpdateModeForAcc( sal_Bool bUp);
-    sal_Bool        GetUpdateModeForAcc( ) const;
+    void            SetUpdateMode( bool bUpdate );
+    bool            GetUpdateMode() const;
+    void            SetUpdateModeForAcc( bool bUp);
+    bool            GetUpdateModeForAcc( ) const;
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
     Color           GetAutoColor() const;
-    void            EnableAutoColor( sal_Bool b );
-    void            ForceAutoColor( sal_Bool b );
-    sal_Bool        IsForceAutoColor() const;
+    void            EnableAutoColor( bool b );
+    void            ForceAutoColor( bool b );
+    bool            IsForceAutoColor() const;
 
     void            InsertView(EditView* pEditView, size_t nIndex = EE_APPEND);
     EditView*       RemoveView( EditView* pEditView );
     EditView*       RemoveView(size_t nIndex = EE_APPEND);
     EditView*       GetView(size_t nIndex = 0) const;
     size_t          GetViewCount() const;
-    sal_Bool        HasView( EditView* pView ) const;
+    bool            HasView( EditView* pView ) const;
     EditView*       GetActiveView() const;
     void SetActiveView(EditView* pView);
 
@@ -222,7 +222,7 @@ public:
     void            SetVertical( bool bVertical );
     bool            IsVertical() const;
 
-    void            SetFixedCellHeight( sal_Bool bUseFixedCellHeight );
+    void            SetFixedCellHeight( bool bUseFixedCellHeight );
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
@@ -236,9 +236,9 @@ public:
 
     void            SetAsianCompressionMode( sal_uInt16 nCompression );
 
-    void            SetKernAsianPunctuation( sal_Bool bEnabled );
+    void            SetKernAsianPunctuation( bool bEnabled );
 
-    void            SetAddExtLeading( sal_Bool b );
+    void            SetAddExtLeading( bool b );
 
     void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
@@ -297,27 +297,27 @@ public:
     void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
-    SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All );
+    SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = sal_False );
 
-    sal_Bool        HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
+    bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );
 
     Font            GetStandardFont( sal_Int32 nPara );
     SvxFont         GetStandardSvxFont( sal_Int32 nPara );
 
-    void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
+    void            RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich );
 
-    void            ShowParagraph( sal_Int32 nParagraph, sal_Bool bShow = sal_True );
+    void            ShowParagraph( sal_Int32 nParagraph, bool bShow = true );
 
     ::svl::IUndoManager& GetUndoManager();
     ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
     void            UndoActionEnd( sal_uInt16 nId );
-    sal_Bool        IsInUndo();
+    bool            IsInUndo();
 
-    void            EnableUndo( sal_Bool bEnable );
-    sal_Bool        IsUndoEnabled();
+    void            EnableUndo( bool bEnable );
+    bool            IsUndoEnabled();
 
     /** returns the value last used for bTryMerge while calling ImpEditEngine::InsertUndo
         This is currently used in a bad but needed hack to get undo actions merged in the
@@ -326,12 +326,12 @@ public:
 
     void            ClearModifyFlag();
     void            SetModified();
-    sal_Bool        IsModified() const;
+    bool            IsModified() const;
 
     void            SetModifyHdl( const Link& rLink );
     Link            GetModifyHdl() const;
 
-    sal_Bool        IsInSelectionMode() const;
+    bool            IsInSelectionMode() const;
 
     void            StripPortions();
     void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList );
@@ -339,12 +339,12 @@ public:
     long            GetFirstLineStartX( sal_Int32 nParagraph );
     Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
-    sal_Bool        IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
+    bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
 
     // StartDocPos corrresponds to VisArea.TopLeft().
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos );
-    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, sal_Bool bClip );
+    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
 //  sal_uInt32: Error code of the stream.
@@ -361,8 +361,8 @@ public:
     Link            GetImportHdl() const;
 
     // Do not evaluate font formatting => For Outliner
-    sal_Bool        IsFlatMode() const;
-    void            SetFlatMode( sal_Bool bFlat );
+    bool            IsFlatMode() const;
+    void            SetFlatMode( bool bFlat );
 
     void            SetControlWord( sal_uInt32 nWord );
     sal_uInt32      GetControlWord() const;
@@ -370,7 +370,7 @@ public:
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void            QuickMarkInvalid( const ESelection& rSel );
-    void            QuickFormatDoc( sal_Bool bFull = sal_False );
+    void            QuickFormatDoc( bool bFull = false );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
     void            QuickInsertLineBreak( const ESelection& rSel );
     void            QuickInsertText(const OUString& rText, const ESelection& rSel);
@@ -412,18 +412,18 @@ public:
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
 
-    sal_Bool        HasOnlineSpellErrors() const;
+    bool            HasOnlineSpellErrors() const;
     void            CompleteOnlineSpelling();
 
-    sal_Bool        ShouldCreateBigTextObject() const;
+    bool            ShouldCreateBigTextObject() const;
 
     // For fast Pre-Test without view:
     EESpellState    HasSpellErrors();
     void ClearSpellErrors();
-    sal_Bool        HasText( const SvxSearchItem& rSearchItem );
+    bool            HasText( const SvxSearchItem& rSearchItem );
 
     //initialize sentence spelling
-    void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
+    void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     //spell and return a sentence
     bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence
@@ -432,17 +432,17 @@ public:
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
 
     // for text conversion (see also HasSpellErrors)
-    sal_Bool        HasConvertibleTextPortion( LanguageType nLang );
-    virtual sal_Bool    ConvertNextDocument();
+    bool            HasConvertibleTextPortion( LanguageType nLang );
+    virtual bool    ConvertNextDocument();
 
     bool UpdateFields();
     bool UpdateFieldsOnly();
-    void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
+    void            RemoveFields( bool bKeepFieldText, TypeId aType = NULL );
 
     sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
     EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;
 
-    sal_Bool        IsRightToLeft( sal_Int32 nPara ) const;
+    bool            IsRightToLeft( sal_Int32 nPara ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                     CreateTransferable( const ESelection& rSelection ) const;
@@ -481,8 +481,8 @@ public:
         const Color& rOverlineColor,
         const Color& rTextLineColor);
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
-    virtual sal_Bool    FormattingParagraph( sal_Int32 nPara );
-    virtual sal_Bool    SpellNextDocument();
+    virtual bool    FormattingParagraph( sal_Int32 nPara );
+    virtual bool    SpellNextDocument();
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
@@ -492,17 +492,17 @@ public:
 
     virtual Rectangle GetBulletArea( sal_Int32 nPara );
 
-    static SfxItemPool* CreatePool( sal_Bool bLoadRefCounts = sal_True );
+    static SfxItemPool* CreatePool( bool bLoadRefCounts = true );
     static SfxItemPool& GetGlobalItemPool();
-    static sal_Bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static sal_Bool     DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
-    static sal_Bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
+    static bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
+    static bool     DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
+    static bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const Font& rFont );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const SvxFont& rFont );
     static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
-    static sal_Bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
-    static sal_Bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
+    static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
+    static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
     virtual SdrObject* GetCurTextObj() { return NULL; }
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link& rLink );
@@ -513,7 +513,7 @@ public:
     Link            GetEndDropHdl() const;
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
-    void            SetFirstWordCapitalization( sal_Bool bCapitalize );
+    void            SetFirstWordCapitalization( bool bCapitalize );
 
     EditDoc& GetEditDoc();
     const EditDoc& GetEditDoc() const;

@@ -390,7 +390,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
-        pEditEngine->EnableUndo (sal_True);
+        pEditEngine->EnableUndo (true);
         pEditEngine->SetDefTab (sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth(OUString("XXXX"))));
 
@@ -443,8 +443,8 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
     DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
     mpEditEngine->SetBackgroundColor(aColor);
-    mpEditEngine->EnableAutoColor(sal_False);
-    mpEditEngine->ForceAutoColor(sal_False);
+    mpEditEngine->EnableAutoColor(false);
+    mpEditEngine->ForceAutoColor(false);
 }
 
 

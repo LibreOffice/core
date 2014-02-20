@@ -579,7 +579,7 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     // formatted cell
     ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
     sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( sal_True );
+    rEE.SetUpdateMode( true );
 
     // default items
     const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
@@ -604,7 +604,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     {
         EditEngine& rEE = rRoot.GetDrawEditEngine();
         sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( sal_True );
+        rEE.SetUpdateMode( true );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
         xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
@@ -632,7 +632,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
     sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( sal_True );
+    rEE.SetUpdateMode( true );
     rEE.SetText( rEditObj );
     xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
@@ -692,7 +692,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
     // edit engine
     sal_Bool bOldUpdateMode = mrEE.GetUpdateMode();
-    mrEE.SetUpdateMode( sal_True );
+    mrEE.SetUpdateMode( true );
     mrEE.SetText( *pTextObj );
 
     // font information

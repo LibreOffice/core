@@ -503,9 +503,9 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
         SetParaAttribs( j, rNewSet );
     }
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
     if ( bUndo )
-        EnableUndo( sal_True );
+        EnableUndo( true );
 }
 
 void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, bool bTakeOwnership )
@@ -548,7 +548,7 @@ void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
@@ -560,7 +560,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
     EditEngine::SetText( rTextObject );
     SetDefaults( rSet, bRememberCopy );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
@@ -572,7 +572,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
     EditEngine::SetText( rTextObject );
     SetDefaults( pSet, bTakeOwnership );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 void ScEditEngineDefaulter::SetText( const OUString& rText )
@@ -584,7 +584,7 @@ void ScEditEngineDefaulter::SetText( const OUString& rText )
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
@@ -596,7 +596,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
     EditEngine::SetText( rText );
     SetDefaults( rSet, bRememberCopy );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
@@ -608,7 +608,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
     EditEngine::SetText( rText );
     SetDefaults( pSet, bTakeOwnership );
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 void ScEditEngineDefaulter::RepeatDefaults()
@@ -691,7 +691,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
         }
     }
     if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 }
 
 ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )

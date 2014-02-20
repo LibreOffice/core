@@ -1283,7 +1283,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nP
     // TODO: MALTE!!!
     EditEngine& rEditEngine = *(EditEngine*)&pOutliner->GetEditEngine();
     bool bOldUpdateMode = rEditEngine.GetUpdateMode();
-    rEditEngine.SetUpdateMode(sal_True);
+    rEditEngine.SetUpdateMode(true);
 
     Paragraph* pPara = pOutliner->GetParagraph(nPara);
     if(NULL == pPara)

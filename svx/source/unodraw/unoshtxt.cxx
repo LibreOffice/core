@@ -607,9 +607,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             mpOutliner->SetTextObjNoInit( pTextObj );
             if( mbIsLocked )
             {
-                ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
+                ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( false );
                 mbOldUndoMode = ((EditEngine*)&(mpOutliner->GetEditEngine()))->IsUndoEnabled();
-                ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( sal_False );
+                ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( false );
             }
 
             if ( !m_xLinguServiceManager.is() )
@@ -904,9 +904,9 @@ void SvxTextEditSourceImpl::lock()
     mbIsLocked = true;
     if( mpOutliner )
     {
-        ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( false );
         mbOldUndoMode = ((EditEngine*)&(mpOutliner->GetEditEngine()))->IsUndoEnabled();
-        ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( sal_False );
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( false );
     }
 }
 
@@ -922,7 +922,7 @@ void SvxTextEditSourceImpl::unlock()
 
     if( mpOutliner )
     {
-        ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_True );
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( true );
         ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( mbOldUndoMode );
     }
 }

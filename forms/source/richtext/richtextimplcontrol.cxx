@@ -630,7 +630,7 @@ namespace frm
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
         // actually draw the content
-        m_pEngine->Draw( _pDev, aPlayground, Point(), sal_True );
+        m_pEngine->Draw( _pDev, aPlayground, Point(), true );
 
         _pDev->Pop();
     }

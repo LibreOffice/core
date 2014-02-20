@@ -1399,7 +1399,7 @@ void ScMultiTextWnd::InitEditEngine()
     if ( pHdl )			//!	Testen, ob's der richtige InputHdl ist?
         bFilled = pHdl->GetTextAndFields( *pEditEngine );
 
-    pEditEngine->SetUpdateMode( sal_True );
+    pEditEngine->SetUpdateMode( true );
 
     //	aString ist die Wahrheit...
     if (bFilled && pEditEngine->GetText() == aString)
@@ -1780,7 +1780,7 @@ void ScTextWnd::StartEditEngine()
         if ( pHdl )         //! Testen, ob's der richtige InputHdl ist?
             bFilled = pHdl->GetTextAndFields( *pEditEngine );
 
-        pEditEngine->SetUpdateMode( sal_True );
+        pEditEngine->SetUpdateMode( true );
 
         //  aString ist die Wahrheit...
         if (bFilled && pEditEngine->GetText() == aString)
@@ -2010,7 +2010,7 @@ void ScTextWnd::MakeDialogEditView()
     if ( bIsRTL )
         lcl_ModifyRTLDefaults( *pSet );
     pEditEngine->SetDefaults( pSet );
-    pEditEngine->SetUpdateMode( sal_True );
+    pEditEngine->SetUpdateMode( true );
 
     pEditView   = new EditView( pEditEngine, this );
     pEditEngine->InsertView( pEditView, EE_APPEND );

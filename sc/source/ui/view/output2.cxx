@@ -2168,7 +2168,7 @@ static void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
     }
 
     if ( bUpdateMode )
-        rEngine.SetUpdateMode( sal_True );
+        rEngine.SetUpdateMode( true );
 }
 
 static long lcl_GetEditSize( EditEngine& rEngine, bool bWidth, bool bSwap, long nAttrRotate )
@@ -4999,7 +4999,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             else if ( mbUseStyleColor && mbForceAutoColor )
                                 lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-                            pEngine->SetUpdateMode( sal_True );     // after SetText, before CalcTextWidth/GetTextHeight
+                            pEngine->SetUpdateMode( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
                             long nEngineWidth  = (long) pEngine->CalcTextWidth();
                             long nEngineHeight = pEngine->GetTextHeight();
@@ -5239,7 +5239,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             else
                                                 pEngine->SetPaperSize(aPaperSize);
 
-                                            pEngine->SetUpdateMode( sal_True );
+                                            pEngine->SetUpdateMode( true );
                                         }
                                     }
                                     else

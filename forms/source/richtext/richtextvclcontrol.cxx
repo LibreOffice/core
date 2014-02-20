@@ -97,7 +97,7 @@ namespace frm
             getView().HideCursor();
 
         sal_Bool bOldUpdateMode = getEngine().GetUpdateMode();   // TODO: guard?
-        getEngine().SetUpdateMode( sal_False );
+        getEngine().SetUpdateMode( false );
 
         getView().SetAttribs( _rAttributesToApply );
 

@@ -112,12 +112,12 @@ void OutlinerEditEng::ParaAttribsChanged( sal_Int32 nPara )
     pOwner->ParaAttribsChanged( nPara );
 }
 
-sal_Bool OutlinerEditEng::SpellNextDocument()
+bool OutlinerEditEng::SpellNextDocument()
 {
     return pOwner->SpellNextDocument();
 }
 
-sal_Bool OutlinerEditEng::ConvertNextDocument()
+bool OutlinerEditEng::ConvertNextDocument()
 {
     return pOwner->ConvertNextDocument();
 }

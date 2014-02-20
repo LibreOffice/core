@@ -540,7 +540,7 @@ void SwDoc::InitDrawModel()
         pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
         pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
     }
-    SfxItemPool *pEEgPool = EditEngine::CreatePool( sal_False );
+    SfxItemPool *pEEgPool = EditEngine::CreatePool( false );
     pSdrPool->SetSecondaryPool( pEEgPool );
      if ( !GetAttrPool().GetFrozenIdRanges () )
         GetAttrPool().FreezeIdRanges();

@@ -111,7 +111,7 @@ SfxItemPool* GetAnnotationPool()
     static SfxItemPool* mpAnnotationPool = 0;
     if( mpAnnotationPool == 0 )
     {
-        mpAnnotationPool = EditEngine::CreatePool( sal_False );
+        mpAnnotationPool = EditEngine::CreatePool( false );
         mpAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
         Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );

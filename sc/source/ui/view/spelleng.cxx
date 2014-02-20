@@ -294,7 +294,7 @@ void ScSpellingEngine::ConvertAll( EditView& rEditView )
     }
 }
 
-sal_Bool ScSpellingEngine::SpellNextDocument()
+bool ScSpellingEngine::SpellNextDocument()
 {
     return FindNextConversionCell();
 }
@@ -398,7 +398,7 @@ void ScTextConversionEngine::ConvertAll( EditView& rEditView )
     }
 }
 
-sal_Bool ScTextConversionEngine::ConvertNextDocument()
+bool ScTextConversionEngine::ConvertNextDocument()
 {
     return FindNextConversionCell();
 }

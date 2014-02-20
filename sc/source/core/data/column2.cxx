@@ -492,7 +492,7 @@ long ScColumn::GetNeededSize(
                  ( pEngine->GetParagraphCount() > 1 || ( bBreak && pEngine->GetLineCount(0) > 1 ) ) )
             {
                 pEngine->SetControlWord( nCtrl | EE_CNTRL_FORMAT100 );
-                pEngine->QuickFormatDoc( sal_True );
+                pEngine->QuickFormatDoc( true );
                 long nSecondValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ), aHMMMode).Height();
                 if ( nSecondValue > nValue )
                     nValue = nSecondValue;

@@ -392,7 +392,7 @@ sal_Int32 OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
 void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 {
     sal_Bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
+    pOwner->pEditEngine->SetUpdateMode( false );
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
         pOwner->UndoActionStart( OLUNDO_ATTR );
@@ -446,7 +446,7 @@ void OutlinerView::Indent( short nDiff )
 
     const bool bOutlinerView = pOwner->pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER;
     sal_Bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
+    pOwner->pEditEngine->SetUpdateMode( false );
 
     sal_Bool bUndo = !pOwner->IsInUndo() && pOwner->IsUndoEnabled();
 
@@ -654,7 +654,7 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
     pOwner->UndoActionStart( OLUNDO_INSERT );
 
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
+    pOwner->pEditEngine->SetUpdateMode( false );
     sal_Int32 nStart, nParaCount;
     nParaCount = pOwner->pEditEngine->GetParagraphCount();
     sal_uInt16 nSize = ImpInitPaste( nStart );
@@ -686,7 +686,7 @@ void OutlinerView::PasteSpecial()
     {
         pOwner->UndoActionStart( OLUNDO_INSERT );
 
-        pOwner->pEditEngine->SetUpdateMode( sal_False );
+        pOwner->pEditEngine->SetUpdateMode( false );
         pOwner->bPasting = sal_True;
         pEditView->PasteSpecial();
 
@@ -829,7 +829,7 @@ void OutlinerView::ToggleBullets()
     aSel.Adjust();
 
     const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
+    pOwner->pEditEngine->SetUpdateMode( false );
 
     sal_Int16 nNewDepth = -2;
     const SvxNumRule* pDefaultBulletNumRule = 0;
@@ -945,7 +945,7 @@ void OutlinerView::EnableBullets()
     aSel.Adjust();
 
     const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
+    pOwner->pEditEngine->SetUpdateMode( false );
 
     for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
@@ -983,7 +983,7 @@ void OutlinerView::ApplyBulletsNumbering(
 
     pOwner->UndoActionStart(OLUNDO_DEPTH);
     const sal_Bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode(sal_False);
+    pOwner->pEditEngine->SetUpdateMode(false);
 
     sal_Int32 nStartPara = 0;
     sal_Int32 nEndPara = 0;
@@ -1125,7 +1125,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
 
     pOwner->UndoActionStart( OLUNDO_DEPTH );
     const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
+    pOwner->pEditEngine->SetUpdateMode( false );
 
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
     {

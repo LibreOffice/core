@@ -66,11 +66,11 @@ public:
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void        ParaAttribsChanged( sal_Int32 nPara );
-    virtual sal_Bool    SpellNextDocument();
+    virtual bool        SpellNextDocument();
     virtual OUString    GetUndoComment( sal_uInt16 nUndoId ) const;
 
     // for text conversion
-    virtual sal_Bool        ConvertNextDocument();
+    virtual bool        ConvertNextDocument();
 
     virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
