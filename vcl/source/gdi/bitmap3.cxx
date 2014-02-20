@@ -1102,8 +1102,6 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
     if( ( nNewWidth > 1L ) && ( nNewHeight > 1L ) )
     {
-        BitmapColor         aCol0;
-        BitmapColor         aCol1;
         BitmapReadAccess*   pReadAcc = AcquireReadAccess();
         long                nWidth = pReadAcc->Width();
         long                nHeight = pReadAcc->Height();
@@ -1137,6 +1135,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
             {
                 if( 1 == nWidth )
                 {
+                    BitmapColor aCol0;
                     if( pReadAcc->HasPalette() )
                     {
                         aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, 0 ) );
@@ -1157,6 +1156,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
                     {
                         nTemp = pLutInt[ nX ];
 
+                        BitmapColor aCol0, aCol1;
                         if( pReadAcc->HasPalette() )
                         {
                             aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp++ ) );
@@ -1224,7 +1224,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
                 {
                     if( 1 == nHeight )
                     {
-                        aCol0 = pReadAcc->GetPixel( 0, nX );
+                        BitmapColor aCol0 = pReadAcc->GetPixel( 0, nX );
 
                         for( nY = 0L; nY < nNewHeight; nY++ )
                         {
@@ -1237,8 +1237,8 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
                         {
                             nTemp = pLutInt[ nY ];
 
-                            aCol0 = pReadAcc->GetPixel( nTemp++, nX );
-                            aCol1 = pReadAcc->GetPixel( nTemp, nX );
+                            BitmapColor aCol0 = pReadAcc->GetPixel( nTemp++, nX );
+                            BitmapColor aCol1 = pReadAcc->GetPixel( nTemp, nX );
 
                             nTemp = pLutFrac[ nY ];
 
@@ -1297,7 +1297,6 @@ sal_Bool Bitmap::ImplScaleSuper(
 
     if( ( nDstW > 1L ) && ( nDstH > 1L ) )
     {
-        BitmapColor         aCol0, aCol1, aColRes;
         BitmapReadAccess*   pAcc = AcquireReadAccess();
         Bitmap              aOutBmp( Size( nDstW, nDstH ), 24 );
         BitmapWriteAccess*  pWAcc = aOutBmp.AcquireWriteAccess();
@@ -1305,7 +1304,6 @@ sal_Bool Bitmap::ImplScaleSuper(
         boost::scoped_array<long> pMapIY(new long[ nDstH ]);
         boost::scoped_array<long> pMapFX(new long[ nDstW ]);
         boost::scoped_array<long> pMapFY(new long[ nDstH ]);
-        sal_uInt8 cR0, cG0, cB0, cR1, cG1, cB1;
         const long nStartX = 0, nStartY = 0;
         const long nEndX = nDstW - 1L;
         const long nEndY = nDstH - 1L;
@@ -1363,17 +1361,17 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 const BitmapColor& rCol1 = pAcc->GetPaletteColor( pLine0[ ++nTempX ] );
                                 const BitmapColor& rCol3 = pAcc->GetPaletteColor( pLine1[ nTempX ] );
 
-                                cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTempFX );
-                                cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTempFX );
-                                cB0 = MAP( rCol0.GetBlue(), rCol1.GetBlue(), nTempFX );
+                                sal_uInt8 cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTempFX );
+                                sal_uInt8 cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTempFX );
+                                sal_uInt8 cB0 = MAP( rCol0.GetBlue(), rCol1.GetBlue(), nTempFX );
 
-                                cR1 = MAP( rCol2.GetRed(), rCol3.GetRed(), nTempFX );
-                                cG1 = MAP( rCol2.GetGreen(), rCol3.GetGreen(), nTempFX );
-                                cB1 = MAP( rCol2.GetBlue(), rCol3.GetBlue(), nTempFX );
+                                sal_uInt8 cR1 = MAP( rCol2.GetRed(), rCol3.GetRed(), nTempFX );
+                                sal_uInt8 cG1 = MAP( rCol2.GetGreen(), rCol3.GetGreen(), nTempFX );
+                                sal_uInt8 cB1 = MAP( rCol2.GetBlue(), rCol3.GetBlue(), nTempFX );
 
-                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
-                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
-                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
+                                        MAP( cG0, cG1, nTempFY ),
+                                        MAP( cB0, cB1, nTempFY ) );
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
                             }
                         }
@@ -1480,9 +1478,9 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     nTotalWeightY += nWeightY;
                                 }
 
-                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
-                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
-                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                BitmapColor aColRes ( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ),
+                                        ( sal_uInt8 ) (( nSumG / nTotalWeightY) ),
+                                        ( sal_uInt8 ) (( nSumB / nTotalWeightY) ) );
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
 
                             }
@@ -1503,21 +1501,21 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 long nTempX = pMapIX[ nX ];
                                 long nTempFX = pMapFX[ nX ];
 
-                                aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, nTempX ) );
-                                aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, ++nTempX ) );
-                                cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
-                                cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
-                                cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+                                BitmapColor aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, nTempX ) );
+                                BitmapColor aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, ++nTempX ) );
+                                sal_uInt8 cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                sal_uInt8 cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                sal_uInt8 cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
 
                                 aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( ++nTempY, nTempX ) );
                                 aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY--, --nTempX ) );
-                                cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
-                                cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
-                                cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+                                sal_uInt8 cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                sal_uInt8 cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                sal_uInt8 cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
 
-                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
-                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
-                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
+                                        MAP( cG0, cG1, nTempFY ),
+                                        MAP( cB0, cB1, nTempFY ) );
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
                             }
                         }
@@ -1571,7 +1569,7 @@ sal_Bool Bitmap::ImplScaleSuper(
 
                                     for(int j = 0; j <= nRowRange; j++)
                                     {
-                                        aCol0 = pAcc->GetPaletteColor ( pAcc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
+                                        BitmapColor aCol0 = pAcc->GetPaletteColor ( pAcc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
 
                                         if(nX == nEndX )
                                         {
@@ -1626,9 +1624,9 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     nTotalWeightY += nWeightY;
                                 }
 
-                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
-                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
-                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                BitmapColor aColRes( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ),
+                                        ( sal_uInt8 ) (( nSumG / nTotalWeightY) ),
+                                        ( sal_uInt8 ) (( nSumB / nTotalWeightY) ));
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
                             }
                         }
@@ -1657,18 +1655,18 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 long nTempFX = pMapFX[ nX ];
 
                                 pTmp1 = ( pTmp0 = pLine0 + nOff ) + 3L;
-                                cB0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cG0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cR0 = MAP( *pTmp0, *pTmp1, nTempFX );
+                                sal_uInt8 cB0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cG0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cR0 = MAP( *pTmp0, *pTmp1, nTempFX );
 
                                 pTmp1 = ( pTmp0 = pLine1 + nOff ) + 3L;
-                                cB1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cG1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cR1 = MAP( *pTmp0, *pTmp1, nTempFX );
+                                sal_uInt8 cB1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cG1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cR1 = MAP( *pTmp0, *pTmp1, nTempFX );
 
-                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
-                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
-                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
+                                        MAP( cG0, cG1, nTempFY ),
+                                        MAP( cB0, cB1, nTempFY ) );
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
                             }
                         }
@@ -1773,9 +1771,9 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     nTotalWeightY += nWeightY;
                                 }
 
-                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
-                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
-                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                BitmapColor aColRes( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ),
+                                        ( sal_uInt8 ) (( nSumG / nTotalWeightY) ),
+                                        ( sal_uInt8 ) (( nSumB / nTotalWeightY) ));
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
 
                             }
@@ -1802,18 +1800,18 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 long nTempFX = pMapFX[ nX ];
 
                                 pTmp1 = ( pTmp0 = pLine0 + nOff ) + 3L;
-                                cR0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cG0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cB0 = MAP( *pTmp0, *pTmp1, nTempFX );
+                                sal_uInt8 cR0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cG0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cB0 = MAP( *pTmp0, *pTmp1, nTempFX );
 
                                 pTmp1 = ( pTmp0 = pLine1 + nOff ) + 3L;
-                                cR1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cG1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
-                                cB1 = MAP( *pTmp0, *pTmp1, nTempFX );
+                                sal_uInt8 cR1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cG1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                sal_uInt8 cB1 = MAP( *pTmp0, *pTmp1, nTempFX );
 
-                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
-                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
-                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
+                                        MAP( cG0, cG1, nTempFY ),
+                                        MAP( cB0, cB1, nTempFY ) );
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
                             }
                         }
@@ -1918,11 +1916,10 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     nTotalWeightY += nWeightY;
                                 }
 
-                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
-                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
-                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                BitmapColor aColRes( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ),
+                                        ( sal_uInt8 ) (( nSumG / nTotalWeightY) ),
+                                        ( sal_uInt8 ) (( nSumB / nTotalWeightY) ));
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
-
                             }
                         }
                     }
@@ -1941,21 +1938,21 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 long nTempX = pMapIX[ nX ];
                                 long nTempFX = pMapFX[ nX ];
 
-                                aCol0 = pAcc->GetPixel( nTempY, nTempX );
-                                aCol1 = pAcc->GetPixel( nTempY, ++nTempX );
-                                cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
-                                cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
-                                cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+                                BitmapColor aCol0 = pAcc->GetPixel( nTempY, nTempX );
+                                BitmapColor aCol1 = pAcc->GetPixel( nTempY, ++nTempX );
+                                sal_uInt8 cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                sal_uInt8 cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                sal_uInt8 cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
 
                                 aCol1 = pAcc->GetPixel( ++nTempY, nTempX );
                                 aCol0 = pAcc->GetPixel( nTempY--, --nTempX );
-                                cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
-                                cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
-                                cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+                                sal_uInt8 cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                sal_uInt8 cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                sal_uInt8 cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
 
-                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
-                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
-                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
+                                        MAP( cG0, cG1, nTempFY ),
+                                        MAP( cB0, cB1, nTempFY ) );
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
                             }
                         }
@@ -2008,7 +2005,7 @@ sal_Bool Bitmap::ImplScaleSuper(
 
                                     for(int j = 0; j <= nRowRange; j++)
                                     {
-                                        aCol0 = pAcc->GetPixel( nLineStart + i, nRowStart + j );
+                                        BitmapColor aCol0 = pAcc->GetPixel( nLineStart + i, nRowStart + j );
 
                                         if(nX == nEndX )
                                         {
@@ -2062,9 +2059,9 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     nTotalWeightY += nWeightY;
                                 }
 
-                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
-                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
-                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                BitmapColor aColRes( ( sal_uInt8 ) (( nSumR / nTotalWeightY) ),
+                                        ( sal_uInt8 ) (( nSumG / nTotalWeightY) ),
+                                        ( sal_uInt8 ) (( nSumB / nTotalWeightY) ));
                                 pWAcc->SetPixel( nYDst, nXDst++, aColRes );
 
                             }
