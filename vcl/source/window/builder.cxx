@@ -1530,6 +1530,15 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             return NULL; // no widget to be created
         }
     }
+    else if (name == "GtkSeparatorToolItem")
+    {
+        ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
+        if (pToolBox)
+        {
+            pToolBox->InsertSeparator();
+            return NULL; // no widget to be created
+        }
+    }
     else
     {
         sal_Int32 nDelim = name.indexOf('-');
