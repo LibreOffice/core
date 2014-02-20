@@ -31,19 +31,17 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 
-OUString sDocCtxName("WordDocumentContext");
-
 // =============================================================================
 // SwVbaGlobals
 // =============================================================================
 
-SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, sDocCtxName )
+SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
     OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
         aInitArgs[ 0 ].Name = "Application";
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
-        aInitArgs[ 1 ].Name = sDocCtxName;
+        aInitArgs[ 1 ].Name = "WordDocumentContext";
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
 
         init( aInitArgs );

@@ -42,16 +42,15 @@ using namespace ::ooo::vba;
 // =============================================================================
 
 //ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
-OUString sDocCtxName( "ExcelDocumentContext" );
 
-ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, sDocCtxName )
+ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
 {
     OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
 
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
         aInitArgs[ 0 ].Name = "Application";
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
-        aInitArgs[ 1 ].Name = sDocCtxName;
+        aInitArgs[ 1 ].Name = "ExcelDocumentContext";
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
 
         init( aInitArgs );
