@@ -2530,6 +2530,7 @@ fi
 if test -n "$enable_lto" -a "$enable_lto" != "no"; then
     ENABLE_LTO="TRUE"
     AC_MSG_RESULT([yes])
+    AC_DEFINE(STATIC_LINKING)
 else
     ENABLE_LTO=""
     AC_MSG_RESULT([no])
@@ -12407,6 +12408,7 @@ if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
         MERGELIBS="CORE"
     fi
     AC_MSG_RESULT([yes])
+    AC_DEFINE(STATIC_LINKING)
 else
     AC_MSG_RESULT([no])
 fi
@@ -12632,6 +12634,7 @@ AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
+AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_test.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])

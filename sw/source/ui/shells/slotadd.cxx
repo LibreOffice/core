@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_options.h>
 
 #include "hintids.hxx"
 #include "uiitems.hxx"
