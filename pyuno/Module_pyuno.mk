@@ -60,6 +60,12 @@ endif
 
 endif # SYSTEM_PYTHON
 
+ifneq (,$(filter PythonTest_pytests,$(MAKECMDGOALS)))
+$(eval $(call gb_Module_add_targets,pyuno, \
+    PythonTest_pytests \
+))
+endif
+
 endif # DISABLE_PYTHON
 
 # vim:set noet sw=4 ts=4:
