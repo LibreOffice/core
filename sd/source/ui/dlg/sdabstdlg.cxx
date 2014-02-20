@@ -46,7 +46,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
     static const OUString sLibName(::vcl::unohelper::CreateLibraryName("sdui", sal_True));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
         fp = ( SdAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( "CreateDialogFactory" );
+            aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" );
 #else
     fp = SdCreateDialogFactory();
 #endif

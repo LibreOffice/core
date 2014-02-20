@@ -20,13 +20,9 @@
 #include "sddlgfact.hxx"
 #include "sal/types.h"
 
-#ifdef DISABLE_DYNLOADING
-#define CreateDialogFactory SdCreateDialogFactory
-#endif
-
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT SdAbstractDialogFactory* CreateDialogFactory()
+    SAL_DLLPUBLIC_EXPORT SdAbstractDialogFactory* SdCreateDialogFactory()
     {
         static SdAbstractDialogFactory_Impl aFactory;
         return &aFactory;
