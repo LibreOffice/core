@@ -992,7 +992,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case 2:  // sprmPIstd
     case 0x4600:
         break;  // sprmPIstd - style code
-    case NS_sprm::LN_PJc: // sprmPJc
+    case NS_ooxml::LN_CT_PPrBase_jc:
         handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
         break;
     case NS_ooxml::LN_CT_PPrBase_keepLines:
@@ -1258,8 +1258,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             rContext->Insert( PROP_PARA_VERT_ALIGNMENT, uno::makeAny( nAlignment) );
         }
         break;  // sprmPWAlignFont
-    case NS_sprm::LN_PFrameTextFlow:
-        break;  // sprmPFrameTextFlow
+    case NS_ooxml::LN_CT_PPrBase_textDirection:
+        break;
     case NS_sprm::LN_POutLvl:
         {
             sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
@@ -1276,7 +1276,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
         break;  // sprmPOutLvl
-    case NS_sprm::LN_PFBiDi:
+    case NS_ooxml::LN_CT_PPrBase_bidi:
         {
             if (nIntValue != 0)
             {
@@ -1290,7 +1290,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
         }
 
-        break;  // sprmPFBiDi
+        break;
     case NS_ooxml::LN_EG_SectPrContents_bidi:
         if (pSectionContext != NULL)
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB));
@@ -2269,7 +2269,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_EG_RPrBase_snapToGrid: // "Use document grid  settings for inter-paragraph spacing"
     break;
-    case NS_sprm::LN_PContextualSpacing:
+    case NS_ooxml::LN_CT_PPrBase_contextualSpacing:
         rContext->Insert(PROP_PARA_CONTEXT_MARGIN, uno::makeAny( sal_Bool( nIntValue ) ));
     break;
     case NS_ooxml::LN_CT_PPrBase_mirrorIndents: // mirrorIndents

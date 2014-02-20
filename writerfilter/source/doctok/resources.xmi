@@ -7,37 +7,6 @@
     <UML:Model name="WW8Document">
       <UML:Namespace.ownedElement>
         <!--SPRMS-->
-        <!--SPRM sprmPContextualSpacing-->
-        <UML:Class xmi.id="sprmPContextualSpacing" name="sprmPContextualSpacing">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x246D</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPIContextualSpacing</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPContextualSpacing-->
         <!--SPRM sprmTCantSplit-->
         <UML:Class xmi.id="sprmTCantSplit" name="sprmTCantSplit">
           <UML:ModelElement.stereotype>
@@ -69,37 +38,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTCantSplit-->
-        <!--SPRM sprmPJc-->
-        <UML:Class xmi.id="sprmPJc" name="sprmPJc">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x2403</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPJc</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPJc-->
         <!--SPRM sprmPDxaRight-->
         <UML:Class xmi.id="sprmPDxaRight" name="sprmPDxaRight">
           <UML:ModelElement.stereotype>
@@ -317,37 +255,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPWAlignFont-->
-        <!--SPRM sprmPFrameTextFlow-->
-        <UML:Class xmi.id="sprmPFrameTextFlow" name="sprmPFrameTextFlow">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x443A</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPFrameTextFlow</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPFrameTextFlow-->
         <!--SPRM sprmPOutLvl-->
         <UML:Class xmi.id="sprmPOutLvl" name="sprmPOutLvl">
           <UML:ModelElement.stereotype>
@@ -379,37 +286,6 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPOutLvl-->
-        <!--SPRM sprmPFBiDi-->
-        <UML:Class xmi.id="sprmPFBiDi" name="sprmPFBiDi">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x2441</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPFBiDi</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="kind"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <!--SPRM sprmPFBiDi-->
         <!--SPRM sprmCHighlight-->
         <UML:Class xmi.id="sprmCHighlight" name="sprmCHighlight">
           <UML:ModelElement.stereotype>

@@ -22582,16 +22582,16 @@
       <element name="topLinePunct" tokenid="ooxml:CT_PPrBase_topLinePunct"/>
       <element name="autoSpaceDE" tokenid="ooxml:CT_PPrBase_autoSpaceDE"/>
       <element name="autoSpaceDN" tokenid="ooxml:CT_PPrBase_autoSpaceDN"/>
-      <element name="bidi" tokenid="sprm:PFBiDi"/>
+      <element name="bidi" tokenid="ooxml:CT_PPrBase_bidi"/>
       <element name="adjustRightInd" tokenid="ooxml:CT_PPrBase_adjustRightInd"/>
       <element name="snapToGrid" tokenid="ooxml:CT_PPrBase_snapToGrid"/>
       <element name="spacing" tokenid="ooxml:CT_PPrBase_spacing"/>
       <element name="ind" tokenid="ooxml:CT_PPrBase_ind"/>
-      <element name="contextualSpacing" tokenid="sprm:PContextualSpacing"/>
+      <element name="contextualSpacing" tokenid="ooxml:CT_PPrBase_contextualSpacing"/>
       <element name="mirrorIndents" tokenid="ooxml:CT_PPrBase_mirrorIndents"/>
       <element name="suppressOverlap" tokenid="ooxml:CT_PPrBase_suppressOverlap"/>
-      <element name="jc" tokenid="sprm:PJc"/>
-      <element name="textDirection" tokenid="sprm:PFrameTextFlow"/>
+      <element name="jc" tokenid="ooxml:CT_PPrBase_jc"/>
+      <element name="textDirection" tokenid="ooxml:CT_PPrBase_textDirection"/>
       <element name="textAlignment" tokenid="sprm:PWAlignFont"/>
       <element name="textboxTightWrap" tokenid="sprm:PTightWrap"/>
       <element name="outlineLvl" tokenid="sprm:POutLvl"/>

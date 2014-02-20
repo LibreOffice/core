@@ -2107,7 +2107,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PJc, pValue);
+        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_jc, pValue);
         m_bNeedPap = true;
         return 0;
     }
@@ -2396,7 +2396,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_RTLPAR:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRPAR ? 0 : 1));
-                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PFrameTextFlow, pValue);
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_textDirection, pValue);
             }
             break;
         case RTF_LTRROW:
@@ -2738,7 +2738,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_CONTEXTUALSPACE:
                 {
                     RTFValue::Pointer_t pValue(new RTFValue(1));
-                    m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PContextualSpacing, pValue);
+                    m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_contextualSpacing, pValue);
                 }
                 break;
         case RTF_LINKSTYLES:
