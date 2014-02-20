@@ -36,11 +36,11 @@ private:
     GIFImageDataOutputStream*   pIDOS;
     GIFLZWCTreeNode*            pTable;
     GIFLZWCTreeNode*            pPrefix;
-    sal_uInt16                      nDataSize;
-    sal_uInt16                      nClearCode;
-    sal_uInt16                      nEOICode;
-    sal_uInt16                      nTableSize;
-    sal_uInt16                      nCodeSize;
+    sal_uInt16                  nDataSize;
+    sal_uInt16                  nClearCode;
+    sal_uInt16                  nEOICode;
+    sal_uInt16                  nTableSize;
+    sal_uInt16                  nCodeSize;
 
 public:
 
