@@ -413,6 +413,26 @@ sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 }
 
 OS2METReader::OS2METReader()
+    : ErrorCode(0)
+    , pOS2MET(NULL)
+    , pVirDev(NULL)
+    , nOrigPos(0)
+    , nOrigNumberFormat(0)
+    , aBoundingRect()
+    , aCalcBndRect()
+    , aGlobMapMode()
+    , bCoord32(sal_False)
+    , pPaletteStack(NULL)
+    , aLineInfo()
+    , pAreaStack(NULL)
+    , pPathStack(NULL)
+    , pPathList(NULL)
+    , pFontList(NULL)
+    , pBitmapList(NULL)
+    , aDefAttr()
+    , aAttr()
+    , pAttrStack(NULL)
+    , pOrdFile(NULL)
 {
 }
 
