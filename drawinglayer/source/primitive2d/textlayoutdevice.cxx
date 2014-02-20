@@ -342,12 +342,12 @@ namespace drawinglayer
             if(nTextLength)
             {
                 aRetval.reserve(nTextLength);
-                sal_Int32* pArray = new sal_Int32[nTextLength];
-                mrDevice.GetTextArray(rText, pArray, nIndex, nLength);
+                ::std::vector<sal_Int32> aDXArray( nTextLength);
+                mrDevice.GetTextArray(rText, &aDXArray[0], nIndex, nLength);
 
                 for(sal_uInt32 a(0); a < nTextLength; a++)
                 {
-                    aRetval.push_back(pArray[a]);
+                    aRetval.push_back(aDXArray[a]);
                 }
             }
 
