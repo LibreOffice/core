@@ -40,6 +40,7 @@
 #include "tools/helpers.hxx"
 
 #include <vcl/sysdata.hxx>
+#include <vcl/settings.hxx>
 
 #include "win/saldata.hxx"
 #include "win/salgdi.h"
