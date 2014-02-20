@@ -41,6 +41,9 @@ using ::std::vector;
 // ---------------------------------------------------------------------------
 
 ScDPTableData::CalcInfo::CalcInfo() :
+    pInitState( NULL ),
+    pColRoot( NULL ),
+    pRowRoot( NULL ),
     bRepeatIfEmpty(false)
 {
 }
