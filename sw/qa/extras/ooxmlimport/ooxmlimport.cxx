@@ -1881,6 +1881,16 @@ DECLARE_OOXMLIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<sal_Int16>(getRun(xParagraph, 1), "CharUnderline"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.docx")
+{
+    // Fonts defined by w:rFonts was not imported and so the font specified by a:fontRef was used.
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+    CPPUNIT_ASSERT_EQUAL(OUString("MS Mincho"), getProperty<OUString>(xRun, "CharFontNameAsian"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

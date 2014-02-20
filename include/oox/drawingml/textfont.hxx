@@ -39,6 +39,9 @@ public:
     /** Sets attributes from the passed attribute list. */
     void                setAttributes( const AttributeList& rAttribs );
 
+    /** Sets font name and init other attributes. */
+    void                setAttributes( const OUString& rFontName );
+
     /** Overwrites this text font with the passed text font, if it is used. */
     void                assignIfUsed( const TextFont& rTextFont );
 

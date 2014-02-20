@@ -65,6 +65,14 @@ void TextFont::setAttributes( const AttributeList& rAttribs )
     mnCharset  = rAttribs.getInteger( XML_charset, WINDOWS_CHARSET_DEFAULT );
 }
 
+void TextFont::setAttributes( const OUString& sFontName )
+{
+    maTypeface = sFontName;
+    maPanose = OUString();
+    mnPitch = 0;
+    mnCharset = WINDOWS_CHARSET_DEFAULT;
+}
+
 void TextFont::assignIfUsed( const TextFont& rTextFont )
 {
     if( !rTextFont.maTypeface.isEmpty() )

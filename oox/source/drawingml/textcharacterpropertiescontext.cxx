@@ -132,6 +132,18 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             return new HyperLinkContext( *this, rAttribs,  mrTextCharacterProperties.maHyperlinkPropertyMap );
         case OOX_TOKEN( doc, rFonts ):
+            if( rAttribs.hasAttribute(OOX_TOKEN(doc, ascii)) )
+            {
+                mrTextCharacterProperties.maLatinFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, ascii), OUString()));
+            }
+            if( rAttribs.hasAttribute(OOX_TOKEN(doc, cs)) )
+            {
+                mrTextCharacterProperties.maComplexFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, cs), OUString()));
+            }
+            if( rAttribs.hasAttribute(OOX_TOKEN(doc, eastAsia)) )
+            {
+                mrTextCharacterProperties.maAsianFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, eastAsia), OUString()));
+            }
             break;
         case OOX_TOKEN( doc, b ):
             mrTextCharacterProperties.moBold = rAttribs.getBool(OOX_TOKEN( doc, val ), true);
