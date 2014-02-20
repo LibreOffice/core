@@ -1311,10 +1311,10 @@ sal_Bool Bitmap::ImplScaleSuper(
 
         if( pAcc && pWAcc )
         {
-            long                nW = pAcc->Width() ;
-            long                nH = pAcc->Height() ;
-            const double    fRevScaleX = ( nDstW > 1L ) ? ( (double) ( nW - 1 ) / ( nDstW - 1 ) ) : 0.0;
-            const double    fRevScaleY = ( nDstH > 1L ) ? ( (double) ( nH - 1 ) / ( nDstH - 1 ) ) : 0.0;
+            const long nW = pAcc->Width() ;
+            const long nH = pAcc->Height() ;
+            const double fRevScaleX = ( nDstW > 1L ) ? ( (double) ( nW - 1 ) / ( nDstW - 1 ) ) : 0.0;
+            const double fRevScaleY = ( nDstH > 1L ) ? ( (double) ( nH - 1 ) / ( nDstH - 1 ) ) : 0.0;
 
             // create horizontal mapping table
             for( long nX = 0L, nTempX = nW - 1L, nTemp = nW - 2L; nX < nDstW; nX++ )
