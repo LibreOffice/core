@@ -3280,11 +3280,21 @@ DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
     // First problem was LO crashed during export (crash test)
 
     // Second problem was LO made file corruption, writing out nested text boxes, which can't be handled by Word.
-    // So test that all three exported text boxes are on the same level
-    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-    if (!pXmlDoc)
-        return;
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:t", 3);
+    // Test that all three exported text boxes are anchored to the same paragraph and not each other.
+    uno::Reference<text::XTextContent> xTextContent(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange(xTextContent->getAnchor(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xRange->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+
+    xTextContent.set(getShape(2), uno::UNO_QUERY);
+    xRange.set(xTextContent->getAnchor(), uno::UNO_QUERY);
+    xText.set(xRange->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
+
+    xTextContent.set(getShape(3), uno::UNO_QUERY);
+    xRange.set(xTextContent->getAnchor(), uno::UNO_QUERY);
+    xText.set(xRange->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.docx")
