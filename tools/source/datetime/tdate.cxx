@@ -33,7 +33,7 @@ struct tm *localtime_r(const time_t *timep, struct tm *buffer);
 #endif
 
 static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
-                                       31, 31, 30, 31, 30, 31 };
+                                             31, 31, 30, 31, 30, 31 };
 
 #define MAX_DAYS    3636532
 
@@ -195,7 +195,7 @@ sal_uInt16 Date::GetDayOfYear() const
 }
 
 sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
-                            sal_Int16 nMinimumNumberOfDaysInWeek ) const
+                                sal_Int16 nMinimumNumberOfDaysInWeek ) const
 {
     short nWeek;
     short n1WDay = (short)Date( 1, 1, GetYear() ).GetDayOfWeek();
@@ -407,6 +407,10 @@ Date& Date::operator +=( long nDays )
     sal_uInt16  nDay;
     sal_uInt16  nMonth;
     sal_uInt16  nYear;
+
+    if (nDays == 0)
+        return *this;
+
     long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
 
     nTempDays += nDays;
@@ -428,6 +432,10 @@ Date& Date::operator -=( long nDays )
     sal_uInt16  nDay;
     sal_uInt16  nMonth;
     sal_uInt16  nYear;
+
+    if (nDays == 0)
+        return *this;
+
     long    nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
 
     nTempDays -= nDays;
