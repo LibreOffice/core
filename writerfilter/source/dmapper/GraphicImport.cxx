@@ -754,16 +754,17 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                 switch (nIntValue)
                 {
                 case NS_ooxml::LN_ST_SizeRelFromH_margin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::FRAME));
+                    }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromH_page:
                     if (m_xShape.is())
                     {
-                        uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-                        if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-                        {
-                            uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                            xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
-                        }
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeWidthRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
                 default:
@@ -777,16 +778,17 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                 switch (nIntValue)
                 {
                 case NS_ooxml::LN_ST_SizeRelFromV_margin:
+                    if (m_xShape.is())
+                    {
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::FRAME));
+                    }
                     break;
                 case NS_ooxml::LN_ST_SizeRelFromV_page:
                     if (m_xShape.is())
                     {
-                        uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
-                        if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-                        {
-                            uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
-                            xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
-                        }
+                        uno::Reference<beans::XPropertySet> xPropertySet(m_xShape, uno::UNO_QUERY);
+                        xPropertySet->setPropertyValue("RelativeHeightRelation", uno::makeAny(text::RelOrientation::PAGE_FRAME));
                     }
                     break;
                 default:
