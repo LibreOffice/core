@@ -630,16 +630,31 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
     // Resize objects with relative width or height
     if ( !bGroupShape && GetPageFrm( ) && ( GetDrawObj( )->GetRelativeWidth( ) || GetDrawObj()->GetRelativeHeight( ) ) )
     {
-        Rectangle aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
         Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
 
         long nTargetWidth = aCurrObjRect.GetWidth( );
         if ( GetDrawObj( )->GetRelativeWidth( ) )
+        {
+            Rectangle aPageRect;
+            if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
+                // Exclude margins.
+                aPageRect = GetPageFrm()->Prt().SVRect();
+            else
+                aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
             nTargetWidth = aPageRect.GetWidth( ) * GetDrawObj( )->GetRelativeWidth( ).get( );
+        }
 
         long nTargetHeight = aCurrObjRect.GetHeight( );
         if ( GetDrawObj( )->GetRelativeHeight( ) )
+        {
+            Rectangle aPageRect;
+            if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
+                // Exclude margins.
+                aPageRect = GetPageFrm()->Prt().SVRect();
+            else
+                aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
             nTargetHeight = aPageRect.GetHeight( ) * GetDrawObj( )->GetRelativeHeight( ).get( );
+        }
 
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
         {
