@@ -994,7 +994,6 @@ void ScInputHandler::ShowTip( const OUString& rText )
 {
     //  aManualTip muss hinterher von aussen gesetzt werden
     HideTip();
-
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView)
     {
@@ -1103,10 +1102,10 @@ void ScInputHandler::UseFormulaData()
                     {
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
                         nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
-
+                        OUString aFuncName = ppFDesc->getFunctionName() + "(";
                         OUString aNew;
                         ScTypedCaseStrSet::const_iterator it =
-                            findText(*pFormulaDataPara, pFormulaDataPara->end(), ppFDesc->getFunctionName(), aNew, false);
+                            findText(*pFormulaDataPara, pFormulaDataPara->end(), aFuncName, aNew, false);
                         if (it != pFormulaDataPara->end())
                         {
                             bool bFlag = false;
