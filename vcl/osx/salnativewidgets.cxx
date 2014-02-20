@@ -21,6 +21,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"
+#include <vcl/settings.hxx>
 
 #include "quartz/salgdi.h"
 #include "osx/salnativewidgets.h"
