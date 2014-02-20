@@ -20,7 +20,8 @@
 #ifndef INCLUDED_SW_INC_CRSSKIP_HXX
 #define INCLUDED_SW_INC_CRSSKIP_HXX
 
-#include <sal/types.h>
+#include <tools/solar.h>
+
 
 // define for cursor travelling normally in western text cells and chars do
 // the same, but in complex text cell skip over legatures and char skip

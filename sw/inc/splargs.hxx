@@ -20,16 +20,20 @@
 #define INCLUDED_SW_INC_SPLARGS_HXX
 
 #include <i18nlangtag/lang.h>
+#include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <limits.h>
 
 class SwTxtNode;
 class SwIndex;
 class Font;
-
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+
+/*************************************************************************
+ *                      struct SwArgsBase
+ *************************************************************************/
 
 
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
@@ -57,9 +61,10 @@ struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
     }
 };
 
-/*
+/*************************************************************************
+ *                      struct SwConversionArgs
  * used for text conversion (Hangul/Hanja, Simplified/Traditional Chinese, ...)
- */
+ *************************************************************************/
 
 struct SwConversionArgs : SwArgsBase
 {
@@ -85,6 +90,10 @@ struct SwConversionArgs : SwArgsBase
         {}
 };
 
+/*************************************************************************
+ *                      struct SwSpellArgs
+ *************************************************************************/
+
 struct SwSpellArgs : SwArgsBase
 {
     ::com::sun::star::uno::Reference<
@@ -105,6 +114,10 @@ struct SwSpellArgs : SwArgsBase
             bIsGrammarCheck( bGrammar )
         {}
 };
+
+/*************************************************************************
+ *                      class SwInterHyphInfo
+ *************************************************************************/
 
 // Parameter-class for Hyphenate.
 // docedt.cxx:  SwDoc::Hyphenate()

@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLITEM_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <tools/solar.h>
 #include <limits.h>
 #include <xmloff/xmlictxt.hxx>
 
@@ -61,6 +62,7 @@ public:
                                     SfxItemSet&  rItemSet,
                                    const SvXMLItemMapEntry& rEntry,
                                    const SvXMLUnitConverter& rUnitConv );
+
 
 };
 

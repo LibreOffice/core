@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX
 #define INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX
 
+#include <tools/solar.h>
+
 class RTFSurround
 {
     union {

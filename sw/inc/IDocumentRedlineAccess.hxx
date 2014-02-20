@@ -21,7 +21,10 @@
  #define INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
 
  #include <sal/types.h>
+ #include <tools/solar.h>
+
  #include <limits.h>
+
  #include <com/sun/star/uno/Sequence.hxx>
 
  class SwRangeRedline;
@@ -95,6 +98,10 @@ public:
 
 public:
 
+    /*************************************************
+        Query
+    *************************************************/
+
     /** Query the currently set redline mode
 
         @returns
@@ -129,6 +136,10 @@ public:
     virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const = 0;
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
+
+    /***************************************************
+        Manipulation
+     ***************************************************/
 
     /** Append a new redline
 

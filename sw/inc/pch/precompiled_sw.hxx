@@ -990,6 +990,7 @@
 #include <tools/resmgr.hxx>
 #include <tools/rtti.hxx>
 #include <tools/shl.hxx>
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>

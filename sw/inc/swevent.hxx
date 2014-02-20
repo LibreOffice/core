@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_SWEVENT_HXX
 #define INCLUDED_SW_INC_SWEVENT_HXX
 
+#include <tools/solar.h>
 #include <sfx2/sfx.hrc>
 
 #define     SW_EVENT_OBJECT_SELECT        ( EVENT_APP_START + 0 )
@@ -112,6 +113,7 @@ struct SwCallMouseEvent
 
     sal_Bool HasEvent() const { return EVENT_OBJECT_NONE != eType; }
 };
+
 
 #endif
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_SWPORTIONHANDLER_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_SWPORTIONHANDLER_HXX
 
+#include <tools/solar.h>
 #include <txttypes.hxx>
 
 /** The SwPortionHandler interface implements a visitor for the layout

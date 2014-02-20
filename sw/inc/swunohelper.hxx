@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWUNOHELPER_HXX
 #define INCLUDED_SW_INC_SWUNOHELPER_HXX
 
+#include <tools/solar.h>
 #include <sal/types.h>
 #include "swdllapi.h"
 

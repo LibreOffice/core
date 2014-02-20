@@ -20,6 +20,8 @@
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLIMPIT_HXX
 
 #include <limits.h>
+#include <tools/solar.h>
+
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include "xmlitmap.hxx"

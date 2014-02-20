@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_FORMAT_HXX
 #define INCLUDED_SW_INC_FORMAT_HXX
 
+#include <tools/solar.h>
 #include "swdllapi.h"
 #include <swatrset.hxx>
 #include <calbck.hxx>
@@ -320,6 +321,8 @@ public:
     */
     virtual bool IsShadowTransparent() const;
 };
+
+// --------------- inline Implementations ------------------------
 
 inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
                                              sal_Bool bInParents ) const

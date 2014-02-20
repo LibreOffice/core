@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_INC_SWATRSET_HXX
 #define INCLUDED_SW_INC_SWATRSET_HXX
-
+#include <tools/solar.h>
 #include <tools/mempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>

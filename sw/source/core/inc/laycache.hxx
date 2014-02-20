@@ -20,11 +20,13 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 
+#include <tools/solar.h>
+
 class SwDoc;
 class SwLayCacheImpl;
 class SvStream;
 
-/*
+/*************************************************************************
  *                      class SwLayoutCache
  *
  * This class allows to save layout information in the file and it contains
@@ -37,8 +39,7 @@ class SvStream;
  * if somebody reads the information, he increments the lock count by 1,
  * during the Read(..) function the lock count will set to $8000.
  *
- */
-
+ **************************************************************************/
 class SwLayoutCache
 {
     SwLayCacheImpl *pImpl;

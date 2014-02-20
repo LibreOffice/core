@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_TABCOL_HXX
 #define INCLUDED_SW_INC_TABCOL_HXX
 
+#include <tools/solar.h>
+
 #include <vector>
 #include "swdllapi.h"
 

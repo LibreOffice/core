@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_INC_WRTSWTBL_HXX
 #define INCLUDED_SW_SOURCE_FILTER_INC_WRTSWTBL_HXX
 
+#include <tools/solar.h>
 #include <tools/color.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
@@ -33,12 +34,17 @@ class SvxBrushItem;
 
 namespace editeng { class SvxBorderLine; }
 
-// Code aus dem HTML-Filter fuers schreiben von Tabellen
+//---------------------------------------------------------------------------
+//       Code aus dem HTML-Filter fuers schreiben von Tabellen
+//---------------------------------------------------------------------------
 
 #define COLFUZZY 20
 #define ROWFUZZY 20
 #define COL_DFLT_WIDTH ((2*COLFUZZY)+1)
 #define ROW_DFLT_HEIGHT (2*ROWFUZZY)+1
+
+
+//-----------------------------------------------------------------------
 
 class SW_DLLPUBLIC SwWriteTableCell
 {
@@ -90,6 +96,9 @@ public:
 };
 
 typedef boost::ptr_vector<SwWriteTableCell> SwWriteTableCells;
+
+
+//-----------------------------------------------------------------------
 
 class SW_DLLPUBLIC SwWriteTableRow
 {
@@ -159,6 +168,9 @@ public:
     ~SwWriteTableRows() { DeleteAndDestroyAll(); }
 };
 
+
+//-----------------------------------------------------------------------
+
 class SW_DLLPUBLIC SwWriteTableCol
 {
     sal_uInt32 nPos;                        // End Position der Spalte
@@ -217,6 +229,8 @@ class SwWriteTableCols : public o3tl::sorted_vector<SwWriteTableCol*, SwWriteTab
 public:
     ~SwWriteTableCols() { DeleteAndDestroyAll(); }
 };
+
+//-----------------------------------------------------------------------
 
 class SW_DLLPUBLIC SwWriteTable
 {
@@ -309,6 +323,9 @@ public:
     const SwWriteTableCols& GetCols() const { return aCols; }
     const SwWriteTableRows& GetRows() const { return aRows; }
 };
+
+
+
 
 #endif
 

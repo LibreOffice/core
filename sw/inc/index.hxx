@@ -22,6 +22,7 @@
 #include <limits.h>
 
 #include "rtl/instance.hxx"
+#include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <swdllapi.h>
 
@@ -139,19 +140,16 @@ inline sal_Int32 SwIndex::operator++()
 {
     return ChgValue( *this, m_nIndex+1 ).m_nIndex;
 }
-
 inline sal_Int32 SwIndex::operator--()
 {
     return ChgValue( *this, m_nIndex-1 ).m_nIndex;
 }
-
 inline sal_Int32 SwIndex::operator++(int)
 {
     sal_Int32 const nOldIndex = m_nIndex;
     ChgValue( *this, m_nIndex+1 );
     return nOldIndex;
 }
-
 inline sal_Int32 SwIndex::operator--(int)
 {
     sal_Int32 const nOldIndex = m_nIndex;
@@ -163,17 +161,14 @@ inline sal_Int32 SwIndex::operator+=( sal_Int32 const nVal )
 {
     return ChgValue( *this, m_nIndex + nVal ).m_nIndex;
 }
-
 inline sal_Int32 SwIndex::operator-=( sal_Int32 const nVal )
 {
     return ChgValue( *this, m_nIndex - nVal ).m_nIndex;
 }
-
 inline sal_Int32 SwIndex::operator+=( const SwIndex& rIndex )
 {
     return ChgValue( *this, m_nIndex + rIndex.m_nIndex ).m_nIndex;
 }
-
 inline sal_Int32 SwIndex::operator-=( const SwIndex& rIndex )
 {
     return ChgValue( *this, m_nIndex - rIndex.m_nIndex ).m_nIndex;
@@ -183,22 +178,18 @@ inline bool SwIndex::operator< ( const SwIndex& rIndex ) const
 {
     return m_nIndex <  rIndex.m_nIndex;
 }
-
 inline bool SwIndex::operator<=( const SwIndex& rIndex ) const
 {
     return m_nIndex <= rIndex.m_nIndex;
 }
-
 inline bool SwIndex::operator> ( const SwIndex& rIndex ) const
 {
     return m_nIndex >  rIndex.m_nIndex;
 }
-
 inline bool SwIndex::operator>=( const SwIndex& rIndex ) const
 {
     return m_nIndex >= rIndex.m_nIndex;
 }
-
 inline SwIndex& SwIndex::operator= ( sal_Int32 const nVal )
 {
     if (m_nIndex != nVal)

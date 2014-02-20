@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTLINKSADMINISTRATION_HXX
 #define INCLUDED_SW_INC_IDOCUMENTLINKSADMINISTRATION_HXX
 
+#include <tools/solar.h>
+
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 namespace sfx2 { class SvLinkSource;  class LinkManager; }
 

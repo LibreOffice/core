@@ -19,9 +19,12 @@
 #ifndef INCLUDED_SW_INC_TXATBASE_HXX
 #define INCLUDED_SW_INC_TXATBASE_HXX
 
+#include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <hintids.hxx>
+
 #include <boost/utility.hpp>
+
 
 class SfxItemPool;
 class SvXMLAttrContainerItem;
@@ -35,6 +38,7 @@ class SwFmtFlyCnt;
 class SwTOXMark;
 class SwFmtRefMark;
 class SwFmtMeta;
+
 
 class SwTxtAttr : private boost::noncopyable
 {
@@ -130,6 +134,9 @@ public:
     virtual sal_Int32* GetEnd();
 };
 
+
+// --------------- Inline Implementations ------------------------
+
 inline const sal_Int32* SwTxtAttr::End() const
 {
     return const_cast<SwTxtAttr * >(this)->GetEnd();
@@ -160,6 +167,8 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
         m_bDontExpand = bDontExpand;
     }
 }
+
+//------------------------------------------------------------------------
 
 inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {

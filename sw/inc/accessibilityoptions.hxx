@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_ACCESSIBILITYOPTIONS_HXX
 #define INCLUDED_SW_INC_ACCESSIBILITYOPTIONS_HXX
 
+#include <tools/solar.h>
+
 struct SwAccessibilityOptions
 {
     sal_Bool bIsAlwaysAutoColor         :1;

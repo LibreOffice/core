@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
 
+#include <tools/solar.h>
 #include "xmlitmap.hxx"
 #include <vector>
 

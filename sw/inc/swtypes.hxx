@@ -18,8 +18,8 @@
  */
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
-
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include <SwGetPoolIdFromName.hxx>
 
 #include <limits.h>

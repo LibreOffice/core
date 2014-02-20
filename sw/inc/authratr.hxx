@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_AUTHRATR_HXX
 #define INCLUDED_SW_INC_AUTHRATR_HXX
 
+#include <tools/solar.h>
 #include <tools/color.hxx>
 #include "swdllapi.h"
 
@@ -40,6 +41,7 @@ public:
                 nColor == rAttr.nColor;
     }
 };
+
 
 #endif
 
