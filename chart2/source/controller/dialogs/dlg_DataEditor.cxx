@@ -18,7 +18,6 @@
  */
 
 #include "dlg_DataEditor.hxx"
-#include "dlg_DataEditor.hrc"
 #include "Strings.hrc"
 #include "DataBrowser.hxx"
 
@@ -43,34 +42,42 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-DataEditor::DataEditor(
-    Window* pParent,
+DataEditor::DataEditor(Window* pParent,
     const Reference< chart2::XChartDocument > & xChartDoc,
-    const Reference< uno::XComponentContext > & xContext ) :
-        ModalDialog( pParent, SchResId( DLG_DIAGRAM_DATA )),
-        m_bReadOnly( false ),
-        m_apBrwData( new DataBrowser( this, SchResId( CTL_DATA ), true /* bLiveUpdate */)),
-        m_aTbxData( this, SchResId( TBX_DATA )),
-        m_xChartDoc( xChartDoc ),
-        m_xContext( xContext ),
-        m_aToolboxImageList( SchResId( IL_DIAGRAM_DATA ))
+    const Reference< uno::XComponentContext > & xContext)
+    : ModalDialog(pParent, "ChartDataDialog",
+        "modules/schart/ui/chartdatadialog.ui")
+    , m_bReadOnly(false)
+    , m_xChartDoc(xChartDoc)
+    , m_xContext(xContext)
 {
-    FreeResource();
+    m_xBrwData.reset(new DataBrowser(get<Window>("datawindow"), WB_BORDER | WB_TABSTOP, true /* bLiveUpdate */));
+    m_xBrwData->set_hexpand(true);
+    m_xBrwData->set_vexpand(true);
+    m_xBrwData->set_expand(true);
+    Size aSize(m_xBrwData->LogicToPixel(Size(232, 121), MAP_APPFONT));
+    m_xBrwData->set_width_request(aSize.Width());
+    m_xBrwData->set_height_request(aSize.Height());
+    m_xBrwData->Show();
 
-    // set min size to current size
-    SetMinOutputSizePixel( GetOutputSizePixel() );
+    get(m_pTbxData, "toolbar");
 
-    ApplyImageList();
+    TBI_DATA_INSERT_ROW = m_pTbxData->GetItemId("InsertRow");
+    TBI_DATA_INSERT_COL = m_pTbxData->GetItemId("InsertColumn");
+    TBI_DATA_INSERT_TEXT_COL = m_pTbxData->GetItemId("InsertTextColumn");
+    TBI_DATA_DELETE_ROW = m_pTbxData->GetItemId("RemoveRow");
+    TBI_DATA_DELETE_COL = m_pTbxData->GetItemId("RemoveColumn");
+    TBI_DATA_SWAP_COL = m_pTbxData->GetItemId("SwapColumn");
+    TBI_DATA_SWAP_ROW = m_pTbxData->GetItemId("SwapRow");
 
-    m_aTbxData.SetSizePixel( m_aTbxData.CalcWindowSizePixel() );
-    m_aTbxData.SetSelectHdl( LINK( this, DataEditor, ToolboxHdl ));
+    m_pTbxData->SetSelectHdl( LINK( this, DataEditor, ToolboxHdl ));
 
-    m_apBrwData->SetCursorMovedHdl( LINK( this, DataEditor,   BrowserCursorMovedHdl ));
-    m_apBrwData->SetCellModifiedHdl( LINK( this, DataEditor,  CellModified ));
+    m_xBrwData->SetCursorMovedHdl( LINK( this, DataEditor,   BrowserCursorMovedHdl ));
+    m_xBrwData->SetCellModifiedHdl( LINK( this, DataEditor,  CellModified ));
 
     UpdateData();
     GrabFocus();
-    m_apBrwData->GrabFocus();
+    m_xBrwData->GrabFocus();
 
     bool bReadOnly = true;
     Reference< frame::XStorable > xStor( m_xChartDoc, uno::UNO_QUERY );
@@ -83,27 +90,15 @@ DataEditor::DataEditor(
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
     // react on changes
     aMiscOptions.AddListenerLink( LINK( this, DataEditor, MiscHdl ) );
-    m_aTbxData.SetOutStyle( nStyle );
-
-    // set good window width
-    Size aWinSize( GetOutputSizePixel());
-    Size aWinSizeWithBorder( GetSizePixel());
-    Point aWinPos( OutputToAbsoluteScreenPixel( GetPosPixel()));
-    sal_Int32 nMaxWidth = GetDesktopRectPixel().getWidth() -
-        (aWinSizeWithBorder.getWidth() - aWinSize.getWidth() + aWinPos.getX()) - 10; // leave some space
-    sal_Int32 nBrowserWidth = m_apBrwData->GetTotalWidth() + 12 + 16; // plus padding + 16?
-    sal_Int32 nWindowWidth = ::std::min( nMaxWidth, nBrowserWidth );
-    aWinSize.setWidth( nWindowWidth );
-    SetOutputSizePixel( aWinSize );
-    AdaptBrowseBoxSize();
+    m_pTbxData->SetOutStyle( nStyle );
 
     // allow travelling to toolbar with F6
-    notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::AddWindow ));
+    notifySystemWindow( this, m_pTbxData, ::comphelper::mem_fun( & TaskPaneList::AddWindow ));
 }
 
 DataEditor::~DataEditor()
 {
-    notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
+    notifySystemWindow( this, m_pTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
 
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
@@ -114,30 +109,22 @@ DataEditor::~DataEditor()
 // react on click (or keypress) on toolbar icon
 IMPL_LINK_NOARG(DataEditor, ToolboxHdl)
 {
-    switch( m_aTbxData.GetCurItemId() )
-    {
-        case TBI_DATA_INSERT_ROW:
-            m_apBrwData->InsertRow();
-            break;
-        case TBI_DATA_INSERT_COL:
-            m_apBrwData->InsertColumn();
-            break;
-        case TBI_DATA_INSERT_TEXT_COL:
-            m_apBrwData->InsertTextColumn();
-            break;
-        case TBI_DATA_DELETE_ROW:
-            m_apBrwData->RemoveRow();
-            break;
-        case TBI_DATA_DELETE_COL:
-            m_apBrwData->RemoveColumn();
-            break;
-        case TBI_DATA_SWAP_COL :
-            m_apBrwData->SwapColumn ();
-            break;
-        case TBI_DATA_SWAP_ROW :
-            m_apBrwData->SwapRow ();
-            break;
-    }
+    sal_uInt16 nId = m_pTbxData->GetCurItemId();
+
+    if (nId == TBI_DATA_INSERT_ROW)
+        m_xBrwData->InsertRow();
+    else if (nId == TBI_DATA_INSERT_COL)
+        m_xBrwData->InsertColumn();
+    else if (nId == TBI_DATA_INSERT_TEXT_COL)
+        m_xBrwData->InsertTextColumn();
+    else if (nId == TBI_DATA_DELETE_ROW)
+        m_xBrwData->RemoveRow();
+    else if (nId == TBI_DATA_DELETE_COL)
+        m_xBrwData->RemoveColumn();
+    else if (nId == TBI_DATA_SWAP_COL)
+        m_xBrwData->SwapColumn();
+    else if (nId == TBI_DATA_SWAP_ROW)
+        m_xBrwData->SwapRow();
 
     return 0;
 }
@@ -148,16 +135,16 @@ IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
     if( m_bReadOnly )
         return 0;
 
-    bool bIsDataValid = m_apBrwData->IsEnableItem();
+    bool bIsDataValid = m_xBrwData->IsEnableItem();
 
-    m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, bIsDataValid && m_apBrwData->MayInsertRow() );
-    m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() );
-    m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() );
-    m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, m_apBrwData->MayDeleteRow() );
-    m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, m_apBrwData->MayDeleteColumn() );
+    m_pTbxData->EnableItem( TBI_DATA_INSERT_ROW, bIsDataValid && m_xBrwData->MayInsertRow() );
+    m_pTbxData->EnableItem( TBI_DATA_INSERT_COL, bIsDataValid && m_xBrwData->MayInsertColumn() );
+    m_pTbxData->EnableItem( TBI_DATA_INSERT_TEXT_COL, bIsDataValid && m_xBrwData->MayInsertColumn() );
+    m_pTbxData->EnableItem( TBI_DATA_DELETE_ROW, m_xBrwData->MayDeleteRow() );
+    m_pTbxData->EnableItem( TBI_DATA_DELETE_COL, m_xBrwData->MayDeleteColumn() );
 
-    m_aTbxData.EnableItem( TBI_DATA_SWAP_COL,   bIsDataValid && m_apBrwData->MaySwapColumns() );
-    m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW,   bIsDataValid && m_apBrwData->MaySwapRows() );
+    m_pTbxData->EnableItem( TBI_DATA_SWAP_COL,   bIsDataValid && m_xBrwData->MaySwapColumns() );
+    m_pTbxData->EnableItem( TBI_DATA_SWAP_ROW,   bIsDataValid && m_xBrwData->MaySwapRows() );
 
     return 0;
 }
@@ -168,16 +155,16 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_bReadOnly = bReadOnly;
     if( m_bReadOnly )
     {
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, false );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, false );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, false );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, false );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, false );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, false );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, false );
+        m_pTbxData->EnableItem( TBI_DATA_INSERT_ROW, false );
+        m_pTbxData->EnableItem( TBI_DATA_INSERT_COL, false );
+        m_pTbxData->EnableItem( TBI_DATA_INSERT_TEXT_COL, false );
+        m_pTbxData->EnableItem( TBI_DATA_DELETE_ROW, false );
+        m_pTbxData->EnableItem( TBI_DATA_DELETE_COL, false );
+        m_pTbxData->EnableItem( TBI_DATA_SWAP_COL, false );
+        m_pTbxData->EnableItem( TBI_DATA_SWAP_ROW, false );
     }
 
-    m_apBrwData->SetReadOnly( m_bReadOnly );
+    m_xBrwData->SetReadOnly( m_bReadOnly );
 }
 
 IMPL_LINK_NOARG(DataEditor, MiscHdl)
@@ -185,7 +172,7 @@ IMPL_LINK_NOARG(DataEditor, MiscHdl)
     SvtMiscOptions aMiscOptions;
     sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
 
-    m_aTbxData.SetOutStyle( nStyle );
+    m_pTbxData->SetOutStyle( nStyle );
 
     return 0L;
 }
@@ -197,24 +184,7 @@ IMPL_LINK_NOARG(DataEditor, CellModified)
 
 void DataEditor::UpdateData()
 {
-    m_apBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
-}
-
-void DataEditor::AdaptBrowseBoxSize()
-{
-    Size aSize( PixelToLogic( GetResizeOutputSizePixel(), MAP_APPFONT ));
-    Size aDataSize;
-
-    aDataSize.setWidth( aSize.getWidth() - 12 );
-    aDataSize.setHeight( aSize.getHeight() - 31 -24 );
-
-    m_apBrwData->SetSizePixel( LogicToPixel( aDataSize, MAP_APPFONT ));
-}
-
-void DataEditor::Resize()
-{
-    Dialog::Resize();
-    AdaptBrowseBoxSize();
+    m_xBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
 }
 
 sal_Bool DataEditor::Close()
@@ -227,13 +197,7 @@ sal_Bool DataEditor::Close()
 
 bool DataEditor::ApplyChangesToModel()
 {
-    return m_apBrwData->EndEditing();
-}
-
-// sets the correct toolbar icons depending on the current mode (e.g. high contrast)
-void DataEditor::ApplyImageList()
-{
-    m_aTbxData.SetImageList( m_aToolboxImageList );
+    return m_xBrwData->EndEditing();
 }
 
 // add/remove a window (the toolbar) to/from the global list, so that F6

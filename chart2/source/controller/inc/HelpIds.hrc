@@ -20,22 +20,12 @@
 #define CHART_HELPIDS_HRC
 
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
-#define HID_SCH_CTL_DATA                                    "CHART2_HID_SCH_CTL_DATA"
 
 //for chart type dialog:
 #define HID_SCH_CTL_TYPE                                    "CHART2_HID_SCH_CTL_TYPE"
 #define HID_SCH_CTL_VARIANT                                 "CHART2_HID_SCH_CTL_VARIANT"
 #define HID_SCH_NUM_OF_LINES                                "CHART2_HID_SCH_NUM_OF_LINES"
 //
-
-#define HID_SCH_TBI_DATA_INSERT_ROW                         "CHART2_HID_SCH_TBI_DATA_INSERT_ROW"
-#define HID_SCH_TBI_DATA_INSERT_COL                         "CHART2_HID_SCH_TBI_DATA_INSERT_COL"
-#define HID_SCH_TBI_DATA_DELETE_ROW                         "CHART2_HID_SCH_TBI_DATA_DELETE_ROW"
-#define HID_SCH_TBI_DATA_DELETE_COL                         "CHART2_HID_SCH_TBI_DATA_DELETE_COL"
-#define HID_SCH_TBI_DATA_SWAP_COL                           "CHART2_HID_SCH_TBI_DATA_SWAP_COL"
-#define HID_SCH_TBI_DATA_SWAP_ROW                           "CHART2_HID_SCH_TBI_DATA_SWAP_ROW"
-#define HID_SCH_TBI_DATA_INSERT_TEXT_COL                    "CHART2_HID_SCH_TBI_DATA_INSERT_TEXT_COL"
-#define HID_SCH_TBX_DATA                                    "CHART2_HID_SCH_TBX_DATA"
 
 #define HID_SCH_CHART_AUTO_FORMAT                           "CHART2_HID_SCH_CHART_AUTO_FORMAT"
 #define HID_SCH_LB_BAR_GEOMETRY                             "CHART2_HID_SCH_LB_BAR_GEOMETRY"
@@ -55,7 +45,6 @@
 #define HID_SCH_LEGEND_SHOW                                 "CHART2_HID_SCH_LEGEND_SHOW"
 #define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
 
-#define HID_DIAGRAM_DATA                                    "CHART2_HID_DIAGRAM_DATA"
 #define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
 
 #endif

@@ -27,7 +27,6 @@ $(eval $(call gb_SrsTarget_set_include,chart2/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,chart2/res,\
-    chart2/source/controller/dialogs/dlg_DataEditor.src \
     chart2/source/controller/dialogs/res_BarGeometry.src \
     chart2/source/controller/dialogs/Strings_AdditionalControls.src \
     chart2/source/controller/dialogs/Strings_ChartTypes.src \

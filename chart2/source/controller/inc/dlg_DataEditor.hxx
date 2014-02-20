@@ -20,14 +20,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 
+#include <boost/scoped_ptr.hpp>
 #include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <comphelper/stl_types.hxx>
 #include <vcl/dialog.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {
@@ -50,9 +49,6 @@ public:
                     ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~DataEditor();
 
-    // Window
-    virtual void Resize();
-
     // Dialog
     virtual sal_Bool Close();
 
@@ -60,14 +56,21 @@ public:
     bool ApplyChangesToModel();
 
 private:
-    bool                            m_bReadOnly;
-    ::std::auto_ptr< DataBrowser >  m_apBrwData;
-    ToolBox                         m_aTbxData;
+    sal_uInt16 TBI_DATA_INSERT_ROW;
+    sal_uInt16 TBI_DATA_INSERT_COL;
+    sal_uInt16 TBI_DATA_INSERT_TEXT_COL;
+    sal_uInt16 TBI_DATA_DELETE_ROW;
+    sal_uInt16 TBI_DATA_DELETE_COL;
+    sal_uInt16 TBI_DATA_SWAP_COL;
+    sal_uInt16 TBI_DATA_SWAP_ROW;
+
+    bool                           m_bReadOnly;
+    boost::scoped_ptr<DataBrowser> m_xBrwData;
+    ToolBox*                       m_pTbxData;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDoc;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;
-    ImageList       m_aToolboxImageList;
 
     /// handles actions of the toolbox
     DECL_LINK( ToolboxHdl, void* );
@@ -83,7 +86,6 @@ private:
     DECL_LINK( BrowserContentScrolled, void* );
 
     void UpdateData();
-    void ApplyImageList();
     /// moved and resizes the series name control etc. to fit the dimensions of the edit browsebox
 //     void ImplAdjustHeaderControls( bool bRefreshFromModel );
 
@@ -103,8 +105,6 @@ private:
     void notifySystemWindow( Window* pWindow,
                              Window* pToRegister,
                              ::comphelper::mem_fun1_t< TaskPaneList, Window* > rMemFunc );
-
-    void AdaptBrowseBoxSize();
 };
 
 } // namespace chart

@@ -39,6 +39,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
@@ -118,7 +119,9 @@ SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
         Edit( pParent ),
         m_nStartColumn( 0 ),
         m_bShowWarningBox( false )
-{}
+{
+    SetHelpId(HID_SCH_DATA_SERIES_LABEL);
+}
 
 SeriesHeaderEdit::~SeriesHeaderEdit()
 {}
@@ -150,7 +153,7 @@ void SeriesHeaderEdit::MouseButtonDown( const MouseEvent& rMEvt )
 class SeriesHeader
 {
 public:
-    explicit SeriesHeader( Window * pParent );
+    explicit SeriesHeader(Window * pParent, Window *pColorParent);
 
     void SetColor( const Color & rCol );
     void SetPos( const Point & rPos );
@@ -160,7 +163,6 @@ public:
     void SetSeriesName( const OUString & rName );
     void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
 
-    void SetPixelPosX( sal_Int32 nPos );
     void SetPixelWidth( sal_Int32 nWidth );
 
     sal_Int32 GetStartColumn() const;
@@ -169,6 +171,7 @@ public:
     static sal_Int32 GetRelativeAppFontXPosForNameField();
 
     void Show();
+    void Hide();
 
     /** call this before destroying the class.  This notifies the listeners to
         changes of the edit field for the series name.
@@ -203,10 +206,10 @@ private:
     bool      m_bSeriesNameChangePending;
 };
 
-SeriesHeader::SeriesHeader( Window * pParent ) :
+SeriesHeader::SeriesHeader( Window * pParent, Window *pColorParent ) :
         m_spSymbol( new FixedImage( pParent, WB_NOBORDER )),
         m_spSeriesName( new SeriesHeaderEdit( pParent )),
-        m_spColorBar( new FixedText( pParent, WB_NOBORDER )),
+        m_spColorBar( new FixedText( pColorParent, WB_NOBORDER )),
         m_pDevice( pParent ),
         m_nStartCol( 0 ),
         m_nEndCol( 0 ),
@@ -255,42 +258,38 @@ void SeriesHeader::SetPos( const Point & rPos )
     m_aPos = rPos;
 
     // chart type symbol
-    Point aPos( rPos );
-    aPos.setY( aPos.getY() + nSymbolDistance );
     Size aSize( nSymbolHeight, nSymbolHeight );
-    m_spSymbol->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
-    m_spSymbol->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
-    aPos.setY( aPos.getY() - nSymbolDistance );
+    aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    m_spSymbol->set_width_request(aSize.Width());
+    m_spSymbol->set_height_request(aSize.Height());
 
     // series name edit field
-    aPos.setX( aPos.getX() + nSymbolHeight + nSymbolDistance );
+    aSize.setWidth(nSymbolDistance);
+    aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    m_spSeriesName->set_margin_left(aSize.Width() + 2);
     aSize.setWidth( m_nWidth - nSymbolHeight - nSymbolDistance );
     sal_Int32 nHeight = 12;
     aSize.setHeight( nHeight );
-    m_spSeriesName->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
-    m_spSeriesName->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
+    aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    m_spSeriesName->set_width_request(aSize.Width());
+    m_spSeriesName->set_height_request(aSize.Height());
 
     // color bar
-    aPos.setX( rPos.getX() + 1 );
-    aPos.setY( aPos.getY() + nHeight + 2 );
+    aSize.setWidth(1);
+    aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    m_spColorBar->set_margin_left(aSize.Width() + 2);
     nHeight = 3;
     aSize.setWidth( m_nWidth - 1 );
     aSize.setHeight( nHeight );
-    m_spColorBar->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
-    m_spColorBar->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
+    aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
+    m_spColorBar->set_width_request(aSize.Width());
+    m_spColorBar->set_height_request(aSize.Height());
 }
 
 void SeriesHeader::SetWidth( sal_Int32 nWidth )
 {
     m_nWidth = nWidth;
     SetPos( m_aPos );
-}
-
-void SeriesHeader::SetPixelPosX( sal_Int32 nPos )
-{
-    Point aPos( m_pDevice->LogicToPixel( m_aPos, MAP_APPFONT ));
-    aPos.setX( nPos );
-    SetPos( m_pDevice->PixelToLogic( aPos, MAP_APPFONT ));
 }
 
 void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
@@ -333,6 +332,13 @@ void SeriesHeader::Show()
     m_spSymbol->Show();
     m_spSeriesName->Show();
     m_spColorBar->Show();
+}
+
+void SeriesHeader::Hide()
+{
+    m_spSymbol->Hide();
+    m_spSeriesName->Hide();
+    m_spColorBar->Hide();
 }
 
 void SeriesHeader::SetEditChangedHdl( const Link & rLink )
@@ -465,8 +471,8 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 
 } // anonymous namespace
 
-DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) :
-    ::svt::EditBrowseBox( pParent, rId, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
+DataBrowser::DataBrowser( Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
+    ::svt::EditBrowseBox( pParent, nStyle, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
     m_bIsDirty( false ),
@@ -484,6 +490,7 @@ DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) 
     RenewTable();
     SetClean();
 }
+
 
 DataBrowser::~DataBrowser()
 {
@@ -589,9 +596,9 @@ void DataBrowser::RenewTable()
     GoToRow( ::std::min( nOldRow, GetRowCount() - 1 ));
     GoToColumnId( ::std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
 
-    Window * pWin = this->GetParent();
-    if( !pWin )
-        pWin = this;
+    Dialog* pDialog = GetParentDialog();
+    Window* pWin = pDialog->get<VclContainer>("columns");
+    Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
 
     // fill series headers
     clearHeaders();
@@ -602,7 +609,7 @@ void DataBrowser::RenewTable()
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
     {
-        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin ));
+        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
         Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
@@ -1236,9 +1243,9 @@ void DataBrowser::EndScroll()
 
 void DataBrowser::RenewSeriesHeaders()
 {
-    Window * pWin = this->GetParent();
-    if( !pWin )
-        pWin = this;
+    Dialog* pDialog = GetParentDialog();
+    Window* pWin = pDialog->get<VclContainer>("columns");
+    Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
 
     clearHeaders();
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
@@ -1248,7 +1255,7 @@ void DataBrowser::RenewSeriesHeaders()
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
     {
-        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin ));
+        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
         Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&
@@ -1279,10 +1286,20 @@ void DataBrowser::ImplAdjustHeaderControls()
 
     // width of header column
     nCurrentPos +=  this->GetColumnWidth( 0 );
+
+    Dialog* pDialog = GetParentDialog();
+    Window* pWin = pDialog->get<VclContainer>("columns");
+    Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
+    pWin->set_margin_left(nCurrentPos);
+    pColorWin->set_margin_left(nCurrentPos);
+
     tSeriesHeaderContainer::iterator aIt( m_aSeriesHeaders.begin());
     sal_uInt16 i = this->GetFirstVisibleColumNumber();
     while( (aIt != m_aSeriesHeaders.end()) && ((*aIt)->GetStartColumn() < i) )
+    {
+        (*aIt)->Hide();
         ++aIt;
+    }
     for( ; i < nColCount && aIt != m_aSeriesHeaders.end(); ++i )
     {
         if( (*aIt)->GetStartColumn() == i )
@@ -1294,12 +1311,19 @@ void DataBrowser::ImplAdjustHeaderControls()
         {
             if( nStartPos < nMaxPos )
             {
-                (*aIt)->SetPixelPosX( nStartPos + 2 );
                 (*aIt)->SetPixelWidth( nCurrentPos - nStartPos - 3 );
+                (*aIt)->Show();
+
+                if (pWin)
+                {
+                    pWin->set_margin_left(nStartPos);
+                    pColorWin->set_margin_left(nStartPos);
+                    pWin = pColorWin = NULL;
+                }
+
             }
             else
-                // do not hide, to get focus events. Move outside the dialog for "hiding"
-                (*aIt)->SetPixelPosX( nMaxPos + 42 );
+                (*aIt)->Hide();
             ++aIt;
         }
     }

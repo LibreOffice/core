@@ -33,6 +33,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/3dviewdialog \
 	chart2/uiconfig/ui/attributedialog \
 	chart2/uiconfig/ui/chardialog \
+	chart2/uiconfig/ui/chartdatadialog \
 	chart2/uiconfig/ui/charttypedialog \
 	chart2/uiconfig/ui/datarangedialog \
 	chart2/uiconfig/ui/dlg_DataLabel \
