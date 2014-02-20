@@ -60,7 +60,7 @@ PropertyMap::~PropertyMap()
 }
 
 
-uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
+uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharGrabBag)
 {
     if(!m_aValues.getLength() && size())
     {
@@ -73,8 +73,14 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
             else if ( i->second.getGrabBagType() == PARA_GRAB_BAG )
                 nParaGrabBag++;
         }
+
+        // In case there are properties to be grab-bagged and we can have a char grab-bag, allocate one slot for it.
+        size_t nCharGrabBagSize = 0;
+        if (bCharGrabBag)
+            nCharGrabBagSize = nCharGrabBag ? 1 : 0;
+
         // If there are any grab bag properties, we need one slot for them.
-        m_aValues.realloc( size() - nCharGrabBag + (nCharGrabBag ? 1 : 0)
+        m_aValues.realloc( size() - nCharGrabBag + nCharGrabBagSize
                                   - nParaGrabBag + (nParaGrabBag ? 1 : 0));
         ::com::sun::star::beans::PropertyValue* pValues = m_aValues.getArray();
         uno::Sequence<beans::PropertyValue> aCharGrabBagValues(nCharGrabBag);
@@ -116,9 +122,12 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
             {
                 if ( aMapIter->second.getGrabBagType() == CHAR_GRAB_BAG )
                 {
-                    pCharGrabBagValues[nCharGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
-                    pCharGrabBagValues[nCharGrabBagValue].Value = aMapIter->second.getValue();
-                    ++nCharGrabBagValue;
+                    if (bCharGrabBag)
+                    {
+                        pCharGrabBagValues[nCharGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
+                        pCharGrabBagValues[nCharGrabBagValue].Value = aMapIter->second.getValue();
+                        ++nCharGrabBagValue;
+                    }
                 }
                 else if ( aMapIter->second.getGrabBagType() == PARA_GRAB_BAG )
                 {
@@ -134,7 +143,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
                 }
             }
         }
-        if (nCharGrabBag)
+        if (nCharGrabBag && bCharGrabBag)
         {
             pValues[nValue].Name = "CharInteropGrabBag";
             pValues[nValue].Value = uno::makeAny(aCharGrabBagValues);

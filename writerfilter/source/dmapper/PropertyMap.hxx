@@ -112,7 +112,7 @@ public:
     PropertyMap();
     virtual ~PropertyMap();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues(bool bCharGrabBag = true);
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */

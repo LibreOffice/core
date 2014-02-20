@@ -1120,7 +1120,8 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
     {
         try
         {
-            uno::Sequence< beans::PropertyValue > pValues = pPropertyMap->GetPropertyValues();
+            // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
+            uno::Sequence< beans::PropertyValue > pValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!m_bIsInComments);
             sal_Int32 len = pValues.getLength();
 
             if (m_bStartTOC || m_bStartIndex)

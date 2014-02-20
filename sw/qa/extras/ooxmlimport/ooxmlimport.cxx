@@ -13,6 +13,7 @@
 #if !defined(WNT)
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
@@ -1869,6 +1870,17 @@ DECLARE_OOXMLIMPORT_TEST(testFloatingTablesAnchor, "floating-tables-anchor.docx"
     xText.set(xRange->getText(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Anchor point"), xText->getString());
 }
+
+DECLARE_OOXMLIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(2), 2), "TextField");
+    uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
+    // Make sure we test the right annotation.
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "days");
+    // Formatting was lost: the second text portion was NONE, not SINGLE.
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<sal_Int16>(getRun(xParagraph, 1), "CharUnderline"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
