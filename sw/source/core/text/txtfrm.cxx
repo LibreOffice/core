@@ -1399,7 +1399,7 @@ static bool lcl_ErgoVadis( SwTxtFrm* pFrm, sal_Int32 &rPos, const PrepareHint eP
 }
 
 void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
-                        sal_Bool bNotify )
+                        bool bNotify )
 {
     SwFrmSwapper aSwapper( this, false );
 
@@ -1413,7 +1413,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-                SetInvalidVert( sal_True );  // Test
+                SetInvalidVert( true );  // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
@@ -1457,7 +1457,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-        SetInvalidVert( sal_True );  // Test
+        SetInvalidVert( true );  // Test
         OSL_ENSURE( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1537,9 +1537,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
     // Test
             {
-                SetInvalidVert( sal_False );
+                SetInvalidVert( false );
                 bool bOld = IsVertical();
-                SetInvalidVert( sal_True );
+                SetInvalidVert( true );
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), COMPLETE_STRING ) );
             }

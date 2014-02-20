@@ -300,7 +300,7 @@ void SwPageFrm::CheckGrid( sal_Bool bInvalidate )
     }
 }
 
-void SwPageFrm::CheckDirection( sal_Bool bVert )
+void SwPageFrm::CheckDirection( bool bVert )
 {
     sal_uInt16 nDir =
             ((SvxFrameDirectionItem&)GetFmt()->GetFmtAttr( RES_FRAMEDIR )).GetValue();

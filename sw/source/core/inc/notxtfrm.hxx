@@ -48,9 +48,9 @@ public:
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual sal_Bool GetCharRect( SwRect &, const SwPosition&,
+    virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
-    sal_Bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
+    virtual bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
                      SwCrsrMoveState* = 0, bool bTestBackground = false) const;
 
     const Size &GetGrfSize() const  { return GetSize(); }

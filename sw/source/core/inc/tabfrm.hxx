@@ -123,13 +123,13 @@ public:
     virtual bool GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual void CheckDirection( bool bVert );
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, sal_Bool bNotify = sal_True );
+                          const void *pVoid = 0, bool bNotify = true );
 
                  SwCntntFrm *FindLastCntnt();
     inline const SwCntntFrm *FindLastCntnt() const;

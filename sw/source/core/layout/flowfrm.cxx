@@ -1928,7 +1928,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
 
             if( bBossChg )
             {
-                m_rThis.Prepare( PREP_BOSS_CHGD, 0, sal_False );
+                m_rThis.Prepare( PREP_BOSS_CHGD, 0, false );
                 if( !bSamePage )
                 {
                     SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
@@ -2462,7 +2462,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         SwPageFrm *pNewPage = m_rThis.FindPageFrm();
         if( pNewPage != pOldPage )
         {
-            m_rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, sal_False );
+            m_rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, false );
             SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                 pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on

@@ -1372,7 +1372,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                         if( pPrv->IsSctFrm() )
                             pPrv = ((SwSectionFrm*)pPrv)->ContainsCntnt();
                         if( pPrv && pPrv->IsTxtFrm() )
-                            ((SwTxtFrm*)pPrv)->Prepare( PREP_QUOVADIS, 0, sal_False );
+                            ((SwTxtFrm*)pPrv)->Prepare( PREP_QUOVADIS, 0, false );
                     }
                 }
                 // #i27138#
@@ -2520,7 +2520,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         pSibling->_InvalidatePrt();
         ((SwCntntFrm*)pSibling)->InvalidatePage( pPage );
         if ( ((SwCntntFrm*)pSibling)->GetFollow() )
-            pSibling->Prepare( PREP_CLEAR, 0, sal_False );
+            pSibling->Prepare( PREP_CLEAR, 0, false );
     }
     else
     {   pNxt = pParent->pLower;

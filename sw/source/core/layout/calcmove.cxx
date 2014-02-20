@@ -1308,7 +1308,7 @@ void SwCntntFrm::MakeAll()
             if ( bMoveable && !bFormatted && ( GetFollow() ||
                  ( (Frm().*fnRect->fnOverStep)( nDeadLine ) ) ) )
             {
-                Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
+                Prepare( PREP_WIDOWS_ORPHANS, 0, false );
                 mbValidSize = bWidow = sal_False;
             }
             if( (Frm().*fnRect->fnGetPos)() != aOldFrmPos ||
@@ -1316,9 +1316,10 @@ void SwCntntFrm::MakeAll()
             {
                 // In this Prepare, an _InvalidateSize() might happen.
                 // mbValidSize becomes sal_False and Format() gets called.
-                Prepare( PREP_POS_CHGD, (const void*)&bFormatted, sal_False );
+                Prepare( PREP_POS_CHGD, (const void*)&bFormatted, false );
                 if ( bWidow && GetFollow() )
-                {   Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
+                {
+                    Prepare( PREP_WIDOWS_ORPHANS, 0, false );
                     mbValidSize = sal_False;
                 }
             }
@@ -1370,7 +1371,7 @@ void SwCntntFrm::MakeAll()
                 MakePos();
                 if( aOldPos != (Frm().*fnRect->fnGetPos)() )
                 {
-                    Prepare( PREP_POS_CHGD, (const void*)&bFormatted, sal_False );
+                    Prepare( PREP_POS_CHGD, (const void*)&bFormatted, false );
                     if ( !mbValidSize )
                     {
                         (Frm().*fnRect->fnSetWidth)( (GetUpper()->
@@ -1380,10 +1381,10 @@ void SwCntntFrm::MakeAll()
                             const long nOldW = (Prt().*fnRect->fnGetWidth)();
                             MakePrtArea( rAttrs );
                             if( nOldW != (Prt().*fnRect->fnGetWidth)() )
-                                Prepare( PREP_FIXSIZE_CHG, 0, sal_False );
+                                Prepare( PREP_FIXSIZE_CHG, 0, false );
                         }
                         if( GetFollow() )
-                            Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
+                            Prepare( PREP_WIDOWS_ORPHANS, 0, false );
                         mbValidSize = bFormatted = sal_True;
                         Format();
                     }
@@ -1565,7 +1566,7 @@ void SwCntntFrm::MakeAll()
                 sal_Bool bSplit = !IsFwdMoveAllowed();
                 if ( nTmp > 0 && WouldFit( nTmp, bSplit, sal_False ) )
                 {
-                    Prepare( PREP_WIDOWS_ORPHANS, 0, sal_False );
+                    Prepare( PREP_WIDOWS_ORPHANS, 0, false );
                     mbValidSize = sal_False;
                     bFitPromise = true;
                     continue;
@@ -1639,7 +1640,7 @@ void SwCntntFrm::MakeAll()
             // FME 2007-08-30 #i81146# new loop control
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
             {
-                Prepare( PREP_MUST_FIT, 0, sal_False );
+                Prepare( PREP_MUST_FIT, 0, false );
                 mbValidSize = sal_False;
                 bMustFit = true;
                 continue;

@@ -81,12 +81,12 @@ public:
     SwTxtFrm* FindMaster() const;
 
     // layout dependent cursor travelling
-    virtual sal_Bool LeftMargin( SwPaM * ) const;
-    virtual sal_Bool RightMargin( SwPaM *, sal_Bool bAPI = sal_False ) const;
-    virtual sal_Bool UnitUp( SwPaM *, const SwTwips nOffset = 0,
-                             sal_Bool bSetInReadOnly = sal_False ) const;
-    virtual sal_Bool UnitDown( SwPaM *, const SwTwips nOffset = 0,
-                               sal_Bool bSetInReadOnly = sal_False ) const;
+    virtual bool LeftMargin( SwPaM * ) const;
+    virtual bool RightMargin( SwPaM *, bool bAPI = false ) const;
+    virtual bool UnitUp( SwPaM *, const SwTwips nOffset = 0,
+                         bool bSetInReadOnly = false ) const;
+    virtual bool UnitDown( SwPaM *, const SwTwips nOffset = 0,
+                           bool bSetInReadOnly = false ) const;
     inline  sal_Bool StartNextPage( SwPaM * ) const;
     inline  sal_Bool StartPrevPage( SwPaM * ) const;
     inline  sal_Bool StartCurrPage( SwPaM * ) const;

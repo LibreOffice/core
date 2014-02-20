@@ -180,7 +180,7 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
  * Both are virtual in the frame base class and thus are redefined here.
  */
 
-sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
+bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                             SwCrsrMoveState *pCMS ) const
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::GetCharRect with swapped frame" );
@@ -195,8 +195,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     //   needs to be formatted
 
     // Optimisation: reading ahead saves us a GetAdjFrmAtPos
-    const sal_Bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->eState );
-    const sal_Bool bNoScroll = pCMS && pCMS->bNoScroll;
+    const bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->eState );
+    const bool bNoScroll = pCMS && pCMS->bNoScroll;
     SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, rPos, bRightMargin,
                                      bNoScroll );
     pFrm->GetFormatted();
@@ -212,7 +212,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                     ( bVertL2R ? std::min( nFrmMaxY, nUpperMaxY ) : std::max( nFrmMaxY, nUpperMaxY ) ) :
                     std::min( nFrmMaxY, nUpperMaxY );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
     {
@@ -258,12 +258,12 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         if ( pFrm->IsRightToLeft() )
             pFrm->SwitchLTRtoRTL( rOrig );
 
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
         if( !pFrm->HasPara() )
-            return sal_False;
+            return false;
 
         SwFrmSwapper aSwapper( pFrm, true );
         if ( bVert )
@@ -672,7 +672,7 @@ bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
  *                 virtual SwTxtFrm::GetCrsrOfst()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
+bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
                                SwCrsrMoveState* pCMS, bool ) const
 {
     MSHORT nChgFrm = 2;
@@ -695,7 +695,7 @@ sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
  * Layout-oriented cursor movement to the line start.
  */
 
-sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
+bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
 {
     if( ((const SwNode*)pPam->GetNode()) != GetNode() )
         pPam->GetPoint()->nNode = *((SwTxtFrm*)this)->GetTxtNode();
@@ -721,7 +721,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
     }
     pPam->GetPoint()->nContent = SwIndex( pFrm->GetTxtNode(), nIndx );
     SwTxtCursor::SetRightMargin( false );
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -734,7 +734,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
  * the last char in order to append text.
  */
 
-sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
+bool SwTxtFrm::RightMargin(SwPaM *pPam, bool bAPI) const
 {
     if( ((const SwNode*)pPam->GetNode()) != GetNode() )
         pPam->GetPoint()->nNode = *((SwTxtFrm*)this)->GetTxtNode();
@@ -766,7 +766,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
     }
     pPam->GetPoint()->nContent = SwIndex( pFrm->GetTxtNode(), nRightMargin );
     SwTxtCursor::SetRightMargin( !bAPI );
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
@@ -1311,8 +1311,8 @@ bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
  *                   virtual SwTxtFrm::UnitUp()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
-                            sal_Bool bSetInReadOnly ) const
+bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
+                      bool bSetInReadOnly ) const
 {
     /* We call CntntNode::GertFrm() in CrsrSh::Up().
      * This _always returns the master.
@@ -1325,7 +1325,7 @@ sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
                                            SwTxtCursor::IsRightMargin() );
     const sal_Bool bRet = pFrm->_UnitUp( pPam, nOffset, bSetInReadOnly );
 
-    // No SwTxtCursor::SetRightMargin( sal_False );
+    // No SwTxtCursor::SetRightMargin( false );
     // Instead we have a SwSetToRightMargin in _UnitUp
     return bRet;
 }
@@ -1334,12 +1334,12 @@ sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
  *                   virtual SwTxtFrm::UnitDown()
  *************************************************************************/
 
-sal_Bool SwTxtFrm::UnitDown(SwPaM *pPam, const SwTwips nOffset,
-                            sal_Bool bSetInReadOnly ) const
+bool SwTxtFrm::UnitDown(SwPaM *pPam, const SwTwips nOffset,
+                        bool bSetInReadOnly ) const
 {
     const SwTxtFrm *pFrm = GetAdjFrmAtPos((SwTxtFrm*)this, *(pPam->GetPoint()),
                                            SwTxtCursor::IsRightMargin() );
-    const sal_Bool bRet = pFrm->_UnitDown( pPam, nOffset, bSetInReadOnly );
+    const bool bRet = pFrm->_UnitDown( pPam, nOffset, bSetInReadOnly );
     SwTxtCursor::SetRightMargin( false );
     return bRet;
 }

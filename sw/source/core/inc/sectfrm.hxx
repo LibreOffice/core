@@ -66,7 +66,7 @@ public:
     virtual ~SwSectionFrm();
 
     void Init();
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual void CheckDirection( bool bVert );
 
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
 

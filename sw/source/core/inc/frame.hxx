@@ -587,7 +587,7 @@ public:
 
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
 
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual void CheckDirection( bool bVert );
 
     void ReinitializeFrmSizeAttrFlags();
 
@@ -790,9 +790,9 @@ public:
 
     virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    virtual sal_Bool    GetCrsrOfst( SwPosition *, Point&,
+    virtual bool    GetCrsrOfst( SwPosition *, Point&,
                                  SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
-    virtual sal_Bool    GetCharRect( SwRect &, const SwPosition&,
+    virtual bool    GetCharRect( SwRect &, const SwPosition&,
                                  SwCrsrMoveState* = 0 ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
@@ -801,7 +801,7 @@ public:
     // It's your own fault if you cast void* incorrectly! In any case check
     // the void* for 0.
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, sal_Bool bNotify = sal_True );
+                          const void *pVoid = 0, bool bNotify = true );
 
     // sal_True if it is the correct class, sal_False otherwise
     inline bool IsLayoutFrm() const;

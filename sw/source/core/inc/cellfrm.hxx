@@ -39,10 +39,10 @@ public:
     SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
     ~SwCellFrm();
 
-    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
+    virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual void CheckDirection( sal_Bool bVert );
+    virtual void CheckDirection( bool bVert );
 
     // #i103961#
     virtual void Cut();

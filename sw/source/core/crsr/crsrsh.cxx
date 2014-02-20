@@ -2333,7 +2333,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
     aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
     aTmpState.bRealHeight = sal_True;
 
-    sal_Bool bRet = GetLayout()->GetCrsrOfst( &aPos, aPt /*, &aTmpState*/ );
+    const bool bRet = GetLayout()->GetCrsrOfst( &aPos, aPt /*, &aTmpState*/ );
 
     SetInFrontOfLabel( false ); // #i27615#
 

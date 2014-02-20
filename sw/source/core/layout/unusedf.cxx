@@ -43,10 +43,10 @@ bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
     return false;
 }
 
-sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*, bool  ) const
+bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*, bool  ) const
 {
     OSL_FAIL( "GetCrsrOfst of the base class, hi!" );
-    return sal_False;
+    return false;
 }
 
 #ifdef DBG_UTIL
@@ -68,11 +68,11 @@ void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 
 #endif
 
-sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
+bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
     OSL_FAIL( "GetCharRect() of the base called." );
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

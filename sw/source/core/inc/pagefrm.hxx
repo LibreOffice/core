@@ -160,14 +160,14 @@ public:
     //   this assertion. Thus, delete it.
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
 
-    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
+    virtual bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
         // erfrage vom Client Informationen
     virtual bool GetInfo( SfxPoolItem& ) const;
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual void CheckDirection( bool bVert );
     void CheckGrid( sal_Bool bInvalidate );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     sal_Bool HasGrid() const { return bHasGrid; }

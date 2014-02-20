@@ -230,8 +230,8 @@ public:
     // Returns the screen position of rPos. The values are relative to the upper
     // left position of the page frame.
     // Additional information can be obtained by passing an SwCrsrMoveState object.
-    // Returns sal_False if rPos > number of character is string
-    virtual sal_Bool   GetCharRect( SwRect& rRect, const SwPosition& rPos,
+    // Returns false if rPos > number of character is string
+    virtual bool GetCharRect( SwRect& rRect, const SwPosition& rPos,
                                 SwCrsrMoveState* pCMS = 0 ) const;
     // Eine etwas abgespeckte GetCharRect-Version fuer autopositionierte Rahmen
     bool GetAutoPos( SwRect &, const SwPosition& ) const;
@@ -266,7 +266,7 @@ public:
     //gegebenen Position innerhalb der SSize des Layout am
     //naechsten ist. Wenn der SPoint ausserhalb der SSize liegt,
     //liefert die Funktion false, true sonst.
-    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
+    virtual bool GetCrsrOfst( SwPosition *, Point&,
                                   SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
 
     // GetKeyCrsrOfst sorgt dafuer, dass der Frame nicht gewechselt wird
@@ -282,13 +282,13 @@ public:
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,
     //vorhergehende/naechste Zeile, gleiche horizontale Position.
-    virtual sal_Bool LeftMargin(SwPaM *) const;
-    virtual sal_Bool RightMargin(SwPaM *, sal_Bool bAPI = sal_False) const;
+    virtual bool LeftMargin(SwPaM *) const;
+    virtual bool RightMargin(SwPaM *, bool bAPI = false) const;
 
-    virtual sal_Bool UnitUp(SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False  ) const;
-    virtual sal_Bool UnitDown(SwPaM *, const SwTwips nOffset = 0,
-                            sal_Bool bSetInReadOnly = sal_False ) const;
+    virtual bool UnitUp(SwPaM *, const SwTwips nOffset = 0,
+                            bool bSetInReadOnly = false ) const;
+    virtual bool UnitDown(SwPaM *, const SwTwips nOffset = 0,
+                            bool bSetInReadOnly = false ) const;
     bool _UnitUp(SwPaM *, const SwTwips nOffset = 0,
                             bool bSetInReadOnly = false ) const;
     bool _UnitDown(SwPaM *, const SwTwips nOffset = 0,
@@ -328,7 +328,7 @@ public:
     // Wer den void* falsch casted ist selbst Schuld!
     // Auf jedenfall muss der void* auf 0 geprueft werden.
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
-                          const void *pVoid = 0, sal_Bool bNotify = sal_True );
+                          const void *pVoid = 0, bool bNotify = true );
 
     // nMaxHeight is the required height
     // bSplit indicates, that the paragraph has to be split
@@ -424,7 +424,7 @@ public:
     inline SwTwips GetRightMargin() const;
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void  CheckDirection( sal_Bool bVert );
+    virtual void CheckDirection( bool bVert );
 
     // Liefert die Summe der Zeilenhoehen in pLine zurueck.
     sal_uInt16 GetParHeight() const;

@@ -3496,7 +3496,7 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     }
 }
 
-void SwTabFrm::Prepare( const PrepareHint eHint, const void *, sal_Bool )
+void SwTabFrm::Prepare( const PrepareHint eHint, const void *, bool )
 {
     if( PREP_BOSS_CHGD == eHint )
         CheckDirChange();

@@ -480,11 +480,11 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
         Shrink( std::min(Prt().Height(), -nChgHght) );
 }
 
-sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
+bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
                               SwCrsrMoveState *pCMS ) const
 {
     if ( &rPos.nNode.GetNode() != (SwNode*)GetNode() )
-        return sal_False;
+        return false;
 
     Calc();
     SwRect aFrameRect( Frm() );
@@ -513,16 +513,16 @@ sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
         }
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
+bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
                              SwCrsrMoveState*, bool ) const
 {
     SwCntntNode* pCNd = (SwCntntNode*)GetNode();
     pPos->nNode = *pCNd;
     pPos->nContent.Assign( pCNd, 0 );
-    return sal_True;
+    return true;
 }
 
 #define CLEARCACHE( pNd ) {\

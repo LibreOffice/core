@@ -185,7 +185,7 @@ public:
           SdrPage* GetDrawPage()       { return pDrawPage; }
           void     SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
 
-    virtual sal_Bool  GetCrsrOfst( SwPosition *, Point&,
+    virtual bool  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0, bool bTestBackground = false ) const;
 
     virtual void Paint( SwRect const&,

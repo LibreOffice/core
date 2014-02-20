@@ -2602,7 +2602,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
     aMoveState.bPosMatchesBounds = true;
-    sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
+    const bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     SwIndex aCntntIdx = aPos.nContent;
     const sal_Int32 nIndex = aCntntIdx.GetIndex();

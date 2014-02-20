@@ -146,7 +146,7 @@ void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_B
     }
 }
 
-void SwFrm::CheckDirection( sal_Bool bVert )
+void SwFrm::CheckDirection( bool bVert )
 {
     if( bVert )
     {
@@ -163,49 +163,49 @@ void SwFrm::CheckDirection( sal_Bool bVert )
     }
 }
 
-void SwSectionFrm::CheckDirection( sal_Bool bVert )
+void SwSectionFrm::CheckDirection( bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
     {
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_True, bBrowseMode );
+                    bVert, true, bBrowseMode );
     }
     else
         SwFrm::CheckDirection( bVert );
 }
 
-void SwFlyFrm::CheckDirection( sal_Bool bVert )
+void SwFlyFrm::CheckDirection( bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
     {
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_False, bBrowseMode );
+                    bVert, false, bBrowseMode );
     }
     else
         SwFrm::CheckDirection( bVert );
 }
 
-void SwTabFrm::CheckDirection( sal_Bool bVert )
+void SwTabFrm::CheckDirection( bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
     {
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_True, bBrowseMode );
+                    bVert, true, bBrowseMode );
     }
     else
         SwFrm::CheckDirection( bVert );
 }
 
-void SwCellFrm::CheckDirection( sal_Bool bVert )
+void SwCellFrm::CheckDirection( bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     const SfxPoolItem* pItem;
@@ -216,19 +216,19 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir( pFrmDirItem->GetValue(), bVert, sal_False, bBrowseMode );
+        const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        CheckDir( pFrmDirItem->GetValue(), bVert, false, bBrowseMode );
     }
     else
         SwFrm::CheckDirection( bVert );
 }
 
-void SwTxtFrm::CheckDirection( sal_Bool bVert )
+void SwTxtFrm::CheckDirection( bool bVert )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     CheckDir( GetTxtNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
-              sal_True, bBrowseMode );
+              true, bBrowseMode );
 }
 
 void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -342,7 +342,7 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     }
 }
 
-void SwFrm::Prepare( const PrepareHint, const void *, sal_Bool )
+void SwFrm::Prepare( const PrepareHint, const void *, bool )
 {
     /* Do nothing */
 }
@@ -762,7 +762,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         if( pNxt->IsSctFrm() )
             pNxt = ((SwSectionFrm*)pNxt)->ContainsCntnt();
         if( pNxt && pNxt->IsTxtFrm() && pNxt->IsInFtn() )
-            pNxt->Prepare( PREP_FTN, 0, sal_False );
+            pNxt->Prepare( PREP_FTN, 0, false );
     }
 
     if ( Frm().Height() )
@@ -802,7 +802,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         if( pFrm && pFrm->IsSctFrm() )
             pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
         if( pFrm )
-            pFrm->Prepare( PREP_QUOVADIS, 0, sal_False );
+            pFrm->Prepare( PREP_QUOVADIS, 0, false );
         if( !GetNext() )
         {
             pFrm = FindFtnFrm()->GetNext();
@@ -844,7 +844,7 @@ void SwCntntFrm::Cut()
         {
             pFrm->_InvalidatePrt();
             if( IsInFtn() )
-                pFrm->Prepare( PREP_QUOVADIS, 0, sal_False );
+                pFrm->Prepare( PREP_QUOVADIS, 0, false );
         }
         // #i26250# - invalidate printing area of previous
         // table frame.
@@ -888,7 +888,7 @@ void SwCntntFrm::Cut()
             }
         }
         if( pFrm && IsInFtn() )
-            pFrm->Prepare( PREP_ERGOSUM, 0, sal_False );
+            pFrm->Prepare( PREP_ERGOSUM, 0, false );
         if( IsInSct() && !GetPrev() )
         {
             SwSectionFrm* pSct = FindSctFrm();
@@ -1071,7 +1071,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
                 if( pFrm->IsSctFrm() )
                     pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
                 if( pFrm )
-                    pFrm->Prepare( PREP_ERGOSUM, 0, sal_False );
+                    pFrm->Prepare( PREP_ERGOSUM, 0, false );
             }
         }
         if ( IsInFtn() && 0 != ( pFrm = GetIndPrev() ) )
@@ -1079,7 +1079,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
             if( pFrm->IsSctFrm() )
                 pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
             if( pFrm )
-                pFrm->Prepare( PREP_QUOVADIS, 0, sal_False );
+                pFrm->Prepare( PREP_QUOVADIS, 0, false );
         }
     }
 
@@ -3626,7 +3626,7 @@ static void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
         }
 
         if( nInv & INV_SIZE )
-            pCnt->Prepare( PREP_CLEAR, 0, sal_False );
+            pCnt->Prepare( PREP_CLEAR, 0, false );
         if( nInv & INV_POS )
             pCnt->_InvalidatePos();
         if( nInv & INV_PRTAREA )
