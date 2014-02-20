@@ -1956,15 +1956,12 @@ sal_Bool Bitmap::ImplScaleSuper(
                     }
                     else
                     {
-                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
-                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
-                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
-
                         for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTop = bVMirr ? ( nY + 1 ) : nY;
-                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+                            long nTop = bVMirr ? ( nY + 1 ) : nY;
+                            long nBottom = bVMirr ? nY : ( nY + 1 ) ;
 
+                            long nLineStart, nLineRange;
                             if( nY ==nEndY )
                             {
                                 nLineStart = pMapIY[ nY ];
@@ -1978,9 +1975,10 @@ sal_Bool Bitmap::ImplScaleSuper(
 
                             for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
                             {
-                                nLeft = bHMirr ? ( nX + 1 ) : nX;
-                                nRight = bHMirr ? nX : ( nX + 1 ) ;
+                                long nLeft = bHMirr ? ( nX + 1 ) : nX;
+                                long nRight = bHMirr ? nX : ( nX + 1 ) ;
 
+                                long nRowStart, nRowRange;
                                 if( nX == nEndX )
                                 {
                                     nRowStart = pMapIX[ nX ];
@@ -1992,13 +1990,17 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
                                 }
 
-                                nSumR = nSumG = nSumB = 0;
-                                nTotalWeightY = 0;
+                                long nSumR = 0;
+                                long nSumG = 0;
+                                long nSumB = 0;
+                                long nTotalWeightY = 0;
 
                                 for(int i = 0; i<= nLineRange; i++)
                                 {
-                                    nSumRowR = nSumRowG = nSumRowB = 0;
-                                    nTotalWeightX = 0;
+                                    long nSumRowR = 0;
+                                    long nSumRowG = 0;
+                                    long nSumRowB = 0;
+                                    long nTotalWeightX = 0;
 
                                     for(int j = 0; j <= nRowRange; j++)
                                     {
@@ -2015,7 +2017,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                         else if( j == 0 )
                                         {
 
-                                            nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                                            long nWeightX = (nMax- pMapFX[ nLeft ]) ;
                                             nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
                                             nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
                                             nSumRowR += ( nWeightX *aCol0.GetRed()) ;
@@ -2024,7 +2026,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                         else if ( nRowRange == j )
                                         {
 
-                                            nWeightX = pMapFX[ nRight ] ;
+                                            long nWeightX = pMapFX[ nRight ] ;
                                             nSumRowB += ( nWeightX *aCol0.GetBlue() );
                                             nSumRowG += ( nWeightX *aCol0.GetGreen() );
                                             nSumRowR += ( nWeightX *aCol0.GetRed() );
@@ -2039,6 +2041,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                         }
                                     }
 
+                                    long nWeightY = nMax;
                                     if( nY == nEndY )
                                         nWeightY = nMax;
                                     else if( i == 0 )
@@ -2047,8 +2050,6 @@ sal_Bool Bitmap::ImplScaleSuper(
                                         nWeightY = pMapFY[ nTop ];
                                     else if ( nLineRange == i )
                                         nWeightY = pMapFY[ nBottom ];
-                                    else
-                                        nWeightY = nMax;
 
                                     nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
                                     nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
