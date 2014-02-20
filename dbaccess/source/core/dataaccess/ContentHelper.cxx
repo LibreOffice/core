@@ -51,6 +51,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 OContentHelper_Impl::OContentHelper_Impl()
+    : m_pDataSource(0)
 {
 }
 
