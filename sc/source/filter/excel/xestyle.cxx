@@ -1570,18 +1570,18 @@ void lclGetBorderLine(
             switch (pLine->GetBorderLineStyle())
             {
                 case table::BorderLineStyle::DASHED:
+                case table::BorderLineStyle::FINE_DASHED:
                     rnXclLine = EXC_LINE_DASHED;
                     break;
                 case table::BorderLineStyle::DOTTED:
                     rnXclLine = EXC_LINE_DOTTED;
                     break;
-                case table::BorderLineStyle::FINE_DASHED:
-                    rnXclLine = EXC_LINE_HAIR;
-                    break;
                 default:
                     break;
             }
         }
+        else if (nOuterWidth >= EXC_BORDER_HAIR)
+            rnXclLine = EXC_LINE_HAIR;
         else
             rnXclLine = EXC_LINE_NONE;
     }
@@ -1726,7 +1726,7 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
         case EXC_LINE_HAIR:     return "hair";
         case EXC_LINE_DOTTED:     return "dotted";
         case EXC_LINE_DASHED:     return "dashed";
-        case EXC_LINE_MEDIUMDASHED:     return "mediumdashed";
+        case EXC_LINE_MEDIUMDASHED: return "mediumDashed";
     }
     return "*unknown*";
 }
