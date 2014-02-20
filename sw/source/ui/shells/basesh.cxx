@@ -1462,11 +1462,16 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, bDisable));
             }
             break;
+
             case FN_BACKSPACE:
             case SID_DELETE:
-                if (rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0)
+                if ( ( rSh.HasReadonlySel() && !rSh.CrsrInsideInputFld() )
+                     || rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0 )
+                {
                     rSet.DisableItem( nWhich );
+                }
                 break;
+
             case SID_CONTOUR_DLG:
             {
                 sal_Bool bParentCntProt = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT );

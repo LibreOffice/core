@@ -572,57 +572,77 @@ static const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 {
     bool bRet = false;
-    Point aTmpPt;
-    const SwCntntNode *pNd;
-    const SwCntntFrm *pFrm;
 
-    if( 0 != ( pNd = GetPoint()->nNode.GetNode().GetCntntNode() ))
-        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetPoint(), sal_False );
-    else
-        pFrm = 0;
-
-    // Will be set if point/mark are inside edit-in-readonly environment
-    const SwFrm* pSttEIRFrm = 0;
-    const SwFrm* pEndEIRFrm = 0;
-
-    if( pFrm && ( pFrm->IsProtected() ||
-                  ( bFormView && 0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-        bRet = true;
-    else if( pNd )
+    const SwCntntNode* pNd = GetPoint()->nNode.GetNode().GetCntntNode();
+    const SwCntntFrm *pFrm = NULL;
+    if ( pNd != NULL )
     {
-        const SwSectionNode* pSNd = pNd->GetSectionNode();
-        if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                      (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-            bRet = true;
+        Point aTmpPt;
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetPoint(), false );
     }
 
-    if( !bRet && HasMark() && GetPoint()->nNode != GetMark()->nNode )
+    // Will be set if point are inside edit-in-readonly environment
+    const SwFrm* pPointEditInReadonlyFrm = NULL;
+    if ( pFrm != NULL
+         && ( pFrm->IsProtected()
+              || ( bFormView
+                   && 0 == ( pPointEditInReadonlyFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
     {
-        if( 0 != ( pNd = GetMark()->nNode.GetNode().GetCntntNode() ))
-            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetMark(), sal_False );
-        else
-            pFrm = 0;
-
-        if( pFrm && ( pFrm->IsProtected() ||
-                  ( bFormView && 0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
+        bRet = true;
+    }
+    else if( pNd != NULL )
+    {
+        const SwSectionNode* pSNd = pNd->GetSectionNode();
+        if ( pSNd != NULL
+             && ( pSNd->GetSection().IsProtectFlag()
+                  || ( bFormView
+                       && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
+        {
             bRet = true;
-        else if( pNd )
+        }
+    }
+
+    if ( !bRet
+         && HasMark()
+         && GetPoint()->nNode != GetMark()->nNode )
+    {
+        pNd = GetMark()->nNode.GetNode().GetCntntNode();
+        pFrm = NULL;
+        if ( pNd != NULL )
+        {
+            Point aTmpPt;
+            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetMark(), false );
+        }
+
+        const SwFrm* pMarkEditInReadonlyFrm = NULL;
+        if ( pFrm != NULL
+             && ( pFrm->IsProtected()
+                  || ( bFormView
+                       && 0 == ( pMarkEditInReadonlyFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
+        {
+            bRet = true;
+        }
+        else if( pNd != NULL )
         {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
-            if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                          (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
+            if ( pSNd != NULL
+                 && ( pSNd->GetSection().IsProtectFlag()
+                      || ( bFormView
+                           && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
+            {
                 bRet = true;
+            }
         }
 
         if ( !bRet && bFormView )
         {
            // Check if start and end frame are inside the _same_
            // edit-in-readonly-environment. Otherwise we better return 'true'
-           if ( pSttEIRFrm != pEndEIRFrm )
+           if ( pPointEditInReadonlyFrm != pMarkEditInReadonlyFrm )
                 bRet = true;
         }
 
-        // protected section in selection
+        // check for protected section inside the selection
         if( !bRet )
         {
             sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
@@ -659,6 +679,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             }
         }
     }
+
     //FIXME FieldBk
     // TODO: Form Protection when Enhanced Fields are enabled
     const SwDoc *pDoc = GetDoc();

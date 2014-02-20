@@ -235,12 +235,13 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
     FN_INSERT_BREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
         StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
     FN_INSERT_PAGEBREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;

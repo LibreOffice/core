@@ -329,7 +329,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     if( m_pApplyTempl )
     {
         PointerStyle eStyle = POINTER_FILL;
-        if( rSh.IsOverReadOnlyPos( rLPt ))
+        if ( rSh.IsOverReadOnlyPos( rLPt ) )
         {
             delete m_pUserMarker;
             m_pUserMarker = 0L;
@@ -1896,7 +1896,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
                 case KEY_BACKSPACE:
                 case KEY_BACKSPACE | KEY_SHIFT:
-                    if( !rSh.HasReadonlySel() )
+                    if ( !rSh.HasReadonlySel()
+                         && !rSh.CrsrInsideInputFld() )
                     {
                         bool bDone = false;
                         // try to add comment for code snip:
@@ -1906,12 +1907,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         // Also try to remove indent, if current paragraph
                         // has numbering rule, but isn't counted and only
                         // key <backspace> is hit.
-                        const bool bOnlyBackspaceKey(
-                                    KEY_BACKSPACE == rKeyCode.GetFullCode() );
-                        if ( rSh.IsSttPara() &&
-                             !rSh.HasSelection() &&
-                             ( NULL == rSh.GetCurNumRule() ||
-                               ( rSh.IsNoNum() && bOnlyBackspaceKey ) ) )
+                        const bool bOnlyBackspaceKey( KEY_BACKSPACE == rKeyCode.GetFullCode() );
+                        if ( rSh.IsSttPara()
+                             && !rSh.HasSelection()
+                             && ( rSh.GetCurNumRule() == NULL
+                                  || ( rSh.IsNoNum() && bOnlyBackspaceKey ) ) )
                         {
                             bDone = rSh.TryRemoveIndent();
                         }
@@ -1920,8 +1920,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_End;
                         else
                         {
-                            if (rSh.IsSttPara() &&
-                                ! rSh.IsNoNum())
+                            if ( rSh.IsSttPara() && !rSh.IsNoNum() )
                             {
                                 if (m_nKS_NUMDOWN_Count > 0 &&
                                     0 < rSh.GetNumLevel())
@@ -1939,7 +1938,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             }
 
                             // If the cursor is in an empty paragraph, which has
-                            // a numbering, but not the oultine numbering, and
+                            // a numbering, but not the outline numbering, and
                             // there is no selection, the numbering has to be
                             // deleted on key <Backspace>.
                             // Otherwise method <SwEditShell::NumOrNoNum(..)>
@@ -1949,35 +1948,34 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             // on <shift-backspace> it is set to <true>.
                             // Thus, assure that method <SwEditShell::NumOrNum(..)>
                             // is only called for the intended purpose.
-                            bool bCallNumOrNoNum( false );
+                            if ( !bDone && rSh.IsSttPara() )
                             {
-                                if ( !bDone )
+                                bool bCallNumOrNoNum( false );
+                                if ( bOnlyBackspaceKey && !rSh.IsNoNum() )
                                 {
-                                    if ( bOnlyBackspaceKey && !rSh.IsNoNum() )
+                                    bCallNumOrNoNum = true;
+                                }
+                                else if ( !bOnlyBackspaceKey && rSh.IsNoNum() )
+                                {
+                                    bCallNumOrNoNum = true;
+                                }
+                                else if ( bOnlyBackspaceKey
+                                          && rSh.IsSttPara()
+                                          && rSh.IsEndPara()
+                                          && !rSh.HasSelection() )
+                                {
+                                    const SwNumRule* pCurrNumRule( rSh.GetCurNumRule() );
+                                    if ( pCurrNumRule != NULL
+                                         && pCurrNumRule != rSh.GetOutlineNumRule() )
                                     {
                                         bCallNumOrNoNum = true;
-                                    }
-                                    else if ( !bOnlyBackspaceKey && rSh.IsNoNum() )
-                                    {
-                                        bCallNumOrNoNum = true;
-                                    }
-                                    else if ( bOnlyBackspaceKey &&
-                                              rSh.IsSttPara() && rSh.IsEndPara() &&
-                                              !rSh.HasSelection() )
-                                    {
-                                        const SwNumRule* pCurrNumRule( rSh.GetCurNumRule() );
-                                        if ( pCurrNumRule &&
-                                             pCurrNumRule != rSh.GetOutlineNumRule() )
-                                        {
-                                            bCallNumOrNoNum = true;
-                                        }
                                     }
                                 }
-                            }
-                            if ( bCallNumOrNoNum &&
-                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, true ) )
-                            {
-                                eKeyState = KS_NumOrNoNum;
+                                if ( bCallNumOrNoNum
+                                     && rSh.NumOrNoNum( !bOnlyBackspaceKey, sal_True ) )
+                                {
+                                    eKeyState = KS_NumOrNoNum;
+                                }
                             }
                         }
                     }
@@ -2009,9 +2007,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_NEXT_INPUTFLD );
                         eKeyState = KS_End;
                     }
-                    else
-                    if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
-                        !rSh.HasReadonlySel() )
+                    else if( rSh.GetCurNumRule()
+                             && rSh.IsSttOfPara()
+                             && !rSh.HasReadonlySel() )
                     {
                         if ( rSh.IsFirstOfNumRule() &&
                              numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
@@ -2060,8 +2058,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PREV_INPUTFLD );
                         eKeyState = KS_End;
                     }
-                    else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
-                         !rSh.HasReadonlySel() )
+                    else if( rSh.GetCurNumRule()
+                             && rSh.IsSttOfPara()
+                             && !rSh.HasReadonlySel() )
                     {
 
                         if ( rSh.IsFirstOfNumRule() &&
@@ -2353,10 +2352,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 eKeyState = KS_End;
             }
-            else if(!rSh.HasReadonlySel())
+            else if ( !rSh.HasReadonlySel()
+                      || rSh.CrsrInsideInputFld() )
             {
-                sal_Bool bIsNormalChar = GetAppCharClass().isLetterNumeric(
-                                                            OUString( aCh ), 0 );
+                const sal_Bool bIsNormalChar =
+                    GetAppCharClass().isLetterNumeric( OUString( aCh ), 0 );
                 if( bAppendSpace && bIsNormalChar &&
                     (!m_aInBuffer.isEmpty() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {
@@ -2365,8 +2365,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     m_aInBuffer += " ";
                 }
 
-                sal_Bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                bool bRunNext = pACorr && pACorr->HasRunNext();
+                const sal_Bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
+                const bool bRunNext = pACorr != NULL && pACorr->HasRunNext();
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&

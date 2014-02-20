@@ -60,10 +60,10 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(GetCrsr())
 
-        if( !PCURCRSR->HasReadonlySel(
-                    // Formular view
-                    GetViewOptions()->IsFormView() ) )
+        if ( !PCURCRSR->HasReadonlySel( GetViewOptions()->IsFormView() ) )
+        {
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
+        }
 
     FOREACHPAM_END()
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);

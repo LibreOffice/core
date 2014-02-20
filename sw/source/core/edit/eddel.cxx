@@ -102,7 +102,7 @@ long SwEditShell::Delete()
 {
     SET_CURR_SHELL( this );
     long nRet = 0;
-    if( !HasReadonlySel() )
+    if ( !HasReadonlySel() || CrsrInsideInputFld() )
     {
         StartAllAction();
 

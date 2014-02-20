@@ -487,7 +487,7 @@ public:
     bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.
-    bool NumOrNoNum( sal_Bool bDelete = sal_False, bool bChkStart = true);
+    bool NumOrNoNum(bool bDelete = false, bool bChkStart = true);
 
     // #i23726#
     // #i90078#

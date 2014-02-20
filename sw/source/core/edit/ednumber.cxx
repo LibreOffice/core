@@ -647,34 +647,37 @@ sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
 }
 
-bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
+bool SwEditShell::NumOrNoNum(
+    bool bNumOn,
+    bool bChkStart )
 {
     bool bRet = false;
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-        ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
+
+    if ( !IsMultiSelection()
+         && !HasSelection()
+         && ( !bChkStart || IsSttPara() ) )
     {
-        StartAllAction();       // Klammern fuers Updaten !!
-        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
+        StartAllAction();
+        bRet = GetDoc()->NumOrNoNum( GetCrsr()->GetPoint()->nNode, !bNumOn );
         EndAllAction();
     }
     return bRet;
 }
 
+
 sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 {
     // a Backspace in the paragraph without number becomes a Delete
     sal_Bool bResult = sal_False;
-    SwPaM* pCrsr = GetCrsr();
 
-    if (pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-        (!bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()))
+    if ( !IsMultiSelection()
+         && !HasSelection()
+         && ( !bChkStart || IsSttPara() ) )
     {
-        const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
-
-        if (pTxtNd)
+        const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
+        if ( pTxtNd != NULL )
         {
-            bResult =  ! pTxtNd->IsCountedInList();
+            bResult =  !pTxtNd->IsCountedInList();
         }
     }
 
@@ -690,11 +693,11 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
     OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
-    if ( !pTxtNd )
+    if ( pTxtNd == NULL )
         return nLevel;
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
-    if(pRule)
+    if ( pRule != NULL )
     {
         const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
         if ( nListLevelOfTxtNode >= 0 )
@@ -721,7 +724,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
+    if( IsMultiSelection() )
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );

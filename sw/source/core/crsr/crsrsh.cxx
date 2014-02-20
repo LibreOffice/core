@@ -2977,19 +2977,26 @@ void SwCrsrShell::SetReadOnlyAvailable( sal_Bool bFlag )
 sal_Bool SwCrsrShell::HasReadonlySel(bool bAnnotationMode) const
 {
     sal_Bool bRet = sal_False;
-    if( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
+    if ( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
     {
-        if( m_pTblCrsr )
-            bRet = m_pTblCrsr->HasReadOnlyBoxSel() ||
-                   m_pTblCrsr->HasReadonlySel( GetViewOptions()->IsFormView() );
+        if ( m_pTblCrsr != NULL )
+        {
+            bRet = m_pTblCrsr->HasReadOnlyBoxSel()
+                   || m_pTblCrsr->HasReadonlySel( GetViewOptions()->IsFormView() );
+        }
         else
         {
             const SwPaM* pCrsr = m_pCurCrsr;
 
-            do {
+            do
+            {
                 if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView(), bAnnotationMode ) )
+                {
                     bRet = sal_True;
-            } while( !bRet && m_pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
+                }
+
+                pCrsr = (SwPaM*)pCrsr->GetNext();
+            } while ( !bRet && pCrsr != m_pCurCrsr );
         }
     }
     return bRet;
