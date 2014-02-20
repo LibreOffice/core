@@ -853,7 +853,10 @@ Reference< XShape > Shape::createAndInsert(
                     PUT_PROP( aGradientStops, i, OUString::number( i ), aGradientStop );
                     ++aIt;
                 }
-                putPropertyToGrabBag( "GradFillDefinition", Any( aGradientStops ) );
+                // If getFillProperties.moFillType is unused that means gradient is defined by a theme
+                // which is already saved into StyleFillRef property, so no need to save the explicit values too
+                if( getFillProperties().moFillType.has() )
+                    putPropertyToGrabBag( "GradFillDefinition", Any( aGradientStops ) );
                 putPropertyToGrabBag( "OriginalGradFill", Any( aShapeProps[PROP_FillGradient] ) );
             }
         }

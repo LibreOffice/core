@@ -339,15 +339,23 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
                     aGrabBag[i].Value >>= aOriginalGradient;
         }
 
-        mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
         // check if an ooxml gradient had been imported and if the user has modified it
-        if( aGradientStops.hasElements() && EqualGradients( aOriginalGradient, aGradient ) )
+        if( EqualGradients( aOriginalGradient, aGradient ) )
         {
-            WriteGrabBagGradientFill(aGradientStops, aGradient);
+            // If we have no gradient stops that means original gradient were defined by a theme.
+            if( aGradientStops.hasElements() )
+            {
+                mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
+                WriteGrabBagGradientFill(aGradientStops, aGradient);
+                mpFS->endElementNS( XML_a, XML_gradFill );
+            }
         }
         else
+        {
+            mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
             WriteGradientFill(aGradient);
-        mpFS->endElementNS( XML_a, XML_gradFill );
+            mpFS->endElementNS( XML_a, XML_gradFill );
+        }
     }
 }
 

@@ -3318,6 +3318,30 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
     CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? -2119 : -2121), xChildGroup->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(m_bExported ? 14028 : 14025), xChildGroup->getPosition().Y);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testDMLGradientFillTheme, "dml-gradientfill-theme.docx")
+{
+    // Problem was when a fill gradient was imported from a theme, (fillRef in ooxml)
+    // not just the theme was written out but the explicit values too
+    // Besides the duplication of values it causes problems with writing out
+    // <a:schemeClr val="phClr"> into document.xml, while phClr can be used just for theme definitions.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // check no explicit gradFill has been exported
+    assertXPath(pXmlDoc,
+            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill",
+            0);
+
+    // check shape style has been exported
+    assertXPath(pXmlDoc,
+            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", "2");
+    assertXPath(pXmlDoc,
+            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", "accent1");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
