@@ -527,15 +527,16 @@ struct TCell
 
 struct Table
 {
-     Table(){};
-     ~Table(){
+     Table() : box(NULL) {};
+     ~Table() {
           std::list<TCell*>::iterator it = cells.begin();
           for( ; it != cells.end(); ++it)
                 delete *it;
      };
+
      Columns columns;
-     Rows rows;
-    std::list<TCell*> cells;
+     Rows    rows;
+     std::list<TCell*> cells;
      TxtBox *box;
 };
 
