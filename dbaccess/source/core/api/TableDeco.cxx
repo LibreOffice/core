@@ -106,7 +106,6 @@ void SAL_CALL ODBTableDecorator::disposing()
     MutexGuard aGuard(m_aMutex);
     m_xTable        = NULL;
     m_xMetaData     = NULL;
-    m_pTables       = NULL;
     m_xColumnDefinitions = NULL;
     m_xNumberFormats = NULL;
     if ( m_pColumns )

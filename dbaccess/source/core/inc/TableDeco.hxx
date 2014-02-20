@@ -75,7 +75,6 @@ namespace dbaccess
         mutable sal_Int32                                                                   m_nPrivileges;
     // </properties>
         ::connectivity::sdbcx::OCollection*                                                 m_pColumns;
-        ::connectivity::sdbcx::OCollection*                                                 m_pTables;
 
         // IColumnFactory
         virtual OColumn*    createColumn(const OUString& _rName) const;
