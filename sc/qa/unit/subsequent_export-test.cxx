@@ -42,6 +42,9 @@
 #include "editeng/editobj.hxx"
 #include "editeng/section.hxx"
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/borderline.hxx>
+
+#include <com/sun/star/table/BorderLineStyle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -79,6 +82,9 @@ public:
     void testFormulaReferenceXLS();
     void testSheetProtectionXLSX();
 
+    void testCellBordersXLS();
+    void testCellBordersXLSX();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -100,10 +106,14 @@ public:
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST(testSheetProtectionXLSX);
+    CPPUNIT_TEST(testCellBordersXLS);
+    CPPUNIT_TEST(testCellBordersXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    void testExcelCellBorders( sal_uLong nFormatType );
+
     uno::Reference<uno::XInterface> m_xCalcComponent;
 
 };
@@ -989,6 +999,85 @@ void ScExportTest::testSheetProtectionXLSX()
         CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
     }
     xDocSh->DoClose();
+}
+
+namespace {
+
+const char* toBorderName( sal_Int16 eStyle )
+{
+    switch (eStyle)
+    {
+        case table::BorderLineStyle::SOLID: return "SOLID";
+        case table::BorderLineStyle::DOTTED: return "DOTTED";
+        case table::BorderLineStyle::DASHED: return "DASHED";
+        case table::BorderLineStyle::DOUBLE: return "DOUBLE";
+        case table::BorderLineStyle::FINE_DASHED: return "FINE_DASHED";
+        default:
+            ;
+    }
+
+    return "";
+}
+
+}
+
+void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
+{
+    ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    struct
+    {
+        SCROW mnRow;
+        sal_Int16 mnStyle;
+        long mnWidth;
+    } aChecks[] = {
+        {  1, table::BorderLineStyle::SOLID,        1L }, // hair
+        {  3, table::BorderLineStyle::DOTTED,      15L }, // thin
+        {  9, table::BorderLineStyle::FINE_DASHED, 15L }, // dashed
+        { 11, table::BorderLineStyle::SOLID,       15L }, // thin
+        { 19, table::BorderLineStyle::DASHED,      35L }, // medium dashed
+        { 21, table::BorderLineStyle::SOLID,       35L }, // medium
+        { 23, table::BorderLineStyle::SOLID,       50L }, // thick
+        { 25, table::BorderLineStyle::DOUBLE,      -1L }, // double (don't check width)
+    };
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        const editeng::SvxBorderLine* pLine = NULL;
+        pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
+        if (aChecks[i].mnWidth >= 0)
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+    }
+
+    ScDocShellRef xNewDocSh = saveAndReload(xDocSh, nFormatType);
+    xDocSh->DoClose();
+    pDoc = xNewDocSh->GetDocument();
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    {
+        const editeng::SvxBorderLine* pLine = NULL;
+        pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
+        if (aChecks[i].mnWidth >= 0)
+            CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+    }
+
+    xNewDocSh->DoClose();
+}
+
+void ScExportTest::testCellBordersXLS()
+{
+    testExcelCellBorders(XLS);
+}
+
+void ScExportTest::testCellBordersXLSX()
+{
+    testExcelCellBorders(XLSX);
 }
 
 ScExportTest::ScExportTest()
