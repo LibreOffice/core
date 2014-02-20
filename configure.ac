@@ -61,6 +61,23 @@ PathFormat()
     fi
 }
 
+AbsolutePath()
+{
+    # There appears to be no simple and portable method to get an absolute and
+    # canonical path, so we try creating the directory if does not exist and
+    # utilizing the shell and pwd.
+    rel="$1"
+    absolute_path=""
+    test ! -e "$rel" && mkdir -p "$rel"
+    if test -d "$rel" ; then
+        cd "$rel" || AC_MSG_ERROR([absolute path resolution failed for "$rel".])
+        absolute_path="$(pwd)"
+        cd - &> /dev/null
+    else
+        AC_MSG_ERROR([Failed to resolve absolute path.  "$rel" does not exist or is not a directory.])
+    fi
+}
+
 rm -f warn
 have_WARNINGS="no"
 add_warning()
@@ -1333,8 +1350,8 @@ AC_ARG_WITH(gnu-cp,
 ,)
 
 AC_ARG_WITH(external-tar,
-    AS_HELP_STRING([--with-external-tar=<TARFILE PATH>],
-        [Specify path to tarfiles manually.]),
+    AS_HELP_STRING([--with-external-tar=<TARFILE_PATH>],
+        [Specify an absolute path of where to find (and store) tarfiles.]),
     TARFILE_LOCATION=$withval ,
 )
 
@@ -4729,6 +4746,9 @@ if test -z "$TARFILE_LOCATION"; then
         ln -s "$SRC_ROOT/external/tarballs" "$SRC_ROOT/src"
     fi
     TARFILE_LOCATION="$SRC_ROOT/external/tarballs"
+else
+    AbsolutePath "$TARFILE_LOCATION"
+    TARFILE_LOCATION="${absolute_path}"
 fi
 AC_SUBST(TARFILE_LOCATION)
 
