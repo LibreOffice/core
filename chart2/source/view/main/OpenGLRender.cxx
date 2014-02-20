@@ -723,14 +723,9 @@ OpenGLRender::~OpenGLRender()
 }
 
 // TODO: moggi: that screws up FBO if called after buffers have been created!!!!
-void OpenGLRender::SetWidth(int width)
+void OpenGLRender::SetSize(int width, int height)
 {
     m_iWidth = width;
-    m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
-}
-
-void OpenGLRender::SetHeight(int height)
-{
     m_iHeight = height;
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
 }

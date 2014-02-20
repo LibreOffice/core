@@ -140,8 +140,7 @@ public:
     ~OpenGLRender();
     int InitOpenGL(GLWindow);
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
-    void SetWidth(int width);
-    void SetHeight(int height);
+    void SetSize(int width, int height);
     void Release();
 #if RENDER_TO_FILE
     int CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize);

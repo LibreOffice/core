@@ -1452,8 +1452,7 @@ void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
     mpWindow->SetSizePixel(Size(width, height));
     pWindow->SetSizePixel(Size(width, height));
     DummyXShape::setSize(awt::Size(0,0));
-    m_GLRender.SetWidth(width);
-    m_GLRender.SetHeight(height);
+    m_GLRender.SetSize(width, height);
     SAL_INFO("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);
 }
 
