@@ -1305,14 +1305,11 @@ sal_Bool Bitmap::ImplScaleSuper(
         boost::scoped_array<long> pMapIY(new long[ nDstH ]);
         boost::scoped_array<long> pMapFX(new long[ nDstW ]);
         boost::scoped_array<long> pMapFY(new long[ nDstH ]);
-        long                nX, nY, nXDst, nYDst;;
-        double              fTemp;
-        long                nTemp , nTempX, nTempY, nTempFX, nTempFY;
-        sal_uInt8           cR0, cG0, cB0, cR1, cG1, cB1;
-        long                nStartX = 0 , nStartY = 0;
-        long                nEndX = nDstW - 1L;
-        long                nEndY = nDstH - 1L;
-        long                nMax = 1 << 7L;
+        sal_uInt8 cR0, cG0, cB0, cR1, cG1, cB1;
+        long nStartX = 0 , nStartY = 0;
+        long nEndX = nDstW - 1L;
+        long nEndY = nDstH - 1L;
+        long nMax = 1 << 7L;
 
         if( pAcc && pWAcc )
         {
@@ -1322,9 +1319,9 @@ sal_Bool Bitmap::ImplScaleSuper(
             const double    fRevScaleY = ( nDstH > 1L ) ? ( (double) ( nH - 1 ) / ( nDstH - 1 ) ) : 0.0;
 
             // create horizontal mapping table
-            for( nX = 0L, nTempX = nW - 1L, nTemp = nW - 2L; nX < nDstW; nX++ )
+            for( long nX = 0L, nTempX = nW - 1L, nTemp = nW - 2L; nX < nDstW; nX++ )
             {
-                fTemp = nX * fRevScaleX;
+                double fTemp = nX * fRevScaleX;
 
                 if( bHMirr )
                     fTemp = nTempX - fTemp;
@@ -1333,9 +1330,9 @@ sal_Bool Bitmap::ImplScaleSuper(
             }
 
             // create vertical mapping table
-            for( nY = 0L, nTempY = nH - 1L, nTemp = nH - 2L; nY < nDstH; nY++ )
+            for( long nY = 0L, nTempY = nH - 1L, nTemp = nH - 2L; nY < nDstH; nY++ )
             {
-                fTemp = nY * fRevScaleY;
+                double fTemp = nY * fRevScaleY;
 
                 if( bVMirr )
                     fTemp = nTempY - fTemp;
@@ -1349,15 +1346,17 @@ sal_Bool Bitmap::ImplScaleSuper(
                 {
                     if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
                     {
-                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            long nTempY = pMapIY[ nY ];
+                            long nTempFY = pMapFY[ nY ];
                             Scanline pLine0 = pAcc->GetScanline( nTempY );
                             Scanline pLine1 = pAcc->GetScanline( ++nTempY );
 
-                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            for(long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
                             {
-                                nTempX = pMapIX[ nX ]; nTempFX = pMapFX[ nX ];
+                                long nTempX = pMapIX[ nX ];
+                                long nTempFX = pMapFX[ nX ];
 
                                 const BitmapColor& rCol0 = pAcc->GetPaletteColor( pLine0[ nTempX ] );
                                 const BitmapColor& rCol2 = pAcc->GetPaletteColor( pLine1[ nTempX ] );
@@ -1381,7 +1380,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                     }
                     else
                     {
-                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
                             long nTop = bVMirr ? ( nY + 1 ) : nY;
                             long nBottom = bVMirr ? nY : ( nY + 1 ) ;
@@ -1398,7 +1397,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
                             }
 
-                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
                             {
                                 long nLeft = bHMirr ? ( nX + 1 ) : nX;
                                 long nRight = bHMirr ? nX : ( nX + 1 ) ;
@@ -1494,13 +1493,15 @@ sal_Bool Bitmap::ImplScaleSuper(
                 {
                     if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
                     {
-                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTempY = pMapIY[ nY ], nTempFY = pMapFY[ nY ];
+                            long nTempY = pMapIY[ nY ];
+                            long nTempFY = pMapFY[ nY ];
 
-                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
                             {
-                                nTempX = pMapIX[ nX ]; nTempFX = pMapFX[ nX ];
+                                long nTempX = pMapIX[ nX ];
+                                long nTempFX = pMapFX[ nX ];
 
                                 aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, nTempX ) );
                                 aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, ++nTempX ) );
@@ -1524,14 +1525,14 @@ sal_Bool Bitmap::ImplScaleSuper(
                     }
                     else
                     {
-                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
-                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
-                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
+                        long nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
+                        long nLeft, nRight, nWeightX, nWeightY ;
+                        long nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
 
-                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTop = bVMirr ? ( nY + 1 ) : nY;
-                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+                            long nTop = bVMirr ? ( nY + 1 ) : nY;
+                            long nBottom = bVMirr ? nY : ( nY + 1 ) ;
 
                             if( nY ==nEndY )
                             {
@@ -1544,7 +1545,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
                             }
 
-                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
                             {
                                 nLeft = bHMirr ? ( nX + 1 ) : nX;
                                 nRight = bHMirr ? nX : ( nX + 1 ) ;
@@ -1643,16 +1644,17 @@ sal_Bool Bitmap::ImplScaleSuper(
                         Scanline    pLine0, pLine1, pTmp0, pTmp1;
                         long        nOff;
 
-                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            long nTempY = pMapIY[ nY ];
+                            long nTempFY = pMapFY[ nY ];
                             pLine0 = pAcc->GetScanline( nTempY );
                             pLine1 = pAcc->GetScanline( ++nTempY );
 
-                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
                             {
-                                nOff = 3L * ( nTempX = pMapIX[ nX ] );
-                                nTempFX = pMapFX[ nX ];
+                                nOff = 3L * pMapIX[ nX ];
+                                long nTempFX = pMapFX[ nX ];
 
                                 pTmp1 = ( pTmp0 = pLine0 + nOff ) + 3L;
                                 cB0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
@@ -1678,7 +1680,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                         long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
                         long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
 
-                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
                             nTop = bVMirr ? ( nY + 1 ) : nY;
                             nBottom = bVMirr ? nY : ( nY + 1 ) ;
@@ -1694,7 +1696,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
                             }
 
-                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
                             {
                                 nLeft = bHMirr ? ( nX + 1 ) : nX;
                                 nRight = bHMirr ? nX : ( nX + 1 ) ;
@@ -1787,16 +1789,17 @@ sal_Bool Bitmap::ImplScaleSuper(
                         Scanline    pLine0, pLine1, pTmp0, pTmp1;
                         long        nOff;
 
-                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            long nTempY = pMapIY[ nY ];
+                            long nTempFY = pMapFY[ nY ];
                             pLine0 = pAcc->GetScanline( nTempY );
                             pLine1 = pAcc->GetScanline( ++nTempY );
 
-                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
                             {
-                                nOff = 3L * ( nTempX = pMapIX[ nX ] );
-                                nTempFX = pMapFX[ nX ];
+                                nOff = 3L * pMapIX[ nX ];
+                                long nTempFX = pMapFX[ nX ];
 
                                 pTmp1 = ( pTmp0 = pLine0 + nOff ) + 3L;
                                 cR0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
@@ -1822,7 +1825,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                         long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
                         long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
 
-                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
                             nTop = bVMirr ? ( nY + 1 ) : nY;
                             nBottom = bVMirr ? nY : ( nY + 1 ) ;
@@ -1838,7 +1841,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
                             }
 
-                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
                             {
                                 nLeft = bHMirr ? ( nX + 1 ) : nX;
                                 nRight = bHMirr ? nX : ( nX + 1 ) ;
@@ -1928,13 +1931,15 @@ sal_Bool Bitmap::ImplScaleSuper(
                 {
                     if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
                     {
-                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
-                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            long nTempY = pMapIY[ nY ];
+                            long nTempFY = pMapFY[ nY ];
 
-                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
                             {
-                                nTempX = pMapIX[ nX ]; nTempFX = pMapFX[ nX ];
+                                long nTempX = pMapIX[ nX ];
+                                long nTempFX = pMapFX[ nX ];
 
                                 aCol0 = pAcc->GetPixel( nTempY, nTempX );
                                 aCol1 = pAcc->GetPixel( nTempY, ++nTempX );
@@ -1961,7 +1966,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                         long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
                         long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
 
-                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
                         {
                             nTop = bVMirr ? ( nY + 1 ) : nY;
                             nBottom = bVMirr ? nY : ( nY + 1 ) ;
@@ -1977,7 +1982,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                                 nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
                             }
 
-                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
                             {
                                 nLeft = bHMirr ? ( nX + 1 ) : nX;
                                 nRight = bHMirr ? nX : ( nX + 1 ) ;
