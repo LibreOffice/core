@@ -1297,9 +1297,9 @@ sal_Bool Bitmap::ImplScaleSuper(
 
     if( ( nDstW > 1L ) && ( nDstH > 1L ) )
     {
-        BitmapReadAccess*   pAcc = AcquireReadAccess();
-        Bitmap              aOutBmp( Size( nDstW, nDstH ), 24 );
-        BitmapWriteAccess*  pWAcc = aOutBmp.AcquireWriteAccess();
+        Bitmap::ScopedReadAccess pAcc(*this);
+        Bitmap aOutBmp( Size( nDstW, nDstH ), 24 );
+        Bitmap::ScopedWriteAccess pWAcc(aOutBmp);
         boost::scoped_array<long> pMapIX(new long[ nDstW ]);
         boost::scoped_array<long> pMapIY(new long[ nDstH ]);
         boost::scoped_array<long> pMapFX(new long[ nDstW ]);
@@ -2071,14 +2071,6 @@ sal_Bool Bitmap::ImplScaleSuper(
             bRet = true;
         }
 
-        if(pAcc)
-        {
-            ReleaseAccess( pAcc );
-        }
-        if(pWAcc)
-        {
-            aOutBmp.ReleaseAccess( pWAcc );
-        }
         if( bRet )
         {
             ImplAdaptBitCount(aOutBmp);
