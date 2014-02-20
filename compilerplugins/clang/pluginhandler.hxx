@@ -14,6 +14,8 @@
 
 #include "plugin.hxx"
 
+#include <set>
+
 #include <clang/AST/ASTConsumer.h>
 #include <clang/Frontend/FrontendAction.h>
 
@@ -33,12 +35,14 @@ class PluginHandler
         static void registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
         DiagnosticBuilder report( DiagnosticsEngine::Level level, const char * plugin, StringRef message,
             CompilerInstance& compiler, SourceLocation loc = SourceLocation());
+        bool addRemoval( SourceLocation loc );
     private:
         void handleOption( const string& option );
         void createPlugins( set< string > rewriters );
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         CompilerInstance& compiler;
         Rewriter rewriter;
+        set< SourceLocation > removals;
         string scope;
         string warningsOnly;
     };

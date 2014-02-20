@@ -25,7 +25,7 @@ namespace loplugin
 {
 
 Plugin::Plugin( const InstantiationData& data )
-    : compiler( data.compiler ), name( data.name ), handler( data.handler )
+    : compiler( data.compiler ), handler( data.handler ), name( data.name )
     {
     }
 
@@ -192,9 +192,11 @@ bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
     assert( rewriter );
     if( rewriter->getRangeSize( range, opts ) == -1 )
         return reportEditFailure( range.getBegin());
-    if( removals.find( range.getBegin()) != removals.end())
+    if( !handler.addRemoval( range.getBegin() ) )
+        {
         report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", range.getBegin());
-    removals.insert( range.getBegin());
+        return true;
+        }
     if( opts.flags & RemoveWholeStatement || opts.flags & RemoveAllWhitespace )
         {
         if( !adjustRangeForOptions( &range, opts ))
@@ -249,9 +251,11 @@ bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOption
 bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr )
     {
     assert( rewriter );
-    if( OrigLength != 0 && removals.find( Start ) != removals.end())
+    if( OrigLength != 0 && !handler.addRemoval( Start ) )
+        {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", Start );
-    removals.insert( Start );
+        return true;
+        }
     if( rewriter->ReplaceText( Start, OrigLength, NewStr ))
         return reportEditFailure( Start );
     return true;
@@ -262,9 +266,11 @@ bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
     assert( rewriter );
     if( rewriter->getRangeSize( range ) == -1 )
         return reportEditFailure( range.getBegin());
-    if( removals.find( range.getBegin()) != removals.end())
+    if( !handler.addRemoval( range.getBegin() ) )
+        {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
-    removals.insert( range.getBegin());
+        return true;
+        }
     if( rewriter->ReplaceText( range, NewStr ))
         return reportEditFailure( range.getBegin());
     return true;
@@ -275,9 +281,11 @@ bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange
     assert( rewriter );
     if( rewriter->getRangeSize( range ) == -1 )
         return reportEditFailure( range.getBegin());
-    if( removals.find( range.getBegin()) != removals.end())
+    if( !handler.addRemoval( range.getBegin() ) )
+        {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
-    removals.insert( range.getBegin());
+        return true;
+        }
     if( rewriter->ReplaceText( range, replacementRange ))
         return reportEditFailure( range.getBegin());
     return true;

@@ -159,6 +159,11 @@ DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, StringR
     return report( level, nullptr, message, compiler, loc );
     }
 
+bool PluginHandler::addRemoval( SourceLocation loc )
+    {
+    return removals.insert( loc ).second;
+    }
+
 void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
     if( context.getDiagnostics().hasErrorOccurred())
