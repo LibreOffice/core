@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 #include "svdconv.hxx"
 
@@ -437,6 +438,8 @@ SdrObject::SdrObject()
     ,pGrabBagItem(NULL)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
+    ,meRelativeWidthRelation(text::RelOrientation::PAGE_FRAME)
+    ,meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME)
     ,mpSvxShape( NULL )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
@@ -1615,6 +1618,8 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
         if (bUnsetRelative)
         {
             mnRelativeWidth.reset( );
+            meRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
+            meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
             mnRelativeHeight.reset( );
         }
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();

@@ -413,13 +413,19 @@ protected:
 private:
     static SdrItemPool*         mpGlobalItemPool;
     boost::optional<double>                                         mnRelativeWidth;
+    sal_Int16                                                       meRelativeWidthRelation;
     boost::optional<double>                                         mnRelativeHeight;
+    sal_Int16                                                       meRelativeHeightRelation;
 public:
     static SdrItemPool& GetGlobalDrawObjectItemPool();
     void SetRelativeWidth( double nValue ) { mnRelativeWidth.reset( nValue ); }
+    void SetRelativeWidthRelation( sal_Int16 eValue ) { meRelativeWidthRelation = eValue; }
     void SetRelativeHeight( double nValue ) { mnRelativeHeight.reset( nValue ); }
+    void SetRelativeHeightRelation( sal_Int16 eValue ) { meRelativeHeightRelation = eValue; }
     boost::optional<double> GetRelativeWidth( ) const { return mnRelativeWidth; }
+    sal_Int16 GetRelativeWidthRelation() const { return meRelativeWidthRelation; }
     boost::optional<double> GetRelativeHeight( ) const { return mnRelativeHeight; }
+    sal_Int16 GetRelativeHeightRelation() const { return meRelativeHeightRelation; }
     // evil calc grid/shape drawlayer syncing
     Point GetGridOffset() const { return aGridOffset; }
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
