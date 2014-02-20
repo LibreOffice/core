@@ -32,6 +32,7 @@
 #include "svtools/fmtfield.hxx"
 #include "document.hxx"
 
+using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
@@ -1280,50 +1281,71 @@ void ScCheckListMenuWindow::setMemberSize(size_t n)
 void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, bool bVisible)
 {
     ScDocument* pDoc = getDoc();
-    if ( pDoc )
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+
+    // Convert the numeric date value to a date object.
+    Date aDate = *(pFormatter->GetNullDate());
+    aDate += static_cast<long>(rtl::math::approxFloor(nVal));
+
+    sal_uInt16 nYear = aDate.GetYear();
+    sal_uInt16 nMonth = aDate.GetMonth();
+    sal_uInt16 nDay = aDate.GetDay();
+
+    // Get the localized month name list.
+    CalendarWrapper* pCalendar = ScGlobal::GetCalendar();
+    uno::Sequence<i18n::CalendarItem2> aMonths = pCalendar->getMonths();
+    if (aMonths.getLength() < nMonth)
+        return;
+
+    OUString aYearName = OUString::number(nYear);
+    OUString aMonthName = aMonths[nMonth-1].FullName;
+    OUString aDayName = OUString::number(nDay);
+
+    maChecks.SetUpdateMode(false);
+
+    SvTreeListEntry* pYearEntry = maChecks.FindEntry(NULL, aYearName);
+    if (!pYearEntry)
     {
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        OUString rsDate;
-        if ( pFormatter )
-        {
-            OUString sFormat("YYYY/MMMM/DD");
-            Color* pColor = NULL;
-            pFormatter->GetPreviewString(sFormat,
-                nVal,
-                rsDate,
-                &pColor,
-                ScGlobal::eLnge );
-        }
-        maChecks.SetUpdateMode(false);
-        sal_Int32 nIndex = 0;
-        OUString sParent;
-        SvTreeListEntry* pParent = NULL;
-        int count = 0;
-        do
-        {
-            OUString sPart = rsDate.getToken( 0, '/', nIndex );
-            bool bLeaf = ( ++count == 3 );
-            SvTreeListEntry* pChild = maChecks.FindEntry( pParent, sPart );
-            if ( !pChild )
-            {
-                if ( bLeaf )
-                    pChild = maChecks.SvTreeListBox::InsertEntry( sPart, pParent, sal_False, LISTBOX_APPEND, NULL, SvLBoxButtonKind_enabledCheckbox );
-                else
-                    pChild = maChecks.SvTreeListBox::InsertEntry( sPart, pParent, sal_True, LISTBOX_APPEND, NULL, SvLBoxButtonKind_enabledCheckbox );
-                Member aMember;
-                aMember.maName = sPart;
-                aMember.maRealName = rsName;
-                aMember.mbDate = true;
-                aMember.mbLeaf = bLeaf;
-                aMember.mbVisible = bVisible;
-                aMember.mpParent = pParent;
-                maMembers.push_back(aMember);
-            }
-            sParent = sPart;
-            pParent = pChild;
-        } while ( nIndex >= 0 );
-        maChecks.SetUpdateMode(true);
+        pYearEntry = maChecks.InsertEntry(aYearName, NULL, true);
+        Member aMemYear;
+        aMemYear.maName = aYearName;
+        aMemYear.maRealName = rsName;
+        aMemYear.mbDate = true;
+        aMemYear.mbLeaf = false;
+        aMemYear.mbVisible = bVisible;
+        aMemYear.mpParent = NULL;
+        maMembers.push_back(aMemYear);
     }
+
+    SvTreeListEntry* pMonthEntry = maChecks.FindEntry(pYearEntry, aMonthName);
+    if (!pMonthEntry)
+    {
+        pMonthEntry = maChecks.InsertEntry(aMonthName, pYearEntry, true);
+        Member aMemMonth;
+        aMemMonth.maName = aMonthName;
+        aMemMonth.maRealName = rsName;
+        aMemMonth.mbDate = true;
+        aMemMonth.mbLeaf = false;
+        aMemMonth.mbVisible = bVisible;
+        aMemMonth.mpParent = pYearEntry;
+        maMembers.push_back(aMemMonth);
+    }
+
+    SvTreeListEntry* pDayEntry = maChecks.FindEntry(pMonthEntry, aDayName);
+    if (!pDayEntry)
+    {
+        pDayEntry = maChecks.InsertEntry(aDayName, pMonthEntry, false);
+        Member aMemDay;
+        aMemDay.maName = aDayName;
+        aMemDay.maRealName = rsName;
+        aMemDay.mbDate = true;
+        aMemDay.mbLeaf = true;
+        aMemDay.mbVisible = bVisible;
+        aMemDay.mpParent = pMonthEntry;
+        maMembers.push_back(aMemDay);
+    }
+
+    maChecks.SetUpdateMode(true);
 }
 
 void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
