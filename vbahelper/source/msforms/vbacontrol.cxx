@@ -624,7 +624,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
             if ( bToggle )
                 return new ScVbaToggleButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
             else
-                return new ScVbaButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+                return new VbaButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         }
         case form::FormComponentType::FIXEDTEXT:
             return new ScVbaLabel( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
@@ -672,7 +672,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         if ( bToggle )
             xVBAControl.set( new ScVbaToggleButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
         else
-            xVBAControl.set( new ScVbaButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+            xVBAControl.set( new VbaButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
     }
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
         xVBAControl.set( new ScVbaComboBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );

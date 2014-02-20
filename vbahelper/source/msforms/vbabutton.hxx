@@ -26,10 +26,10 @@
 
 typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XCommandButton > ButtonImpl_BASE;
 
-class ScVbaButton : public ButtonImpl_BASE
+class VbaButton : public ButtonImpl_BASE
 {
 public:
-    ScVbaButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
+    VbaButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
    // Attributes
     virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException);

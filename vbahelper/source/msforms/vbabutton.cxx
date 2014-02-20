@@ -25,13 +25,13 @@ using namespace ooo::vba;
 
 
 const static OUString LABEL( "Label" );
-ScVbaButton::ScVbaButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
+VbaButton::VbaButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
 
 // Attributes
 OUString SAL_CALL
-ScVbaButton::getCaption() throw (css::uno::RuntimeException)
+VbaButton::getCaption() throw (css::uno::RuntimeException)
 {
     OUString Label;
     m_xProps->getPropertyValue( LABEL ) >>= Label;
@@ -39,85 +39,85 @@ ScVbaButton::getCaption() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-ScVbaButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
+VbaButton::setCaption( const OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-sal_Bool SAL_CALL ScVbaButton::getAutoSize() throw (uno::RuntimeException)
+sal_Bool SAL_CALL VbaButton::getAutoSize() throw (uno::RuntimeException)
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+void SAL_CALL VbaButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaButton::getLocked() throw (uno::RuntimeException)
+sal_Bool SAL_CALL VbaButton::getLocked() throw (uno::RuntimeException)
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaButton::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+void SAL_CALL VbaButton::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
 {
     ScVbaControl::setLocked( bLocked );
 }
 
-sal_Bool SAL_CALL ScVbaButton::getCancel() throw (uno::RuntimeException)
+sal_Bool SAL_CALL VbaButton::getCancel() throw (uno::RuntimeException)
 {
     return sal_False;
 }
 
-void SAL_CALL ScVbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
+void SAL_CALL VbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
 {
     // #STUB
 }
 
-sal_Bool SAL_CALL ScVbaButton::getDefault() throw (uno::RuntimeException)
+sal_Bool SAL_CALL VbaButton::getDefault() throw (uno::RuntimeException)
 {
     // #STUB
     return sal_False;
 }
 
-void SAL_CALL ScVbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
+void SAL_CALL VbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
 {
     // #STUB
 }
 
-sal_Int32 SAL_CALL ScVbaButton::getBackColor() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL VbaButton::getBackColor() throw (uno::RuntimeException)
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaButton::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+void SAL_CALL VbaButton::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Int32 SAL_CALL ScVbaButton::getForeColor() throw (uno::RuntimeException)
+sal_Int32 SAL_CALL VbaButton::getForeColor() throw (uno::RuntimeException)
 {
     return ScVbaControl::getForeColor();
 }
 
-void SAL_CALL ScVbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
+void SAL_CALL VbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
 {
     // #STUB
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaButton::getFont() throw (uno::RuntimeException)
+uno::Reference< msforms::XNewFont > SAL_CALL VbaButton::getFont() throw (uno::RuntimeException)
 {
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
 OUString
-ScVbaButton::getServiceImplName()
+VbaButton::getServiceImplName()
 {
-    return OUString("ScVbaButton");
+    return OUString("VbaButton");
 }
 
 uno::Sequence< OUString >
-ScVbaButton::getServiceNames()
+VbaButton::getServiceNames()
 {
     static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
