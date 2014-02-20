@@ -61,6 +61,20 @@ PathFormat()
     fi
 }
 
+AbsolutePath()
+{
+    rel="$1"
+    absolute_path=""
+    if test -d "$rel" ; then
+        old_path="$(pwd)"
+        cd "$rel" || AC_MSG_ERROR([absolute path resolution failed for "$rel".])
+        absolute_path="$(pwd)"
+        cd "$old_path"
+    else
+        AC_MSG_ERROR([absolute path resolution failed  "$rel" does note exit or is not a directory.])
+    fi
+}
+
 rm -f warn
 have_WARNINGS="no"
 add_warning()
@@ -4729,7 +4743,11 @@ if test -z "$TARFILE_LOCATION"; then
         ln -s "$SRC_ROOT/external/tarballs" "$SRC_ROOT/src"
     fi
     TARFILE_LOCATION="$SRC_ROOT/external/tarballs"
+else
+    AbsolutePath "$TARFILE_LOCATION"
+    TARFILE_LOCATION="${absolute_path}"
 fi
+
 AC_SUBST(TARFILE_LOCATION)
 
 AC_MSG_CHECKING([whether we want to fetch tarballs])
