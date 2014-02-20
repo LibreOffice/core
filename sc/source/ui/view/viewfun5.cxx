@@ -181,6 +181,9 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     Graphic aGraphic;
                     sal_uLong nGrFormat = 0;
 
+                    if (aDataHelper.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+                        nGrFormat = SOT_FORMAT_GDIMETAFILE;
+
                     // insert replacement image ( if there is one ) into the object helper
                     if ( nGrFormat )
                     {
