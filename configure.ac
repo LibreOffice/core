@@ -943,9 +943,7 @@ AC_ARG_ENABLE(python,
     AS_HELP_STRING([--enable-python=<no/auto/system/internal>],
         [Enables or disables Python support at run-time and build-time.
          Also specifies what Python to use. 'auto' is the
-         default. Note that Python can be disabled with
-         --disable-python or --enable-python=no only if no
-         translations are required.]))
+         default.]))
 
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
