@@ -2420,7 +2420,7 @@ void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
     }
 }
 
-void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
+void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 {
     m_bFullscreen = bFullScreen;
 

@@ -1946,7 +1946,7 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
+void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 {
     if ( (mbFullScreen == bFullScreen) && (!bFullScreen || (mnDisplay == nDisplay)) )
         return;

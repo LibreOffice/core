@@ -722,7 +722,7 @@ void AquaSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
+void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 {
     if ( !mpNSWindow )
         return;
@@ -730,7 +730,7 @@ void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    SAL_INFO("vcl.macosx", OSL_THIS_FUNC << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
+    SAL_INFO("vcl.osx", OSL_THIS_FUNC << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
 
     if( mbFullScreen == bFullScreen )
         return;
@@ -1297,8 +1297,8 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // images in menus false for MacOSX
     aStyleSettings.SetPreferredUseImagesInMenus( false );
-    aStyleSettings.SetHideDisabledMenuItems( sal_True );
-    aStyleSettings.SetAcceleratorsInContextMenus( sal_False );
+    aStyleSettings.SetHideDisabledMenuItems( true );
+    aStyleSettings.SetAcceleratorsInContextMenus( false );
 
     rSettings.SetStyleSettings( aStyleSettings );
 
@@ -1535,7 +1535,7 @@ bool AquaSalFrame::SetPluginParent( SystemParentData* )
     // plugging process;
 
     //TODO: implement
-    return sal_False;
+    return false;
 }
 
 bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )

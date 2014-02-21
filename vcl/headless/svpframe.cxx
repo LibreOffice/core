@@ -366,7 +366,7 @@ bool SvpSalFrame::GetWindowState( SalFrameState* pState )
     return true;
 }
 
-void SvpSalFrame::ShowFullScreen( sal_Bool, sal_Int32 )
+void SvpSalFrame::ShowFullScreen( bool, sal_Int32 )
 {
     SetPosSize( 0, 0, VIRTUAL_DESKTOP_WIDTH, VIRTUAL_DESKTOP_HEIGHT,
                 SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );

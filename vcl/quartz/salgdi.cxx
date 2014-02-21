@@ -596,7 +596,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
 
     // prepare a byte buffer for a fake font
     int nTableCount = 7;
-    nTableCount += (nPrepSize>0) + (nCvtSize>0) + (nFpgmSize>0) + (nGlyfSize>0);
+    nTableCount += (nPrepSize>0?1:0) + (nCvtSize>0?1:0) + (nFpgmSize>0?1:0) + (nGlyfSize>0?1:0);
     const ByteCount nFdirSize = 12 + 16*nTableCount;
     ByteCount nTotalSize = nFdirSize;
     nTotalSize += nHeadSize + nMaxpSize + nNameSize + nCmapSize;

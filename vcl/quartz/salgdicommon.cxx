@@ -154,7 +154,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     // prepare the requested file name for writing the font-subset file
     OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return sal_False;
+        return false;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
     const OString aToFile( OUStringToOString( aSysPath, aThreadEncoding ) );
 
@@ -162,7 +162,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     ByteVector aBuffer;
     bool bCffOnly = false;
     if( !GetRawFontData( pFontData, aBuffer, &bCffOnly ) )
-        return sal_False;
+        return false;
 
     // handle CFF-subsetting
     if( bCffOnly )
@@ -189,7 +189,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     TrueTypeFont* pSftFont = NULL;
     int nRC = ::OpenTTFontBuffer( (void*)&aBuffer[0], aBuffer.size(), 0, &pSftFont);
     if( nRC != SF_OK )
-        return sal_False;
+        return false;
 
     // get details about the subsetted font
     TTGlobalFontInfo aTTInfo;
@@ -264,7 +264,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     TTSimpleGlyphMetrics* pGlyphMetrics =
         ::GetTTSimpleGlyphMetrics( pSftFont, aShortIDs, nGlyphCount, bVertical );
     if( !pGlyphMetrics )
-        return sal_False;
+        return false;
     sal_uInt16 nNotDefAdv       = pGlyphMetrics[0].adv;
     pGlyphMetrics[0].adv        = pGlyphMetrics[nNotDef].adv;
     pGlyphMetrics[nNotDef].adv  = nNotDefAdv;
@@ -859,7 +859,7 @@ bool AquaSalGraphics::drawPolyLine(
 
 bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
 {
-    return sal_False;
+    return false;
 }
 
 bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly,
@@ -1084,13 +1084,13 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
 
 bool AquaSalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
 {
-    return sal_False;
+    return false;
 }
 
 bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
                                                  const SalPoint* const*, const sal_uInt8* const* )
 {
-    return sal_False;
+    return false;
 }
 
 void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )

@@ -270,7 +270,7 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
  */
 bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
-    bool bOk = sal_False;
+    bool bOk = false;
 
     // Native controls are now defaults
     // If you want to disable experimental native controls code,
@@ -421,20 +421,20 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
                 {
                     // the left 4 pixels are not hit sensitive
                     if( rPos.X() - aRect.Left() < 4 )
-                        rIsInside = sal_False;
+                        rIsInside = false;
                 }
                 else if( nPart == PART_TRACK_VERT_AREA )
                 {
                     // the top 4 pixels are not hit sensitive
                     if( rPos.Y() - aRect.Top() < 4 )
-                        rIsInside = sal_False;
+                        rIsInside = false;
                 }
             }
         }
         return bValid;
     }  //  CTRL_SCROLLBAR
 
-    return sal_False;
+    return false;
 }
 
 /*
@@ -1353,8 +1353,8 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 else if( nPart == PART_BUTTON_DOWN )
                 {
                     w = aCtrlBoundRect.GetWidth();
-                if( w < 3+2*FOCUS_RING_WIDTH )
-                    w = 3+2*FOCUS_RING_WIDTH;
+                    if( w < 3+2*FOCUS_RING_WIDTH )
+                        w = 3+2*FOCUS_RING_WIDTH;
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
 
                     x += w-DROPDOWN_BUTTON_WIDTH - FOCUS_RING_WIDTH;

@@ -59,8 +59,8 @@ bool PNGToImage( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
     if( !pData)
         return false;
 
-        NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData: pData];
-        if( !pRep)
+    NSBitmapImageRep* pRep = [NSBitmapImageRep imageRepWithData: pData];
+    if( !pRep)
         return false;
 
     NSData* pOut = [pRep representationUsingType: eOutFormat properties: nil];

@@ -2282,12 +2282,12 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
     for (i = 0; i < nchars; i++) {
         cp[i] = (sal_uInt16)ttf->mapper(ttf->cmap, cp[i]);
         if (cp[i]!=0 && bvertical)
-            cp[i] = (sal_uInt16)UseGSUB(ttf,cp[i],bvertical);
+            cp[i] = (sal_uInt16)UseGSUB(ttf,cp[i]);
     }
     return nchars;
 }
 
-sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, int bvertical)
+sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
 {
     switch (ttf->cmapType) {
         case CMAP_MS_Symbol:
@@ -2305,8 +2305,8 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, int bvertical)
         default:                return 0;
     }
     ch = (sal_uInt16)ttf->mapper(ttf->cmap, ch);
-    if (ch!=0 && bvertical!=0)
-        ch = (sal_uInt16)UseGSUB(ttf,ch,bvertical);
+    if (ch!=0 && bvertical)
+        ch = (sal_uInt16)UseGSUB(ttf,ch);
     return ch;
 }
 
@@ -2336,13 +2336,13 @@ bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
     return bOk;
 }
 
-TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, int mode)
+TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
 {
     const sal_uInt8* pTable;
     sal_uInt32 n;
     int nTableSize;
 
-    if (mode == 0) {
+    if (!vertical) {
         n = ttf->numberOfHMetrics;
         pTable = getTable( ttf, O_hmtx );
         nTableSize = getTableSize( ttf, O_hmtx );
@@ -2391,7 +2391,7 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
 }
 
 #ifndef NO_MAPPERS
-TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firstChar, int nChars, int mode)
+TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firstChar, int nChars, bool vertical)
 {
     TTSimpleGlyphMetrics *res = 0;
     int i, n;
@@ -2400,8 +2400,8 @@ TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firs
     assert(str != 0);
 
     for (i=0; i<nChars; i++) str[i] = (sal_uInt16)(firstChar + i);
-    if ((n = MapString(ttf, str, nChars, 0, mode)) != -1) {
-        res = GetTTSimpleGlyphMetrics(ttf, str, n, mode);
+    if ((n = MapString(ttf, str, nChars, 0, vertical)) != -1) {
+        res = GetTTSimpleGlyphMetrics(ttf, str, n, vertical);
     }
 
     free(str);

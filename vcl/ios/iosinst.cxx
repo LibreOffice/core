@@ -171,7 +171,7 @@ public:
         IosSalInstance::getInstance()->GetWorkArea( rRect );
     }
 
-    void ShowFullScreen( sal_Bool, sal_Int32 )
+    void ShowFullScreen( bool, sal_Int32 )
     {
         SetPosSize( 0, 0, viewWidth, viewHeight,
                     SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );

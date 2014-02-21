@@ -234,7 +234,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
         int nCharacters = nPage < 255 ? 256 : 254;
         MapString( pTTFont, table, nCharacters, NULL, false );
-        TTSimpleGlyphMetrics* pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, 0 );
+        TTSimpleGlyphMetrics* pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, false );
         if( pMetrics )
         {
             for( i = 0; i < nCharacters; i++ )
@@ -253,7 +253,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
         for( i = 0; i < 256; i++ )
             table_vert[ i ] = 256*nPage + i;
         MapString( pTTFont, table_vert, nCharacters, NULL, true );
-        pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, 1 );
+        pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, true );
         if( pMetrics )
         {
             for( i = 0; i < nCharacters; i++ )
@@ -2028,7 +2028,7 @@ bool PrintFontManager::createFontSubset(
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
                                                               pGID,
                                                               nGlyphs,
-                                                              bVertical ? 1 : 0 );
+                                                              bVertical );
     if( pMetrics )
     {
         for( int i = 0; i < nGlyphs; i++ )
@@ -2080,7 +2080,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
             TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
                                                                       &aGlyphIds[0],
                                                                       nGlyphs,
-                                                                      bVertical ? 1 : 0 );
+                                                                      bVertical );
             if( pMetrics )
             {
                 for( int i = 0; i< nGlyphs; i++ )

@@ -31,6 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/endian.h>
 
+#include <cassert>
 #include <stdio.h>
 #include <string.h>
 
@@ -58,7 +59,7 @@ namespace // private
 
   OUString NSStringToOUString( const NSString* cfString)
   {
-    BOOST_ASSERT(cfString && "Invalid parameter");
+    assert(cfString && "Invalid parameter");
 
     const char* utf8Str = [cfString UTF8String];
     unsigned int len = rtl_str_getLength(utf8Str);

@@ -166,7 +166,7 @@ void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 
 bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -244,7 +244,7 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
 bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
-        return sal_False;
+        return false;
 
 
     if( mpPrintInfo )
@@ -395,7 +395,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     sal_Int32 nAllPages = 0;
 
     // reset IsLastPage
-    i_rController.setLastPage( sal_False );
+    i_rController.setLastPage( false );
 
     // update job data
     if( i_pSetupData )
@@ -545,7 +545,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
     // inform application that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
     // so we need to call XRenderadble::render one last time with IsLastPage = sal_True
-    i_rController.setLastPage( sal_True );
+    i_rController.setLastPage( true );
     GDIMetaFile aPageFile;
     if( mrContext )
         SetupPrinterGraphics( mrContext );
@@ -643,7 +643,7 @@ bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                ImplJobSetup* )
 {
     OSL_FAIL( "should never be called" );
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------

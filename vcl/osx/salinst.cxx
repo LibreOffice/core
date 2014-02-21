@@ -808,7 +808,7 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
     if( !nType)
         return false;
 
-        NSEvent* pEvent = [NSApp nextEventMatchingMask: nEventMask untilDate: nil
+    NSEvent* pEvent = [NSApp nextEventMatchingMask: nEventMask untilDate: nil
                             inMode: NSDefaultRunLoopMode dequeue: NO];
     return (pEvent != NULL);
 }

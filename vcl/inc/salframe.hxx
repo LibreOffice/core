@@ -143,7 +143,7 @@ public:
 
     virtual void            SetWindowState( const SalFrameState* pState ) = 0;
     virtual bool        GetWindowState( SalFrameState* pState ) = 0;
-    virtual void            ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay ) = 0;
+    virtual void            ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) = 0;
 
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void            StartPresentation( sal_Bool bStart ) = 0;

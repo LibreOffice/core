@@ -526,11 +526,11 @@ bool AquaSalMenu::VisibleMenuBar()
     static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
 
     if ( pExperimental && !strcasecmp(pExperimental, "FALSE") )
-        return sal_False;
+        return false;
 
     // End of experimental code enable/disable part
 
-    return sal_True;
+    return true;
 }
 
 void AquaSalMenu::SetFrame( const SalFrame *pFrame )

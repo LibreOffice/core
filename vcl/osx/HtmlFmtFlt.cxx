@@ -25,8 +25,7 @@
 #include <sstream>
 #include <vector>
 #include <iomanip>
-
-#include <boost/assert.hpp>
+#include <cassert>
 
 using namespace com::sun::star::uno;
 
@@ -122,14 +121,14 @@ const char* HtmlStartTag = "<html";
 
 Sequence<sal_Int8> HTMLFormatToTextHtml(const Sequence<sal_Int8>& aHTMLFormat)
 {
-  BOOST_ASSERT(isHTMLFormat(aHTMLFormat) && "No HTML Format provided");
+  assert(isHTMLFormat(aHTMLFormat) && "No HTML Format provided");
 
   Sequence<sal_Int8>& nonconstHTMLFormatRef = const_cast< Sequence<sal_Int8>& >(aHTMLFormat);
   sal_Char* dataStart = reinterpret_cast<sal_Char*>(nonconstHTMLFormatRef.getArray());
   sal_Char* dataEnd = dataStart + nonconstHTMLFormatRef.getLength() - 1;
   const sal_Char* htmlStartTag = strcasestr(dataStart, HtmlStartTag);
 
-  BOOST_ASSERT(htmlStartTag && "Seems to be no HTML at all");
+  assert(htmlStartTag && "Seems to be no HTML at all");
 
   // It doesn't seem to be HTML? Well then simply return what has been
   // provided in non-debug builds

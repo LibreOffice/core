@@ -800,7 +800,7 @@ X11SalFrame::~X11SalFrame()
         XSelectInput( GetXDisplay(), GetShellWindow(), 0 );
     XSelectInput( GetXDisplay(), GetWindow(), 0 );
 
-    ShowFullScreen( sal_False, 0 );
+    ShowFullScreen( false, 0 );
 
     if( bMapped_ )
         Show( sal_False );
@@ -2056,7 +2056,7 @@ void X11SalFrame::updateWMClass()
     XFree( pClass );
 }
 
-void X11SalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
+void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 {
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
     {

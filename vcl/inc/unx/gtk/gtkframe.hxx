@@ -380,7 +380,7 @@ public:
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
     virtual bool            GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
+    virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( sal_Bool bStart );
     // Show Window over all other Windows

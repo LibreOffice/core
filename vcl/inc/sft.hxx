@@ -464,11 +464,11 @@ namespace vcl
  * @param ttf         pointer to the TrueTypeFont structure
  * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf
  * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @param mode        writing mode: 0 - horizontal, 1 - vertical
+ * @param vertical    writing mode: false - horizontal, true - vertical
  * @ingroup sft
  *
  */
-    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, int mode);
+    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
 #ifndef NO_MAPPERS
 /**
@@ -479,13 +479,13 @@ namespace vcl
  * @param ttf         pointer to the TrueTypeFont structure
  * @param firstChar   Unicode value of the first character in the range
  * @param nChars      number of Unicode characters in the range
- * @param mode        writing mode: 0 - horizontal, 1 - vertical
+ * @param vertical    writing mode: false - horizontal, true - vertical
  *
  * @see GetTTSimpleGlyphMetrics
  * @ingroup sft
  *
  */
-    TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont *ttf, sal_uInt16 firstChar, int nChars, int mode);
+    TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont *ttf, sal_uInt16 firstChar, int nChars, bool vertical);
 
 /**
  * Maps a Unicode (UCS-2) string to a glyph array. Returns the number of glyphs in the array,
@@ -516,7 +516,7 @@ namespace vcl
  * @return glyph ID, if the character is missing in the font, the return value is 0.
  * @ingroup sft
  */
-    sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, int bvertical);
+    sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical);
 
 /**
  * Returns 0 when the font does not substitute vertical glyphs

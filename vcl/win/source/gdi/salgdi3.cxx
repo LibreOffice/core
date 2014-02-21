@@ -1339,7 +1339,7 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
 
     for( const sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
         for( sal_Unicode cChar = pPair[0]; cChar < pPair[1]; ++cChar )
-            if( ::MapChar( pTTFont, cChar, 0 ) != ::MapChar( pTTFont, cChar, 1 ) )
+            if( ::MapChar( pTTFont, cChar, false ) != ::MapChar( pTTFont, cChar, true ) )
                 maGsubTable.insert( cChar ); // insert GSUBbed unicodes
 
     CloseTTFont( pTTFont );
@@ -2826,7 +2826,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
             TTSimpleGlyphMetrics* pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
                                                                         &aGlyphIds[0],
                                                                         nGlyphs,
-                                                                        bVertical ? 1 : 0 );
+                                                                        bVertical );
             if( pMetrics )
             {
                 for( int i = 0; i< nGlyphs; i++ )
@@ -2847,7 +2847,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                 {
                     sal_uInt16 nGlyph = ::MapChar( aSftTTF.get(),
                                                    static_cast<sal_Ucs>(nChar),
-                                                   bVertical ? 1 : 0 );
+                                                   bVertical );
                     if( nGlyph )
                         rUnicodeEnc[ static_cast<sal_Unicode>(nChar) ] = nGlyph;
                 }
