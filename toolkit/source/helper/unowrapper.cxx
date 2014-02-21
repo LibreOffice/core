@@ -275,23 +275,20 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     // #i42462#/#116855# no, don't loop: Instead, just ensure that all our top-window-children
     // are disposed, too (which should also be a valid fix for #102132#, but doesn't have the extreme
     // performance penalties)
-    if ( pWindow )
+    Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
+    while ( pTopWindowChild )
     {
-        Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
-        while ( pTopWindowChild )
-        {
-            OSL_ENSURE( pTopWindowChild->GetParent() == pWindow,
-                        "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
+        OSL_ENSURE( pTopWindowChild->GetParent() == pWindow,
+                    "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
 
-            Window* pNextTopChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
+        Window* pNextTopChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
 
-            //the window still could be on the stack, so we have to
-            // use lazy delete ( it will automatically
-            // disconnect from the currently destroyed parent window )
-            pTopWindowChild->doLazyDelete();
+        //the window still could be on the stack, so we have to
+        // use lazy delete ( it will automatically
+        // disconnect from the currently destroyed parent window )
+        pTopWindowChild->doLazyDelete();
 
-            pTopWindowChild = pNextTopChild;
-        }
+        pTopWindowChild = pNextTopChild;
     }
 }
 
