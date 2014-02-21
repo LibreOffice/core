@@ -510,7 +510,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_NOOVERFLOW:
                 if( PARDID->nHangPunct )
                 {
-                    pSet->Put( SvxHangingPunctuationItem( sal_False,
+                    pSet->Put( SvxHangingPunctuationItem( false,
                                                     PARDID->nHangPunct ));
                 }
                 break;

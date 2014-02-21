@@ -75,7 +75,7 @@ TYPEINIT1_FACTORY(SvxTabStopItem, SfxPoolItem, new SvxTabStopItem(0));
 TYPEINIT1_FACTORY(SvxFmtSplitItem, SfxBoolItem, new SvxFmtSplitItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxPageModelItem, SfxStringItem, new SvxPageModelItem(0));
 TYPEINIT1_FACTORY(SvxScriptSpaceItem, SfxBoolItem, new SvxScriptSpaceItem(sal_False, 0));
-TYPEINIT1_FACTORY(SvxHangingPunctuationItem, SfxBoolItem, new SvxHangingPunctuationItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxHangingPunctuationItem, SfxBoolItem, new SvxHangingPunctuationItem(false, 0));
 TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
 TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(sal_True, 0));
@@ -1424,7 +1424,7 @@ SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
 //------------------------------------------------------------------------
 
 SvxHangingPunctuationItem::SvxHangingPunctuationItem(
-                                    sal_Bool bOn, const sal_uInt16 nId )
+                                    bool bOn, const sal_uInt16 nId )
     : SfxBoolItem( nId, bOn )
 {
 }

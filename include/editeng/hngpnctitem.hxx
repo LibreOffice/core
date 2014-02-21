@@ -34,8 +34,7 @@ class EDITENG_DLLPUBLIC SvxHangingPunctuationItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxHangingPunctuationItem( sal_Bool bOn /*= sal_False*/,
-                        const sal_uInt16 nId  );
+    SvxHangingPunctuationItem( bool bOn /*= false*/, const sal_uInt16 nId  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;

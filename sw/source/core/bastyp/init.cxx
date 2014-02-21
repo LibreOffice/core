@@ -543,7 +543,7 @@ void _InitCore()
     aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] =       new SwNumRuleItem( OUString() );
 
     aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =   new SvxScriptSpaceItem( sal_True, RES_PARATR_SCRIPTSPACE );
-    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] = new SvxHangingPunctuationItem( sal_True, RES_PARATR_HANGINGPUNCTUATION );
+    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] = new SvxHangingPunctuationItem( true, RES_PARATR_HANGINGPUNCTUATION );
     aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] = new SvxForbiddenRuleItem( sal_True, RES_PARATR_FORBIDDEN_RULES );
     aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =     new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
     aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =    new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
