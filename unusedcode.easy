@@ -85,7 +85,6 @@ ScDocument::GetCellCount(short, short) const
 ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::IsEmptyData(short, short) const
 ScDocument::RebuildFormulaGroups()
-ScEditUtil::GetSpaceDelimitedString(EditTextObject const&)
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
 ScFormulaCell::HasColRowName() const
