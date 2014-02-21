@@ -3432,10 +3432,10 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     OUString aText(convertLineEnd(GetSelected(aSelection), GetSystemLineEnd())); // System specific
     pDataObj->GetString() = aText;
 
-    SvxFontItem::EnableStoreUnicodeNames( sal_True );
+    SvxFontItem::EnableStoreUnicodeNames( true );
     WriteBin( pDataObj->GetStream(), aSelection, true );
     pDataObj->GetStream().Seek( 0 );
-    SvxFontItem::EnableStoreUnicodeNames( sal_False );
+    SvxFontItem::EnableStoreUnicodeNames( false );
 
     ((ImpEditEngine*)this)->WriteRTF( pDataObj->GetRTFStream(), aSelection );
     pDataObj->GetRTFStream().Seek( 0 );

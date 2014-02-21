@@ -35,13 +35,13 @@ class SvXMLUnitConverter;
 
 class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
 {
-    OUString aFamilyName;
-    OUString aStyleName;
-    FontFamily eFamily;
-    FontPitch ePitch;
+    OUString    aFamilyName;
+    OUString    aStyleName;
+    FontFamily  eFamily;
+    FontPitch   ePitch;
     rtl_TextEncoding eTextEncoding;
 
-    static sal_Bool bEnableStoreUnicodeNames;
+    static bool bEnableStoreUnicodeNames;
 
 public:
     TYPEINFO();
@@ -85,7 +85,7 @@ public:
 
     SvxFontItem& operator=(const SvxFontItem& rFont);
 
-    static void EnableStoreUnicodeNames( sal_Bool bEnable );
+    static void EnableStoreUnicodeNames( bool bEnable );
 
 };
 

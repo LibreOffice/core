@@ -105,7 +105,7 @@ using namespace ::com::sun::star::text;
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
-sal_Bool SvxFontItem::bEnableStoreUnicodeNames = sal_False;
+bool SvxFontItem::bEnableStoreUnicodeNames = false;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -465,7 +465,7 @@ SfxItemPresentation SvxFontItem::GetPresentation
 
 
 
-void SvxFontItem::EnableStoreUnicodeNames( sal_Bool bEnable )
+void SvxFontItem::EnableStoreUnicodeNames( bool bEnable )
 {
     bEnableStoreUnicodeNames = bEnable;
 }
