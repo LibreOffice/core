@@ -160,6 +160,7 @@ namespace frm
         ,OEntryListHelper( (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet()
+        ,m_nConvertedBoundValuesType(0)
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
     {
@@ -182,6 +183,7 @@ namespace frm
         ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
         ,m_aListSourceValues( _pOriginal->m_aListSourceValues )
         ,m_aBoundValues( _pOriginal->m_aBoundValues )
+        ,m_nConvertedBoundValuesType(0)
         ,m_aDefaultSelectSeq( _pOriginal->m_aDefaultSelectSeq )
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
