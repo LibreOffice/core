@@ -913,11 +913,6 @@ IMPL_LINK_NOARG(MenuManager, Highlight)
     return 0;
 }
 
-const Reference< XComponentContext >& MenuManager::getContext()
-{
-    return m_xContext;
-}
-
 void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
 {
     MenuManager* pSubMenuManager = new MenuManager( m_xContext, m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );

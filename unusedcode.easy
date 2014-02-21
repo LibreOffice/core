@@ -306,7 +306,6 @@ editeng::Section::Section()
 formula::FormulaDlg::CheckMatrix()
 formula::FormulaTokenArray::AddString(unsigned short const*)
 formula::SingleVectorRefToken::SingleVectorRefToken(double const*, unsigned long)
-framework::MenuManager::getContext()
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::AttributeConversion::decodeDouble(rtl::OUString const&)
