@@ -180,7 +180,9 @@ bool Plugin::ignoreLocation( const Decl* decl )
 inline
 bool Plugin::ignoreLocation( const Stmt* stmt )
     {
-    return ignoreLocation( stmt->getLocStart());
+    // Invalid location can happen at least for ImplicitCastExpr of
+    // ImplicitParam 'self' in Objective C method declarations:
+    return stmt->getLocStart().isValid() && ignoreLocation( stmt->getLocStart());
     }
 
 template< typename T >
