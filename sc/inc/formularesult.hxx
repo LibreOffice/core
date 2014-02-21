@@ -155,7 +155,6 @@ public:
     bool IsMultiline() const;
 
     bool GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const;
-    bool GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr ) const;
     sc::FormulaResultValue GetResult() const;
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,

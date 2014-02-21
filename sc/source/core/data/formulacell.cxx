@@ -2348,17 +2348,6 @@ bool ScFormulaCell::GetErrorOrValue( sal_uInt16& rErr, double& rVal )
     return aResult.GetErrorOrDouble(rErr, rVal);
 }
 
-bool ScFormulaCell::GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr )
-{
-    MaybeInterpret();
-
-    rErr = pCode->GetCodeError();
-    if (rErr)
-        return true;
-
-    return aResult.GetErrorOrString(rErr, rStr);
-}
-
 sc::FormulaResultValue ScFormulaCell::GetResult()
 {
     MaybeInterpret();

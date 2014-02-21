@@ -345,42 +345,6 @@ bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
     return true;
 }
 
-bool ScFormulaResult::GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr ) const
-{
-    if (mnError)
-    {
-        rErr = mnError;
-        return true;
-    }
-
-    formula::StackVar sv = GetCellResultType();
-    if (sv == formula::svError)
-    {
-        if (GetType() == formula::svMatrixCell)
-        {
-            // don't need to test for mpToken here, GetType() already did it
-            rErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
-                GetUpperLeftToken()->GetError();
-        }
-        else if (mpToken)
-        {
-            rErr = mpToken->GetError();
-        }
-    }
-
-    if (rErr)
-        return true;
-
-    if (!mbToken)
-        return false;
-
-    if (!isString(sv))
-        return false;
-
-    rStr = GetString();
-    return true;
-}
-
 sc::FormulaResultValue ScFormulaResult::GetResult() const
 {
     if (mnError)

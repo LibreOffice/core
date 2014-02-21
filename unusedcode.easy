@@ -88,7 +88,6 @@ ScDocument::RebuildFormulaGroups()
 ScEditUtil::GetSpaceDelimitedString(EditTextObject const&)
 ScExtIButton::GetSelected() const
 ScFlatBoolRowSegments::getValue(int)
-ScFormulaCell::GetErrorOrString(unsigned short&, svl::SharedString&)
 ScFormulaCell::HasColRowName() const
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
 ScGridWindow::HasScenarioRange(unsigned short, int, ScRange&)

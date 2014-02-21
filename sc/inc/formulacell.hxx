@@ -284,7 +284,6 @@ public:
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );
-    bool GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr );
     sc::FormulaResultValue GetResult();
     sal_uInt8       GetMatrixFlag() const;
     ScTokenArray* GetCode();
