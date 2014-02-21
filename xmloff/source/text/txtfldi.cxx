@@ -1814,13 +1814,15 @@ TYPEINIT1( XMLDateTimeDocInfoImportContext, XMLSimpleDocInfoImportContext );
 XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
     const OUString& sLocalName, sal_uInt16 nToken)
-:   XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx, sLocalName,nToken, sal_False, sal_False)
-,   sPropertyNumberFormat(sAPI_number_format)
-,   sPropertyIsDate(sAPI_is_date)
-,   sPropertyIsFixedLanguage(sAPI_is_fixed_language)
-,   nFormat(0)
-,   bFormatOK(sal_False)
-,   bIsDefaultLanguage(sal_True)
+    : XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx, sLocalName,nToken, sal_False, sal_False)
+    , sPropertyNumberFormat(sAPI_number_format)
+    , sPropertyIsDate(sAPI_is_date)
+    , sPropertyIsFixedLanguage(sAPI_is_fixed_language)
+    , nFormat(0)
+    , bFormatOK(sal_False)
+    , bIsDate(false)
+    , bHasDateTime(false)
+    , bIsDefaultLanguage(sal_True)
 {
     // we allow processing of EDIT_DURATION here, because import of actual
     // is not supported anyway. If it was, we'd need an extra import class
