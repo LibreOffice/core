@@ -100,8 +100,6 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static const OUString& PROP_VIEWONLY();
         static const OUString& PROP_DOCUMENTBASEURL();
 
-        static const OUString& PROP_DEEPDETECTION();
-
     //-------------------------------------------
     // interface
     public:
