@@ -743,23 +743,21 @@ OUString XMLPropertiesTContext_Impl::MergeLineThrough(
 
 TYPEINIT1( XMLStyleOASISTContext, XMLPersElemContentTContext );
 
-XMLStyleOASISTContext::XMLStyleOASISTContext( XMLTransformerBase& rImp,
-                                                const OUString& rQName,
-                                                 sal_Bool bPersistent ) :
-    XMLPersElemContentTContext ( rImp, rQName ),
-    m_bPersistent( bPersistent ),
-    m_bControlStyle( false )
+XMLStyleOASISTContext::XMLStyleOASISTContext(XMLTransformerBase& rImp,
+    const OUString& rQName, sal_Bool bPersistent)
+    : XMLPersElemContentTContext(rImp, rQName)
+    , m_bPersistent(bPersistent)
+    , m_bControlStyle(false)
 {
 }
 
 XMLStyleOASISTContext::XMLStyleOASISTContext(
-        XMLTransformerBase& rImp,
-          const OUString& rQName,
-        sal_uInt16 nPrefix,
-        ::xmloff::token::XMLTokenEnum eToken,
-           sal_Bool bPersistent ) :
-    XMLPersElemContentTContext( rImp, rQName, nPrefix, eToken ),
-    m_bPersistent( bPersistent )
+    XMLTransformerBase& rImp, const OUString& rQName,
+    sal_uInt16 nPrefix, ::xmloff::token::XMLTokenEnum eToken,
+    sal_Bool bPersistent)
+    : XMLPersElemContentTContext(rImp, rQName, nPrefix, eToken)
+    , m_bPersistent(bPersistent)
+    , m_bControlStyle(false)
 {
 }
 
