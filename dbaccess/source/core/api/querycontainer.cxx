@@ -68,6 +68,7 @@ OQueryContainer::OQueryContainer(
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)
     ,m_xConnection(_rxConn)
+    ,m_eDoingCurrently(NONE)
 {
 }
 
