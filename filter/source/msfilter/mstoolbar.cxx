@@ -384,7 +384,10 @@ WString::Read( SvStream &rS )
     return true;
 }
 
-TBCExtraInfo::TBCExtraInfo() : idHelpContext( 0 )
+TBCExtraInfo::TBCExtraInfo()
+    : idHelpContext(0)
+    , tbcu(0)
+    , tbmg(0)
 {
 }
 
