@@ -22,6 +22,10 @@ vcl \
 $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,vcl_app_test, \
+	boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_set_include,vcl_app_test, \
 $$(INCLUDE) \
 -I$(OUTDIR)/inc \
