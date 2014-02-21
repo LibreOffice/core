@@ -619,12 +619,13 @@ XMLSenderFieldImportContext::XMLSenderFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName,
     sal_uInt16 nToken)
-:   XMLTextFieldImportContext(rImport, rHlp, sAPI_extended_user,nPrfx, sLocalName)
-,   sPropertyFixed(sAPI_is_fixed)
-,   sPropertyFieldSubType(sAPI_user_data_type)
-,   sPropertyContent(sAPI_content)
-,   bFixed(sal_True)
-,   nElementToken(nToken)
+    : XMLTextFieldImportContext(rImport, rHlp, sAPI_extended_user,nPrfx, sLocalName)
+    , nSubType(0)
+    , sPropertyFixed(sAPI_is_fixed)
+    , sPropertyFieldSubType(sAPI_user_data_type)
+    , sPropertyContent(sAPI_content)
+    , bFixed(sal_True)
+    , nElementToken(nToken)
 {
 }
 
