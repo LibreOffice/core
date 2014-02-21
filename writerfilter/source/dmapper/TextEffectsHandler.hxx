@@ -24,6 +24,7 @@ namespace dmapper
 
 class GrabBagStack;
 
+/// Class to process all text effects like glow, textOutline, ...
 class TextEffectsHandler : public LoggedProperties
 {
 private:
@@ -41,6 +42,8 @@ public:
     void enableInteropGrabBag(OUString aName);
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled();
+
+    static OUString getSchemeColorTypeString(sal_Int32 nType);
 };
 
 typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;

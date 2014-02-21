@@ -9,11 +9,11 @@
  */
 
 #include <TextEffectsHandler.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/string.hxx>
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
-
 #include <stack>
-
 
 namespace writerfilter {
 namespace dmapper
@@ -29,6 +29,7 @@ struct GrabBagStackElement
     std::vector<beans::PropertyValue> maPropertyList;
 };
 
+/// Tool that is useful for construction of a nested Sequence/PropertyValue hierarchy
 class GrabBagStack
 {
 public:
@@ -42,6 +43,11 @@ public:
 
     std::stack<GrabBagStackElement> mStack;
     GrabBagStackElement mCurrentElement;
+
+    OUString getCurrentName()
+    {
+        return mCurrentElement.maName;
+    }
 
     PropertyValue getRootProperty()
     {
@@ -92,6 +98,27 @@ public:
     }
 };
 
+OUString TextEffectsHandler::getSchemeColorTypeString(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_ST_SchemeColorVal_bg1: return OUString("bg1");
+        case NS_ooxml::LN_ST_SchemeColorVal_tx1: return OUString("tx1");
+        case NS_ooxml::LN_ST_SchemeColorVal_bg2: return OUString("bg2");
+        case NS_ooxml::LN_ST_SchemeColorVal_tx2: return OUString("tx2");
+        case NS_ooxml::LN_ST_SchemeColorVal_accent1: return OUString("accent1");
+        case NS_ooxml::LN_ST_SchemeColorVal_accent2: return OUString("accent2");
+        case NS_ooxml::LN_ST_SchemeColorVal_accent3: return OUString("accent3");
+        case NS_ooxml::LN_ST_SchemeColorVal_accent4: return OUString("accent4");
+        case NS_ooxml::LN_ST_SchemeColorVal_accent5: return OUString("accent5");
+        case NS_ooxml::LN_ST_SchemeColorVal_accent6: return OUString("accent6");
+
+        default: break;
+    }
+    return OUString();
+}
+
+
 TextEffectsHandler::TextEffectsHandler() :
     LoggedProperties(dmapper_logger, "TextEffectsHandler"),
     mpGrabBagStack(NULL)
@@ -104,20 +131,35 @@ TextEffectsHandler::~TextEffectsHandler()
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 {
-    sal_Int32 nValue = aValue.getInt();
+
+    if (mpGrabBagStack->getCurrentName() != "attributes")
+        mpGrabBagStack->push("attributes");
+
     switch(aName)
     {
         case NS_ooxml::LN_CT_Percentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(nValue));
+            mpGrabBagStack->appendElement("val", makeAny(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_PositiveFixedPercentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(nValue));
+            mpGrabBagStack->appendElement("val", makeAny(aValue.getInt()));
+            break;
+        case NS_ooxml::LN_CT_PositivePercentage_val:
+            mpGrabBagStack->appendElement("val", makeAny(aValue.getInt()));
             break;
         case NS_ooxml::LN_CT_SchemeColor_val:
-            mpGrabBagStack->appendElement("val", makeAny(nValue));
+            mpGrabBagStack->appendElement("val", makeAny(getSchemeColorTypeString(aValue.getInt())));
+            break;
+        case NS_ooxml::LN_CT_SRgbColor_val:
+            {
+                OUStringBuffer aBuf = OUString::number(aValue.getInt(), 16);
+                OUStringBuffer aStr;
+                comphelper::string::padToLength(aStr, 6 - aBuf.getLength(), '0');
+                aStr.append(aBuf.getStr());
+                mpGrabBagStack->appendElement("val", makeAny(aStr.makeStringAndClear()));
+            }
             break;
         case NS_ooxml::LN_CT_Glow_rad:
-            mpGrabBagStack->appendElement("rad", makeAny(nValue));
+            mpGrabBagStack->appendElement("rad", makeAny(aValue.getInt()));
             break;
         default:
             break;
@@ -126,6 +168,9 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 
 void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
 {
+    if (mpGrabBagStack->getCurrentName() == "attributes")
+        mpGrabBagStack->pop();
+
     sal_uInt32 nSprmId = rSprm.getId();
 
     switch(nSprmId)
@@ -176,6 +221,9 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
         return;
 
     pProperties.get()->resolve( *this );
+
+    if (mpGrabBagStack->getCurrentName() == "attributes")
+        mpGrabBagStack->pop();
 
     switch(nSprmId)
     {
