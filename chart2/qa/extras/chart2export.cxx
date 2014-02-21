@@ -48,6 +48,7 @@ public:
     void testBarChartRotation();
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
+    void testSeriesIdxOrder();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST(testPieChartDataLabels);
+    CPPUNIT_TEST(testSeriesIdxOrder);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -610,6 +612,14 @@ void Chart2ExportTest::testPieChartDataLabels()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", "bestFit");
 }
 
+void Chart2ExportTest::testSeriesIdxOrder()
+{
+    load("/chart2/qa/extras/data/docx/", "testSeriesIdxOrder.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:idx[1]", "val", "1");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]", "val", "1");
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

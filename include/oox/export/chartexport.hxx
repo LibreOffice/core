@@ -83,6 +83,7 @@ public:
 
 private:
     sal_Int32           mnXmlNamespace;
+    sal_Int32           mnSeriesCount;
     Fraction            maFraction;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxChartModel;
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;

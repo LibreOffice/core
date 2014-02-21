@@ -438,6 +438,7 @@ sal_Int32 lcl_generateRandomValue()
 ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel >& xModel, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( pFS, pFB, eDocumentType )
     , mnXmlNamespace( nXmlNamespace )
+    , mnSeriesCount(0)
     , maFraction( 1, 576 )
     , mxChartModel( xModel )
     , mbHasCategoryLabels( sal_False )
@@ -1041,9 +1042,11 @@ void ChartExport::exportPlotArea( )
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
     for( sal_Int32 nCSIdx=0; nCSIdx<aCooSysSeq.getLength(); ++nCSIdx )
     {
+
         Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCSIdx], uno::UNO_QUERY );
         if( ! xCTCnt.is())
             continue;
+        mnSeriesCount=0;
         Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
         for( sal_Int32 nCTIdx=0; nCTIdx<aCTSeq.getLength(); ++nCTIdx )
         {
@@ -1689,10 +1692,10 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
 
                     // TODO: idx and order
                     pFS->singleElement( FSNS( XML_c, XML_idx ),
-                        XML_val, I32S(nSeriesIdx),
+                        XML_val, I32S(mnSeriesCount),
                         FSEND );
                     pFS->singleElement( FSNS( XML_c, XML_order ),
-                        XML_val, I32S(nSeriesIdx),
+                        XML_val, I32S(mnSeriesCount++),
                         FSEND );
 
                     // export label
