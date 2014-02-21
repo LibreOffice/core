@@ -71,7 +71,11 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     mnCnvrtFlags            ( nCnvrtFlags ),
     mbStatus                ( sal_False ),
     mbUseNewAnimations      ( sal_True ),
+    mnStatMaxValue          ( 0 ),
     mnLatestStatValue       ( 0 ),
+    mnTextStyle( 0 ),
+    mbFontIndependentLineSpacing( false ),
+    mnTextSize( 0 ),
     mrStg                   ( rSvStorage ),
     mpCurUserStrm           ( NULL ),
     mpStrm                  ( NULL ),
@@ -81,8 +85,13 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     mpVBA                   ( pVBA ),
     mnExEmbed               ( 0 ),
     mpExEmbed               ( new SvMemoryStream ),
+    mnDrawings              ( 0 ),
     mnPagesWritten          ( 0 ),
-    mnTxId                  ( 0x7a2f64 )
+    mnUniqueSlideIdentifier ( 0 ),
+    mnTxId                  ( 0x7a2f64 ),
+    mnDiaMode               ( 0 ),
+    mnShapeMasterTitle      ( 0 ),
+    mnShapeMasterBody       ( 0 )
 {
 }
 
