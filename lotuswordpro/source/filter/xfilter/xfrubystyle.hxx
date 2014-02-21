@@ -67,7 +67,11 @@
 class XFRubyStyle : public XFStyle
 {
 public:
-    XFRubyStyle(){}
+    XFRubyStyle()
+        : m_ePos(enumXFRubyLeft)
+        , m_eAlign(enumXFRubyLeft)
+    {
+    }
     virtual ~XFRubyStyle(){}
     virtual void ToXml(IXFStream *strm);
     void SetPosition(enumXFRubyPosition ePosition);
