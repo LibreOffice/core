@@ -1855,27 +1855,6 @@ OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
     return pItem->GetText();
 }
 
-OUString SvTreeListBox::SearchEntryText( SvTreeListEntry* pEntry ) const
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" );
-    OUString sRet;
-    sal_uInt16 nCount = pEntry->ItemCount();
-    sal_uInt16 nCur = 0;
-    SvLBoxItem* pItem;
-    while( nCur < nCount )
-    {
-        pItem = pEntry->GetItem( nCur );
-        if (pItem->GetType() == SV_ITEM_ID_LBOXSTRING && !static_cast<const SvLBoxString*>(pItem)->GetText().isEmpty())
-        {
-            sRet = static_cast<const SvLBoxString*>(pItem)->GetText();
-            break;
-        }
-        nCur++;
-    }
-    return sRet;
-}
-
 const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);

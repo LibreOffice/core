@@ -658,7 +658,6 @@ public:
     void            SetCollapsedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
 
     virtual OUString GetEntryText( SvTreeListEntry* pEntry ) const;
-    OUString        SearchEntryText( SvTreeListEntry* pEntry ) const;
     const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry ) const;
     const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry ) const;
 

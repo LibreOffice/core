@@ -119,7 +119,6 @@ SmFontPickList::Contains(Font const&) const
 SmParser::Insert(rtl::OUString const&, int)
 SotFactory::Find(SvGlobalName const&)
 SvStream::WriteUCharPtr(unsigned char const*)
-SvTreeListBox::SearchEntryText(SvTreeListEntry*) const
 SvViewDataEntry::SetObjectSelected(bool)
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostedEventsInQueue()
