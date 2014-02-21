@@ -113,7 +113,6 @@ SfxBindings::GetSystemWindow() const
 SfxDispatcher::IsOnTop(SfxShell const&)
 SfxGrabBagItem::SetGrabBag(std::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
 SfxItemPool::GetMasterPool() const
-SfxTemplatePanelControl::SetParagraphFamily()
 SimpleErrorHandler::SimpleErrorHandler()
 SmFontPickList::Contains(Font const&) const
 SmParser::Insert(rtl::OUString const&, int)

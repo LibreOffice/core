@@ -412,17 +412,6 @@ SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
 
 
 
-void SfxTemplatePanelControl::SetParagraphFamily()
-{
-    // first select the paragraph family
-    pImpl->FamilySelect( SFX_STYLE_FAMILY_PARA );
-    // then select the automatic filter
-    pImpl->SetAutomaticFilter();
-}
-
-
-
-
 void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
 {
     if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&

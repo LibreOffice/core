@@ -94,8 +94,6 @@ public:
     virtual void                StateChanged( StateChangedType nStateChange );
     virtual void                FreeResource (void);
 
-    void                        SetParagraphFamily();
-
 private:
     SfxTemplateDialog_Impl*     pImpl;
     SfxBindings* mpBindings;
