@@ -1567,10 +1567,11 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
     return pContext;
 }
 
-SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
-: SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList )
+SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
+    sal_uInt16 nPrfx, const OUString& rLName,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList)
+    : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList)
+    , mbFixed(false)
 {
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
