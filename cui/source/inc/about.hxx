@@ -59,7 +59,7 @@ private:
     OUString GetCopyrightString();
 
 protected:
-    virtual sal_Bool Close();
+    virtual bool Close();
     virtual void Paint( const Rectangle& rRect );
     virtual void Resize();
 

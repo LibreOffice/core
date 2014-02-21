@@ -589,7 +589,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
 
     aColor=Sgv2SvFarbe(Atr.L.LFarbe,Atr.L.LBFarbe,Atr.L.LIntens); aFont.SetColor(aColor);
     aColor=Sgv2SvFarbe(Atr.F.FFarbe,Atr.F.FBFarbe,Atr.F.FIntens); aFont.SetFillColor(aColor);
-    aFont.SetTransparent(sal_True);
+    aFont.SetTransparent(true);
     aFont.SetAlign(ALIGN_BASELINE);
 
     Dreh/=10; Dreh=3600-Dreh; if (Dreh==3600) Dreh=0;
@@ -601,11 +601,11 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
     if ((Atr.Schnitt & TextDbUnBit) !=0) aFont.SetUnderline(UNDERLINE_DOUBLE);
     if ((Atr.Schnitt & TextStrkBit) !=0) aFont.SetStrikeout(STRIKEOUT_SINGLE);
     if ((Atr.Schnitt & TextDbStBit) !=0) aFont.SetStrikeout(STRIKEOUT_DOUBLE);
-    if ((Atr.Schnitt & TextSh2DBit) !=0) aFont.SetShadow(sal_True);
-    if ((Atr.Schnitt & TextSh3DBit) !=0) aFont.SetShadow(sal_True);
-    if ((Atr.Schnitt & TextSh4DBit) !=0) aFont.SetShadow(sal_True);
-    if ((Atr.Schnitt & TextShEbBit) !=0) aFont.SetShadow(sal_True);
-    if (CheckTextOutl(Atr.F,Atr.L)) aFont.SetOutline(sal_True);
+    if ((Atr.Schnitt & TextSh2DBit) !=0) aFont.SetShadow(true);
+    if ((Atr.Schnitt & TextSh3DBit) !=0) aFont.SetShadow(true);
+    if ((Atr.Schnitt & TextSh4DBit) !=0) aFont.SetShadow(true);
+    if ((Atr.Schnitt & TextShEbBit) !=0) aFont.SetShadow(true);
+    if (CheckTextOutl(Atr.F,Atr.L)) aFont.SetOutline(true);
 
     if (aFont!=rOut.GetFont()) rOut.SetFont(aFont);
 
@@ -1095,11 +1095,11 @@ SgfFontOne::SgfFontOne()
 {
     Next=NULL;
     IFID=0;
-    Bold=sal_False;
-    Ital=sal_False;
-    Sans=sal_False;
-    Serf=sal_False;
-    Fixd=sal_False;
+    Bold=false;
+    Ital=false;
+    Sans=false;
+    Serf=false;
+    Fixd=false;
     SVFamil=FAMILY_DONTKNOW;
     SVChSet=RTL_TEXTENCODING_DONTKNOW;
     SVWidth=40;
@@ -1134,11 +1134,11 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
         if (!s.isEmpty())
         {
             s = s.toAsciiUpperCase();
-            if      (s.match("BOLD")) Bold=sal_True;
-            else if (s.match("ITAL")) Ital=sal_True;
-            else if (s.match("SERF")) Serf=sal_True;
-            else if (s.match("SANS")) Sans=sal_True;
-            else if (s.match("FIXD")) Fixd=sal_True;
+            if      (s.match("BOLD")) Bold=true;
+            else if (s.match("ITAL")) Ital=true;
+            else if (s.match("SERF")) Serf=true;
+            else if (s.match("SANS")) Sans=true;
+            else if (s.match("FIXD")) Fixd=true;
             else if (s.match("ROMAN")) SVFamil=FAMILY_ROMAN;
             else if (s.match("SWISS")) SVFamil=FAMILY_SWISS;
             else if (s.match("MODERN")) SVFamil=FAMILY_MODERN;

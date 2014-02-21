@@ -36,7 +36,7 @@ class DNDListenerContainer :    public ::vcl::unohelper::MutexHelper,
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
     ::com::sun::star::datatransfer::dnd::XDropTarget >
 {
-    sal_Bool m_bActive;
+    bool m_bActive;
     sal_Int8 m_nDefaultActions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetDragContext > m_xDropTargetDragContext;

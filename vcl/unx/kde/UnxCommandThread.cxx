@@ -43,7 +43,7 @@ UnxFilePickerCommandThread::~UnxFilePickerCommandThread()
 {
 }
 
-sal_Bool SAL_CALL UnxFilePickerCommandThread::result()
+bool SAL_CALL UnxFilePickerCommandThread::result()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -115,10 +115,10 @@ void SAL_CALL UnxFilePickerCommandThread::run()
     sal_Char *pWhereToRead = pBuffer;
     sal_Char *pEntryBegin = pBuffer;
     sal_Int32 nBytesRead = 0;
-    sal_Bool  bShouldExit = sal_False;
+    bool  bShouldExit = false;
     while ( !bShouldExit && ( nBytesRead = read( m_nReadFD, pWhereToRead, pBufferEnd - pWhereToRead ) ) > 0 )
     {
-        sal_Bool bFoundNL = sal_False;
+        bool bFoundNL = false;
         sal_Char *pWhereToReadEnd = pWhereToRead + nBytesRead;
         sal_Char *pEntryEnd = pWhereToRead;
         do {
@@ -127,11 +127,11 @@ void SAL_CALL UnxFilePickerCommandThread::run()
 
             if ( pEntryEnd < pWhereToReadEnd )
             {
-                bFoundNL = sal_True;
+                bFoundNL = true;
                 *pEntryEnd = 0;
 
                 if ( strcmp( pEntryBegin, "exited" ) == 0 )
-                    bShouldExit = sal_True;
+                    bShouldExit = true;
                 else
                     handleCommand( OUString( pEntryBegin, pEntryEnd - pEntryBegin, RTL_TEXTENCODING_UTF8 )/*, bQuit*/ );
 
@@ -181,12 +181,12 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
 
     if ( aCommandName == "accept" )
     {
-        m_aResult = sal_True;
+        m_aResult = true;
         m_aExecCondition.set();
     }
     else if ( aCommandName == "reject" )
     {
-        m_aResult = sal_False;
+        m_aResult = false;
         m_aExecCondition.set();
     }
     else if ( aCommandName == "fileSelectionChanged" )
@@ -210,7 +210,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
 
         if ( aType == "bool" )
         {
-            sal_Bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCase("true");
+            bool bValue = !aList.empty() && aList.front().equalsIgnoreAsciiCase("true");
 
             m_aGetValue <<= bValue;
             m_aGetValueCondition.set();
@@ -275,7 +275,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rComman
 
     const sal_Unicode *pUnicode = rCommand.getStr();
     const sal_Unicode *pEnd     = pUnicode + rCommand.getLength();
-    sal_Bool bQuoted            = sal_False;
+    bool bQuoted            = false;
 
     for ( ; pUnicode != pEnd; ++pUnicode )
     {

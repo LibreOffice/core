@@ -47,13 +47,13 @@ private:
     sal_uLong               mnRecordCount;
     sal_uLong               mnRecordPos;
     sal_uLong               mnRecordPlusPos;
-    sal_Bool                mbRecordOpen;
-    sal_Bool                mbRecordPlusOpen;
-    sal_Bool                mbLineChanged;
+    bool                mbRecordOpen;
+    bool                mbRecordPlusOpen;
+    bool                mbLineChanged;
     sal_uInt32          mnLineHandle;
-    sal_Bool                mbFillChanged;
+    bool                mbFillChanged;
     sal_uInt32          mnFillHandle;
-    sal_Bool                mbTextChanged;
+    bool                mbTextChanged;
     sal_uInt32          mnTextHandle;
     sal_uInt32          mnHorTextAlign;
 
@@ -68,7 +68,7 @@ private:
     sal_uLong               ImplAcquireHandle();
     void                ImplReleaseHandle( sal_uLong nHandle );
 
-    sal_Bool                ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType );
+    bool                ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType );
     void                ImplCheckLineAttr();
     void                ImplCheckFillAttr();
     void                ImplCheckTextAttr();
@@ -79,8 +79,8 @@ private:
     void                ImplWritePoint( const Point& rPoint );
     void                ImplWriteSize( const Size& rSize);
     void                ImplWriteRect( const Rectangle& rRect );
-    void                ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClose );
-    void                ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose );
+    void                ImplWritePath( const PolyPolygon& rPolyPoly, bool bClose );
+    void                ImplWritePolygonRecord( const Polygon& rPoly, bool bClose );
     void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
     void                ImplWriteTextRecord( const Point& rPos, const OUString rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
@@ -97,7 +97,7 @@ public:
 
     EMFWriter(SvStream &rStream) : m_rStm(rStream) {}
 
-    sal_Bool WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
+    bool WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX

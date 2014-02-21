@@ -65,9 +65,9 @@ public:
                     ~Hatch();
 
     Hatch&          operator=( const Hatch& rHatch );
-    sal_Bool            operator==( const Hatch& rHatch ) const;
-    sal_Bool            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
-    sal_Bool            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
+    bool            operator==( const Hatch& rHatch ) const;
+    bool            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
+    bool            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
 
     HatchStyle      GetStyle() const { return mpImplHatch->meStyle; }
 

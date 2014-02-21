@@ -160,7 +160,7 @@ void ScXMLSourceDlg::SetActive()
     RefInputDone();
 }
 
-sal_Bool ScXMLSourceDlg::Close()
+bool ScXMLSourceDlg::Close()
 {
     return DoClose(ScXMLSourceDlgWrapper::GetChildWindowId());
 }

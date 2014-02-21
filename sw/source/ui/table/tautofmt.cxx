@@ -581,7 +581,7 @@ void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, F
     SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );
     SETONALLFONTS( SetColor,        rBoxFmt.GetColor().GetValue() );
     SETONALLFONTS( SetSize,         aFontSize );
-    SETONALLFONTS( SetTransparent,  sal_True );
+    SETONALLFONTS( SetTransparent,  true );
 }
 
 sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
@@ -869,7 +869,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     Font    aFont;
 
     aFont = aVD.GetFont();
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
 
     aVD.SetFont          ( aFont );
     aVD.SetLineColor     ();

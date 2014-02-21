@@ -61,15 +61,15 @@ public:
     virtual SalGraphics*            GetGraphics() = 0;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
-    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) = 0;
     // This function set the driver data and
     // set the new indepen data in pSetupData
-    virtual sal_Bool                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) = 0;
     // This function merged the indepen driver data
     // and set the new indepen data in pSetupData
     // Only the data must changed, where the bit
     // in nFlags is set
-    virtual sal_Bool                    SetData( sal_uLong nFlags, ImplJobSetup* pSetupData ) = 0;
+    virtual bool                    SetData( sal_uLong nFlags, ImplJobSetup* pSetupData ) = 0;
 
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
@@ -90,7 +90,7 @@ public:
     SalPrinter() {}
     virtual ~SalPrinter();
 
-    virtual sal_Bool                    StartJob( const OUString* pFileName,
+    virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               sal_uLong nCopies,
@@ -100,16 +100,16 @@ public:
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns sal_False
-    virtual sal_Bool                    StartJob( const OUString* pFileName,
+    virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               ImplJobSetup* pSetupData,
                                               vcl::PrinterController& rController );
 
-    virtual sal_Bool                    EndJob() = 0;
-    virtual sal_Bool                    AbortJob() = 0;
+    virtual bool                    EndJob() = 0;
+    virtual bool                    AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData ) = 0;
-    virtual sal_Bool                    EndPage() = 0;
+    virtual bool                    EndPage() = 0;
     virtual sal_uLong                   GetErrorCode() = 0;
 
 };

@@ -155,7 +155,7 @@ public:
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void ClearDevFontCache();
     virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
-    virtual sal_Bool        CreateFontSubset( const OUString& rToFile,
+    virtual bool        CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_GlyphId* pGlyphIds,
                                               sal_uInt8* pEncoding,
@@ -194,13 +194,13 @@ public:
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
-    virtual sal_Bool        drawPolyLineBezier( sal_uInt32 nPoints,
+    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry );
-    virtual sal_Bool        drawPolygonBezier( sal_uInt32 nPoints,
+    virtual bool        drawPolygonBezier( sal_uInt32 nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry );
-    virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
+    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const sal_uInt8* const* pFlgAry );
@@ -230,7 +230,7 @@ public:
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags );
     virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize );
+    virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize );
 
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const;

@@ -1079,7 +1079,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
     GetFrame().ReleasingComponent_Impl( sal_True );
-    if ( GetWindow().HasChildPathFocus( sal_True ) )
+    if ( GetWindow().HasChildPathFocus( true ) )
     {
         DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );
         GetWindow().GrabFocus();
@@ -1708,7 +1708,7 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
             if ( !bEnable )
                 pImp->bWindowWasEnabled = pWindow->IsInputEnabled();
             if ( !bEnable || pImp->bWindowWasEnabled )
-                pWindow->EnableInput( bEnable, sal_True );
+                pWindow->EnableInput( bEnable, true );
         }
 
         // cursor and focus
@@ -2916,7 +2916,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                         }
                     }
 
-                    sal_Bool bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
+                    bool bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
                     if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
                     {
                         Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet( xLayoutManager, UNO_QUERY );

@@ -163,7 +163,7 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScPrintAreasDlg::Close()
+bool ScPrintAreasDlg::Close()
 {
     return DoClose( ScPrintAreasDlgWrapper::GetChildWindowId() );
 }

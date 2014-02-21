@@ -2237,7 +2237,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 
 
 #ifndef NO_MAPPERS
-int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, int bvertical)
+int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical)
 {
     int i;
     sal_uInt16 *cp;
@@ -2281,7 +2281,7 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
 
     for (i = 0; i < nchars; i++) {
         cp[i] = (sal_uInt16)ttf->mapper(ttf->cmap, cp[i]);
-        if (cp[i]!=0 && bvertical!=0)
+        if (cp[i]!=0 && bvertical)
             cp[i] = (sal_uInt16)UseGSUB(ttf,cp[i],bvertical);
     }
     return nchars;

@@ -150,7 +150,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 //----------------------------------------------------------------------------
-sal_Bool ScHighlightChgDlg::Close()
+bool ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }

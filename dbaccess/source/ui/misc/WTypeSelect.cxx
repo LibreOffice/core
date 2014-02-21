@@ -235,7 +235,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
     m_etAuto.SetText(OUString("10"));
     m_etAuto.SetDecimalDigits(0);
     m_pbAuto.SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));
-    m_lbColumnNames.EnableMultiSelection(sal_True);
+    m_lbColumnNames.EnableMultiSelection(true);
 
     try
     {

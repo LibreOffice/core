@@ -48,10 +48,10 @@ class FilterConfigCache
 
         // user data
         OUString        sFilterName;
-        sal_Bool        bIsInternalFilter   : 1;
-        sal_Bool        bIsPixelFormat      : 1;
+        bool        bIsInternalFilter   : 1;
+        bool        bIsPixelFormat      : 1;
 
-        sal_Bool        CreateFilterName( const OUString& rUserDataEntry );
+        bool        CreateFilterName( const OUString& rUserDataEntry );
         OUString        GetShortName( );
 
         static const char* InternalPixelFilterNameList[];
@@ -63,9 +63,9 @@ class FilterConfigCache
 
     CacheVector         aImport;
     CacheVector         aExport;
-    sal_Bool            bUseConfig;
+    bool            bUseConfig;
 
-    static sal_Bool   bInitialized;
+    static bool   bInitialized;
     static sal_Int32  nIndType;
     static sal_Int32  nIndUIName;
     static sal_Int32  nIndDocumentService;
@@ -98,8 +98,8 @@ public:
     OUString    GetImportFilterType( sal_uInt16 nFormat );
     OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
 
-    sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
-    sal_Bool    IsImportPixelFormat( sal_uInt16 nFormat );
+    bool    IsImportInternalFilter( sal_uInt16 nFormat );
+    bool    IsImportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };
@@ -116,10 +116,10 @@ public:
     OUString    GetExportFilterTypeName( sal_uInt16 nFormat );
     OUString    GetExportInternalFilterName( sal_uInt16 nFormat );
 
-    sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );
-    sal_Bool    IsExportPixelFormat( sal_uInt16 nFormat );
+    bool    IsExportInternalFilter( sal_uInt16 nFormat );
+    bool    IsExportPixelFormat( sal_uInt16 nFormat );
 
-                FilterConfigCache( sal_Bool bUseConfig );
+                FilterConfigCache( bool bUseConfig );
                 ~FilterConfigCache();
 };
 

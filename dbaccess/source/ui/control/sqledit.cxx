@@ -100,7 +100,7 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     m_ColorConfig.AddListener(this);
 
     //#i97044#
-    EnableFocusSelectionHide( sal_False );
+    EnableFocusSelectionHide( false );
 }
 
 OSqlEdit::~OSqlEdit()

@@ -175,7 +175,7 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
 ,m_pParent(_pReportWindow)
 ,m_bInUnmark(sal_False)
 {
-    SetPaintTransparent(sal_True);
+    SetPaintTransparent(true);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
     m_aColorConfig.AddListener(this);
@@ -275,7 +275,7 @@ void OViewsWindow::Paint( const Rectangle& rRect )
 //------------------------------------------------------------------------------
 void OViewsWindow::ImplInitSettings()
 {
-    EnableChildTransparentMode( sal_True );
+    EnableChildTransparentMode( true );
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );

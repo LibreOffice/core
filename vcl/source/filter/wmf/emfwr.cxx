@@ -178,7 +178,7 @@ void EMFWriter::ImplBeginPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags )
 
     if( !mbRecordPlusOpen )
     {
-        mbRecordPlusOpen = sal_True;
+        mbRecordPlusOpen = true;
         mnRecordPlusPos = m_rStm.Tell();
 
         m_rStm.WriteUInt16( (sal_uInt16) nType ).WriteUInt16( (sal_uInt16) nFlags );
@@ -198,7 +198,7 @@ void EMFWriter::ImplEndPlusRecord()
         m_rStm.WriteUInt32( (sal_uInt32)( nSize ) )         // Size
               .WriteUInt32( (sal_uInt32) ( nSize - 0xc ) ); // Data Size
         m_rStm.Seek( nActPos );
-        mbRecordPlusOpen = sal_False;
+        mbRecordPlusOpen = false;
     }
 }
 
@@ -283,11 +283,11 @@ void EMFWriter::ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_
     ImplEndCommentRecord();
 }
 
-sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConfigItem )
+bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConfigItem )
 {
     const sal_uLong nHeaderPos = m_rStm.Tell();
 
-    maVDev.EnableOutput( sal_False );
+    maVDev.EnableOutput( false );
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
     // don't work with pixel as destination map mode -> higher resolution preferrable
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
@@ -401,7 +401,7 @@ void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
 
     if( !mbRecordOpen )
     {
-        mbRecordOpen = sal_True;
+        mbRecordOpen = true;
         mnRecordPos = m_rStm.Tell();
 
         m_rStm.WriteUInt32( nType );
@@ -426,11 +426,11 @@ void EMFWriter::ImplEndRecord()
         while( nFillBytes-- )
             m_rStm.WriteUChar( (sal_uInt8)0 );
         mnRecordCount++;
-        mbRecordOpen = sal_False;
+        mbRecordOpen = false;
     }
 }
 
-sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
+bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
 {
     if( rHandle != HANDLE_INVALID )
     {
@@ -664,7 +664,7 @@ void EMFWriter::ImplWriteRect( const Rectangle& rRect )
        .WriteInt32( static_cast<sal_Int32>(aRect.Bottom()) );
 }
 
-void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose )
+void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, bool bClose )
 {
     if( rPoly.GetSize() )
     {
@@ -696,7 +696,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
     if( nPolyCount )
     {
         if( 1 == nPolyCount )
-            ImplWritePolygonRecord( rPolyPoly[ 0 ], sal_True );
+            ImplWritePolygonRecord( rPolyPoly[ 0 ], true );
         else
         {
             bool    bHasFlags = false;
@@ -711,7 +711,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
             if( nTotalPoints )
             {
                 if ( bHasFlags )
-                    ImplWritePath( rPolyPoly, sal_True );
+                    ImplWritePath( rPolyPoly, true );
                 else
                 {
                     ImplCheckFillAttr();
@@ -738,7 +738,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
     }
 }
 
-void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
+void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, bool bClosed )
 {
     if ( bClosed )
         ImplCheckFillAttr();
@@ -957,7 +957,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                ImplWritePolygonRecord( Polygon(aCandidate), sal_False );
+                ImplWritePolygonRecord( Polygon(aCandidate), false );
             }
         }
 
@@ -1154,7 +1154,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                     {
                         if(pA->GetLineInfo().IsDefault())
                         {
-                            ImplWritePolygonRecord( rPoly, sal_False );
+                            ImplWritePolygonRecord( rPoly, false );
                         }
                         else
                         {
@@ -1394,14 +1394,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_LINECOLOR_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                mbLineChanged = sal_True;
+                mbLineChanged = true;
             }
             break;
 
             case( META_FILLCOLOR_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                mbFillChanged = sal_True;
+                mbFillChanged = true;
             }
             break;
 
@@ -1412,7 +1412,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_FONT_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                mbTextChanged = sal_True;
+                mbTextChanged = true;
             }
             break;
 
@@ -1457,7 +1457,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 ImplEndRecord();
 
                 ImplWriteRasterOp( maVDev.GetRasterOp() );
-                mbLineChanged = mbFillChanged = mbTextChanged = sal_True;
+                mbLineChanged = mbFillChanged = mbTextChanged = true;
             }
             break;
 

@@ -50,7 +50,7 @@ namespace svt
         :Window( &i_rParent )
         ,m_rDrawer( i_rParent )
     {
-        SetMouseTransparent( sal_True );
+        SetMouseTransparent( true );
         Show();
         SetAccessibleRole( AccessibleRole::LABEL );
     }
@@ -78,7 +78,7 @@ namespace svt
         ,m_bFocused( false )
         ,m_bExpanded( false )
     {
-        EnableMapMode( sal_False );
+        EnableMapMode( false );
         SetBackground( Wallpaper() );
         SetPointer( POINTER_REFHAND );
 
@@ -198,7 +198,7 @@ namespace svt
         {
             const Rectangle aTextPixelBox( m_pPaintDevice->LogicToPixel( i_rTextBox ) );
 
-            m_pPaintDevice->EnableMapMode( sal_False );
+            m_pPaintDevice->EnableMapMode( false );
             m_pPaintDevice->SetFillColor();
 
             Rectangle aBox( i_rTextBox );
@@ -215,7 +215,7 @@ namespace svt
 
             m_pPaintDevice->SetLineColor( COL_BLACK );
             m_pPaintDevice->DrawPolyLine( Polygon( aTextPixelBox ), aDottedStyle );
-            m_pPaintDevice->EnableMapMode( sal_False );
+            m_pPaintDevice->EnableMapMode( false );
         }
         else
             HideFocus();

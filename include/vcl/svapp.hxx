@@ -348,7 +348,7 @@ public:
 
      @returns true if exited successfully, false if not able to fully exit
     */
-    virtual sal_Bool           QueryExit();
+    virtual bool           QueryExit();
 
     /** Send user event.
 
@@ -626,7 +626,7 @@ public:
 
      @see IsInExecute, IsInModalMode
     */
-    static sal_Bool             IsInMain();
+    static bool             IsInMain();
 
     /** Queries whether the application is in the event loop
 
@@ -634,7 +634,7 @@ public:
 
      @see IsInMain, IsInModalMode
     */
-    static sal_Bool             IsInExecute();
+    static bool             IsInExecute();
 
     /** Queries whether application has a modal dialog active.
 
@@ -642,7 +642,7 @@ public:
 
      @see IsInMain, IsInExecute
     */
-    static sal_Bool             IsInModalMode();
+    static bool             IsInModalMode();
 
     /** Return how many events are being dispatched.
 
@@ -679,7 +679,7 @@ public:
 
      @returns   true if UI is captured, false if not
      */
-    static sal_Bool             IsUICaptured();
+    static bool             IsUICaptured();
 
     /** @name Settings
 
@@ -836,7 +836,7 @@ public:
 
      @see PostKeyEvent
     */
-    static sal_Bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static bool             HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
     /** Send keypress event
 
@@ -902,7 +902,7 @@ public:
 
      @return true if there is a default window and the event could be posted to it successfully.
     */
-    static sal_Bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static bool             PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
 
     /** Remove user event based on event ID
 
@@ -920,7 +920,7 @@ public:
 
      @return true if the handler was inserted successfully, false if it couldn't be inserted.
     */
-    static sal_Bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
+    static bool             InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
 
     /** Remove an idle handler from the application.
 
@@ -1173,7 +1173,7 @@ public:
 
      @see RemoveAccel
     */
-    static sal_Bool             InsertAccel( Accelerator* pAccel );
+    static bool             InsertAccel( Accelerator* pAccel );
 
     /** Remove accelerator
 
@@ -1189,7 +1189,7 @@ public:
 
      @see IsAutoMnemonicEnabled
     */
-    static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
+    static void                 EnableAutoMnemonic( bool bEnabled = true );
 
     /** Determines if auto-mnemonics are enabled.
 
@@ -1197,7 +1197,7 @@ public:
 
      @see EnableAutoMnemonic
     */
-    static sal_Bool             IsAutoMnemonicEnabled();
+    static bool             IsAutoMnemonicEnabled();
 
     /** Get the number of reserved key codes used by the application.
 
@@ -1250,7 +1250,7 @@ public:
 
      @see EnableAutoHelpId
     */
-    static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
+    static void                 EnableAutoHelpId( bool bEnabled = true );
 
     /** Determines if auto-help is enabled or disabled.
 
@@ -1258,7 +1258,7 @@ public:
 
      @see EnableAutoHelpId
     */
-    static sal_Bool             IsAutoHelpIdEnabled();
+    static bool             IsAutoHelpIdEnabled();
 
     ///@}
 
@@ -1316,7 +1316,7 @@ public:
 
      @see GetDialogCancelMode, SetDialogCancelMode
     */
-    static sal_Bool             IsDialogCancelEnabled();
+    static bool             IsDialogCancelEnabled();
 
 
     /** Make a dialog box a system window or not.
@@ -1371,7 +1371,7 @@ public:
 
      @return UNO wrapper object.
     */
-    static UnoWrapperBase*      GetUnoWrapper( sal_Bool bCreateIfNotExists = sal_True );
+    static UnoWrapperBase*      GetUnoWrapper( bool bCreateIfNotExists = true );
 
     /** Sets the application's UNO Wrapper object.
 
@@ -1419,7 +1419,7 @@ public:
 
      @see EnableHeadlessMode, IsHeadlessModeRequested
     */
-    static sal_Bool             IsHeadlessModeEnabled();
+    static bool             IsHeadlessModeEnabled();
 
     /** Check command line arguments for \code --headless \endcode
 

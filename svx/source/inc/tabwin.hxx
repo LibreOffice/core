@@ -89,7 +89,7 @@ public:
 
     virtual ~FmFieldWin();
     virtual void Resize();
-    virtual sal_Bool Close();
+    virtual bool Close();
     virtual void GetFocus();
     virtual bool PreNotify( NotifyEvent& _rNEvt );
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,

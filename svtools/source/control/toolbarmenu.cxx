@@ -140,7 +140,7 @@ const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible( bool bCr
     {
         if( mpControl )
         {
-            mxAccContext = Reference< XAccessibleContext >( mpControl->GetAccessible( sal_True ), UNO_QUERY );
+            mxAccContext = Reference< XAccessibleContext >( mpControl->GetAccessible( true ), UNO_QUERY );
         }
         else
         {
@@ -920,7 +920,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                 if( bHighlight && IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
                 {
                     bDrawItemRect = false;
-                    if( sal_False == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
+                    if( !DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
                                                     aItemRect,
                                                     CTRL_STATE_SELECTED | ( pEntry->mbEnabled? CTRL_STATE_ENABLED: 0 ),
                                                     ImplControlValue(),
@@ -1308,7 +1308,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     {
         const StyleSettings& rSettings = i_pWindow->GetSettings().GetStyleSettings();
         Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
-        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, sal_True, sal_False, 2, NULL, &aColor );
+        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, true, false, 2, NULL, &aColor );
     }
 }
 

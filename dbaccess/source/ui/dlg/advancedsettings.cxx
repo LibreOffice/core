@@ -102,7 +102,7 @@ namespace dbaui
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
                 if ( rItem.ISA( OptionalBoolItem ) )
-                    (*setting->ppControl)->EnableTriState( sal_True );
+                    (*setting->ppControl)->EnableTriState( true );
             }
         }
 
@@ -126,7 +126,7 @@ namespace dbaui
             get(m_pMaxRowScanLabel, "rowsft");
             get(m_pMaxRowScan, "rows");
             m_pMaxRowScan->SetModifyHdl(getControlModifiedLink());
-            m_pMaxRowScan->SetUseThousandSep(sal_False);
+            m_pMaxRowScan->SetUseThousandSep(false);
             m_pMaxRowScanLabel->Show();
             m_pMaxRowScan->Show();
         }

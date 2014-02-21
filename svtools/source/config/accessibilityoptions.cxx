@@ -81,7 +81,7 @@ public:
     sal_Bool    GetIsAllowAnimatedGraphics() const;
     sal_Bool    GetIsAllowAnimatedText() const;
     sal_Bool    GetIsAutomaticFontColor() const;
-    sal_Bool    GetIsSystemFont() const;
+    bool    GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
     sal_Bool    IsSelectionInReadonly() const;
     sal_Int16   GetEdgeBlending() const;
@@ -252,7 +252,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
     return bRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
+bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_True;

@@ -201,7 +201,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAddessBookSourcePilot::Close()
+    bool OAddessBookSourcePilot::Close()
     {
         implCleanup();
 

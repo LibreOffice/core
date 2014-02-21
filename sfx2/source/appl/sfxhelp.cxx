@@ -494,12 +494,12 @@ static bool impl_hasHelpInstalled( const OUString &rLang = OUString() )
     return !aFactories.empty();
 }
 
-sal_Bool SfxHelp::SearchKeyword( const OUString& rKeyword )
+bool SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
     return Start_Impl( OUString(), NULL, rKeyword );
 }
 
-sal_Bool SfxHelp::Start( const OUString& rURL, const Window* pWindow )
+bool SfxHelp::Start( const OUString& rURL, const Window* pWindow )
 {
     return Start_Impl( rURL, pWindow, OUString() );
 }

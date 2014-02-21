@@ -318,7 +318,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
         if ( rMEvt.GetClicks() == 2 )
         {
             // So that the SelectionEngine knows about the anchor.
-            aSelEngine.CursorPosChanging( sal_True, sal_False );
+            aSelEngine.CursorPosChanging( true, false );
 
             EditSelection aNewSelection( SelectWord( aCurSel ) );
             pView->pImpEditView->DrawSelection();
@@ -329,7 +329,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
         else if ( rMEvt.GetClicks() == 3 )
         {
             // So that the SelectionEngine knows about the anchor.
-            aSelEngine.CursorPosChanging( sal_True, sal_False );
+            aSelEngine.CursorPosChanging( true, false );
 
             EditSelection aNewSelection( aCurSel );
             aNewSelection.Min().SetIndex( 0 );

@@ -22,9 +22,9 @@
 #ifndef MACOSX
 // MacOSX implementation of ImplSVMainHook is in osx/salinst.cxx
 
-sal_Bool ImplSVMainHook( int * )
+bool ImplSVMainHook( int * )
 {
-    return sal_False;   // indicate that ImplSVMainHook is not implemented
+    return false;   // indicate that ImplSVMainHook is not implemented
 }
 
 #endif

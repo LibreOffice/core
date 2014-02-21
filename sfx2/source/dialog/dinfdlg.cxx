@@ -1118,7 +1118,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     TriState eState = (TriState)m_bUseUserData;
 
     if ( STATE_DONTKNOW == eState )
-        m_pUseUserDataCB->EnableTriState( sal_True );
+        m_pUseUserDataCB->EnableTriState( true );
 
     m_pUseUserDataCB->SetState( eState );
     m_pUseUserDataCB->SaveValue();
@@ -2486,7 +2486,7 @@ void CmisPropertiesControl::checkAutoVScroll()
         return;
     if (nBits & WB_AUTOVSCROLL)
     {
-        sal_Bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
+        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
         if (bShow != m_rVertScroll.IsVisible())
             m_rVertScroll.Show(bShow);
     }

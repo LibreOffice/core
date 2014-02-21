@@ -39,10 +39,10 @@ class VCL_PLUGIN_PUBLIC SalObject
 {
     void*               m_pInst;
     SALOBJECTPROC       m_pCallback;
-    sal_Bool                m_bMouseTransparent:1,
+    bool                m_bMouseTransparent:1,
                         m_bEraseBackground:1;
 public:
-    SalObject() : m_pInst( NULL ), m_pCallback( NULL ), m_bMouseTransparent( sal_False ), m_bEraseBackground( sal_True ) {}
+    SalObject() : m_pInst( NULL ), m_pCallback( NULL ), m_bMouseTransparent( false ), m_bEraseBackground( true ) {}
     virtual ~SalObject();
 
     virtual void                    ResetClipRegion() = 0;
@@ -67,13 +67,13 @@ public:
     { m_pInst = pInst; m_pCallback = pProc; }
     long                    CallCallback( sal_uInt16 nEvent, const void* pEvent )
     { return m_pCallback ? m_pCallback( m_pInst, this, nEvent, pEvent ) : 0; }
-    void                    SetMouseTransparent( sal_Bool bMouseTransparent )
+    void                    SetMouseTransparent( bool bMouseTransparent )
     { m_bMouseTransparent = bMouseTransparent; }
-    sal_Bool                    IsMouseTransparent()
+    bool                    IsMouseTransparent()
     { return m_bMouseTransparent; }
-    void                    EnableEraseBackground( sal_Bool bEnable )
+    void                    EnableEraseBackground( bool bEnable )
     { m_bEraseBackground = bEnable; }
-    sal_Bool                    IsEraseBackgroundEnabled()
+    bool                    IsEraseBackgroundEnabled()
     { return m_bEraseBackground; }
 };
 

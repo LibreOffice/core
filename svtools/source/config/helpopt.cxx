@@ -69,9 +69,9 @@ public:
     virtual void    Commit();
 
     void            SetExtendedHelp( sal_Bool b )           { bExtendedHelp= b; SetModified(); }
-    sal_Bool        IsExtendedHelp() const                  { return bExtendedHelp; }
+    bool        IsExtendedHelp() const                  { return bExtendedHelp; }
     void            SetHelpTips( sal_Bool b )               { bHelpTips = b; SetModified(); }
-    sal_Bool        IsHelpTips() const                      { return bHelpTips; }
+    bool        IsHelpTips() const                      { return bHelpTips; }
 
     void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
     sal_Bool        IsWelcomeScreen() const                 { return bWelcomeScreen; }
@@ -291,7 +291,7 @@ void SvtHelpOptions::SetExtendedHelp( sal_Bool b )
     pImp->SetExtendedHelp( b );
 }
 
-sal_Bool SvtHelpOptions::IsExtendedHelp() const
+bool SvtHelpOptions::IsExtendedHelp() const
 {
     return pImp->IsExtendedHelp();
 }
@@ -301,7 +301,7 @@ void SvtHelpOptions::SetHelpTips( sal_Bool b )
     pImp->SetHelpTips( b );
 }
 
-sal_Bool SvtHelpOptions::IsHelpTips() const
+bool SvtHelpOptions::IsHelpTips() const
 {
     return pImp->IsHelpTips();
 }

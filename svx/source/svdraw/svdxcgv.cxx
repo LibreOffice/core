@@ -646,7 +646,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
                                   pModel->GetScaleFraction(),
                                   pModel->GetScaleFraction() );
 
-            aOut.EnableOutput( sal_False );
+            aOut.EnableOutput( false );
             aOut.SetMapMode( aMap );
             aMtf.Record( &aOut );
             pObj->SingleObjectPainter( aOut );

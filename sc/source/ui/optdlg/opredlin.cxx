@@ -159,10 +159,10 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
         m_pInsertColorLB->InsertEntry( aColor, sName );
         m_pRemoveColorLB->InsertEntry( aColor, sName );
     }
-    m_pContentColorLB->SetUpdateMode( sal_True );
-    m_pMoveColorLB->SetUpdateMode( sal_True );
-    m_pInsertColorLB->SetUpdateMode( sal_True );
-    m_pRemoveColorLB->SetUpdateMode( sal_True );
+    m_pContentColorLB->SetUpdateMode( true );
+    m_pMoveColorLB->SetUpdateMode( true );
+    m_pInsertColorLB->SetUpdateMode( true );
+    m_pRemoveColorLB->SetUpdateMode( true );
 
 
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();

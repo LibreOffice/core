@@ -118,7 +118,7 @@ private:
 protected:
     virtual void    Resizing( Size& rSize );
     virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    PopupModeEnd();
 
     /** This function is called when the window gets the focus.  It grabs

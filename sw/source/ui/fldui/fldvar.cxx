@@ -93,7 +93,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 
     Init(); // general initialisation
 
-    m_pTypeLB->SetUpdateMode(sal_False);
+    m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
 
     sal_uInt16 nPos, nTypeId;
@@ -165,7 +165,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
     }
     TypeHdl(0);
 
-    m_pTypeLB->SetUpdateMode(sal_True);
+    m_pTypeLB->SetUpdateMode(true);
 
     if (IsFldEdit())
     {
@@ -233,8 +233,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     if (m_pValueFT->GetText() != OUString(sOldValueFT))
         m_pValueFT->SetText(sOldValueFT);
 
-    m_pNumFormatLB->SetUpdateMode(sal_False);
-    m_pFormatLB->SetUpdateMode(sal_False);
+    m_pNumFormatLB->SetUpdateMode(false);
+    m_pFormatLB->SetUpdateMode(false);
     FillFormatLB(nTypeId);
 
     sal_uInt16 nSize = m_pFormatLB->GetEntryCount();
@@ -532,8 +532,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
     ModifyHdl();    // apply/insert/delete status update
 
-    m_pNumFormatLB->SetUpdateMode(sal_True);
-    m_pFormatLB->SetUpdateMode(sal_True);
+    m_pNumFormatLB->SetUpdateMode(true);
+    m_pFormatLB->SetUpdateMode(true);
 
     if(m_pSelectionLB->IsCallAddSelection())
     {
@@ -574,7 +574,7 @@ void SwFldVarPage::UpdateSubType()
         sOldSel = m_pSelectionLB->GetEntry(GetSelectionSel());
 
     // fill Selection-Listbox
-    m_pSelectionLB->SetUpdateMode(sal_False);
+    m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 
     std::vector<OUString> aList;
@@ -663,7 +663,7 @@ void SwFldVarPage::UpdateSubType()
     m_pSelection->Enable(bEnable);
 
     SubTypeHdl(pLB);
-    m_pSelectionLB->SetUpdateMode(sal_True);
+    m_pSelectionLB->SetUpdateMode(true);
 }
 
 sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)

@@ -1176,7 +1176,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool ExtMgrDialog::Close()
+bool ExtMgrDialog::Close()
 {
     bool bRet = m_pManager->queryTermination();
     if ( bRet )
@@ -1556,7 +1556,7 @@ void UpdateRequiredDialog::Resize()
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) != sal_False )
+                                                 aNativeControlRegion, aNativeContentRegion ) )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1601,7 +1601,7 @@ short UpdateRequiredDialog::Execute()
 
 //------------------------------------------------------------------------------
 // VCL::Dialog
-sal_Bool UpdateRequiredDialog::Close()
+bool UpdateRequiredDialog::Close()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

@@ -523,7 +523,7 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
             {
                 const sal_uInt16 nItemId = m_aActions.GetItemId(j);
                 if ( nCurItem != nItemId )
-                    m_aActions.CheckItem(nItemId,sal_False);
+                    m_aActions.CheckItem(nItemId,false);
             }
             SvSortMode eSortMode = SortNone;
             if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )

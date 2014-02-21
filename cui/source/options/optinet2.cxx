@@ -648,7 +648,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
                 m_pMasterPasswordPB->Enable( true );
-                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordCB->Check( true );
                 m_pMasterPasswordCB->Enable( true );
                 m_pMasterPasswordFT->Enable( true );
                 m_pShowConnectionsPB->Enable( true );
@@ -656,7 +656,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
             else
             {
                 xMasterPasswd->allowPersistentStoring( bOldValue );
-                m_pSavePasswordsCB->Check( sal_False );
+                m_pSavePasswordsCB->Check( false );
             }
         }
         else
@@ -667,7 +667,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
             if( RET_YES == nRet )
             {
                 xMasterPasswd->allowPersistentStoring( sal_False );
-                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordCB->Check( true );
                 m_pMasterPasswordPB->Enable( false );
                 m_pMasterPasswordCB->Enable( false );
                 m_pMasterPasswordFT->Enable( false );
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
             }
             else
             {
-                m_pSavePasswordsCB->Check( sal_True );
+                m_pSavePasswordsCB->Check( true );
                 m_pMasterPasswordPB->Enable( true );
                 m_pShowConnectionsPB->Enable( true );
             }
@@ -721,7 +721,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
             }
             else
             {
-                m_pMasterPasswordCB->Check( sal_False );
+                m_pMasterPasswordCB->Check( false );
                 m_pMasterPasswordPB->Enable( true );
                 m_pMasterPasswordFT->Enable( true );
             }
@@ -735,7 +735,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
             }
             else
             {
-                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordCB->Check( true );
                 m_pMasterPasswordPB->Enable( true );
                 m_pShowConnectionsPB->Enable( true );
             }
@@ -823,7 +823,7 @@ void SvxSecurityTabPage::InitControls()
 
     m_pMasterPasswordPB->Enable( false );
     m_pMasterPasswordCB->Enable( false );
-    m_pMasterPasswordCB->Check( sal_True );
+    m_pMasterPasswordCB->Check( true );
     m_pMasterPasswordFT->Enable( false );
     m_pShowConnectionsPB->Enable( false );
 
@@ -837,14 +837,14 @@ void SvxSecurityTabPage::InitControls()
         {
             m_pMasterPasswordCB->Enable( true );
             m_pShowConnectionsPB->Enable( true );
-            m_pSavePasswordsCB->Check( sal_True );
+            m_pSavePasswordsCB->Check( true );
 
             if ( xMasterPasswd->isDefaultMasterPasswordUsed() )
-                m_pMasterPasswordCB->Check( sal_False );
+                m_pMasterPasswordCB->Check( false );
             else
             {
                 m_pMasterPasswordPB->Enable( true );
-                m_pMasterPasswordCB->Check( sal_True );
+                m_pMasterPasswordCB->Check( true );
                 m_pMasterPasswordFT->Enable( true );
             }
         }

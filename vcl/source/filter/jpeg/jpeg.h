@@ -38,7 +38,7 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 
-long    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream, long nWidth, long nHeight, long bGreyScale,
+bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream, long nWidth, long nHeight, bool bGreyScale,
                    long nQualityPercent, long aChromaSubsampling,
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 

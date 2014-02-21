@@ -1301,11 +1301,11 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
                 aEvent.ActionCommand = maActionCommand;
                 maActionListeners.actionPerformed( aEvent );
             }
-            ImplClickedOrToggled( sal_False );
+            ImplClickedOrToggled( false );
             break;
 
         case VCLEVENT_RADIOBUTTON_TOGGLE:
-            ImplClickedOrToggled( sal_True );
+            ImplClickedOrToggled( true );
             break;
 
         default:
@@ -1314,7 +1314,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     }
 }
 
-void VCLXRadioButton::ImplClickedOrToggled( sal_Bool bToggled )
+void VCLXRadioButton::ImplClickedOrToggled( bool bToggled )
 {
     // In the formulars, RadioChecked is not enabled, call itemStateChanged only for click
     // In the dialog editor, RadioChecked is enabled, call itemStateChanged only for bToggled
@@ -1324,7 +1324,7 @@ void VCLXRadioButton::ImplClickedOrToggled( sal_Bool bToggled )
         ::com::sun::star::awt::ItemEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.Highlighted = sal_False;
-        aEvent.Selected = pRadioButton->IsChecked();
+        aEvent.Selected = pRadioButton->IsChecked() ? 1 : 0;
         maItemListeners.itemStateChanged( aEvent );
     }
 }
@@ -1678,7 +1678,7 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com:
     SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
-    if ( pBox && ( pBox->IsEntryPosSelected( nPos ) != bSelect ) )
+    if ( pBox && ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) ) )
     {
         pBox->SelectEntryPos( nPos, bSelect );
 
@@ -1703,7 +1703,7 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
         for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
         {
             sal_uInt16 nPos = (sal_uInt16) aPositions.getConstArray()[--n];
-            if ( pBox->IsEntryPosSelected( nPos ) != bSelect )
+            if ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) )
             {
                 pBox->SelectEntryPos( nPos, bSelect );
                 bChanged = sal_True;
@@ -1898,7 +1898,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
                 if ( Value >>= aItems )
                 {
                     for ( sal_uInt16 n = pListBox->GetEntryCount(); n; )
-                        pListBox->SelectEntryPos( --n, sal_False );
+                        pListBox->SelectEntryPos( --n, false );
 
                     if ( aItems.getLength() )
                         selectItemsPos( aItems, sal_True );
@@ -4835,7 +4835,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 if ( bVoid )
                 {
-                    ((DateField*)GetWindow())->EnableEmptyFieldValue( sal_True );
+                    ((DateField*)GetWindow())->EnableEmptyFieldValue( true );
                     ((DateField*)GetWindow())->SetEmptyFieldValue();
                 }
                 else
@@ -5319,7 +5319,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 if ( bVoid )
                 {
-                    ((TimeField*)GetWindow())->EnableEmptyFieldValue( sal_True );
+                    ((TimeField*)GetWindow())->EnableEmptyFieldValue( true );
                     ((TimeField*)GetWindow())->SetEmptyFieldValue();
                 }
                 else
@@ -5649,7 +5649,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             {
                 if ( bVoid )
                 {
-                    ((NumericField*)GetWindow())->EnableEmptyFieldValue( sal_True );
+                    ((NumericField*)GetWindow())->EnableEmptyFieldValue( true );
                     ((NumericField*)GetWindow())->SetEmptyFieldValue();
                 }
                 else
@@ -6245,7 +6245,7 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             {
                 if ( bVoid )
                 {
-                    ((LongCurrencyField*)GetWindow())->EnableEmptyFieldValue( sal_True );
+                    ((LongCurrencyField*)GetWindow())->EnableEmptyFieldValue( true );
                     ((LongCurrencyField*)GetWindow())->SetEmptyFieldValue();
                 }
                 else

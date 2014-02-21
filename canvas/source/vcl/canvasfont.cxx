@@ -68,7 +68,7 @@ namespace vclcanvas
             OutputDevice& rOutDev( rOutDevProvider->getOutDev() );
 
             const bool bOldMapState( rOutDev.IsMapModeEnabled() );
-            rOutDev.EnableMapMode(sal_False);
+            rOutDev.EnableMapMode(false);
 
             const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
 

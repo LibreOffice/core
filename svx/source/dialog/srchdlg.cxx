@@ -415,7 +415,7 @@ void SvxSearchDialog::Construct_Impl()
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsJapaneseFindEnabled())
     {
-        m_pJapOptionsCB->Check( sal_False );
+        m_pJapOptionsCB->Check( false );
         m_pJapOptionsCB->Hide();
         m_pJapOptionsBtn->Hide();
     }
@@ -426,7 +426,7 @@ void SvxSearchDialog::Construct_Impl()
     SvtCTLOptions aCTLOptions;
     if(!aCTLOptions.IsCTLFontEnabled())
     {
-        m_pIgnoreDiacritics->Check( sal_False );
+        m_pIgnoreDiacritics->Check( false );
         m_pIgnoreDiacritics->Hide();
     }
     //component extension - show component search buttons if the commands
@@ -494,7 +494,7 @@ void SvxSearchDialog::Construct_Impl()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSearchDialog::Close()
+bool SvxSearchDialog::Close()
 {
     // remember strings speichern
     if (!aSearchStrings.empty())
@@ -518,7 +518,7 @@ sal_Bool SvxSearchDialog::Close()
     rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SFX_CALLMODE_SLOT, ppArgs );
     rBindings.Execute( SID_SEARCH_DLG );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -570,9 +570,9 @@ void SvxSearchDialog::Activate()
 void SvxSearchDialog::InitControls_Impl()
 {
     // CaseSensitives AutoComplete
-    m_pSearchLB->EnableAutocomplete( sal_True, sal_True );
+    m_pSearchLB->EnableAutocomplete( true, true );
     m_pSearchLB->Show();
-    m_pReplaceLB->EnableAutocomplete( sal_True, sal_True );
+    m_pReplaceLB->EnableAutocomplete( true, true );
     m_pReplaceLB->Show();
 
     m_pFormatBtn->Disable();
@@ -855,7 +855,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             EnableControl_Impl(m_pSelectionBtn);
         else
         {
-            m_pSelectionBtn->Check( sal_False );
+            m_pSelectionBtn->Check( false );
             m_pSelectionBtn->Disable();
         }
     }
@@ -1066,14 +1066,14 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
         if ( bIsChecked )
         {
             m_pSimilarityBtn->Enable();
-            m_pRegExpBtn->Check( sal_False );
+            m_pRegExpBtn->Check( false );
             m_pRegExpBtn->Disable();
             EnableControl_Impl(m_pWordBtn);
 
             if ( m_pLayoutBtn->IsChecked() )
             {
                 EnableControl_Impl(m_pMatchCaseCB);
-                m_pLayoutBtn->Check( sal_False );
+                m_pLayoutBtn->Check( false );
             }
             m_pRegExpBtn->Disable();
             m_pLayoutBtn->Disable();
@@ -1110,11 +1110,11 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
     {
         if ( m_pLayoutBtn->IsChecked() && !bFormat )
         {
-            m_pWordBtn->Check( sal_False );
+            m_pWordBtn->Check( false );
             m_pWordBtn->Disable();
-            m_pRegExpBtn->Check( sal_False );
+            m_pRegExpBtn->Check( false );
             m_pRegExpBtn->Disable();
-            m_pMatchCaseCB->Check( sal_False );
+            m_pMatchCaseCB->Check( false );
             m_pMatchCaseCB->Disable();
             m_pNotesBtn->Disable();
 
@@ -1134,7 +1134,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
             if ( m_pRegExpBtn->IsChecked() )
             {
-                m_pWordBtn->Check( sal_False );
+                m_pWordBtn->Check( false );
                 m_pWordBtn->Disable();
                 m_pSimilarityBox->Disable();
                 m_pSimilarityBtn->Disable();
@@ -1503,8 +1503,8 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
     m_pSearchTmplLB->Clear();
     m_pReplaceTmplLB->Clear();
     rPool.SetSearchMask( pSearchItem->GetFamily(), SFXSTYLEBIT_ALL );
-    m_pSearchTmplLB->SetUpdateMode( sal_False );
-    m_pReplaceTmplLB->SetUpdateMode( sal_False );
+    m_pSearchTmplLB->SetUpdateMode( false );
+    m_pReplaceTmplLB->SetUpdateMode( false );
     SfxStyleSheetBase* pBase = rPool.First();
 
     while ( pBase )
@@ -1514,8 +1514,8 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
         m_pReplaceTmplLB->InsertEntry( pBase->GetName() );
         pBase = rPool.Next();
     }
-    m_pSearchTmplLB->SetUpdateMode( sal_True );
-    m_pReplaceTmplLB->SetUpdateMode( sal_True );
+    m_pSearchTmplLB->SetUpdateMode( true );
+    m_pReplaceTmplLB->SetUpdateMode( true );
     m_pSearchTmplLB->SelectEntryPos(0);
 
     if ( !aOldSrch.isEmpty() )
@@ -1940,7 +1940,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
     }
 
     bFormat = sal_False;
-    m_pLayoutBtn->Check( sal_False );
+    m_pLayoutBtn->Check( false );
 
     if ( bSearch )
     {
@@ -1990,7 +1990,7 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
             EnableControl_Impl(m_pSelectionBtn);
         else
         {
-            m_pSelectionBtn->Check( sal_False );
+            m_pSelectionBtn->Check( false );
             m_pSelectionBtn->Disable();
         }
     }

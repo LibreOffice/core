@@ -139,7 +139,7 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
     m_pRbRange->SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
     m_pLbFunction->SetSelectHdl( LINK( this, ErrorBarResources, CategoryChosen ));
 
-    m_pCbSyncPosNeg->Check( sal_False );
+    m_pCbSyncPosNeg->Check( false );
     m_pCbSyncPosNeg->SetToggleHdl( LINK( this, ErrorBarResources, SynchronizePosAndNeg ));
 
     m_pMfPositive->SetModifyHdl( LINK( this, ErrorBarResources, PosValueChanged ));
@@ -522,10 +522,10 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
     else
     {
-        m_pRbNone->Check( sal_False );
-        m_pRbConst->Check( sal_False );
-        m_pRbPercent->Check( sal_False );
-        m_pRbFunction->Check( sal_False );
+        m_pRbNone->Check( false );
+        m_pRbConst->Check( false );
+        m_pRbPercent->Check( false );
+        m_pRbFunction->Check( false );
     }
 
     // parameters
@@ -576,9 +576,9 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
     else
     {
-        m_pRbBoth->Check( sal_False );
-        m_pRbPositive->Check( sal_False );
-        m_pRbNegative->Check( sal_False );
+        m_pRbBoth->Check( false );
+        m_pRbPositive->Check( false );
+        m_pRbNegative->Check( false );
     }
 
     // ranges

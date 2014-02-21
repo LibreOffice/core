@@ -143,7 +143,7 @@ inline sal_uInt8 ImplGetGradientColorValue( long nValue )
 
 void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
-                                           sal_Bool bMtf, const PolyPolygon* pClipPolyPoly )
+                                           bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -211,7 +211,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         nGreen      = (sal_uInt8)nStartGreen;
         nBlue       = (sal_uInt8)nStartBlue;
         if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -296,7 +296,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         fTempColor = ((double)nStartBlue) * (1.0-fAlpha) + ((double)nEndBlue) * fAlpha;
         nBlue = ImplGetGradientColorValue((long)fTempColor);
         if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -334,7 +334,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
         nGreen = ImplGetGradientColorValue(nEndGreen);
         nBlue = ImplGetGradientColorValue(nEndBlue);
         if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
         else
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -354,7 +354,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
 
 void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
-                                            sal_Bool bMtf, const PolyPolygon* pClipPolyPoly )
+                                            bool bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
@@ -442,7 +442,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
     if( bMtf )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
     else
         mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -510,7 +510,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
             // the one painted in the window outdev path below. To get
             // matching colors, have to delay color setting here.
             if( bMtf )
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
             else
                 mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
         }
@@ -518,7 +518,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         {
             // #107349# Set fill color _before_ geometry painting
             if( bMtf )
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
             else
                 mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
@@ -545,7 +545,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
             if( bMtf )
             {
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), sal_True ) );
+                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
                 mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
             }
             else
@@ -670,9 +670,9 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
                 aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
             if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-                ImplDrawLinearGradient( aRect, aGradient, sal_False, NULL );
+                ImplDrawLinearGradient( aRect, aGradient, false, NULL );
             else
-                ImplDrawComplexGradient( aRect, aGradient, sal_False, NULL );
+                ImplDrawComplexGradient( aRect, aGradient, false, NULL );
         }
 
         Pop();
@@ -743,9 +743,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             }
             else
             {
-                const sal_Bool  bOldOutput = IsOutputEnabled();
+                const bool  bOldOutput = IsOutputEnabled();
 
-                EnableOutput( sal_False );
+                EnableOutput( false );
                 Push( PUSH_RASTEROP );
                 SetRasterOp( ROP_XOR );
                 DrawGradient( aRect, rGradient );
@@ -830,9 +830,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
                         if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-                            ImplDrawLinearGradient( aRect, aGradient, sal_False, &aClipPolyPoly );
+                            ImplDrawLinearGradient( aRect, aGradient, false, &aClipPolyPoly );
                         else
-                            ImplDrawComplexGradient( aRect, aGradient, sal_False, &aClipPolyPoly );
+                            ImplDrawComplexGradient( aRect, aGradient, false, &aClipPolyPoly );
                     }
                 }
             }
@@ -874,9 +874,9 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                 if( pVDev->SetOutputSizePixel( aDstSize) )
                 {
                     MapMode         aVDevMap;
-                    const sal_Bool      bOldMap = mbMap;
+                    const bool      bOldMap = mbMap;
 
-                    EnableMapMode( sal_False );
+                    EnableMapMode( false );
 
                     pVDev->DrawOutDev( Point(), aDstSize, aDstRect.TopLeft(), aDstSize, *this );
                     pVDev->SetRasterOp( ROP_XOR );
@@ -921,7 +921,7 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         mpMetaFile = &rMtf;
         mpMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
         mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), sal_False ) );
+        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
 
         // because we draw with no border line, we have to expand gradient
         // rect to avoid missing lines on the right and bottom edge
@@ -935,9 +935,9 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
         if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-            ImplDrawLinearGradient( aRect, aGradient, sal_True, NULL );
+            ImplDrawLinearGradient( aRect, aGradient, true, NULL );
         else
-            ImplDrawComplexGradient( aRect, aGradient, sal_True, NULL );
+            ImplDrawComplexGradient( aRect, aGradient, true, NULL );
 
         mpMetaFile->AddAction( new MetaPopAction() );
         mpMetaFile = pOldMtf;
@@ -998,17 +998,17 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
     {
         PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
-        sal_Bool            bOldMap = mbMap;
+        bool            bOldMap = mbMap;
 
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
         aHatch.SetDistance( ImplLogicWidthToDevicePixel( aHatch.GetDistance() ) );
 
         mpMetaFile = NULL;
-        EnableMapMode( sal_False );
+        EnableMapMode( false );
         Push( PUSH_LINECOLOR );
         SetLineColor( aHatch.GetColor() );
         ImplInitLineColor();
-        ImplDrawHatch( aPolyPoly, aHatch, sal_False );
+        ImplDrawHatch( aPolyPoly, aHatch, false );
         Pop();
         EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;
@@ -1031,14 +1031,14 @@ void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& r
 
         mpMetaFile = &rMtf;
         mpMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
-        mpMetaFile->AddAction( new MetaLineColorAction( rHatch.GetColor(), sal_True ) );
-        ImplDrawHatch( aPolyPoly, rHatch, sal_True );
+        mpMetaFile->AddAction( new MetaLineColorAction( rHatch.GetColor(), true ) );
+        ImplDrawHatch( aPolyPoly, rHatch, true );
         mpMetaFile->AddAction( new MetaPopAction() );
         mpMetaFile = pOldMtf;
     }
 }
 
-void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, sal_Bool bMtf )
+void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
 {
     if(rPolyPoly.Count())
     {
@@ -1221,7 +1221,7 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_
 }
 
 void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
-                                      Point* pPtBuffer, sal_Bool bMtf )
+                                      Point* pPtBuffer, bool bMtf )
 {
     double  fX, fY;
     long    nAdd, nPCounter = 0;

@@ -66,11 +66,11 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
 
     if( bOutputForPrinter )
     {
-        m_pPrinterOutputRB->Check( sal_True );
+        m_pPrinterOutputRB->Check( true );
     }
     else
     {
-        m_pPrintFileOutputRB->Check( sal_True );
+        m_pPrintFileOutputRB->Check( true );
         m_pPDFCB->Disable();
     }
 
@@ -172,27 +172,27 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
     m_pReduceTransparencyCB->Check( pCurrentOptions->IsReduceTransparency() );
 
     if( pCurrentOptions->GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO )
-        m_pReduceTransparencyAutoRB->Check( sal_True );
+        m_pReduceTransparencyAutoRB->Check( true );
     else
-        m_pReduceTransparencyNoneRB->Check( sal_True );
+        m_pReduceTransparencyNoneRB->Check( true );
 
     m_pReduceGradientsCB->Check( pCurrentOptions->IsReduceGradients() );
 
     if( pCurrentOptions->GetReducedGradientMode() == PRINTER_GRADIENT_STRIPES )
-        m_pReduceGradientsStripesRB->Check( sal_True );
+        m_pReduceGradientsStripesRB->Check( true );
     else
-        m_pReduceGradientsColorRB->Check( sal_True );
+        m_pReduceGradientsColorRB->Check( true );
 
     m_pReduceGradientsStepCountNF->SetValue( pCurrentOptions->GetReducedGradientStepCount() );
 
     m_pReduceBitmapsCB->Check( pCurrentOptions->IsReduceBitmaps() );
 
     if( pCurrentOptions->GetReducedBitmapMode() == PRINTER_BITMAP_OPTIMAL )
-        m_pReduceBitmapsOptimalRB->Check( sal_True );
+        m_pReduceBitmapsOptimalRB->Check( true );
     else if( pCurrentOptions->GetReducedBitmapMode() == PRINTER_BITMAP_NORMAL )
-        m_pReduceBitmapsNormalRB->Check( sal_True );
+        m_pReduceBitmapsNormalRB->Check( true );
     else
-        m_pReduceBitmapsResolutionRB->Check( sal_True );
+        m_pReduceBitmapsResolutionRB->Check( true );
 
     const sal_uInt16 nDPI = pCurrentOptions->GetReducedBitmapResolution();
 

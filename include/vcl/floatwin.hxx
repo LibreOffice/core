@@ -76,14 +76,14 @@ private:
     sal_uLong           mnPopupModeFlags;
     sal_uInt16          mnTitle;
     sal_uInt16          mnOldTitle;
-    sal_Bool            mbInPopupMode;
-    sal_Bool            mbPopupMode;
-    sal_Bool            mbPopupModeCanceled;
-    sal_Bool            mbPopupModeTearOff;
-    sal_Bool            mbMouseDown;
-    sal_Bool            mbOldSaveBackMode;
-    sal_Bool            mbGrabFocus;    // act as key input window, although focus is not set
-    sal_Bool            mbInCleanUp;
+    bool            mbInPopupMode;
+    bool            mbPopupMode;
+    bool            mbPopupModeCanceled;
+    bool            mbPopupModeTearOff;
+    bool            mbMouseDown;
+    bool            mbOldSaveBackMode;
+    bool            mbGrabFocus;    // act as key input window, although focus is not set
+    bool            mbInCleanUp;
     Link            maPopupModeEndHdl;
 
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
@@ -105,15 +105,15 @@ public:
 #define IMPL_FLOATWIN_HITTEST_RECT          ((sal_uInt16)0x0004)
     SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( Window* pReference, const Point& rPos, sal_uInt16& rHitTest );
     SAL_DLLPRIVATE FloatingWindow*  ImplFindLastLevelFloat();
-    SAL_DLLPRIVATE sal_Bool             ImplIsFloatPopupModeWindow( const Window* pWindow );
-    SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = sal_True; }
-    SAL_DLLPRIVATE sal_Bool             ImplIsMouseDown() const  { return mbMouseDown; }
+    SAL_DLLPRIVATE bool             ImplIsFloatPopupModeWindow( const Window* pWindow );
+    SAL_DLLPRIVATE void             ImplSetMouseDown() { mbMouseDown = true; }
+    SAL_DLLPRIVATE bool             ImplIsMouseDown() const  { return mbMouseDown; }
     SAL_DLLPRIVATE static Point     ImplCalcPos( Window* pWindow,
                                                  const Rectangle& rRect, sal_uLong nFlags,
                                                  sal_uInt16& rArrangeIndex );
     SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
-    SAL_DLLPRIVATE sal_Bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
+    SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
 
 public:
     explicit        FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
@@ -135,15 +135,15 @@ public:
     void            AddPopupModeWindow( Window* pWindow );
     sal_uLong           GetPopupModeFlags() const { return mnPopupModeFlags; }
     void            SetPopupModeFlags( sal_uLong nFlags ) { mnPopupModeFlags = nFlags; }
-    sal_Bool            IsInPopupMode() const { return mbPopupMode; }
-    sal_Bool            IsInCleanUp() const { return mbInCleanUp; }
-    sal_Bool            IsPopupModeCanceled() const { return mbPopupModeCanceled; }
-    sal_Bool            IsPopupModeTearOff() const { return mbPopupModeTearOff; }
+    bool            IsInPopupMode() const { return mbPopupMode; }
+    bool            IsInCleanUp() const { return mbInCleanUp; }
+    bool            IsPopupModeCanceled() const { return mbPopupModeCanceled; }
+    bool            IsPopupModeTearOff() const { return mbPopupModeTearOff; }
 
     void            SetPopupModeEndHdl( const Link& rLink ) { maPopupModeEndHdl = rLink; }
     const Link&     GetPopupModeEndHdl() const  { return maPopupModeEndHdl; }
 
-    sal_Bool            GrabsFocus() const { return mbGrabFocus; }
+    bool            GrabsFocus() const { return mbGrabFocus; }
 
     static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
 };

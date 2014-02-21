@@ -76,7 +76,7 @@ class Desktop : public Application
         virtual void            Init();
         virtual void            InitFinished();
         virtual void            DeInit();
-        virtual sal_Bool        QueryExit();
+        virtual bool        QueryExit();
         virtual sal_uInt16      Exception(sal_uInt16 nError);
         virtual void            OverrideSystemSettings( AllSettings& rSettings );
         virtual void            AppEvent( const ApplicationEvent& rAppEvent );

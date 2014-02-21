@@ -253,7 +253,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
     if( ! pDummyVDev )
     {
         pPrivateDevice = pDummyVDev = new VirtualDevice();
-        pDummyVDev->EnableOutput( sal_False );
+        pDummyVDev->EnableOutput( false );
         pDummyVDev->SetMapMode( i_rMtf.GetPrefMapMode() );
     }
     GDIMetaFile aMtf( i_rMtf );
@@ -461,9 +461,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.Play( pVDev, aPoint, aDstSize );
                                 aTmpMtf.WindStart();
 
-                                pVDev->EnableMapMode( sal_False );
+                                pVDev->EnableMapMode( false );
                                 aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                                pVDev->EnableMapMode( sal_True );
+                                pVDev->EnableMapMode( true );
 
                                 // create mask bitmap
                                 pVDev->SetLineColor( COL_BLACK );
@@ -474,15 +474,15 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.WindStart();
                                 aTmpMtf.Play( pVDev, aPoint, aDstSize );
                                 aTmpMtf.WindStart();
-                                pVDev->EnableMapMode( sal_False );
+                                pVDev->EnableMapMode( false );
                                 aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                                pVDev->EnableMapMode( sal_True );
+                                pVDev->EnableMapMode( true );
 
                                 // create alpha mask from gradient
                                 pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
                                 pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
                                 pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                                pVDev->EnableMapMode( sal_False );
+                                pVDev->EnableMapMode( false );
                                 pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
                                 aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint, aAlpha ), pDummyVDev, i_rContext );

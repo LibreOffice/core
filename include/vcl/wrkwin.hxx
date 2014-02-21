@@ -44,7 +44,7 @@ class VCL_DLLPUBLIC WorkWindow : public SystemWindow
 {
 private:
     sal_uInt16          mnPresentationFlags;
-    sal_Bool            mbPresentationMode:1,
+    bool            mbPresentationMode:1,
                     mbPresentationVisible:1,
                     mbPresentationFull:1,
                     mbFullScreenMode:1;
@@ -67,37 +67,37 @@ public:
     explicit        WorkWindow( SystemParentData* pParent ); // Not in the REMOTE-Version
     virtual         ~WorkWindow();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
-    void            ShowFullScreenMode( sal_Bool bFullScreenMode,
+    void            ShowFullScreenMode( bool bFullScreenMode,
                                         sal_Int32 nDisplayScreen );
     /**
      @overload void ShowFullScreenMode(sal_Bool bFullScreenMode, sal_Int32 nDisplayScreen)
     */
-    void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True );
-    void            EndFullScreenMode() { ShowFullScreenMode( sal_False ); }
-    sal_Bool        IsFullScreenMode() const { return mbFullScreenMode; }
+    void            ShowFullScreenMode( bool bFullScreenMode = true );
+    void            EndFullScreenMode() { ShowFullScreenMode( false ); }
+    bool        IsFullScreenMode() const { return mbFullScreenMode; }
 
-    void            StartPresentationMode( sal_Bool   bPresentation,
+    void            StartPresentationMode( bool   bPresentation,
                                            sal_uInt16 nFlags,
                                            sal_Int32  nDisplayScreen );
     /**
      @overload void StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags, sal_uInt32 nDisplayScreen)
     */
-    void            StartPresentationMode( sal_Bool   bPresentation = sal_True,
+    void            StartPresentationMode( bool   bPresentation = true,
                                            sal_uInt16 nFlags = 0 );
-    void            EndPresentationMode() {  StartPresentationMode( sal_False ); }
-    sal_Bool        IsPresentationMode() const { return mbPresentationMode; }
+    void            EndPresentationMode() {  StartPresentationMode( false ); }
+    bool        IsPresentationMode() const { return mbPresentationMode; }
 
-    sal_Bool        IsMinimized() const;
+    bool        IsMinimized() const;
 
-    sal_Bool        SetPluginParent( SystemParentData* pParent );
+    bool        SetPluginParent( SystemParentData* pParent );
 
     void            Minimize();
     void            Restore();
 
-    void            Maximize( sal_Bool bMaximize = sal_True );
-    sal_Bool        IsMaximized() const;
+    void            Maximize( bool bMaximize = true );
+    bool        IsMaximized() const;
 };
 
 #endif // INCLUDED_VCL_WRKWIN_HXX

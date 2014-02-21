@@ -80,7 +80,7 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     const OUString aTimeText( " 00:00:00/00:00:00 " );
 
     SetBackground();
-    SetPaintTransparent( sal_True );
+    SetPaintTransparent( true );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
@@ -98,11 +98,11 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
         mpZoomListBox->SetBackground();
 
         maZoomToolBox.SetBackground();
-        maZoomToolBox.SetPaintTransparent( sal_True );
+        maZoomToolBox.SetPaintTransparent( true );
         maPlayToolBox.SetBackground();
-        maPlayToolBox.SetPaintTransparent( sal_True );
+        maPlayToolBox.SetPaintTransparent( true );
         maMuteToolBox.SetBackground();
-        maMuteToolBox.SetPaintTransparent( sal_True );
+        maMuteToolBox.SetPaintTransparent( true );
 
     }
 

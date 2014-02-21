@@ -115,7 +115,7 @@ public:
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual sal_Bool        PostEvent( void* pData ) = 0;
+    virtual bool        PostEvent( void* pData ) = 0;
 
     virtual void            SetTitle( const OUString& rTitle ) = 0;
     virtual void            SetIcon( sal_uInt16 nIcon ) = 0;
@@ -142,7 +142,7 @@ public:
     const SalFrameGeometry& GetUnmirroredGeometry() const { return maGeometry; }
 
     virtual void            SetWindowState( const SalFrameState* pState ) = 0;
-    virtual sal_Bool        GetWindowState( SalFrameState* pState ) = 0;
+    virtual bool        GetWindowState( SalFrameState* pState ) = 0;
     virtual void            ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay ) = 0;
 
     // Enable/Disable ScreenSaver, SystemAgents, ...
@@ -173,7 +173,7 @@ public:
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
     // returns sal_False if no mapping exists or function not supported
     // this is required for advanced menu support
-    virtual sal_Bool        MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) = 0;
+    virtual bool        MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) = 0;
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS

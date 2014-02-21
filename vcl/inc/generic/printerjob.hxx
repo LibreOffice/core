@@ -89,7 +89,7 @@ public:             // for usage in PrinterGfx
     void            GetScale (double &rXScale, double &rYScale) const;
     sal_uInt16      GetDepth () const;
     sal_uInt16      GetPostscriptLevel (const JobData *pJobData = NULL) const;
-    sal_Bool        IsColorPrinter () const;
+    bool        IsColorPrinter () const;
 
     osl::File*      GetCurrentPageHeader ();
     osl::File*      GetCurrentPageBody ();
@@ -114,7 +114,7 @@ public:
      *               the quick command for spooling should be used instead
      *               of the normal command
      */
-    sal_Bool        StartJob (const OUString& rFileName,
+    bool        StartJob (const OUString& rFileName,
                               int nMode,
                               const OUString& rJobName,
                               const OUString& rAppName,
@@ -122,12 +122,12 @@ public:
                               PrinterGfx* pGraphics,
                               bool bIsQuickJob
                               );
-    sal_Bool        EndJob ();
+    bool        EndJob ();
 
-    sal_Bool        AbortJob ();
+    bool        AbortJob ();
 
-    sal_Bool        StartPage (const JobData& rJobSetup);
-    sal_Bool        EndPage ();
+    bool        StartPage (const JobData& rJobSetup);
+    bool        EndPage ();
 };
 
 }  /* namespace psp */

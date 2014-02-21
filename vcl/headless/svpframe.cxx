@@ -182,10 +182,10 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     delete pSvpGraphics;
 }
 
-sal_Bool SvpSalFrame::PostEvent( void* pData )
+bool SvpSalFrame::PostEvent( void* pData )
 {
     m_pInstance->PostEvent( this, pData, SALEVENT_USEREVENT );
-    return sal_True;
+    return true;
 }
 
 void SvpSalFrame::PostPaint(bool bImmediate) const
@@ -354,7 +354,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
     }
 }
 
-sal_Bool SvpSalFrame::GetWindowState( SalFrameState* pState )
+bool SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
     pState->mnState = WINDOWSTATE_STATE_NORMAL;
     pState->mnX      = maGeometry.nX;
@@ -363,7 +363,7 @@ sal_Bool SvpSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnHeight = maGeometry.nHeight;
     pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
-    return sal_True;
+    return true;
 }
 
 void SvpSalFrame::ShowFullScreen( sal_Bool, sal_Int32 )
@@ -418,9 +418,9 @@ OUString SvpSalFrame::GetKeyName( sal_uInt16 )
     return OUString();
 }
 
-sal_Bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
+bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
 {
-    return sal_False;
+    return false;
 }
 
 LanguageType SvpSalFrame::GetInputLanguage()

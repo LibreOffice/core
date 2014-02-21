@@ -1245,7 +1245,7 @@ int SwPagePreview::_CreateScrollbar( sal_Bool bHori )
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
 
     ScrollDocSzChg();
-    (*ppScrollbar)->EnableDrag( sal_True );
+    (*ppScrollbar)->EnableDrag( true );
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwPagePreview, EndScrollHdl ));
 
     (*ppScrollbar)->SetScrollHdl( LINK( this, SwPagePreview, ScrollHdl ));
@@ -1814,7 +1814,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SolarMutexGuard aGuard; // this should have happened already!!!
 
     OSL_ENSURE( GetViewShell() != NULL, "We need a view shell" );
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible( sal_False );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible( false );
     if (xAcc.is())
     {
         return xAcc;
@@ -1824,7 +1824,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccPreview = mpViewShell->CreateAccessiblePreview();
         SetAccessible(xAccPreview);
     }
-    return GetAccessible( sal_False );
+    return GetAccessible( false );
 }
 
 // MT: Removed Windows::SwitchView() introduced with IA2 CWS.

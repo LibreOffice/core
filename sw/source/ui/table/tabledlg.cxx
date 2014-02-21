@@ -250,7 +250,7 @@ void SwFormatTablePage::RightModify()
         m_pRelWidthCB->Enable(bEnable);
         if ( !bEnable )
         {
-            m_pRelWidthCB->Check(sal_False);
+            m_pRelWidthCB->Check(false);
             RelWidthClickHdl(m_pRelWidthCB);
         }
         bEnable = m_pRelWidthCB->IsChecked();
@@ -462,7 +462,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
         if(pTblData->GetWidthPercent())
         {
-            m_pRelWidthCB->Check(sal_True);
+            m_pRelWidthCB->Check(true);
             RelWidthClickHdl(m_pRelWidthCB);
             m_aWidthMF.SetPrcntValue(pTblData->GetWidthPercent(), FUNIT_CUSTOM);
 
@@ -1110,13 +1110,13 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
         bModifyTbl = sal_False;
     if(bPercentMode)
     {
-        m_pModifyTableCB->Check(sal_False);
-        m_pProportionalCB->Check(sal_False);
+        m_pModifyTableCB->Check(false);
+        m_pProportionalCB->Check(false);
     }
     else if( !bModifyTbl )
     {
-        m_pProportionalCB->Check(sal_False);
-        m_pModifyTableCB->Check(sal_False);
+        m_pProportionalCB->Check(false);
+        m_pModifyTableCB->Check(false);
     }
     m_pSpaceFT->Enable(!bPercentMode);
     m_pSpaceED->Enable(!bPercentMode);
@@ -1539,15 +1539,15 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                     m_pPageCollCB->Enable();
                     m_pPgBrkCB->Check();
 
-                    m_pPgBrkCB->Check( sal_True );
-                    m_pColBrkRB->Check( sal_False );
-                    m_pPgBrkBeforeRB->Check( sal_True );
-                    m_pPgBrkAfterRB->Check( sal_False );
+                    m_pPgBrkCB->Check( true );
+                    m_pColBrkRB->Check( false );
+                    m_pPgBrkBeforeRB->Check( true );
+                    m_pPgBrkAfterRB->Check( false );
                 }
                 else
                 {
                     m_pPageCollLB->SetNoSelection();
-                    m_pPageCollCB->Check(sal_False);
+                    m_pPageCollCB->Check(false);
                 }
             }
 
@@ -1567,28 +1567,28 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                 switch ( eBreak )
                 {
                     case SVX_BREAK_PAGE_BEFORE:
-                        m_pPgBrkRB->Check( sal_True );
-                        m_pColBrkRB->Check( sal_False );
-                        m_pPgBrkBeforeRB->Check( sal_True );
-                        m_pPgBrkAfterRB->Check( sal_False );
+                        m_pPgBrkRB->Check( true );
+                        m_pColBrkRB->Check( false );
+                        m_pPgBrkBeforeRB->Check( true );
+                        m_pPgBrkAfterRB->Check( false );
                         break;
                     case SVX_BREAK_PAGE_AFTER:
-                        m_pPgBrkRB->Check( sal_True );
-                        m_pColBrkRB->Check( sal_False );
-                        m_pPgBrkBeforeRB->Check( sal_False );
-                        m_pPgBrkAfterRB->Check( sal_True );
+                        m_pPgBrkRB->Check( true );
+                        m_pColBrkRB->Check( false );
+                        m_pPgBrkBeforeRB->Check( false );
+                        m_pPgBrkAfterRB->Check( true );
                         break;
                     case SVX_BREAK_COLUMN_BEFORE:
-                        m_pPgBrkRB->Check( sal_False );
-                        m_pColBrkRB->Check( sal_True );
-                        m_pPgBrkBeforeRB->Check( sal_True );
-                        m_pPgBrkAfterRB->Check( sal_False );
+                        m_pPgBrkRB->Check( false );
+                        m_pColBrkRB->Check( true );
+                        m_pPgBrkBeforeRB->Check( true );
+                        m_pPgBrkAfterRB->Check( false );
                         break;
                     case SVX_BREAK_COLUMN_AFTER:
-                        m_pPgBrkRB->Check( sal_False );
-                        m_pColBrkRB->Check( sal_True );
-                        m_pPgBrkBeforeRB->Check( sal_False );
-                        m_pPgBrkAfterRB->Check( sal_True );
+                        m_pPgBrkRB->Check( false );
+                        m_pColBrkRB->Check( true );
+                        m_pPgBrkBeforeRB->Check( false );
+                        m_pPgBrkAfterRB->Check( true );
                         break;
                     default:; //prevent warning
                 }
@@ -1691,7 +1691,7 @@ IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl)
     }
     else
     {
-            m_pPageCollCB->Check( sal_False );
+            m_pPageCollCB->Check( false );
             m_pPageCollCB->Enable(false);
             m_pPageCollLB->Enable(false);
             m_pPageNoFT->Enable(false);
@@ -1746,7 +1746,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
         }
         else if (pBtn == m_pPgBrkAfterRB)
         {
-            m_pPageCollCB->Check( sal_False );
+            m_pPageCollCB->Check( false );
             m_pPageCollCB->Enable(false);
             m_pPageCollLB->Enable(false);
             m_pPageNoFT->Enable(false);
@@ -1760,7 +1760,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
 {
     if ( pBtn == m_pColBrkRB || m_pPgBrkAfterRB->IsChecked() )
     {
-        m_pPageCollCB->Check(sal_False);
+        m_pPageCollCB->Check(false);
         m_pPageCollCB->Enable(false);
         m_pPageCollLB->Enable(false);
         m_pPageNoFT->Enable(false);
@@ -1779,7 +1779,7 @@ IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
 
 IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
 {
-    pBox->EnableTriState(sal_False);
+    pBox->EnableTriState(false);
     return 0;
 }
 

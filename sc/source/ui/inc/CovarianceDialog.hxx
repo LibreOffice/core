@@ -20,7 +20,7 @@ public:
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
         Window* pParent, ScViewData* pViewData);
 
-    virtual sal_Bool Close();
+    virtual bool Close();
 
 protected:
     virtual const OUString getLabel();

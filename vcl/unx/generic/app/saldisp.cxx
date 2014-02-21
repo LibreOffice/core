@@ -126,7 +126,7 @@ static int sal_significantBits( Pixel nMask )
     return nBits;
 }
 
-static sal_Bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
+static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
 {
     int         nInfos;
     XVisualInfo aTemplate;
@@ -136,14 +136,14 @@ static sal_Bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI
 
     pInfos = XGetVisualInfo( pDisplay, VisualIDMask, &aTemplate, &nInfos );
     if( !pInfos )
-        return sal_False;
+        return false;
 
     rVI = *pInfos;
     XFree( pInfos );
 
     DBG_ASSERT( rVI.visualid == nVID,
                 "sal_GetVisualInfo: could not get correct visual by visualId" );
-    return sal_True;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -175,7 +175,7 @@ sal_GetServerVendor( Display *p_display )
     return vendor_unknown;
 }
 
-sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
+bool SalDisplay::BestVisual( Display     *pDisplay,
                              int          nScreen,
                              XVisualInfo &rVI )
 {
@@ -200,22 +200,22 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
     int i;
     for( i = 0; i < nVisuals; i++ )
     {
-        sal_Bool bUsable = sal_False;
+        bool bUsable = false;
         int nTrueColor = 1;
 
         if ( pVInfos[i].screen != nScreen )
         {
-            bUsable = sal_False;
+            bUsable = false;
         }
         else if( pVInfos[i].c_class == TrueColor )
         {
             nTrueColor = 2048;
             if( pVInfos[i].depth == 24 )
-                bUsable = sal_True;
+                bUsable = true;
         }
         else if( pVInfos[i].c_class == PseudoColor )
         {
-            bUsable = sal_True;
+            bUsable = true;
         }
         pWeight[ i ] = bUsable ? nTrueColor*pVInfos[i].depth : -1024;
         pWeight[ i ] -= pVInfos[ i ].visualid;
@@ -332,12 +332,12 @@ static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
   if( ! pDisplay->IsDisplay() )
       return 0;
 
-  int result;
+  bool result;
 
   GetSalData()->m_pInstance->GetYieldMutex()->acquire();
   result = pDisplay->IsEvent();
   GetSalData()->m_pInstance->GetYieldMutex()->release();
-  return result;
+  return int(result);
 }
 static int DisplayQueue( int fd, SalX11Display *pDisplay )
 {
@@ -1833,13 +1833,13 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 
 // Events
 
-sal_Bool SalX11Display::IsEvent()
+bool SalX11Display::IsEvent()
 {
     if( HasUserEvents() || XEventsQueued( pDisp_, QueuedAlready ) )
-        return sal_True;
+        return true;
 
     XFlush( pDisp_ );
-    return sal_False;
+    return false;
 }
 
 void SalX11Display::Yield()
@@ -2752,7 +2752,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
     return MAKE_SALCOLOR( aColor.red>>8, aColor.green>>8, aColor.blue>>8 );
 }
 
-inline sal_Bool SalColormap::GetXPixel( XColor &rColor,
+inline bool SalColormap::GetXPixel( XColor &rColor,
                                           int     r,
                                           int     g,
                                           int     b ) const
@@ -2763,15 +2763,15 @@ inline sal_Bool SalColormap::GetXPixel( XColor &rColor,
     return XAllocColor( GetXDisplay(), m_hColormap, &rColor );
 }
 
-sal_Bool SalColormap::GetXPixels( XColor &rColor,
+bool SalColormap::GetXPixels( XColor &rColor,
                                     int     r,
                                     int     g,
                                     int     b ) const
 {
     if( !GetXPixel( rColor, r, g, b ) )
-        return sal_False;
+        return false;
     if( rColor.pixel & 1 )
-        return sal_True;
+        return true;
     return GetXPixel( rColor, r^0xFF, g^0xFF, b^0xFF );
 }
 

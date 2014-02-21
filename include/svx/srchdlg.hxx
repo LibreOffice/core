@@ -122,7 +122,7 @@ public:
     SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     ~SvxSearchDialog();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     // Window
     virtual void    Activate();

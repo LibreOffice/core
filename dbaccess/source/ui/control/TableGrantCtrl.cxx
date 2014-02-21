@@ -123,7 +123,7 @@ void OTableGrantControl::Init()
     if(!m_pCheckCell)
     {
         m_pCheckCell    = new CheckBoxControl( &GetDataWindow() );
-        m_pCheckCell->GetBox().EnableTriState(sal_False);
+        m_pCheckCell->GetBox().EnableTriState(false);
 
         m_pEdit         = new Edit( &GetDataWindow() );
         m_pEdit->SetReadOnly();

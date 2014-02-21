@@ -60,7 +60,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
 
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
-    EnableRTL (sal_False);
+    EnableRTL (false);
 
     MapMode aMap(GetMapMode());
     aMap.SetMapUnit(MAP_100TH_MM);
@@ -197,7 +197,7 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
                 sal_uLong nTime = Time::GetSystemTicks();
                 if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
                 {
-                    ShowPointer( sal_True );
+                    ShowPointer( true );
                     mnFirstMouseMove = 0;
                     mbMouseCursorHidden = false;
                     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl)
     else
     {
         // mouse has been idle to long, hide pointer
-        ShowPointer( sal_False );
+        ShowPointer( false );
         mbMouseCursorHidden = true;
     }
     return 0L;
@@ -663,7 +663,7 @@ void ShowWindow::AddWindowToPaintView()
     ::com::sun::star::accessibility::XAccessible>
     ShowWindow::CreateAccessible (void)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(sal_False);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(false);
     if (xAcc.get())
     {
         return xAcc;

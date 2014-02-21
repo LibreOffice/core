@@ -35,7 +35,7 @@ SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
 {
     // SSA: --- RTL --- no mirroring for horizontal scrollbars
     if( bHoriz )
-        EnableRTL( sal_False );
+        EnableRTL( false );
 }
 
 

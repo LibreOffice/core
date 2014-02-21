@@ -279,12 +279,12 @@ void SvxRubyDialog::ClearCharStyleList()
     m_pCharStyleLB->Clear();
 }
 
-sal_Bool    SvxRubyDialog::Close()
+bool    SvxRubyDialog::Close()
 {
     pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
-    return sal_True;
+    return true;
 }
 
 void SvxRubyDialog::Activate()

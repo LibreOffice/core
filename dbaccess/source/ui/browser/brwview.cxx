@@ -311,8 +311,8 @@ bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
             const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-            if (  ( rKeyCode == KeyCode( KEY_E, sal_True, sal_True, sal_False, sal_False ) )
-               || ( rKeyCode == KeyCode( KEY_TAB, sal_True, sal_False, sal_False, sal_False ) )
+            if (  ( rKeyCode == KeyCode( KEY_E, true, true, false, false ) )
+               || ( rKeyCode == KeyCode( KEY_TAB, true, false, false, false ) )
                )
             {
                 if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )

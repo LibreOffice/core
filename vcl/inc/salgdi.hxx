@@ -110,9 +110,9 @@ protected:
                                           const ::basegfx::B2DVector& rLineWidths,
                                           basegfx::B2DLineJoin,
                                           com::sun::star::drawing::LineCap) = 0;
-    virtual sal_Bool        drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
-    virtual sal_Bool        drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
-    virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
+    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual bool        drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void            copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
@@ -139,15 +139,15 @@ protected:
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
     virtual void        invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
 
-    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) = 0;
+    virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) = 0;
 
     // native widget rendering methods that require mirroring
-    virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                   const Point& aPos, bool& rIsInside );
-    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const OUString& aCaption );
-    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+    virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                     const ImplControlValue& aValue, const OUString& aCaption,
                                                     Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
@@ -260,7 +260,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual sal_Bool        CreateFontSubset( const OUString& rToFile,
+    virtual bool        CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace* pFont,
                                               sal_GlyphId* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -352,7 +352,7 @@ public:
 
     void                    mirror( long& nX, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
-    sal_Bool                mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
+    bool                mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                    mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( ImplControlValue&, const OutputDevice*, bool bBack = false ) const;
@@ -385,15 +385,15 @@ public:
                                           com::sun::star::drawing::LineCap i_eLineCap,
                                           const OutputDevice* i_pOutDev);
 
-    sal_Bool                DrawPolyLineBezier( sal_uInt32 nPoints,
+    bool                DrawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry,
                                                 const OutputDevice *pOutDev );
-    sal_Bool                DrawPolygonBezier( sal_uInt32 nPoints,
+    bool                DrawPolygonBezier( sal_uInt32 nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry,
                                                const OutputDevice *pOutDev );
-    sal_Bool                DrawPolyPolygonBezier( sal_uInt32 nPoly,
+    bool                DrawPolyPolygonBezier( sal_uInt32 nPoly,
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const sal_uInt8* const* pFlgAry,
@@ -443,7 +443,7 @@ public:
                                     SalInvert nFlags,
                                     const OutputDevice *pOutDev );
 
-    sal_Bool                DrawEPS( long nX, long nY,
+    bool                DrawEPS( long nX, long nY,
                                      long nWidth, long nHeight,
                                      void* pPtr,
                                      sal_uLong nSize,
@@ -452,10 +452,10 @@ public:
     //  native widget rendering functions
 
     // Query the platform layer for control support
-    virtual sal_Bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
 
     // Query the native control to determine if it was acted upon
-    sal_Bool                HitTestNativeControl( ControlType nType,
+    bool                HitTestNativeControl( ControlType nType,
                                                   ControlPart nPart,
                                                   const Rectangle& rControlRegion,
                                                   const Point& aPos,
@@ -463,7 +463,7 @@ public:
                                                   const OutputDevice *pOutDev );
 
     // Request rendering of a particular control and/or part
-    sal_Bool                DrawNativeControl( ControlType nType,
+    bool                DrawNativeControl( ControlType nType,
                                                ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState,
@@ -472,7 +472,7 @@ public:
                                                const OutputDevice *pOutDev );
 
     // Query the native control's actual drawing region (including adornment)
-    sal_Bool                GetNativeControlRegion( ControlType nType,
+    bool                GetNativeControlRegion( ControlType nType,
                                                     ControlPart nPart,
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,

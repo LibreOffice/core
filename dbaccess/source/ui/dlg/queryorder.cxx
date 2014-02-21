@@ -64,7 +64,7 @@ DlgOrderCrit::DlgOrderCrit(Window * pParent,
 
     AllSettings aSettings( GetSettings() );
     StyleSettings aStyle( aSettings.GetStyleSettings() );
-    aStyle.SetAutoMnemonic( sal_False );
+    aStyle.SetAutoMnemonic( false );
     aSettings.SetStyleSettings( aStyle );
     SetSettings( aSettings );
 

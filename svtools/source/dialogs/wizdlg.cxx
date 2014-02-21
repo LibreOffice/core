@@ -462,8 +462,8 @@ bool WizardDialog::Notify( NotifyEvent& rNEvt )
                     if ( mpPrevBtn->IsVisible() &&
                          mpPrevBtn->IsEnabled() && mpPrevBtn->IsInputEnabled() )
                     {
-                        mpPrevBtn->SetPressed( sal_True );
-                        mpPrevBtn->SetPressed( sal_False );
+                        mpPrevBtn->SetPressed( true );
+                        mpPrevBtn->SetPressed( false );
                         mpPrevBtn->Click();
                     }
                     return true;
@@ -476,8 +476,8 @@ bool WizardDialog::Notify( NotifyEvent& rNEvt )
                     if ( mpNextBtn->IsVisible() &&
                          mpNextBtn->IsEnabled() && mpNextBtn->IsInputEnabled() )
                     {
-                        mpNextBtn->SetPressed( sal_True );
-                        mpNextBtn->SetPressed( sal_False );
+                        mpNextBtn->SetPressed( true );
+                        mpNextBtn->SetPressed( false );
                         mpNextBtn->Click();
                     }
                     return true;

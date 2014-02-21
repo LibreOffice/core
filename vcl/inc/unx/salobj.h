@@ -64,10 +64,10 @@ public:
     XLIB_Window     maSecondary;
     Colormap        maColormap;
     SalClipRegion   maClipRegion;
-    sal_Bool            mbVisible;
+    bool            mbVisible;
 
     static VCL_DLLPUBLIC bool Dispatch( XEvent* pEvent );
-    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = sal_True );
 
     X11SalObject();
     virtual ~X11SalObject();

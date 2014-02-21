@@ -99,7 +99,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     SvxIMapDlgItem      aIMapItem;
 
     virtual void        Resize();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     DECL_LINK( TbxClickHdl, ToolBox* );
     DECL_LINK( InfoHdl, IMapWindow* );

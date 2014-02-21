@@ -119,7 +119,7 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 
 // -----------------------------------------------------------------------
 
-sal_Bool LineInfo::operator==( const LineInfo& rLineInfo ) const
+bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
 
     return( mpImplLineInfo == rLineInfo.mpImplLineInfo ||
@@ -220,7 +220,7 @@ void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
 
 // -----------------------------------------------------------------------
 
-sal_Bool LineInfo::IsDefault() const
+bool LineInfo::IsDefault() const
 {
     return( !mpImplLineInfo->mnWidth
         && ( LINE_SOLID == mpImplLineInfo->meStyle )

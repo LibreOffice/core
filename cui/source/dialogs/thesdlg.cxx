@@ -64,7 +64,7 @@ LookUpComboBox::LookUpComboBox(Window *pParent)
     m_aModifyTimer.SetTimeoutHdl( LINK( this, LookUpComboBox, ModifyTimer_Hdl ) );
     m_aModifyTimer.SetTimeout( 500 );
 
-    EnableAutocomplete( sal_False );
+    EnableAutocomplete( false );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLookUpComboBox(Window *pParent, VclBuilder::stringmap &)

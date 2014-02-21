@@ -42,7 +42,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
 {
     m_pEdit = new OSqlEdit(this);
-    m_pEdit->SetRightToLeft(sal_False);
+    m_pEdit->SetRightToLeft(false);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
     m_pEdit->SetPosPixel( Point( 0, 0 ) );

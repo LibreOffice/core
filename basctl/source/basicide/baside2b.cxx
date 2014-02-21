@@ -2653,14 +2653,14 @@ void CodeCompleteListBox::InsertSelectedEntry()
 
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_False );
+            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), false );
         }
     }
     else
     {
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_False );
+            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), false );
         }
     }
     HideAndRestoreFocus();
@@ -2741,7 +2741,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 
                         GetParentEditView()->SetSelection( aTextSelection );
                         GetParentEditView()->DeleteSelected();
-                        GetParentEditView()->InsertText( GetSelectEntry(), sal_False );
+                        GetParentEditView()->InsertText( GetSelectEntry(), false );
                     }
                 }
                 break;

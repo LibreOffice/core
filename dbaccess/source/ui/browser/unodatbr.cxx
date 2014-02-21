@@ -585,7 +585,7 @@ void SbaTableQueryBrowser::initializePreviewMode()
 {
     if ( getBrowserView() && getBrowserView()->getVclControl() )
     {
-        getBrowserView()->getVclControl()->AlwaysEnableInput( sal_False );
+        getBrowserView()->getVclControl()->AlwaysEnableInput( false );
         getBrowserView()->getVclControl()->EnableInput( false );
         getBrowserView()->getVclControl()->ForceHideScrollbars( sal_True );
     }
@@ -1355,7 +1355,7 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
     // check if we have to hide this item from the toolbox
     if ( pToolbox )
     {
-        sal_Bool bHaveDispatcher = m_aExternalFeatures[ _nId ].xDispatcher.is();
+        bool bHaveDispatcher = m_aExternalFeatures[ _nId ].xDispatcher.is();
         if ( bHaveDispatcher != pToolbox->IsItemVisible( _nId ) )
             bHaveDispatcher ? pToolbox->ShowItem( _nId ) : pToolbox->HideItem( _nId );
     }

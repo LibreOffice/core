@@ -1309,7 +1309,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
         }
         if(bNewEntry && !m_pFromDocContentRB->IsChecked())
         {
-            m_pFromDocContentRB->Check(sal_True);
+            m_pFromDocContentRB->Check(true);
             ChangeSourceHdl(m_pFromDocContentRB);
         }
         if(bCreate)

@@ -192,7 +192,7 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     m_pPageLbl->Show();
 
     InitHandler();
-    m_pBspWin->EnableRTL( sal_False );
+    m_pBspWin->EnableRTL( false );
 
     // This Page needs ExchangeSupport
     SetExchangeSupport();
@@ -404,10 +404,10 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        m_pTurnOnBox->Check( sal_False );
-        m_pHeightDynBtn->Check( sal_True );
-        m_pCntSharedBox->Check( sal_True );
-        m_pCntSharedFirstBox->Check( sal_True );
+        m_pTurnOnBox->Check( false );
+        m_pHeightDynBtn->Check( true );
+        m_pCntSharedBox->Check( true );
+        m_pCntSharedFirstBox->Check( true );
     }
 
     TurnOnHdl(0);

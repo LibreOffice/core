@@ -168,10 +168,10 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pBtnUp->Check( sal_False );
-        m_pBtnLeft->Check( sal_False );
-        m_pBtnRight->Check( sal_False );
-        m_pBtnDown->Check( sal_False );
+        m_pBtnUp->Check( false );
+        m_pBtnLeft->Check( false );
+        m_pBtnRight->Check( false );
+        m_pBtnDown->Check( false );
     }
     m_pBtnUp->SaveValue();
     m_pBtnLeft->SaveValue();
@@ -184,7 +184,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
     if( pItem )
     {
-        m_pTsbStartInside->EnableTriState( sal_False );
+        m_pTsbStartInside->EnableTriState( false );
         sal_Bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
         if( bValue )
             m_pTsbStartInside->SetState( STATE_CHECK );
@@ -201,7 +201,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
     if( pItem )
     {
-        m_pTsbStopInside->EnableTriState( sal_False );
+        m_pTsbStopInside->EnableTriState( false );
         sal_Bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
         if( bValue )
             m_pTsbStopInside->SetState( STATE_CHECK );
@@ -218,7 +218,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
     if( pItem )
     {
-        m_pTsbEndless->EnableTriState( sal_False );
+        m_pTsbEndless->EnableTriState( false );
         long nValue = (long) ( ( const SdrTextAniCountItem* )pItem )->GetValue();
         m_pNumFldCount->SetValue( nValue );
         if( nValue == 0 )
@@ -251,7 +251,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
     if( pItem )
     {
-        m_pTsbAuto->EnableTriState( sal_False );
+        m_pTsbAuto->EnableTriState( false );
         long nValue = (long) ( ( const SdrTextAniDelayItem* )pItem )->GetValue();
         m_pMtrFldDelay->SetValue( nValue );
         if( nValue == 0 )
@@ -276,7 +276,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
     if( pItem )
     {
-        m_pTsbPixel->EnableTriState( sal_False );
+        m_pTsbPixel->EnableTriState( false );
         long nValue = (long) ( ( const SdrTextAniAmountItem* )pItem )->GetValue();
         if( nValue <= 0 )
         {
@@ -348,10 +348,10 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     }
 
     // animation direction
-    if( m_pBtnUp->GetSavedValue() != m_pBtnUp->IsChecked() ||
-        m_pBtnLeft->GetSavedValue() != m_pBtnLeft->IsChecked() ||
-        m_pBtnRight->GetSavedValue() != m_pBtnRight->IsChecked() ||
-        m_pBtnDown->GetSavedValue() != m_pBtnDown->IsChecked() )
+    if( m_pBtnUp->GetSavedValue() != TriState(m_pBtnUp->IsChecked()) ||
+        m_pBtnLeft->GetSavedValue() != TriState(m_pBtnLeft->IsChecked()) ||
+        m_pBtnRight->GetSavedValue() != TriState(m_pBtnRight->IsChecked()) ||
+        m_pBtnDown->GetSavedValue() != TriState(m_pBtnDown->IsChecked()) )
     {
         SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
         rAttrs.Put( SdrTextAniDirectionItem( eValue ) );

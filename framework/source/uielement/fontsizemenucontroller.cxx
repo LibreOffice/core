@@ -225,7 +225,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             m_pHeightArray[nPos] = *pTempAry;
             nPos++; // Id is nPos+1
-            pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, sal_True, sal_False ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+            pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MIB_RADIOCHECK | MIB_AUTOCHECK );
             fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
             // Create dispatchable .uno command and set it

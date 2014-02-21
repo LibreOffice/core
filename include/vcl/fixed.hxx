@@ -44,7 +44,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void    ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
@@ -101,7 +101,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void    ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void    ImplDraw( bool bLayout = false );
 
 protected:
@@ -168,7 +168,7 @@ class VCL_DLLPUBLIC FixedImage : public Control
 {
 private:
     Image           maImage;
-    sal_Bool            mbInUserDraw;
+    bool            mbInUserDraw;
 
 private:
     using Control::ImplInitSettings;
@@ -198,7 +198,7 @@ public:
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
-    sal_Bool        SetModeImage( const Image& rImage );
+    bool        SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const;
     virtual bool set_property(const OString &rKey, const OString &rValue);
 

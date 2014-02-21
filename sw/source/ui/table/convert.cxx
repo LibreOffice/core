@@ -203,7 +203,7 @@ IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton )
     {
         if( mpKeepColumn->IsEnabled() )
             mpKeepColumn->SaveValue();
-        mpKeepColumn->Check( sal_True );
+        mpKeepColumn->Check( true );
     }
     mpKeepColumn->Enable( mpTabBtn->IsChecked() );
     mpOtherEd->Enable( mpOtherBtn->IsChecked() );

@@ -151,8 +151,8 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewSh
     maBulletFont.SetUnderline(UNDERLINE_NONE);
     maBulletFont.SetStrikeout(STRIKEOUT_NONE);
     maBulletFont.SetItalic(ITALIC_NONE);
-    maBulletFont.SetOutline(sal_False);
-    maBulletFont.SetShadow(sal_False);
+    maBulletFont.SetOutline(false);
+    maBulletFont.SetShadow(false);
 
 
     Reference<XFrame> xFrame (mrOutlineViewShell.GetViewShellBase().GetFrame()->GetTopFrame().GetFrameInterface(), UNO_QUERY);

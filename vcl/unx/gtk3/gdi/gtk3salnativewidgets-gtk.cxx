@@ -396,7 +396,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
 
-    sal_Bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
+    bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
 
     // ----------------- TROUGH
     gtk_style_context_save(context);
@@ -785,7 +785,7 @@ void GtkSalGraphics::PaintCheckOrRadio(GtkStyleContext *context,
         gtk_render_option(context, cr, x, y, indicator_size, indicator_size);
 }
 
-sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& aValue,
                                             const OUString& )
 {
@@ -823,7 +823,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
             renderType = RENDER_COMBOBOX;
             break;
         default:
-            return sal_False;
+            return false;
         }
         break;
     case CTRL_MENU_POPUP:
@@ -864,7 +864,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
             context = mpToolButtonStyle;
             break;
         default:
-            return sal_False;
+            return false;
         }
         break;
     case CTRL_CHECKBOX:
@@ -898,7 +898,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         }
         break;
     default:
-        return sal_False;
+        return false;
     }
 
     cairo_rectangle_int_t translatedRegion = { (int) rControlRegion.Left() - 1, (int) rControlRegion.Top() - 1,
@@ -959,7 +959,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     renderAreaToPix(cr, &translatedRegion);
     cairo_destroy(cr); // unref
 
-    return sal_True;
+    return true;
 }
 
 // FIXME: This is incredibly lame ... but so is cairo's insistance on -exactly-
@@ -1007,7 +1007,7 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
         gtk_widget_queue_draw_area( mpFrame->getWindow(), ax, ay, awidth, aheight );
 }
 
-sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
+bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue&, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 {
@@ -1099,13 +1099,13 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
     }
     else
     {
-        return sal_False;
+        return false;
     }
 
     rNativeBoundingRegion = aEditRect;
     rNativeContentRegion = rNativeBoundingRegion;
 
-    return sal_True;
+    return true;
 }
 /************************************************************************
  * helper for GtkSalFrame
@@ -1197,8 +1197,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 }
 
     // menu disabled entries handling
-    aStyleSet.SetSkipDisabledInMenus( sal_True );
-    aStyleSet.SetAcceleratorsInContextMenus( sal_False );
+    aStyleSet.SetSkipDisabledInMenus( true );
+    aStyleSet.SetAcceleratorsInContextMenus( false );
 
     // menu colors
     gtk_style_context_get_background_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &background_color );
@@ -1439,7 +1439,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
 }
 
-sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     if(
        (nType == CTRL_EDITBOX) ||
@@ -1463,12 +1463,12 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
        (nType == CTRL_MENU_POPUP &&
         ((nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) ||
          (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW))))
-        return sal_True;
+        return true;
 
     printf( "Unhandled is native supported for Type: %d, Part %d\n",
             (int)nType, (int)nPart );
 
-    return sal_False;
+    return false;
 }
 
 void GtkData::initNWF() {}

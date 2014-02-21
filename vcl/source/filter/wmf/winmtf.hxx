@@ -307,12 +307,12 @@ public :
 
 class WinMtfPathObj : public PolyPolygon
 {
-    sal_Bool    bClosed;
+    bool    bClosed;
 
 public :
 
-                WinMtfPathObj() { bClosed = sal_True; }
-    void        Init() { Clear(); bClosed = sal_True; };
+                WinMtfPathObj() { bClosed = true; }
+    void        Init() { Clear(); bClosed = true; };
     void        ClosePath();
     void        AddPoint( const Point& rPoint );
     void        AddPolygon( const Polygon& rPoly );
@@ -400,29 +400,29 @@ struct WinMtfLineStyle
 {
     Color       aLineColor;
     LineInfo    aLineInfo;
-    sal_Bool        bTransparent;
+    bool        bTransparent;
 
     WinMtfLineStyle() :
         aLineColor  ( COL_BLACK ),
-        bTransparent( sal_False ) {}
+        bTransparent( false ) {}
 
-    WinMtfLineStyle( const Color& rColor, sal_Bool bTrans = sal_False ) :
+    WinMtfLineStyle( const Color& rColor, bool bTrans = false ) :
         aLineColor  ( rColor ),
         bTransparent( bTrans ) {}
 
-    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, sal_Bool bTrans = sal_False ) :
+    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, bool bTrans = false ) :
         aLineColor  ( rColor ),
         aLineInfo   ( rStyle ),
         bTransparent( bTrans ) {}
 
-    sal_Bool operator==( const WinMtfLineStyle& rStyle )
+    bool operator==( const WinMtfLineStyle& rStyle )
         {
             return (  ( aLineColor == rStyle.aLineColor )
                    && ( bTransparent == rStyle.bTransparent )
                    && ( aLineInfo == rStyle.aLineInfo )
                    );
         }
-    sal_Bool operator==( WinMtfLineStyle* pStyle )
+    bool operator==( WinMtfLineStyle* pStyle )
         {
             return (  ( aLineColor == pStyle->aLineColor )
                    && ( bTransparent == pStyle->bTransparent )
@@ -485,8 +485,8 @@ struct SaveStruct
     WinMtfClipPath      aClipPath;
     XForm               aXForm;
 
-    sal_Bool            bRecordPath;
-    sal_Bool            bFillStyleSelected;
+    bool            bRecordPath;
+    bool            bFillStyleSelected;
 };
 
 typedef ::boost::shared_ptr< SaveStruct > SaveStructPtr;
@@ -601,10 +601,10 @@ class WinMtfOutput
     Point               maActPos;
 
     sal_uInt32          mnRop;
-    sal_Bool            mbNopMode;
-    sal_Bool            mbFillStyleSelected;
-    sal_Bool            mbClipNeedsUpdate;
-    sal_Bool            mbComplexClip;
+    bool            mbNopMode;
+    bool            mbFillStyleSelected;
+    bool            mbClipNeedsUpdate;
+    bool            mbComplexClip;
 
     std::vector< SaveStructPtr > vSaveStack;
 
@@ -616,8 +616,8 @@ class WinMtfOutput
     sal_Int32           mnDevWidth, mnDevHeight;
     sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuel window origin
     sal_Int32           mnWinExtX, mnWinExtY;       // aktuel window extend
-    sal_Bool            mbIsMapWinSet;
-    sal_Bool            mbIsMapDevSet;
+    bool            mbIsMapWinSet;
+    bool            mbIsMapDevSet;
 
     sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
     sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
@@ -648,12 +648,12 @@ public:
     void                SetDevByWin(); //Hack to set varying defaults for incompletely defined files.
     void                SetDevOrg( const Point& rPoint );
     void                SetDevOrgOffset( sal_Int32 nXAdd, sal_Int32 nYAdd );
-    void                SetDevExt( const Size& rSize ,sal_Bool regular = true);
+    void                SetDevExt( const Size& rSize ,bool regular = true);
     void                ScaleDevExt( double fX, double fY );
 
-    void                SetWinOrg( const Point& rPoint , sal_Bool bIsEMF = false);
+    void                SetWinOrg( const Point& rPoint , bool bIsEMF = false);
     void                SetWinOrgOffset( sal_Int32 nX, sal_Int32 nY );
-    void                SetWinExt( const Size& rSize , sal_Bool bIsEMF = false);
+    void                SetWinExt( const Size& rSize , bool bIsEMF = false);
     void                ScaleWinExt( double fX, double fY );
 
     void                SetrclBounds( const Rectangle& rRect );
@@ -671,7 +671,7 @@ public:
     void                Pop();
 
     sal_uInt32          SetRasterOp( sal_uInt32 nRasterOp );
-    void                StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
+    void                StrokeAndFillPath( bool bStroke, bool bFill );
 
     void                SetGfxMode( sal_Int32 nGfxMode ){ mnGfxMode = nGfxMode; };
     sal_Int32           GetGfxMode() const { return mnGfxMode; };
@@ -692,17 +692,17 @@ public:
     void                ClosePath(){ aPathObj.ClosePath(); };
     const PolyPolygon&  GetPathObj(){ return aPathObj; };
 
-    void                MoveTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
-    void                LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
+    void                MoveTo( const Point& rPoint, bool bRecordPath = false );
+    void                LineTo( const Point& rPoint, bool bRecordPath = false );
     void                DrawPixel( const Point& rSource, const Color& rColor );
-    void                DrawRect( const Rectangle& rRect, sal_Bool bEdge = sal_True );
+    void                DrawRect( const Rectangle& rRect, bool bEdge = true );
     void                DrawRoundRect( const Rectangle& rRect, const Size& rSize );
     void                DrawEllipse( const Rectangle& rRect );
     void                DrawArc(
                             const Rectangle& rRect,
                             const Point& rStartAngle,
                             const Point& rEndAngle,
-                            sal_Bool bDrawTo = sal_False
+                            bool bDrawTo = false
                         );
     void                DrawPie(
                             const Rectangle& rRect,
@@ -714,28 +714,28 @@ public:
                             const Point& rStartAngle,
                             const Point& rEndAngle
                         );
-    void                DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
-    void                DrawPolygon( Polygon& rPolygon, sal_Bool /*bDrawTo*/, sal_Bool bRecordPath)
+    void                DrawPolygon( Polygon& rPolygon, bool bRecordPath = false );
+    void                DrawPolygon( Polygon& rPolygon, bool /*bDrawTo*/, bool bRecordPath)
                         {
                             //For ReadAndDrawPolygon template compatibility
                             DrawPolygon(rPolygon, bRecordPath);
                         }
-    void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
+    void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, bool bRecordPath = false );
     void                DrawPolyLine(
                             Polygon& rPolygon,
-                            sal_Bool bDrawTo = sal_False,
-                            sal_Bool bRecordPath = sal_False
+                            bool bDrawTo = false,
+                            bool bRecordPath = false
                         );
     void                DrawPolyBezier(
                             Polygon& rPolygin,
-                            sal_Bool bDrawTo = sal_False,
-                            sal_Bool bRecordPath = sal_False
+                            bool bDrawTo = false,
+                            bool bRecordPath = false
                         );
     void                DrawText(
                             Point& rPosition,
                             OUString& rString,
                             sal_Int32* pDXArry = NULL,
-                            sal_Bool bRecordPath = sal_False,
+                            bool bRecordPath = false,
                             sal_Int32 nGraphicsMode = GM_COMPATIBLE
                         );
     void                ResolveBitmapActions( BSaveStructList_impl& rSaveList );
@@ -746,7 +746,7 @@ public:
     void                SetClipPath(
                             const PolyPolygon& rPolyPoly,
                             sal_Int32 nClippingMode,
-                            sal_Bool bIsMapped
+                            bool bIsMapped
                         );
     void                UpdateClipRegion();
     void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
@@ -791,12 +791,12 @@ protected:
 
 class EnhWMFReader : public WinMtf
 {
-    sal_Bool        bRecordPath;
+    bool        bRecordPath;
     sal_Int32       nRecordCount;
-    sal_Bool        bEMFPlus;
+    bool        bEMFPlus;
 
 
-    sal_Bool        ReadHeader();
+    bool        ReadHeader();
                     // reads and converts the rectangle
     Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
 
@@ -809,18 +809,18 @@ public:
                         : WinMtf( new WinMtfOutput( rGDIMetaFile )
                         , rStreamWMF
                         , pConfigItem )
-                        , bRecordPath( sal_False )
-                        , bEMFPlus( sal_False )
+                        , bRecordPath( false )
+                        , bEMFPlus( false )
                     {};
                     ~EnhWMFReader();
 
-    sal_Bool        ReadEnhWMF();
-    void            ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC);
+    bool        ReadEnhWMF();
+    void            ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
 private:
     template <class T> void ReadAndDrawPolyPolygon();
     template <class T> void ReadAndDrawPolyLine();
     template <class T> Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
-    template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const sal_Bool skipFirst);
+    template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const bool skipFirst);
 };
 
 //============================ WMFReader ==================================
@@ -851,7 +851,7 @@ private:
     WMF_EXTERNALHEADER* pExternalHeader;
 
     // reads header of the WMF-Datei
-    sal_Bool        ReadHeader();
+    bool        ReadHeader();
 
     // reads parameters of the record with the functionnumber nFunction.
     void            ReadRecordParams( sal_uInt16 nFunction );
@@ -860,7 +860,7 @@ private:
     Point           ReadYX();                   // reads and converts a point (first Y then X)
     Rectangle       ReadRectangle();            // reads and converts a rectangle
     Size            ReadYXExt();
-    sal_Bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
+    bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
 
 public:
 

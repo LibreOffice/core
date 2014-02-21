@@ -174,7 +174,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     // reset the pages
 
     // prevent flicker
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     // remove all items which relate to indirect properties from the input set
     // (without this, the following may happen: select an arbitrary data source where some indirect properties
@@ -213,7 +213,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     // if this is NULL, the page has not been created yet, which means we're called before the
     // dialog was displayed (probably from inside the ctor)
 
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 }
 
 void ODbAdminDialog::setTitle(const OUString& _sTitle)

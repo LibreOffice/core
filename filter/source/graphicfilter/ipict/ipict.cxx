@@ -659,7 +659,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
         case PDM_TEXT:
             aActFont.SetColor(aActForeColor);
             aActFont.SetFillColor(aActBackColor);
-            aActFont.SetTransparent(sal_True);
+            aActFont.SetTransparent(true);
             pVirDev->SetFont(aActFont);
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
@@ -1252,10 +1252,10 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         else                     aActFont.SetItalic(ITALIC_NONE);
         if ( (nFace & 0x04)!=0 ) aActFont.SetUnderline(UNDERLINE_SINGLE);
         else                     aActFont.SetUnderline(UNDERLINE_NONE);
-        if ( (nFace & 0x08)!=0 ) aActFont.SetOutline(sal_True);
-        else                     aActFont.SetOutline(sal_False);
-        if ( (nFace & 0x10)!=0 ) aActFont.SetShadow(sal_True);
-        else                     aActFont.SetShadow(sal_False);
+        if ( (nFace & 0x08)!=0 ) aActFont.SetOutline(true);
+        else                     aActFont.SetOutline(false);
+        if ( (nFace & 0x10)!=0 ) aActFont.SetShadow(true);
+        else                     aActFont.SetShadow(false);
         eActMethod=PDM_UNDEFINED;
         nDataSize=1;
         break;
@@ -1791,7 +1791,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aHRes = aVRes = Fraction( 1, 1 );
 
     pVirDev = new VirtualDevice();
-    pVirDev->EnableOutput(sal_False);
+    pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 
     pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);

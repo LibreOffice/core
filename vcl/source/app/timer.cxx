@@ -92,7 +92,7 @@ void Timer::ImplTimerCallbackProc()
         return;
 
     pSVData->mnTimerUpdate++;
-    pSVData->mbNotAllTimerCalled = sal_True;
+    pSVData->mbNotAllTimerCalled = true;
 
     // find timer where the timer handler needs to be called
     pTimerData = pSVData->mpFirstTimerData;
@@ -188,7 +188,7 @@ void Timer::ImplTimerCallbackProc()
         ImplStartTimer( pSVData, nMinPeriod );
 
     pSVData->mnTimerUpdate--;
-    pSVData->mbNotAllTimerCalled = sal_False;
+    pSVData->mbNotAllTimerCalled = false;
 }
 
 Timer::Timer():

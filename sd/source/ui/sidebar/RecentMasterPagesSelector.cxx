@@ -165,7 +165,7 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
 void RecentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
     if (rMenu.GetItemPos(SID_TP_EDIT_MASTER) != MENU_ITEM_NOTFOUND)
-        rMenu.EnableItem(SID_TP_EDIT_MASTER, sal_False);
+        rMenu.EnableItem(SID_TP_EDIT_MASTER, false);
 }
 
 

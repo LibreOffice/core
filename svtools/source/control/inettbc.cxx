@@ -895,7 +895,7 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
     if (bSetDefaultHelpID && GetHelpId().isEmpty())
         SetHelpId( ".uno:OpenURL" );
-    EnableAutocomplete( sal_False );
+    EnableAutocomplete( false );
 
     SetText( OUString() );
 

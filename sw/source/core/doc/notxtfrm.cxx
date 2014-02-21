@@ -100,7 +100,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         pFont->SetStyleName( OUString() );
         pFont->SetName(OUString("Arial Unicode"));
         pFont->SetFamily( FAMILY_SWISS );
-        pFont->SetTransparent( sal_True );
+        pFont->SetTransparent( true );
     }
 
     Color aCol( COL_RED );

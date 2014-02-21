@@ -373,7 +373,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     else
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
-    EnableAlwaysOnTop( sal_True );
+    EnableAlwaysOnTop( true );
 }
 
 IIIMPStatusWindow::~IIIMPStatusWindow()

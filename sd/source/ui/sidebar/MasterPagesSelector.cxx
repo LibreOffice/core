@@ -292,9 +292,9 @@ void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
 {
     // Disable some entries.
     if (mpContainer->GetPreviewSize() == MasterPageContainer::SMALL)
-        rMenu.EnableItem(SID_TP_SHOW_SMALL_PREVIEW, sal_False);
+        rMenu.EnableItem(SID_TP_SHOW_SMALL_PREVIEW, false);
     else
-        rMenu.EnableItem(SID_TP_SHOW_LARGE_PREVIEW, sal_False);
+        rMenu.EnableItem(SID_TP_SHOW_LARGE_PREVIEW, false);
 }
 
 

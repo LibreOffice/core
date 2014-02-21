@@ -510,7 +510,7 @@ void SvxLineEndWindow::FillValueSet()
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
         aBmpSize = aBmp.GetSizePixel();
-        aVD.SetOutputSizePixel( aBmpSize, sal_False );
+        aVD.SetOutputSizePixel( aBmpSize, false );
         aBmpSize.Width() = aBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
         Point aPt1( aBmpSize.Width(), 0 );
@@ -623,7 +623,7 @@ void SvxLineEndWindow::StartSelection()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxLineEndWindow::Close()
+bool SvxLineEndWindow::Close()
 {
     return SfxPopupWindow::Close();
 }

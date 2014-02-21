@@ -116,15 +116,15 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontInfo::operator==( const FontInfo& rInfo ) const
+bool FontInfo::operator==( const FontInfo& rInfo ) const
 {
     if( !Font::operator==( rInfo ) )
-        return sal_False;
+        return false;
     if( mpImplMetric == rInfo.mpImplMetric )
-        return sal_True;
+        return true;
     if( *mpImplMetric == *rInfo.mpImplMetric  )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -190,7 +190,7 @@ FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontMetric::operator==( const FontMetric& rMetric ) const
+bool FontMetric::operator==( const FontMetric& rMetric ) const
 {
     return FontInfo::operator==( rMetric );
 }

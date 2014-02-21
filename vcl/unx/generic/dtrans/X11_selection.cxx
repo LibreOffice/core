@@ -2162,7 +2162,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         // some listener forgot to call dropComplete in the last operation
         // let us end it now and accept the new enter event
         aGuard.clear();
-        dropComplete( sal_False, m_aCurrentDropWindow, m_nDropTime );
+        dropComplete( false, m_aCurrentDropWindow, m_nDropTime );
         aGuard.reset();
     }
 
@@ -2294,7 +2294,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                 aGuard.clear();
                 it->second->dragExit( aEvent );
                 // reset the drop status, notify source
-                dropComplete( sal_False, m_aCurrentDropWindow, m_nDropTime );
+                dropComplete( false, m_aCurrentDropWindow, m_nDropTime );
             }
         }
     }
@@ -2305,7 +2305,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
  *  methods for XDropTargetDropContext
  */
 
-void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow, XLIB_Time )
+void SelectionManager::dropComplete( bool bSuccess, XLIB_Window aDropWindow, XLIB_Time )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -3880,7 +3880,7 @@ sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
             m_nSelectionTimestamp = nTimestamp;
         }
 
-        return sal_Bool( handleXEvent( *pEvent ) );
+        return handleXEvent( *pEvent );
     }
     else
     {

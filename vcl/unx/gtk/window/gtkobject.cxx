@@ -30,7 +30,7 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
 
-GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
+GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         : m_pSocket( NULL ),
           m_pRegion( NULL )
 {

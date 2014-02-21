@@ -1491,9 +1491,9 @@ namespace cppcanvas
                             (sal_Int8)rFont.GetUnderline();
                         rState.textStrikeoutStyle       = (sal_Int8)rFont.GetStrikeout();
                         rState.textEmphasisMarkStyle    = (sal_Int8)rFont.GetEmphasisMark();
-                        rState.isTextEffectShadowSet    = (rFont.IsShadow() != sal_False);
-                        rState.isTextWordUnderlineSet   = (rFont.IsWordLineMode() != sal_False);
-                        rState.isTextOutlineModeSet     = (rFont.IsOutline() != sal_False);
+                        rState.isTextEffectShadowSet    = rFont.IsShadow();
+                        rState.isTextWordUnderlineSet   = rFont.IsWordLineMode();
+                        rState.isTextOutlineModeSet     = rFont.IsOutline();
                     }
                     break;
 
@@ -2889,7 +2889,7 @@ namespace cppcanvas
             VectorOfOutDevStates    aStateStack;
 
             VirtualDevice aVDev;
-            aVDev.EnableOutput( sal_False );
+            aVDev.EnableOutput( false );
 
             // Setup VDev for state tracking and mapping
             // =========================================

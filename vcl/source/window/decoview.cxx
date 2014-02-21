@@ -841,7 +841,7 @@ void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
     const Color             aOldFillColor   = mpOutDev->GetFillColor();
     const bool              bOldMapMode     = mpOutDev->IsMapModeEnabled();
     Color                   nColor(rColor);
-    mpOutDev->EnableMapMode( sal_False );
+    mpOutDev->EnableMapMode( false );
 
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
          (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
@@ -945,11 +945,11 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
 Rectangle DecorationView::DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle )
 {
     Rectangle   aRect = rRect;
-    sal_Bool        bOldMap = mpOutDev->IsMapModeEnabled();
+    bool        bOldMap = mpOutDev->IsMapModeEnabled();
     if ( bOldMap )
     {
         aRect = mpOutDev->LogicToPixel( aRect );
-        mpOutDev->EnableMapMode( sal_False );
+        mpOutDev->EnableMapMode( false );
     }
 
     if ( !rRect.IsEmpty() )

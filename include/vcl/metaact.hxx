@@ -134,7 +134,7 @@ private:
     sal_uLong               mnRefCount;
     sal_uInt16              mnType;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 protected:
     virtual             ~MetaAction();
@@ -169,7 +169,7 @@ private:
     Point               maPt;
     Color               maColor;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Pixel, META_PIXEL_ACTION )
@@ -188,7 +188,7 @@ class VCL_DLLPUBLIC MetaPointAction : public MetaAction
 private:
     Point               maPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Point, META_POINT_ACTION )
@@ -209,7 +209,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Line, META_LINE_ACTION )
@@ -232,7 +232,7 @@ private:
 
     Rectangle           maRect;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 public:
                         DECL_META_ACTION( Rect, META_RECT_ACTION )
 
@@ -252,7 +252,7 @@ private:
     sal_uInt32          mnHorzRound;
     sal_uInt32          mnVertRound;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( RoundRect, META_ROUNDRECT_ACTION )
@@ -274,7 +274,7 @@ private:
 
     Rectangle           maRect;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Ellipse, META_ELLIPSE_ACTION )
@@ -295,7 +295,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Arc, META_ARC_ACTION )
@@ -319,7 +319,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Pie, META_PIE_ACTION )
@@ -343,7 +343,7 @@ private:
     Point               maStartPt;
     Point               maEndPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Chord, META_CHORD_ACTION )
@@ -366,7 +366,7 @@ private:
     LineInfo            maLineInfo;
     Polygon             maPoly;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( PolyLine, META_POLYLINE_ACTION )
@@ -387,7 +387,7 @@ private:
 
     Polygon             maPoly;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Polygon, META_POLYGON_ACTION )
@@ -406,7 +406,7 @@ private:
 
     PolyPolygon         maPolyPoly;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( PolyPolygon, META_POLYPOLYGON_ACTION )
@@ -428,7 +428,7 @@ private:
     sal_Int32       mnIndex;
     sal_Int32       mnLen;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Text, META_TEXT_ACTION )
@@ -455,7 +455,7 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 protected:
     virtual             ~MetaTextArrayAction();
@@ -494,7 +494,7 @@ private:
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
@@ -521,7 +521,7 @@ private:
     OUString       maStr;
     sal_uInt16          mnStyle;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
@@ -547,7 +547,7 @@ private:
     FontUnderline       meUnderline;
     FontUnderline       meOverline;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextLine, META_TEXTLINE_ACTION )
@@ -573,7 +573,7 @@ private:
     Bitmap              maBmp;
     Point               maPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Bmp, META_BMP_ACTION )
@@ -595,7 +595,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( BmpScale, META_BMPSCALE_ACTION )
@@ -621,7 +621,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( BmpScalePart, META_BMPSCALEPART_ACTION )
@@ -647,7 +647,7 @@ private:
     BitmapEx            maBmpEx;
     Point               maPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( BmpEx, META_BMPEX_ACTION )
@@ -669,7 +669,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( BmpExScale, META_BMPEXSCALE_ACTION )
@@ -695,7 +695,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( BmpExScalePart, META_BMPEXSCALEPART_ACTION )
@@ -722,7 +722,7 @@ private:
     Color               maColor;
     Point               maPt;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Mask, META_MASK_ACTION )
@@ -748,7 +748,7 @@ private:
     Point               maPt;
     Size                maSz;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( MaskScale, META_MASKSCALE_ACTION )
@@ -777,7 +777,7 @@ private:
     Point               maSrcPt;
     Size                maSrcSz;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( MaskScalePart, META_MASKSCALEPART_ACTION )
@@ -805,7 +805,7 @@ private:
     Rectangle           maRect;
     Gradient            maGradient;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Gradient, META_GRADIENT_ACTION )
@@ -826,7 +826,7 @@ private:
     PolyPolygon         maPolyPoly;
     Gradient            maGradient;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( GradientEx, META_GRADIENTEX_ACTION )
@@ -847,7 +847,7 @@ private:
     PolyPolygon         maPolyPoly;
     Hatch               maHatch;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Hatch, META_HATCH_ACTION )
@@ -868,7 +868,7 @@ private:
     Rectangle           maRect;
     Wallpaper           maWallpaper;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Wallpaper, META_WALLPAPER_ACTION )
@@ -888,20 +888,20 @@ class VCL_DLLPUBLIC MetaClipRegionAction : public MetaAction
 private:
 
     Region              maRegion;
-    sal_Bool                mbClip;
+    bool                mbClip;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
 
-                        MetaClipRegionAction( const Region& rRegion, sal_Bool bClip );
+                        MetaClipRegionAction( const Region& rRegion, bool bClip );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Region&       GetRegion() const { return maRegion; }
-    sal_Bool                IsClipping() const { return mbClip; }
+    bool                IsClipping() const { return mbClip; }
 };
 
 class VCL_DLLPUBLIC MetaISectRectClipRegionAction : public MetaAction
@@ -910,7 +910,7 @@ private:
 
     Rectangle           maRect;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( ISectRectClipRegion, META_ISECTRECTCLIPREGION_ACTION )
@@ -929,7 +929,7 @@ private:
 
     Region              maRegion;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( ISectRegionClipRegion, META_ISECTREGIONCLIPREGION_ACTION )
@@ -949,7 +949,7 @@ private:
     long                mnHorzMove;
     long                mnVertMove;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( MoveClipRegion, META_MOVECLIPREGION_ACTION )
@@ -967,17 +967,17 @@ class VCL_DLLPUBLIC MetaLineColorAction : public MetaAction
 private:
 
     Color               maColor;
-    sal_Bool                mbSet;
+    bool                mbSet;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
 
-                        MetaLineColorAction( const Color& rColor, sal_Bool bSet );
+                        MetaLineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    sal_Bool                IsSetting() const { return mbSet; }
+    bool                IsSetting() const { return mbSet; }
 };
 
 class VCL_DLLPUBLIC MetaFillColorAction : public MetaAction
@@ -985,17 +985,17 @@ class VCL_DLLPUBLIC MetaFillColorAction : public MetaAction
 private:
 
     Color               maColor;
-    sal_Bool                mbSet;
+    bool                mbSet;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( FillColor, META_FILLCOLOR_ACTION )
 
-                        MetaFillColorAction( const Color& rColor, sal_Bool bSet );
+                        MetaFillColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    sal_Bool                IsSetting() const { return mbSet; }
+    bool                IsSetting() const { return mbSet; }
 };
 
 class VCL_DLLPUBLIC MetaTextColorAction : public MetaAction
@@ -1004,7 +1004,7 @@ private:
 
     Color               maColor;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextColor, META_TEXTCOLOR_ACTION )
@@ -1019,17 +1019,17 @@ class VCL_DLLPUBLIC MetaTextFillColorAction : public MetaAction
 private:
 
     Color               maColor;
-    sal_Bool                mbSet;
+    bool                mbSet;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
 
-                        MetaTextFillColorAction( const Color& rColor, sal_Bool bSet );
+                        MetaTextFillColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    sal_Bool                IsSetting() const { return mbSet; }
+    bool                IsSetting() const { return mbSet; }
 };
 
 class VCL_DLLPUBLIC MetaTextLineColorAction : public MetaAction
@@ -1037,17 +1037,17 @@ class VCL_DLLPUBLIC MetaTextLineColorAction : public MetaAction
 private:
 
     Color               maColor;
-    sal_Bool                mbSet;
+    bool                mbSet;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
 
-                        MetaTextLineColorAction( const Color& rColor, sal_Bool bSet );
+                        MetaTextLineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    sal_Bool                IsSetting() const { return mbSet; }
+    bool                IsSetting() const { return mbSet; }
 };
 
 class VCL_DLLPUBLIC MetaOverlineColorAction : public MetaAction
@@ -1055,17 +1055,17 @@ class VCL_DLLPUBLIC MetaOverlineColorAction : public MetaAction
 private:
 
     Color               maColor;
-    sal_Bool                mbSet;
+    bool                mbSet;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
 
-                        MetaOverlineColorAction( const Color& rColor, sal_Bool bSet );
+                        MetaOverlineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    sal_Bool                IsSetting() const { return mbSet; }
+    bool                IsSetting() const { return mbSet; }
 };
 
 class VCL_DLLPUBLIC MetaTextAlignAction : public MetaAction
@@ -1074,7 +1074,7 @@ private:
 
     TextAlign           maAlign;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextAlign, META_TEXTALIGN_ACTION )
@@ -1090,7 +1090,7 @@ private:
 
     MapMode             maMapMode;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( MapMode, META_MAPMODE_ACTION )
@@ -1108,7 +1108,7 @@ private:
 
     Font                maFont;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Font, META_FONT_ACTION )
@@ -1126,7 +1126,7 @@ private:
 
     sal_uInt16              mnFlags;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Push, META_PUSH_ACTION )
@@ -1149,7 +1149,7 @@ private:
 
     RasterOp            meRasterOp;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( RasterOp, META_RASTEROP_ACTION )
@@ -1166,7 +1166,7 @@ private:
     PolyPolygon         maPolyPoly;
     sal_uInt16              mnTransPercent;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
@@ -1189,7 +1189,7 @@ private:
     Size                maSize;
     Gradient            maGradient;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( FloatTransparent, META_FLOATTRANSPARENT_ACTION )
@@ -1215,7 +1215,7 @@ private:
     Point               maPoint;
     Size                maSize;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( EPS, META_EPS_ACTION )
@@ -1237,17 +1237,17 @@ class VCL_DLLPUBLIC MetaRefPointAction : public MetaAction
 private:
 
     Point               maRefPoint;
-    sal_Bool                mbSet;
+    bool                mbSet;
 
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
 
-                        MetaRefPointAction( const Point& rRefPoint, sal_Bool bSet );
+                        MetaRefPointAction( const Point& rRefPoint, bool bSet );
 
     const Point&        GetRefPoint() const { return maRefPoint; }
-    sal_Bool                IsSetting() const { return mbSet; }
+    bool                IsSetting() const { return mbSet; }
 };
 
 class VCL_DLLPUBLIC MetaCommentAction : public MetaAction
@@ -1260,7 +1260,7 @@ private:
     sal_uInt8*          mpData;
 
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 protected:
     virtual             ~MetaCommentAction();
@@ -1289,7 +1289,7 @@ class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
 private:
 
     sal_uInt32          mnLayoutMode;
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
@@ -1304,7 +1304,7 @@ class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction
 private:
 
     LanguageType        meTextLanguage;
-    virtual sal_Bool    Compare( const MetaAction& ) const;
+    virtual bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )

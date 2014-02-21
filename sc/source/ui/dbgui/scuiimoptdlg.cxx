@@ -215,7 +215,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         m_pCbFixed->SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
         m_pCbFixed->Check( false );
         m_pCbShown->Show();
-        m_pCbShown->Check( sal_True );
+        m_pCbShown->Check( true );
         m_pCbQuoteAll->Show();
         m_pCbQuoteAll->Check( false );
         m_pCbFormulas->Show();

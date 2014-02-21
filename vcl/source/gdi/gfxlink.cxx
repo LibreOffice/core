@@ -45,7 +45,7 @@ GfxLink::GfxLink( const GfxLink& rGfxLink ) :
     ImplCopy( rGfxLink );
 }
 
-GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, sal_Bool bOwns ) :
+GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns ) :
     mpImpData( new ImpGfxLink )
 {
     DBG_ASSERT( (pBuf != NULL && nSize) || (!bOwns && nSize == 0),
@@ -94,9 +94,9 @@ GfxLink& GfxLink::operator=( const GfxLink& rGfxLink )
     return *this;
 }
 
-sal_Bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
+bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
 {
-    sal_Bool bIsEqual = sal_False;
+    bool bIsEqual = false;
 
     if ( ( mnBufSize == rGfxLink.mnBufSize ) && ( meType == rGfxLink.meType ) )
     {
@@ -109,7 +109,7 @@ sal_Bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
             bIsEqual = memcmp( pSource, pDest, nSourceSize ) == 0;
         }
         else if ( ( pSource == 0 ) && ( pDest == 0 ) )
-            bIsEqual = sal_True;
+            bIsEqual = true;
     }
     return bIsEqual;
 }
@@ -135,7 +135,7 @@ GfxLinkType GfxLink::GetType() const
     return meType;
 }
 
-sal_Bool GfxLink::IsNative() const
+bool GfxLink::IsNative() const
 {
     return( meType >= GFX_LINK_FIRST_NATIVE_ID && meType <= GFX_LINK_LAST_NATIVE_ID );
 }
@@ -185,9 +185,9 @@ bool GfxLink::IsPrefMapModeValid()
     return mpImpData->mbPrefMapModeValid;
 }
 
-sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
+bool GfxLink::LoadNative( Graphic& rGraphic )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( IsNative() && mnBufSize )
     {
@@ -215,7 +215,7 @@ sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
             }
 
             if( nCvtType && ( GraphicConverter::Import( aMemStm, rGraphic, nCvtType ) == ERRCODE_NONE ) )
-                bRet = sal_True;
+                bRet = true;
         }
     }
 
@@ -256,7 +256,7 @@ void GfxLink::SwapIn()
     }
 }
 
-sal_Bool GfxLink::ExportNative( SvStream& rOStream ) const
+bool GfxLink::ExportNative( SvStream& rOStream ) const
 {
     if( GetDataSize() )
     {
@@ -319,7 +319,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     pBuf = new sal_uInt8[ nSize ];
     rIStream.Read( pBuf, nSize );
 
-    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, sal_True );
+    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, true );
     rGfxLink.SetUserId( nUserId );
 
     if( bMapAndSizeValid )

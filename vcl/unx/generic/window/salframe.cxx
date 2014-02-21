@@ -193,12 +193,12 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     GetGenericData()->ErrorTrapPop();
 }
 
-static sal_Bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen,
+static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen,
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
     if( ! ImplGetResMgr() )
-        return sal_False;
+        return false;
 
     sal_uInt16 nIconSizeOffset;
 
@@ -209,11 +209,11 @@ static sal_Bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXSc
     else if( iconSize >= 16 )
         nIconSizeOffset = SV_ICON_SIZE16_START;
     else
-        return sal_False;
+        return false;
 
     BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
-    if( sal_True == aIcon.IsEmpty() )
-        return sal_False;
+    if( aIcon.IsEmpty() )
+        return false;
 
     SalTwoRect aRect;
     aRect.mnSrcX = 0; aRect.mnSrcY = 0;
@@ -264,7 +264,7 @@ static sal_Bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXSc
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
 
-    return sal_True;
+    return true;
 }
 
 void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemParentData* pParentData, bool bUseGeometry )
@@ -531,8 +531,8 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     }
 
     nShowState_                 = SHOWSTATE_UNKNOWN;
-    bViewable_                  = sal_True;
-    bMapped_                    = sal_False;
+    bViewable_                  = true;
+    bMapped_                    = false;
     nVisibility_                = VisibilityFullyObscured;
     mhWindow = XCreateWindow( GetXDisplay(),
                               aFrameParent,
@@ -729,16 +729,16 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
     nHeight_                    = 0;
     nStyle_                     = 0;
     mnExtStyle                  = 0;
-    bAlwaysOnTop_               = sal_False;
+    bAlwaysOnTop_               = false;
 
     // set bViewable_ to sal_True: hack GetClientSize to report something
     // different to 0/0 before first map
-    bViewable_                  = sal_True;
-    bMapped_                    = sal_False;
-    bDefaultPosition_           = sal_True;
+    bViewable_                  = true;
+    bMapped_                    = false;
+    bDefaultPosition_           = true;
     nVisibility_                = VisibilityFullyObscured;
     m_nWorkArea                 = 0;
-    mbInShow                    = sal_False;
+    mbInShow                    = false;
     m_bXEmbed                   = false;
 
     nScreenSaversTimeout_       = 0;
@@ -1009,7 +1009,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
         }
         pHints = &Hints;
 
-        sal_Bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
+        bool bOk = lcl_SelectAppIconPixmap( GetDisplay(), m_nXScreen,
                                                 nIcon, iconSize,
                                                 pHints->icon_pixmap, pHints->icon_mask );
         if ( !bOk )
@@ -1098,7 +1098,7 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     setXEmbedInfo();
     if( bVisible )
     {
-        mbInShow = sal_True;
+        mbInShow = true;
         if( ! (nStyle_ & SAL_FRAME_STYLE_INTRO) )
         {
             // hide all INTRO frames
@@ -1712,7 +1712,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     }
 }
 
-sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
+bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
         pState->mnState = WINDOWSTATE_STATE_MINIMIZED;
@@ -1751,7 +1751,7 @@ sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
         pState->mnMask |= _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
     }
 
-    return sal_True;
+    return true;
 }
 
 // native menu implementation - currently empty
@@ -2375,10 +2375,10 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 
 // PostEvent
 
-sal_Bool X11SalFrame::PostEvent( void *pData )
+bool X11SalFrame::PostEvent( void *pData )
 {
     GetDisplay()->SendInternalEvent( this, pData );
-    return sal_True;
+    return true;
 }
 
 // Title
@@ -2460,10 +2460,10 @@ OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
     return GetDisplay()->GetKeyName( nKeyCode );
 }
 
-sal_Bool X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+bool X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet
-    return sal_False;
+    return false;
 }
 
 LanguageType X11SalFrame::GetInputLanguage()
@@ -3628,9 +3628,9 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     XLIB_Window     hWM_Parent;
     XLIB_Window     hRoot, *Children, hDummy;
     unsigned int    nChildren;
-    sal_Bool            bNone = pDisplay_->GetProperties()
+    bool            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
-    sal_Bool            bAccessParentWindow = ! (pDisplay_->GetProperties()
+    bool            bAccessParentWindow = ! (pDisplay_->GetProperties()
                             & PROPERTY_FEATURE_TrustedSolaris);
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
@@ -4013,8 +4013,8 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                             XUnmapWindow( GetXDisplay(), GetShellWindow() );
                         break;
                     }
-                    bMapped_   = sal_True;
-                    bViewable_ = sal_True;
+                    bMapped_   = true;
+                    bViewable_ = true;
                     nRet = sal_True;
                     if ( mpInputContext != NULL )
                         mpInputContext->Map( this );
@@ -4065,7 +4065,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 
 
                     RestackChildren();
-                    mbInShow = sal_False;
+                    mbInShow = false;
                     m_bSetFocusOnMap = false;
                 }
                 break;
@@ -4073,8 +4073,8 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
             case UnmapNotify:
                 if( pEvent->xunmap.window == GetShellWindow() )
                 {
-                    bMapped_   = sal_False;
-                    bViewable_ = sal_False;
+                    bMapped_   = false;
+                    bViewable_ = false;
                     nRet = sal_True;
                     if ( mpInputContext != NULL )
                         mpInputContext->Unmap( this );

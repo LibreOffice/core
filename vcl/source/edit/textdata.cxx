@@ -73,7 +73,7 @@ void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
     erase( begin() + nDelFrom, end() );
 }
 
-sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion )
+sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, bool bPreferStartingPortion )
 {
     // find left portion at nCharPos at portion border
     sal_uInt16 nTmpPos = 0;
@@ -163,7 +163,7 @@ void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/
     mbSimple = false;
 }
 
-sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
+sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, bool bInclEnd )
 {
     for ( sal_uInt16 nLine = 0; nLine < maLines.size(); nLine++ )
     {

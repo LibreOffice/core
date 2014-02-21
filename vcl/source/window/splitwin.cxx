@@ -108,7 +108,7 @@ namespace {
 #define SPLIT_WINDOW            ((sal_uInt16)0x0004)
 #define SPLIT_NOSPLIT           ((sal_uInt16)0x8000)
 
-static void ImplCalcBorder( WindowAlign eAlign, sal_Bool bNoAlign,
+static void ImplCalcBorder( WindowAlign eAlign, bool bNoAlign,
                             long& rLeft, long& rTop,
                             long& rRight, long& rBottom )
 {
@@ -310,7 +310,7 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, Window* pWindow )
 }
 
 static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, const Point& rPos,
-                            sal_Bool bRows, sal_Bool bDown = sal_True )
+                            bool bRows, bool bDown = true )
 {
     sal_uInt16          i;
     sal_uInt16          nItems = pSet->mnItems;
@@ -379,7 +379,7 @@ static void ImplDeleteSet( ImplSplitSet* pSet )
 static void ImplCalcSet( ImplSplitSet* pSet,
                          long nSetLeft, long nSetTop,
                          long nSetWidth, long nSetHeight,
-                         sal_Bool bRows, sal_Bool bDown = sal_True )
+                         bool bRows, bool bDown = true )
 {
     if ( !pSet->mpItems )
         return;
@@ -753,8 +753,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     }
 }
 
-void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, sal_Bool bHide,
-                                sal_Bool bRows, sal_Bool /*bDown*/ )
+void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
+                                bool bRows, bool /*bDown*/ )
 {
     sal_uInt16          i;
     sal_uInt16          nItems = pSet->mnItems;
@@ -827,9 +827,9 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, sal_Bo
     {
         if ( pItems[i].mpSet )
         {
-            sal_Bool bTempHide = bHide;
+            bool bTempHide = bHide;
             if ( !pItems[i].mnWidth || !pItems[i].mnHeight )
-                bTempHide = sal_True;
+                bTempHide = true;
             ImplCalcSet2( pWindow, pItems[i].mpSet, bTempHide,
                           ((pItems[i].mnBits & SWIB_COLSET) == 0) );
         }
@@ -958,7 +958,7 @@ void SplitWindow::ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet )
 }
 
 static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
-                           sal_Bool bRows, sal_Bool bDown = sal_True )
+                           bool bRows, bool bDown = true )
 {
     if ( !pSet->mpItems )
         return;
@@ -1052,7 +1052,7 @@ static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
 
 sal_uInt16 SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                    long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
-                                   sal_Bool bRows, sal_Bool /*bDown*/ )
+                                   bool bRows, bool /*bDown*/ )
 {
     if ( !pSet->mpItems )
         return 0;
@@ -1258,29 +1258,29 @@ void SplitWindow::ImplInit( Window* pParent, WinBits nStyle )
     mnMouseModifier         = 0;
     mnMStartPos             = 0;
     mnMSplitPos             = 0;
-    mbDragFull              = sal_False;
-    mbHorz                  = sal_True;
-    mbBottomRight           = sal_False;
-    mbCalc                  = sal_False;
-    mbRecalc                = sal_True;
-    mbInvalidate            = sal_True;
-    mbAutoHide              = sal_False;
-    mbFadeIn                = sal_False;
-    mbFadeOut               = sal_False;
-    mbAutoHideIn            = sal_False;
-    mbAutoHideDown          = sal_False;
-    mbFadeInDown            = sal_False;
-    mbFadeOutDown           = sal_False;
-    mbAutoHidePressed       = sal_False;
-    mbFadeInPressed         = sal_False;
-    mbFadeOutPressed        = sal_False;
-    mbFadeNoButtonMode      = sal_False;
-    mbNoAlign               = sal_False;
+    mbDragFull              = false;
+    mbHorz                  = true;
+    mbBottomRight           = false;
+    mbCalc                  = false;
+    mbRecalc                = true;
+    mbInvalidate            = true;
+    mbAutoHide              = false;
+    mbFadeIn                = false;
+    mbFadeOut               = false;
+    mbAutoHideIn            = false;
+    mbAutoHideDown          = false;
+    mbFadeInDown            = false;
+    mbFadeOutDown           = false;
+    mbAutoHidePressed       = false;
+    mbFadeInPressed         = false;
+    mbFadeOutPressed        = false;
+    mbFadeNoButtonMode      = false;
+    mbNoAlign               = false;
 
     if ( nStyle & WB_NOSPLITDRAW )
     {
         pNewSet->mnSplitSize -= 2;
-        mbInvalidate = sal_False;
+        mbInvalidate = false;
     }
 
     if ( nStyle & WB_BORDER )
@@ -1479,9 +1479,9 @@ void SplitWindow::ImplCalcLayout()
             nCurSize -= nSplitSize;
             nCurSize -= (mpMainSet->mnItems-1)*mpMainSet->mnSplitSize;
 
-            mbRecalc = sal_False;
+            mbRecalc = false;
             ImplSetWindowSize( nCalcSize-nCurSize );
-            mbRecalc = sal_True;
+            mbRecalc = true;
         }
     }
 
@@ -1522,13 +1522,13 @@ void SplitWindow::ImplCalcLayout()
 
     // Sets rekursiv berechnen
     ImplCalcSet( mpMainSet, nL, nT, nW, nH, mbHorz, !mbBottomRight );
-    ImplCalcSet2( this, mpMainSet, sal_False, mbHorz, !mbBottomRight );
-    mbCalc = sal_False;
+    ImplCalcSet2( this, mpMainSet, false, mbHorz, !mbBottomRight );
+    mbCalc = false;
 }
 
 void SplitWindow::ImplUpdate()
 {
-    mbCalc = sal_True;
+    mbCalc = true;
 
     if ( IsReallyShown() && IsUpdateMode() && mbRecalc )
     {
@@ -1562,7 +1562,7 @@ void SplitWindow::ImplSplitMousePos( Point& rMousePos )
     }
 }
 
-void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest ) const
+void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const
 {
     long nSplitSize = mpMainSet->mnSplitSize-1;
     if ( mbAutoHide || mbFadeOut || mbFadeIn )
@@ -1632,7 +1632,7 @@ void SplitWindow::ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest 
     }
 }
 
-void SplitWindow::ImplGetAutoHideRect( Rectangle& rRect, sal_Bool bTest ) const
+void SplitWindow::ImplGetAutoHideRect( Rectangle& rRect, bool bTest ) const
 {
     Rectangle aRect;
 
@@ -1647,7 +1647,7 @@ void SplitWindow::ImplGetAutoHideRect( Rectangle& rRect, sal_Bool bTest ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplGetFadeInRect( Rectangle& rRect, sal_Bool bTest ) const
+void SplitWindow::ImplGetFadeInRect( Rectangle& rRect, bool bTest ) const
 {
     Rectangle aRect;
 
@@ -1657,12 +1657,12 @@ void SplitWindow::ImplGetFadeInRect( Rectangle& rRect, sal_Bool bTest ) const
     rRect = aRect;
 }
 
-void SplitWindow::ImplGetFadeOutRect( Rectangle& rRect, sal_Bool ) const
+void SplitWindow::ImplGetFadeOutRect( Rectangle& rRect, bool ) const
 {
     Rectangle aRect;
 
     if ( mbFadeOut )
-        ImplGetButtonRect( aRect, 0, sal_False );
+        ImplGetButtonRect( aRect, 0, false );
 
     rRect = aRect;
 }
@@ -1733,7 +1733,7 @@ void SplitWindow::ImplDrawButtonRect( const Rectangle& rRect, long nSize )
     }
 }
 
-void SplitWindow::ImplDrawAutoHide( sal_Bool bInPaint )
+void SplitWindow::ImplDrawAutoHide( bool bInPaint )
 {
     if ( mbAutoHide )
     {
@@ -1808,7 +1808,7 @@ void SplitWindow::ImplDrawAutoHide( sal_Bool bInPaint )
     }
 }
 
-void SplitWindow::ImplDrawFadeArrow( const Point& rPt, sal_Bool bHorz, sal_Bool bLeft )
+void SplitWindow::ImplDrawFadeArrow( const Point& rPt, bool bHorz, bool bLeft )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1864,14 +1864,14 @@ void SplitWindow::ImplDrawFadeArrow( const Point& rPt, sal_Bool bHorz, sal_Bool 
     }
 }
 
-void SplitWindow::ImplDrawGrip( const Rectangle& rRect, sal_Bool bHorz, sal_Bool bLeft )
+void SplitWindow::ImplDrawGrip( const Rectangle& rRect, bool bHorz, bool bLeft )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     if( rRect.IsInside( GetPointerPosPixel() ) )
     {
         DrawWallpaper( rRect, Wallpaper( Color( COL_WHITE ) ) );
-        DrawSelectionBackground( rRect, 2, sal_False, sal_False, sal_False );
+        DrawSelectionBackground( rRect, 2, false, false, false );
     }
 
     if( bHorz )
@@ -1922,24 +1922,24 @@ void SplitWindow::ImplDrawGrip( const Rectangle& rRect, sal_Bool bHorz, sal_Bool
     }
 }
 
-void SplitWindow::ImplDrawFadeIn( sal_Bool bInPaint )
+void SplitWindow::ImplDrawFadeIn( bool bInPaint )
 {
     if ( mbFadeIn )
     {
         Rectangle       aTempRect;
         ImplGetFadeInRect( aTempRect );
 
-        sal_Bool bLeft = sal_True;
+        bool bLeft = true;
         switch ( meAlign )
         {
         case WINDOWALIGN_TOP:
         case WINDOWALIGN_LEFT:
-            bLeft = sal_False;
+            bLeft = false;
             break;
         case WINDOWALIGN_BOTTOM:
         case WINDOWALIGN_RIGHT:
         default:
-            bLeft = sal_True;
+            bLeft = true;
             break;
         }
 
@@ -1950,24 +1950,24 @@ void SplitWindow::ImplDrawFadeIn( sal_Bool bInPaint )
     }
 }
 
-void SplitWindow::ImplDrawFadeOut( sal_Bool bInPaint )
+void SplitWindow::ImplDrawFadeOut( bool bInPaint )
 {
     if ( mbFadeOut )
     {
         Rectangle       aTempRect;
         ImplGetFadeOutRect( aTempRect );
 
-        sal_Bool bLeft = sal_True;
+        bool bLeft = true;
         switch ( meAlign )
         {
         case WINDOWALIGN_BOTTOM:
         case WINDOWALIGN_RIGHT:
-            bLeft = sal_False;
+            bLeft = false;
             break;
         case WINDOWALIGN_TOP:
         case WINDOWALIGN_LEFT:
         default:
-            bLeft = sal_True;
+            bLeft = true;
             break;
         }
 
@@ -2208,35 +2208,35 @@ void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
     Point           aMousePosPixel = rMEvt.GetPosPixel();
     Rectangle       aTestRect;
 
-    mbFadeNoButtonMode = sal_False;
-    ImplGetAutoHideRect( aTestRect, sal_True );
+    mbFadeNoButtonMode = false;
+    ImplGetAutoHideRect( aTestRect, true );
     if ( aTestRect.IsInside( aMousePosPixel ) )
     {
-        mbAutoHideDown = sal_True;
-        mbAutoHidePressed = sal_True;
-        ImplDrawAutoHide( sal_False );
+        mbAutoHideDown = true;
+        mbAutoHidePressed = true;
+        ImplDrawAutoHide( false );
     }
     else
     {
-        ImplGetFadeOutRect( aTestRect, sal_True );
+        ImplGetFadeOutRect( aTestRect, true );
         if ( aTestRect.IsInside( aMousePosPixel ) )
         {
-            mbFadeOutDown = sal_True;
-            mbFadeOutPressed = sal_True;
-            ImplDrawFadeOut( sal_False );
+            mbFadeOutDown = true;
+            mbFadeOutPressed = true;
+            ImplDrawFadeOut( false );
         }
         else
         {
-            ImplGetFadeInRect( aTestRect, sal_True );
+            ImplGetFadeInRect( aTestRect, true );
             if ( aTestRect.IsInside( aMousePosPixel ) )
             {
-                mbFadeInDown = sal_True;
-                mbFadeInPressed = sal_True;
-                ImplDrawFadeIn( sal_False );
+                mbFadeInDown = true;
+                mbFadeInPressed = true;
+                ImplDrawFadeIn( false );
             }
             else if ( !aTestRect.IsEmpty() && !(mnWinStyle & WB_SIZEABLE) )
             {
-                mbFadeNoButtonMode = sal_True;
+                mbFadeNoButtonMode = true;
                 FadeIn();
                 return;
             }
@@ -2292,30 +2292,30 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
     {
         if ( rTEvt.IsTrackingEnded() )
         {
-            mbAutoHideDown = sal_False;
+            mbAutoHideDown = false;
             if ( mbAutoHidePressed )
             {
-                mbAutoHidePressed = sal_False;
+                mbAutoHidePressed = false;
 
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
                     mbAutoHideIn = !mbAutoHideIn;
-                    ImplDrawAutoHide( sal_False );
+                    ImplDrawAutoHide( false );
                     AutoHide();
                 }
                 else
-                    ImplDrawAutoHide( sal_False );
+                    ImplDrawAutoHide( false );
             }
         }
         else
         {
             Rectangle aTestRect;
-            ImplGetAutoHideRect( aTestRect, sal_True );
-            sal_Bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
+            ImplGetAutoHideRect( aTestRect, true );
+            bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
             if ( bNewPressed != mbAutoHidePressed )
             {
                 mbAutoHidePressed = bNewPressed;
-                ImplDrawAutoHide( sal_False );
+                ImplDrawAutoHide( false );
             }
         }
     }
@@ -2323,11 +2323,11 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
     {
         if ( rTEvt.IsTrackingEnded() )
         {
-            mbFadeInDown = sal_False;
+            mbFadeInDown = false;
             if ( mbFadeInPressed )
             {
-                mbFadeInPressed = sal_False;
-                ImplDrawFadeIn( sal_False );
+                mbFadeInPressed = false;
+                ImplDrawFadeIn( false );
 
                 if ( !rTEvt.IsTrackingCanceled() )
                     FadeIn();
@@ -2336,12 +2336,12 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         else
         {
             Rectangle aTestRect;
-            ImplGetFadeInRect( aTestRect, sal_True );
-            sal_Bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
+            ImplGetFadeInRect( aTestRect, true );
+            bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
             if ( bNewPressed != mbFadeInPressed )
             {
                 mbFadeInPressed = bNewPressed;
-                ImplDrawFadeIn( sal_False );
+                ImplDrawFadeIn( false );
             }
         }
     }
@@ -2349,11 +2349,11 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
     {
         if ( rTEvt.IsTrackingEnded() )
         {
-            mbFadeOutDown = sal_False;
+            mbFadeOutDown = false;
             if ( mbFadeOutPressed )
             {
-                mbFadeOutPressed = sal_False;
-                ImplDrawFadeOut( sal_False );
+                mbFadeOutPressed = false;
+                ImplDrawFadeOut( false );
 
                 if ( !rTEvt.IsTrackingCanceled() )
                     FadeOut();
@@ -2362,12 +2362,12 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         else
         {
             Rectangle aTestRect;
-            ImplGetFadeOutRect( aTestRect, sal_True );
-            sal_Bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
-            if ( bNewPressed == sal_False )
+            ImplGetFadeOutRect( aTestRect, true );
+            bool bNewPressed = aTestRect.IsInside( aMousePosPixel );
+            if ( !bNewPressed )
             {
                 mbFadeOutPressed = bNewPressed;
-                ImplDrawFadeOut( sal_False );
+                ImplDrawFadeOut( false );
 
                 // We need a mouseevent with a position inside the button for the
                 // ImplStartSplit function!
@@ -2377,7 +2377,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
                                                   aOrgMEvt.GetModifier() );
 
                 ImplStartSplit( aNewMEvt );
-                mbFadeOutDown = sal_False;
+                mbFadeOutDown = false;
             }
         }
     }
@@ -2420,8 +2420,8 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
 
         if ( bSplit )
         {
-            sal_Bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? sal_True : sal_False;
-            sal_Bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? sal_True : sal_False;
+            bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? sal_True : sal_False;
+            bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? sal_True : sal_False;
             long    nDelta = mnMSplitPos-mnMStartPos;
 
             if ( (mnSplitTest & SPLIT_WINDOW) && !mpMainSet->mpItems )
@@ -2500,9 +2500,9 @@ void SplitWindow::Paint( const Rectangle& )
         ImplDrawBorder( this );
 
     ImplDrawBorderLine( this );
-    ImplDrawFadeOut( sal_True );
-    ImplDrawFadeIn( sal_True );
-    ImplDrawAutoHide( sal_True );
+    ImplDrawFadeOut( true );
+    ImplDrawFadeIn( true );
+    ImplDrawAutoHide( true );
 
     // FrameSet-Hintergruende zeichnen
     ImplDrawBack( this, mpMainSet );
@@ -2536,7 +2536,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
         Rectangle   aHelpRect;
         sal_uInt16      nHelpResId = 0;
 
-        ImplGetAutoHideRect( aHelpRect, sal_True );
+        ImplGetAutoHideRect( aHelpRect, true );
         if ( aHelpRect.IsInside( aMousePosPixel ) )
         {
             if ( mbAutoHideIn )
@@ -2546,12 +2546,12 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
         }
         else
         {
-            ImplGetFadeInRect( aHelpRect, sal_True );
+            ImplGetFadeInRect( aHelpRect, true );
             if ( aHelpRect.IsInside( aMousePosPixel ) )
                 nHelpResId = SV_HELPTEXT_FADEIN;
             else
             {
-                ImplGetFadeOutRect( aHelpRect, sal_True );
+                ImplGetFadeOutRect( aHelpRect, true );
                 if ( aHelpRect.IsInside( aMousePosPixel ) )
                     nHelpResId = SV_HELPTEXT_FADEOUT;
             }
@@ -2690,7 +2690,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, long nSize,
     InsertItem( nId, NULL, nSize, nPos, nSetId, nBits );
 }
 
-void SplitWindow::RemoveItem( sal_uInt16 nId, sal_Bool bHide )
+void SplitWindow::RemoveItem( sal_uInt16 nId, bool bHide )
 {
 #ifdef DBG_UTIL
     sal_uInt16 nDbgDummy;
@@ -2760,7 +2760,7 @@ void SplitWindow::Clear()
 }
 
 void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
-                             sal_Bool bPropSmall, sal_Bool bPropGreat )
+                             bool bPropSmall, bool bPropGreat )
 {
     sal_uInt16          nItems;
     sal_uInt16          nPos;
@@ -2841,7 +2841,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     {
         nPos--;
         nDelta *= -1;
-        sal_Bool bTemp = bPropSmall;
+        bool bTemp = bPropSmall;
         bPropSmall = bPropGreat;
         bPropGreat = bTemp;
     }
@@ -3101,15 +3101,15 @@ sal_uInt16 SplitWindow::GetSet( sal_uInt16 nId ) const
         return 0;
 }
 
-sal_Bool SplitWindow::IsItemValid( sal_uInt16 nId ) const
+bool SplitWindow::IsItemValid( sal_uInt16 nId ) const
 {
     sal_uInt16          nPos;
     ImplSplitSet* pSet = mpBaseSet ? ImplFindItem(mpBaseSet, nId, nPos) : NULL;
 
     if ( pSet )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 sal_uInt16 SplitWindow::GetItemId( Window* pWindow ) const
@@ -3164,28 +3164,28 @@ void SplitWindow::ImplNewAlign()
 {
     if ( mbNoAlign )
     {
-        mbHorz        = sal_False;
-        mbBottomRight = sal_False;
+        mbHorz        = false;
+        mbBottomRight = false;
     }
     else
     {
         switch ( meAlign )
         {
         case WINDOWALIGN_TOP:
-            mbHorz        = sal_True;
-            mbBottomRight = sal_False;
+            mbHorz        = true;
+            mbBottomRight = false;
             break;
         case WINDOWALIGN_BOTTOM:
-            mbHorz        = sal_True;
-            mbBottomRight = sal_True;
+            mbHorz        = true;
+            mbBottomRight = true;
             break;
         case WINDOWALIGN_LEFT:
-            mbHorz        = sal_False;
-            mbBottomRight = sal_False;
+            mbHorz        = false;
+            mbBottomRight = false;
             break;
         case WINDOWALIGN_RIGHT:
-            mbHorz        = sal_False;
-            mbBottomRight = sal_True;
+            mbHorz        = false;
+            mbBottomRight = true;
             break;
         }
     }
@@ -3210,25 +3210,25 @@ void SplitWindow::SetAlign( WindowAlign eNewAlign )
     }
 }
 
-void SplitWindow::ShowAutoHideButton( sal_Bool bShow )
+void SplitWindow::ShowAutoHideButton( bool bShow )
 {
     mbAutoHide = bShow;
     ImplUpdate();
 }
 
-void SplitWindow::ShowFadeInHideButton( sal_Bool bShow )
+void SplitWindow::ShowFadeInHideButton( bool bShow )
 {
     mbFadeIn = bShow;
     ImplUpdate();
 }
 
-void SplitWindow::ShowFadeOutButton( sal_Bool bShow )
+void SplitWindow::ShowFadeOutButton( bool bShow )
 {
     mbFadeOut = bShow;
     ImplUpdate();
 }
 
-void SplitWindow::SetAutoHideState( sal_Bool bAutoHide )
+void SplitWindow::SetAutoHideState( bool bAutoHide )
 {
     mbAutoHideIn = bAutoHide;
     if ( IsReallyVisible() )

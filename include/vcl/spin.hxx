@@ -36,13 +36,13 @@ private:
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
     Rectangle       maFocusRect;
-    sal_Bool            mbRepeat         : 1;
-    sal_Bool            mbUpperIn        : 1;
-    sal_Bool            mbLowerIn        : 1;
-    sal_Bool            mbInitialUp      : 1;
-    sal_Bool            mbInitialDown    : 1;
-    sal_Bool            mbHorz           : 1;
-    sal_Bool            mbUpperIsFocused : 1;
+    bool            mbRepeat         : 1;
+    bool            mbUpperIn        : 1;
+    bool            mbLowerIn        : 1;
+    bool            mbInitialUp      : 1;
+    bool            mbInitialDown    : 1;
+    bool            mbHorz           : 1;
+    bool            mbUpperIsFocused : 1;
     Link            maUpHdlLink;
     Link            maDownHdlLink;
     long            mnMinRange;
@@ -92,14 +92,14 @@ public:
 
 private:
     // moves the focus to the upper or lower rect. Return sal_True if the focus rect actually changed.
-    SAL_DLLPRIVATE sal_Bool        ImplMoveFocus( sal_Bool _bUpper );
-    SAL_DLLPRIVATE void        ImplCalcFocusRect( sal_Bool _bUpper );
+    SAL_DLLPRIVATE bool        ImplMoveFocus( bool _bUpper );
+    SAL_DLLPRIVATE void        ImplCalcFocusRect( bool _bUpper );
 
-    SAL_DLLPRIVATE inline sal_Bool ImplIsUpperEnabled( ) const
+    SAL_DLLPRIVATE inline bool ImplIsUpperEnabled( ) const
     {
         return mnValue + mnValueStep <= mnMaxRange;
     }
-    SAL_DLLPRIVATE inline sal_Bool ImplIsLowerEnabled( ) const
+    SAL_DLLPRIVATE inline bool ImplIsLowerEnabled( ) const
     {
         return mnValue >= mnMinRange + mnValueStep;
     }

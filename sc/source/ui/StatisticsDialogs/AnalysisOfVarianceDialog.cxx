@@ -92,7 +92,7 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
 ScAnalysisOfVarianceDialog::~ScAnalysisOfVarianceDialog()
 {}
 
-sal_Bool ScAnalysisOfVarianceDialog::Close()
+bool ScAnalysisOfVarianceDialog::Close()
 {
     return DoClose( ScAnalysisOfVarianceDialogWrapper::GetChildWindowId() );
 }

@@ -363,7 +363,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // has a shadow been set?
         if( rAttrs.GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
         {
-            m_pTsbShowShadow->EnableTriState( sal_False );
+            m_pTsbShowShadow->EnableTriState( false );
 
             if( ( ( const SdrShadowItem& ) rAttrs.Get( SDRATTR_SHADOW ) ).GetValue() )
                 m_pTsbShowShadow->SetState( STATE_CHECK );

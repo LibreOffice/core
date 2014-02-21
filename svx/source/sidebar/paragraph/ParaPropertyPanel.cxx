@@ -400,7 +400,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
     const OUString aCommand(pToolBox->GetItemCommand(nId));
 
     EndTracking();
-    pToolBox->SetItemDown( nId, sal_True );
+    pToolBox->SetItemDown( nId, true );
 
     if (aCommand == UNO_DEFAULTBULLET)
     {
@@ -412,7 +412,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
         maNumberingPopup.UpdateValueSet();
         maNumberingPopup.Show(*pToolBox);
     }
-    pToolBox->SetItemDown( nId, sal_False );
+    pToolBox->SetItemDown( nId, false );
     return 0;
 }
 

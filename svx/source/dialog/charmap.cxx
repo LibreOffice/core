@@ -81,7 +81,7 @@ void SvxShowCharSet::init()
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
-    aVscrollSB.EnableDrag( sal_True );
+    aVscrollSB.EnableDrag( true );
     // other settings like aVscroll depend on selected font => see SetFont
 
     bDrag = sal_False;
@@ -532,7 +532,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     aFont.SetAlign( ALIGN_TOP );
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
     aFont.SetSize( PixelToLogic( Size( 0, nFontHeight ) ) );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     Control::SetFont( aFont );
     GetFontCharMap( maFontCharMap );
 

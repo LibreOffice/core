@@ -1021,11 +1021,11 @@ namespace sfx2
         switch ( i_pMenu->GetCurItemId() )
         {
             case MID_UNLOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( sal_True );
+                m_rDockingWindow.SetFloatingMode( true );
                 break;
 
             case MID_LOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( sal_False );
+                m_rDockingWindow.SetFloatingMode( false );
                 break;
 
             case MID_LAYOUT_DRAWERS:
@@ -1246,7 +1246,7 @@ namespace sfx2
                 SfxResId( STR_SFX_UNDOCK ).toString()
             );
 
-        pMenu->RemoveDisabledEntries( sal_False, sal_False );
+        pMenu->RemoveDisabledEntries( false, false );
 
         return pMenu;
     }

@@ -42,7 +42,7 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    static const OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
+    static const OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", true));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )

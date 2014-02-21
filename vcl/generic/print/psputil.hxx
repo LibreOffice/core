@@ -41,10 +41,10 @@ sal_Int32   getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer);
 sal_Int32   getValueOf    (sal_Int32 nValue, sal_Char* pBuffer);
 sal_Int32   appendStr     (const sal_Char* pSrc, sal_Char* pDst);
 
-sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString);
-sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength);
-sal_Bool    WritePS (osl::File* pFile, const OString &rString);
-sal_Bool    WritePS (osl::File* pFile, const OUString &rString);
+bool    WritePS (osl::File* pFile, const sal_Char* pString);
+bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength);
+bool    WritePS (osl::File* pFile, const OString &rString);
+bool    WritePS (osl::File* pFile, const OUString &rString);
 
 class ConverterFactory
 {

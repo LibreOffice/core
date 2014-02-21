@@ -110,7 +110,7 @@ namespace dbaui
            m_aRBAccessTextFiles.SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
            m_aRBAccessCSVFiles.SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_aRBAccessOtherFiles.SetToggleHdl(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
-        m_aRBAccessCSVFiles.Check(sal_True);
+        m_aRBAccessCSVFiles.Check(true);
 
         struct SectionDescriptor
         {
@@ -422,12 +422,12 @@ namespace dbaui
     void OTextConnectionHelper::SetExtension(const OUString& _rVal)
     {
         if (_rVal == "txt")
-            m_aRBAccessTextFiles.Check(sal_True);
+            m_aRBAccessTextFiles.Check(true);
         else if (_rVal == "csv")
-            m_aRBAccessCSVFiles.Check(sal_True);
+            m_aRBAccessCSVFiles.Check(true);
         else
         {
-            m_aRBAccessOtherFiles.Check(sal_True);
+            m_aRBAccessOtherFiles.Check(true);
             m_aFTExtensionExample.SetText(_rVal);
         }
     }

@@ -1471,7 +1471,7 @@ void ScPreview::LoseFocus()
 
 com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
 {
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> xAcc= GetAccessible(sal_False);
+    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> xAcc= GetAccessible(false);
     if (xAcc.is())
     {
         return xAcc;
@@ -1490,7 +1490,7 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
 // There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
 void ScPreview::SwitchView()
 {
-    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(sal_False).get());
+    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(false).get());
     if (pAccDoc)
     {
         pAccDoc->SwitchViewFireFocus();

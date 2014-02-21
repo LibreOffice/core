@@ -236,7 +236,7 @@ static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nL
     return bOk;
 }
 
-void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
+void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 {
     if (!bEMFPlus) {
         pOut->PassEMFPlusHeaderInfo();
@@ -306,7 +306,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
  * skipFirst: if the first point read is the 0th point or the 1st point in the array.
  * */
 template <class T, class Drawer>
-void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const sal_Bool skipFirst)
+void EnhWMFReader::ReadAndDrawPolygon(Drawer drawer, const bool skipFirst)
 {
     sal_uInt32 nPoints(0), nStartIndex(0);
     pWMF->SeekRel( 16 );
@@ -379,7 +379,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
         for ( i = 0; ( i < nPoly ) && pWMF->good(); i++ )
         {
             Polygon aPolygon = ReadPolygon<T>(0, pnPoints[i]);
-            pOut->DrawPolyLine( aPolygon, sal_False, bRecordPath );
+            pOut->DrawPolyLine( aPolygon, false, bRecordPath );
         }
         delete[] pnPoints;
     }
@@ -450,7 +450,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
     }
 }
 
-sal_Bool EnhWMFReader::ReadEnhWMF()
+bool EnhWMFReader::ReadEnhWMF()
 {
     sal_uInt32  nStretchBltMode = 0;
     sal_uInt32  nRecType(0), nRecSize(0), nNextPos(0),
@@ -458,8 +458,8 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 nDat32(0), nNom1(0), nDen1(0), nNom2(0), nDen2(0);
     sal_Int32   nX32(0), nY32(0), nx32(0), ny32(0);
 
-    sal_Bool    bFlag(sal_False), bStatus = ReadHeader();
-    sal_Bool    bHaveDC = false;
+    bool    bFlag(false), bStatus = ReadHeader();
+    bool    bHaveDC = false;
 
     static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
 
@@ -469,7 +469,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
         if ( !pWMF->good() || ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameters are always divisible by 4
         {
-            bStatus = sal_False;
+            bStatus = false;
             break;
         }
 
@@ -477,7 +477,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
         if ( !pWMF->good() || nNextPos > nEndPos )
         {
-            bStatus = sal_False;
+            bStatus = false;
             break;
         }
 
@@ -488,7 +488,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             pOut->ResolveBitmapActions( aBmpSaveList );
         }
 
-        bFlag = sal_False;
+        bFlag = false;
 
         SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " record type: " << std::dec << nRecType << " size: " <<  nRecSize << std::dec);
 
@@ -522,21 +522,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             switch( nRecType )
             {
                 case EMR_POLYBEZIERTO :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_True);
+                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), true);
                 break;
                 case EMR_POLYBEZIER :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_False);
+                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), false);
                 break;
 
                 case EMR_POLYGON :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), sal_False);
+                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), false);
                 break;
 
                 case EMR_POLYLINETO :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_True);
+                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), true);
                 break;
                 case EMR_POLYLINE :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_False);
+                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), false);
                 break;
 
                 case EMR_POLYPOLYLINE :
@@ -727,7 +727,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         if ( aSize.Width() )
                             aLineInfo.SetWidth( aSize.Width() );
 
-                        sal_Bool bTransparent = sal_False;
+                        bool bTransparent = false;
                         switch( nStyle & 0xFF )
                         {
                             case PS_DASHDOTDOT :
@@ -761,7 +761,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 aLineInfo.SetDistance( 100 );
                             break;
                             case PS_NULL :
-                                bTransparent = sal_True;
+                                bTransparent = true;
                                 aLineInfo.SetStyle( LINE_NONE );
                             break;
                             case PS_INSIDEFRAME :
@@ -817,7 +817,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         if ( nWidth )
                             aLineInfo.SetWidth( nWidth );
 
-                        sal_Bool bTransparent = sal_False;
+                        bool bTransparent = false;
                         sal_uInt16 nDashCount = 0;
                         sal_uInt16 nDotCount = 0;
 
@@ -834,7 +834,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                 nDashCount++;
                             break;
                             case PS_NULL :
-                                bTransparent = sal_True;
+                                bTransparent = true;
                                 aLineInfo.SetStyle( LINE_NONE );
                             break;
 
@@ -938,21 +938,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 {
                     sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                     pWMF->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nStartX ).ReadUInt32( nStartY ).ReadUInt32( nEndX ).ReadUInt32( nEndY );
-                    pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), sal_True );
+                    pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), true );
                 }
                 break;
 
                 case EMR_BEGINPATH :
                 {
                     pOut->ClearPath();
-                    bRecordPath = sal_True;
+                    bRecordPath = true;
                 }
                 break;
 
                 case EMR_ABORTPATH :
                     pOut->ClearPath();
                 case EMR_ENDPATH :
-                    bRecordPath = sal_False;
+                    bRecordPath = false;
                 break;
 
                 case EMR_CLOSEFIGURE :
@@ -960,22 +960,22 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_FILLPATH :
-                    pOut->StrokeAndFillPath( sal_False, sal_True );
+                    pOut->StrokeAndFillPath( false, true );
                 break;
 
                 case EMR_STROKEANDFILLPATH :
-                    pOut->StrokeAndFillPath( sal_True, sal_True );
+                    pOut->StrokeAndFillPath( true, true );
                 break;
 
                 case EMR_STROKEPATH :
-                    pOut->StrokeAndFillPath( sal_True, sal_False );
+                    pOut->StrokeAndFillPath( true, false );
                 break;
 
                 case EMR_SELECTCLIPPATH :
                 {
                     sal_Int32 nClippingMode;
                     pWMF->ReadInt32( nClippingMode );
-                    pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, sal_True );
+                    pOut->SetClipPath( pOut->GetPathObj(), nClippingMode, true );
                 }
                 break;
 
@@ -988,7 +988,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     PolyPolygon aPolyPoly;
                     if ( cbRgnData )
                         ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                    pOut->SetClipPath( aPolyPoly, iMode, sal_True );
+                    pOut->SetClipPath( aPolyPoly, iMode, true );
                 }
                 break;
 
@@ -1018,7 +1018,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
-                        bStatus = sal_False;
+                        bStatus = false;
                     else
                     {
                         sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
@@ -1082,7 +1082,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     cyDest = abs( (int)cyDest );        // and also 122889
 
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
-                        bStatus = sal_False;
+                        bStatus = false;
                     else
                     {
                         sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
@@ -1151,7 +1151,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                        || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
                        )
                     {
-                        bStatus = sal_False;
+                        bStatus = false;
                     }
                     else
                     {
@@ -1238,7 +1238,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_EXTTEXTOUTA :
-                    bFlag = sal_True;
+                    bFlag = true;
                 case EMR_EXTTEXTOUTW :
                 {
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
@@ -1328,21 +1328,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_POLYBEZIERTO16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_True);
+                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), true);
                     break;
                 case EMR_POLYBEZIER16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), sal_False);
+                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), false);
                 break;
 
                 case EMR_POLYGON16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), sal_False);
+                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), false);
                 break;
 
                 case EMR_POLYLINETO16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_True);
+                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), true);
                     break;
                 case EMR_POLYLINE16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), sal_False);
+                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), false);
                 break;
 
                 case EMR_POLYPOLYLINE16 :
@@ -1364,7 +1364,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     {
                         pOut->Push();
                         pOut->SelectObject( nIndex );
-                        pOut->DrawPolyPolygon( aPolyPoly, sal_False );
+                        pOut->DrawPolyPolygon( aPolyPoly, false );
                         pOut->Pop();
                     }
                 }
@@ -1388,7 +1388,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         pWMF->ReadUInt32( cbBits );
 
                         if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
-                           bStatus = sal_False;
+                           bStatus = false;
                         else if ( offBmi )
                         {
                             sal_uInt32  nSize = cbBmi + cbBits + 14;
@@ -1488,7 +1488,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 };
 
 
-sal_Bool EnhWMFReader::ReadHeader()
+bool EnhWMFReader::ReadHeader()
 {
     sal_uInt32      nType, nSignature, nVersion;
     sal_uInt32      nHeaderSize, nPalEntries;
@@ -1499,7 +1499,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     pWMF->ReadUInt32( nType ).ReadUInt32( nHeaderSize );
     if ( nType != 1 ) { // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
         SAL_WARN("vcl.emf", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
-        return sal_False;
+        return false;
     }
 
     // Start reading the EMR_HEADER Header object
@@ -1526,7 +1526,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     // and 2.1.14 FormatSignature Enumeration
     if ( nSignature != 0x464d4520 ) {
         SAL_WARN("vcl.emf", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
-        return sal_False;
+        return false;
     }
 
     pWMF->ReadUInt32( nVersion );  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
@@ -1555,7 +1555,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     if ( !nRecordCount ) {
         SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as 0! This shouldn't "
                             "be possible... indicator of possible file corruption?");
-        return sal_False;
+        return false;
     }
 
     // the number of "handles", or graphics objects used in the metafile
@@ -1591,7 +1591,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     pOut->SetRefMill( Size( nMillX, nMillY ) );
 
     pWMF->Seek( nStartPos + nHeaderSize );
-    return sal_True;
+    return true;
 }
 
 

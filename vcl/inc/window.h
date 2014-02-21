@@ -100,15 +100,15 @@ struct ImplWinData
     sal_uInt16*             mpExtOldAttrAry;
     Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;
-    sal_Bool            mbVertical;
+    bool            mbVertical;
     Rectangle*          mpCompositionCharRects;
     long                mnCompositionCharRects;
     Rectangle*          mpFocusRect;
     Rectangle*          mpTrackRect;
     sal_uInt16              mnTrackFlags;
     sal_uInt16              mnIsTopWindow;
-    sal_Bool                mbMouseOver;          // tracks mouse over for native widget paint effect
-    sal_Bool                mbEnableNativeWidget; // toggle native widget rendering
+    bool                mbMouseOver;          // tracks mouse over for native widget paint effect
+    bool                mbEnableNativeWidget; // toggle native widget rendering
     ::std::list< Window* >
                         maTopWindowChildren;
 };
@@ -119,7 +119,7 @@ struct ImplOverlapData
     Region*             mpSaveBackRgn;      // saved region, which must be invalidated
     Window*             mpNextBackWin;      // next window with saved background
     sal_uIntPtr         mnSaveBackSize;     // bitmap size of saved background
-    sal_Bool            mbSaveBack;         // sal_True: save background
+    bool            mbSaveBack;         // sal_True: save background
     sal_uInt8           mnTopLevel;         // Level for Overlap-Window
 };
 
@@ -158,16 +158,16 @@ struct ImplFrameData
     sal_uInt16          mnMouseCode;        // mouse code
     sal_uInt16          mnMouseMode;        // mouse mode
     MapUnit             meMapUnit;          // last MapUnit for LogicUnitToPixel
-    sal_Bool            mbHasFocus;         // focus
-    sal_Bool            mbInMouseMove;      // is MouseMove on stack
-    sal_Bool            mbMouseIn;          // is Mouse inside the frame
-    sal_Bool            mbStartDragCalled;  // is command startdrag called
-    sal_Bool            mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
-    sal_Bool            mbMinimized;        // set, when FrameSize <= 0
-    sal_Bool            mbStartFocusState;  // FocusState, when sending the event
-    sal_Bool            mbInSysObjFocusHdl; // within a SysChildren's GetFocus handler
-    sal_Bool            mbInSysObjToTopHdl; // within a SysChildren's ToTop handler
-    sal_Bool            mbSysObjFocus;      // does a SysChild have focus
+    bool            mbHasFocus;         // focus
+    bool            mbInMouseMove;      // is MouseMove on stack
+    bool            mbMouseIn;          // is Mouse inside the frame
+    bool            mbStartDragCalled;  // is command startdrag called
+    bool            mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
+    bool            mbMinimized;        // set, when FrameSize <= 0
+    bool            mbStartFocusState;  // FocusState, when sending the event
+    bool            mbInSysObjFocusHdl; // within a SysChildren's GetFocus handler
+    bool            mbInSysObjToTopHdl; // within a SysChildren's ToTop handler
+    bool            mbSysObjFocus;      // does a SysChild have focus
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > mxDropTarget;
@@ -175,7 +175,7 @@ struct ImplFrameData
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
 
-    sal_Bool                mbInternalDragGestureRecognizer;
+    bool                mbInternalDragGestureRecognizer;
 };
 
 struct ImplAccessibleInfos
@@ -371,7 +371,7 @@ public:
 
 // helper methods
 
-bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouseLeave,
+bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uIntPtr nMsgTime,
                            sal_uInt16 nCode, sal_uInt16 nMode );
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );

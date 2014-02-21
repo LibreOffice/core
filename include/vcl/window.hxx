@@ -379,7 +379,7 @@ public:
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplSetFrameParent( const Window* pParent );
     SAL_DLLPRIVATE void                ImplInsertWindow( Window* pParent );
-    SAL_DLLPRIVATE void                ImplRemoveWindow( sal_Bool bRemoveFrameData );
+    SAL_DLLPRIVATE void                ImplRemoveWindow( bool bRemoveFrameData );
     SAL_DLLPRIVATE Window*             ImplGetWindow();
     SAL_DLLPRIVATE ImplFrameData*      ImplGetFrameData();
                    SalFrame*           ImplGetFrame() const;
@@ -394,15 +394,15 @@ public:
     SAL_DLLPRIVATE Window*             ImplGetFirstOverlapWindow();
     SAL_DLLPRIVATE const Window*       ImplGetFirstOverlapWindow() const;
     SAL_DLLPRIVATE Window*             ImplGetFrameWindow() const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsRealParentPath( const Window* pWindow ) const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsChild( const Window* pWindow, sal_Bool bSystemWindow = sal_False ) const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow = sal_False ) const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsDockingWindow() const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsFloatingWindow() const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsSplitter() const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsPushButton() const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsOverlapWindow() const;
-    SAL_DLLPRIVATE void                ImplSetMouseTransparent( sal_Bool bTransparent );
+    SAL_DLLPRIVATE bool                ImplIsRealParentPath( const Window* pWindow ) const;
+    SAL_DLLPRIVATE bool                ImplIsChild( const Window* pWindow, bool bSystemWindow = false ) const;
+    SAL_DLLPRIVATE bool                ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow = false ) const;
+    SAL_DLLPRIVATE bool                ImplIsDockingWindow() const;
+    SAL_DLLPRIVATE bool                ImplIsFloatingWindow() const;
+    SAL_DLLPRIVATE bool                ImplIsSplitter() const;
+    SAL_DLLPRIVATE bool                ImplIsPushButton() const;
+    SAL_DLLPRIVATE bool                ImplIsOverlapWindow() const;
+    SAL_DLLPRIVATE void                ImplSetMouseTransparent( bool bTransparent );
     SAL_DLLPRIVATE int                 ImplTestMousePointerSet();
     SAL_DLLPRIVATE PointerStyle        ImplGetMousePointer() const;
     SAL_DLLPRIVATE void                ImplResetReallyVisible();
@@ -415,20 +415,20 @@ public:
     SAL_DLLPRIVATE void                ImplLogicToPoint( Font& rFont ) const;
     SAL_DLLPRIVATE Point               ImplOutputToFrame( const Point& rPos );
     SAL_DLLPRIVATE Point               ImplFrameToOutput( const Point& rPos );
-    SAL_DLLPRIVATE sal_Bool                ImplSysObjClip( const Region* pOldRegion );
+    SAL_DLLPRIVATE bool                ImplSysObjClip( const Region* pOldRegion );
     SAL_DLLPRIVATE void                ImplUpdateSysObjChildrenClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjOverlapsClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjClip();
-    SAL_DLLPRIVATE sal_Bool                ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller = sal_False );
-    SAL_DLLPRIVATE sal_Bool                ImplSetClipFlagOverlapWindows( sal_Bool bSysObjOnlySmaller = sal_False );
-    SAL_DLLPRIVATE sal_Bool                ImplSetClipFlag( sal_Bool bSysObjOnlySmaller = sal_False );
+    SAL_DLLPRIVATE bool                ImplSetClipFlagChildren( bool bSysObjOnlySmaller = false );
+    SAL_DLLPRIVATE bool                ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
+    SAL_DLLPRIVATE bool                ImplSetClipFlag( bool bSysObjOnlySmaller = false );
     SAL_DLLPRIVATE void                ImplIntersectWindowClipRegion( Region& rRegion );
     SAL_DLLPRIVATE void                ImplIntersectWindowRegion( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeWindowRegion( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeOverlapWindows( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeOverlapWindows2( Region& rRegion );
-    SAL_DLLPRIVATE void                ImplClipBoundaries( Region& rRegion, sal_Bool bThis, sal_Bool bOverlaps );
-    SAL_DLLPRIVATE sal_Bool                ImplClipChildren( Region& rRegion );
+    SAL_DLLPRIVATE void                ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps );
+    SAL_DLLPRIVATE bool                ImplClipChildren( Region& rRegion );
     SAL_DLLPRIVATE void                ImplClipAllChildren( Region& rRegion );
     SAL_DLLPRIVATE void                ImplClipSiblings( Region& rRegion );
     SAL_DLLPRIVATE void                ImplInitWinClipRegion();
@@ -438,7 +438,7 @@ public:
     SAL_DLLPRIVATE void                ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                               sal_Bool bChildren, sal_Bool bParent, sal_Bool bSiblings );
+                                               bool bChildren, bool bParent, bool bSiblings );
     SAL_DLLPRIVATE void                ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags );
     SAL_DLLPRIVATE void                ImplCallOverlapPaint();
     SAL_DLLPRIVATE void                ImplPostPaint();
@@ -448,14 +448,14 @@ public:
     SAL_DLLPRIVATE void                ImplInvalidate( const Region* rRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                ImplValidateFrameRegion( const Region* rRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                ImplValidate( const Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_Bool bChildren );
-    SAL_DLLPRIVATE void                ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_Bool bChildren );
+    SAL_DLLPRIVATE void                ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
+    SAL_DLLPRIVATE void                ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
     SAL_DLLPRIVATE void                ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplUpdateAll( sal_Bool bOverlapWindows = sal_True );
+    SAL_DLLPRIVATE void                ImplUpdateAll( bool bOverlapWindows = true );
     SAL_DLLPRIVATE void                ImplUpdateWindowPtr( Window* pWindow );
     SAL_DLLPRIVATE void                ImplUpdateWindowPtr();
-    SAL_DLLPRIVATE void                ImplUpdateOverlapWindowPtr( sal_Bool bNewFrame );
-    SAL_DLLPRIVATE sal_Bool                ImplUpdatePos();
+    SAL_DLLPRIVATE void                ImplUpdateOverlapWindowPtr( bool bNewFrame );
+    SAL_DLLPRIVATE bool                ImplUpdatePos();
     SAL_DLLPRIVATE void                ImplUpdateSysObjPos();
     SAL_DLLPRIVATE WindowImpl*         ImplGetWindowImpl() const { return mpWindowImpl; }
 
@@ -473,34 +473,34 @@ public:
     False if the font is unsuitable as UI font
      */
     SAL_DLLPRIVATE bool        ImplCheckUIFont( const Font& rFont );
-    SAL_DLLPRIVATE void        ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl = sal_True );
+    SAL_DLLPRIVATE void        ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true );
     SAL_DLLPRIVATE void        ImplAlignChildren();
     SAL_DLLPRIVATE void        ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplToBottomChild();
     SAL_DLLPRIVATE void        ImplCalcToTop( ImplCalcToTopData* pPrevData );
     SAL_DLLPRIVATE void        ImplToTop( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplStartToTop( sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void        ImplFocusToTop( sal_uInt16 nFlags, sal_Bool bReallyVisible );
+    SAL_DLLPRIVATE void        ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible );
     SAL_DLLPRIVATE void        ImplShowAllOverlaps();
     SAL_DLLPRIVATE void        ImplHideAllOverlaps();
     SAL_DLLPRIVATE void        ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt );
-    SAL_DLLPRIVATE void        ImplCallMouseMove( sal_uInt16 nMouseCode, sal_Bool bModChanged = sal_False );
+    SAL_DLLPRIVATE void        ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged = false );
     SAL_DLLPRIVATE void        ImplGenerateMouseMove();
     SAL_DLLPRIVATE void        ImplGrabFocus( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplGrabFocusToDocument( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplInvertFocus( const Rectangle& rRect );
     SAL_DLLPRIVATE void        ImplControlFocus( sal_uInt16 nFlags = 0 );
     SAL_DLLPRIVATE Window*     ImplGetDlgWindow( sal_uInt16 n, sal_uInt16 nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = NULL );
-    SAL_DLLPRIVATE sal_Bool        ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput );
-    SAL_DLLPRIVATE sal_Bool        ImplHasDlgCtrl();
+    SAL_DLLPRIVATE bool        ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput );
+    SAL_DLLPRIVATE bool        ImplHasDlgCtrl();
     SAL_DLLPRIVATE void        ImplDlgCtrlNextWindow();
-    SAL_DLLPRIVATE void        ImplDlgCtrlFocusChanged( Window* pWindow, sal_Bool bGetFocus );
+    SAL_DLLPRIVATE void        ImplDlgCtrlFocusChanged( Window* pWindow, bool bGetFocus );
     SAL_DLLPRIVATE Window*     ImplFindDlgCtrlWindow( Window* pWindow );
     SAL_DLLPRIVATE long        ImplLogicUnitToPixelX( long nX, MapUnit eUnit );
     SAL_DLLPRIVATE long        ImplLogicUnitToPixelY( long nY, MapUnit eUnit );
-    SAL_DLLPRIVATE sal_Bool        ImplIsWindowInFront( const Window* pTestWindow ) const;
+    SAL_DLLPRIVATE bool        ImplIsWindowInFront( const Window* pTestWindow ) const;
     SAL_DLLPRIVATE void        ImplSaveOverlapBackground();
-    SAL_DLLPRIVATE sal_Bool        ImplRestoreOverlapBackground( Region& rInvRegion );
+    SAL_DLLPRIVATE bool        ImplRestoreOverlapBackground( Region& rInvRegion );
     SAL_DLLPRIVATE void        ImplDeleteOverlapBackground();
     SAL_DLLPRIVATE void        ImplInvalidateAllOverlapBackgrounds();
     SAL_DLLPRIVATE static void ImplNewInputContext();
@@ -515,11 +515,11 @@ public:
 
     SAL_DLLPRIVATE static void ImplCalcSymbolRect( Rectangle& rRect );
     SAL_DLLPRIVATE void        ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
-    SAL_DLLPRIVATE sal_Bool        ImplIsAccessibleCandidate() const;
-    SAL_DLLPRIVATE sal_Bool        ImplIsAccessibleNativeFrame() const;
+    SAL_DLLPRIVATE bool        ImplIsAccessibleCandidate() const;
+    SAL_DLLPRIVATE bool        ImplIsAccessibleNativeFrame() const;
     SAL_DLLPRIVATE sal_uInt16      ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const;
-    SAL_DLLPRIVATE Window*     ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, sal_Bool bTopLevel = sal_True ) const;
-    SAL_DLLPRIVATE sal_Bool        ImplRegisterAccessibleNativeFrame();
+    SAL_DLLPRIVATE Window*     ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel = true ) const;
+    SAL_DLLPRIVATE bool        ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplRevokeAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplCallResize();
     SAL_DLLPRIVATE void        ImplCallMove();
@@ -533,15 +533,15 @@ public:
     SAL_DLLPRIVATE ::std::vector<Window *>& ImplGetOwnerDrawList();
     SAL_DLLPRIVATE Window*     ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, sal_Bool bClientOnly ) const;
-    SAL_DLLPRIVATE void        ImplNotifyIconifiedState( sal_Bool bIconified );
+    SAL_DLLPRIVATE Rectangle   ImplGetWindowExtentsRelative( Window *pRelativeWindow, bool bClientOnly ) const;
+    SAL_DLLPRIVATE void        ImplNotifyIconifiedState( bool bIconified );
     SAL_DLLPRIVATE bool        ImplStopDnd();
     SAL_DLLPRIVATE void        ImplStartDnd();
 
     SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
     SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
-    SAL_DLLPRIVATE void        ImplIsInTaskPaneList( sal_Bool mbIsInTaskList );
+    SAL_DLLPRIVATE void        ImplIsInTaskPaneList( bool mbIsInTaskList );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
 
@@ -557,7 +557,7 @@ protected:
     // Single argument ctors shall be explicit.
     explicit            Window( WindowType nType );
 
-            void        SetCompoundControl( sal_Bool bCompound );
+            void        SetCompoundControl( bool bCompound );
 
             void        ImplCallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
@@ -621,12 +621,12 @@ public:
     /*virtual*/ void    RemoveChildEventListener( const Link& rEventListener );
 
     sal_uLong               PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    sal_Bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     void                RemoveUserEvent( sal_uLong nUserEvent );
 
     void                IncrementLockCount();
     void                DecrementLockCount();
-    sal_Bool                IsLocked( sal_Bool bChildren = sal_False ) const;
+    bool                IsLocked( bool bChildren = false ) const;
 
                         // returns the input language used for the last key stroke
                         // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -639,14 +639,14 @@ public:
     WinBits             GetExtendedStyle() const;
     void                SetType( WindowType nType );
     WindowType          GetType() const;
-    sal_Bool                IsSystemWindow() const;
-    sal_Bool                IsDialog() const;
-    sal_Bool                IsMenuFloatingWindow() const;
-    sal_Bool                IsToolbarFloatingWindow() const;
-    sal_Bool                IsTopWindow() const;
+    bool                IsSystemWindow() const;
+    bool                IsDialog() const;
+    bool                IsMenuFloatingWindow() const;
+    bool                IsToolbarFloatingWindow() const;
+    bool                IsTopWindow() const;
     SystemWindow*       GetSystemWindow() const;
 
-    void                EnableAllResize( sal_Bool bEnable = sal_True );
+    void                EnableAllResize( bool bEnable = true );
 
     void                SetBorderStyle( sal_uInt16 nBorderStyle );
     sal_uInt16              GetBorderStyle() const;
@@ -656,17 +656,17 @@ public:
     Size                CalcOutputSize( const Size& rWinSz ) const;
     long                CalcTitleWidth() const;
 
-    void                EnableClipSiblings( sal_Bool bClipSiblings = sal_True );
+    void                EnableClipSiblings( bool bClipSiblings = true );
 
-    void                EnableChildTransparentMode( sal_Bool bEnable = sal_True );
-    sal_Bool                IsChildTransparentModeEnabled() const;
+    void                EnableChildTransparentMode( bool bEnable = true );
+    bool                IsChildTransparentModeEnabled() const;
 
-    void                SetMouseTransparent( sal_Bool bTransparent );
-    sal_Bool                IsMouseTransparent() const;
-    void                SetPaintTransparent( sal_Bool bTransparent );
-    sal_Bool                IsPaintTransparent() const;
-    void                SetDialogControlStart( sal_Bool bStart );
-    sal_Bool                IsDialogControlStart() const;
+    void                SetMouseTransparent( bool bTransparent );
+    bool                IsMouseTransparent() const;
+    void                SetPaintTransparent( bool bTransparent );
+    bool                IsPaintTransparent() const;
+    void                SetDialogControlStart( bool bStart );
+    bool                IsDialogControlStart() const;
     void                SetDialogControlFlags( sal_uInt16 nFlags );
     sal_uInt16              GetDialogControlFlags() const;
 
@@ -676,7 +676,7 @@ public:
         Point   maPos;      // mouse position in output coordinates
     };
     PointerState        GetPointerState();
-    sal_Bool                IsMouseOver();
+    bool                IsMouseOver();
 
     sal_uLong               GetCurrentModButtons();
 
@@ -687,12 +687,12 @@ public:
     const Rectangle*    GetCursorRect() const;
     long                GetCursorExtTextInputWidth() const;
 
-    void                SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical = sal_False );
+    void                SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical = false );
 
     using               OutputDevice::SetSettings;
     virtual void        SetSettings( const AllSettings& rSettings );
     virtual void        SetSettings( const AllSettings& rSettings, sal_Bool bChild );
-    void                UpdateSettings( const AllSettings& rSettings, sal_Bool bChild = sal_False );
+    void                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
     void                SetPointFont( const Font& rFont );
@@ -704,15 +704,15 @@ public:
     void                SetControlFont();
     void                SetControlFont( const Font& rFont );
     Font                GetControlFont() const;
-    sal_Bool                IsControlFont() const;
+    bool                IsControlFont() const;
     void                SetControlForeground();
     void                SetControlForeground( const Color& rColor );
     Color               GetControlForeground() const;
-    sal_Bool                IsControlForeground() const;
+    bool                IsControlForeground() const;
     void                SetControlBackground();
     void                SetControlBackground( const Color& rColor );
     Color               GetControlBackground() const;
-    sal_Bool                IsControlBackground() const;
+    bool                IsControlBackground() const;
 
     void                SetParentClipMode( sal_uInt16 nMode = 0 );
     sal_uInt16              GetParentClipMode() const;
@@ -720,10 +720,10 @@ public:
     void                SetWindowRegionPixel();
     void                SetWindowRegionPixel( const Region& rRegion );
     const Region&       GetWindowRegionPixel() const;
-    sal_Bool                IsWindowRegionPixel() const;
+    bool                IsWindowRegionPixel() const;
     Region              GetWindowClipRegionPixel( sal_uInt16 nFlags = 0 ) const;
     Region              GetPaintRegion() const;
-    sal_Bool                IsInPaint() const;
+    bool                IsInPaint() const;
     // while IsInPaint returns true ExpandPaintClipRegion adds the
     // submitted region to the paint clip region so you can
     // paint additional parts of your window if necessary
@@ -736,19 +736,19 @@ public:
 
     void                Show( bool bVisible = true, sal_uInt16 nFlags = 0 );
     void                Hide() { Show( false ); }
-    sal_Bool                IsVisible() const;
-    sal_Bool                IsReallyVisible() const;
-    sal_Bool                IsReallyShown() const;
-    sal_Bool                IsInInitShow() const;
+    bool                IsVisible() const;
+    bool                IsReallyVisible() const;
+    bool                IsReallyShown() const;
+    bool                IsInInitShow() const;
 
     void                Enable( bool bEnable = true, bool bChild = true );
     void                Disable( bool bChild = true ) { Enable( false, bChild ); }
-    sal_Bool                IsEnabled() const;
+    bool                IsEnabled() const;
 
-    void                EnableInput( bool bEnable = true, sal_Bool bChild = sal_True );
-    void                EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
+    void                EnableInput( bool bEnable = true, bool bChild = true );
+    void                EnableInput( bool bEnable, bool bChild, bool bSysWin,
                                      const Window* pExcludeWindow = NULL );
-    sal_Bool                IsInputEnabled() const;
+    bool                IsInputEnabled() const;
 
     /** Override <code>EnableInput</code>. This can be necessary due to other people
         using EnableInput for whole window hierarchies.
@@ -762,12 +762,12 @@ public:
         @param bChild
         if true children are recursively set to AlwaysEnableInput
     */
-    void                AlwaysEnableInput( sal_Bool bAlways, sal_Bool bChild = sal_True );
+    void                AlwaysEnableInput( bool bAlways, bool bChild = true );
     /** returns the current AlwaysEnableInput state
     @return
     true if window is in AlwaysEnableInput state
     */
-    sal_Bool                IsAlwaysEnableInput() const;
+    bool                IsAlwaysEnableInput() const;
     /** Override <code>EnableInput</code>, counterpart to AlwaysEnableInput.
         Windows with AlwaysDisableInput will not get key events even if enabled
         and input enabled.This can be necessary due to other people using EnableInput
@@ -782,7 +782,7 @@ public:
         @param bChild
         if true children are recursively set to AlwaysDisableInput
     */
-    void                AlwaysDisableInput( sal_Bool bAlways, sal_Bool bChild = sal_True );
+    void                AlwaysDisableInput( bool bAlways, bool bChild = true );
 
     /** usually event handlers (see AddEventListener and AddChildEventListener)
     are not called on disabled, modal or input disabled windows. There are however rare cases
@@ -811,7 +811,7 @@ public:
 
         @returns sal_True if a child or subchild is a running modal window
     */
-    sal_Bool                IsInModalMode() const;
+    bool                IsInModalMode() const;
 
     /**
      *  Necessary for calc ref input handling from modal dialogs
@@ -823,8 +823,8 @@ public:
 
     void                ToTop( sal_uInt16 nFlags = 0 );
     void                SetZOrder( Window* pRefWindow, sal_uInt16 nFlags );
-    void                EnableAlwaysOnTop( sal_Bool bEnable = sal_True );
-    sal_Bool                IsAlwaysOnTopEnabled() const;
+    void                EnableAlwaysOnTop( bool bEnable = true );
+    bool                IsAlwaysOnTopEnabled() const;
 
     virtual void        setPosSizePixel( long nX, long nY,
                                          long nWidth, long nHeight,
@@ -836,8 +836,8 @@ public:
     virtual void        SetPosSizePixel( const Point& rNewPos,
                                          const Size& rNewSize );
     virtual void        SetOutputSizePixel( const Size& rNewSize );
-    sal_Bool                IsDefaultPos() const;
-    sal_Bool                IsDefaultSize() const;
+    bool                IsDefaultPos() const;
+    bool                IsDefaultSize() const;
 
     // those conversion routines might deliver different results during UI mirroring
     Point               OutputToScreenPixel( const Point& rPos ) const;
@@ -853,7 +853,7 @@ public:
     // window extents of the client window, coordinates to be used in SetPosPixel
     Rectangle           GetClientWindowExtentsRelative( Window *pRelativeWindow ) const;
 
-    virtual sal_Bool        IsScrollable() const;
+    virtual bool        IsScrollable() const;
     virtual void        Scroll( long nHorzScroll, long nVertScroll,
                                 sal_uInt16 nFlags = 0 );
     virtual void        Scroll( long nHorzScroll, long nVertScroll,
@@ -862,27 +862,27 @@ public:
     virtual void        Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
     virtual void        Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 );
     void                Validate( sal_uInt16 nFlags = 0 );
-    sal_Bool                HasPaintEvent() const;
+    bool                HasPaintEvent() const;
     void                Update();
     void                Flush();
     void                Sync();
 
     // toggles new docking support, enabled via toolkit
-    void                EnableDocking( sal_Bool bEnable = sal_True );
+    void                EnableDocking( bool bEnable = true );
     // retrieves the single dockingmanager instance
     static DockingManager* GetDockingManager();
 
-    void                EnablePaint( sal_Bool bEnable );
-    sal_Bool                IsPaintEnabled() const;
-    void                SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool                IsUpdateMode() const;
-    void                SetParentUpdateMode( sal_Bool bUpdate );
+    void                EnablePaint( bool bEnable );
+    bool                IsPaintEnabled() const;
+    void                SetUpdateMode( bool bUpdate );
+    bool                IsUpdateMode() const;
+    void                SetParentUpdateMode( bool bUpdate );
 
     void                GrabFocus();
-    sal_Bool                HasFocus() const;
-    sal_Bool                HasChildPathFocus( sal_Bool bSystemWindow = sal_False ) const;
-    sal_Bool                IsActive() const;
-    sal_Bool                HasActiveChildFrame();
+    bool                HasFocus() const;
+    bool                HasChildPathFocus( bool bSystemWindow = false ) const;
+    bool                IsActive() const;
+    bool                HasActiveChildFrame();
     sal_uInt16              GetGetFocusFlags() const;
     void                GrabFocusToDocument();
 
@@ -893,14 +893,14 @@ public:
      */
     void                SetFakeFocus( bool bFocus );
 
-    sal_Bool                IsCompoundControl() const;
+    bool                IsCompoundControl() const;
 
     static sal_uIntPtr  SaveFocus();
-    static sal_Bool         EndSaveFocus( sal_uIntPtr nSaveId, sal_Bool bRestore = sal_True );
+    static bool         EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore = true );
 
     void                CaptureMouse();
     void                ReleaseMouse();
-    sal_Bool                IsMouseCaptured() const;
+    bool                IsMouseCaptured() const;
 
     void                SetPointer( const Pointer& rPointer );
     const Pointer&      GetPointer() const;
@@ -908,17 +908,17 @@ public:
     void                SetPointerPosPixel( const Point& rPos );
     Point               GetPointerPosPixel();
     Point               GetLastPointerPosPixel();
-    void                ShowPointer( sal_Bool bVisible );
+    void                ShowPointer( bool bVisible );
     void                EnterWait();
     void                LeaveWait();
-    sal_Bool                IsWait() const;
+    bool                IsWait() const;
 
     void                SetCursor( Cursor* pCursor );
     Cursor*             GetCursor() const;
 
     void                SetZoom( const Fraction& rZoom );
     const Fraction&     GetZoom() const;
-    sal_Bool                IsZoom() const;
+    bool                IsZoom() const;
     long                CalcZoom( long n ) const;
 
     virtual void      SetText( const OUString& rStr );
@@ -949,8 +949,8 @@ public:
     sal_uInt16              GetChildCount() const;
     Window*             GetChild( sal_uInt16 nChild ) const;
     Window*             GetWindow( sal_uInt16 nType ) const;
-    sal_Bool                IsChild( const Window* pWindow, sal_Bool bSystemWindow = sal_False ) const;
-    sal_Bool                IsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow = sal_False  ) const;
+    bool                IsChild( const Window* pWindow, bool bSystemWindow = false ) const;
+    bool                IsWindowOrChild( const Window* pWindow, bool bSystemWindow = false  ) const;
 
     void                SetData( void* pNewData );
     void*               GetData() const;
@@ -962,11 +962,11 @@ public:
     void                Invert( const Polygon& rPoly, sal_uInt16 nFlags = 0 );
 
     // transparent background for selected or checked items in toolboxes etc.
-    void                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bDrawBorder, sal_Bool bDrawExtBorderOnly );
+    void                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly );
     // the same, but fills a passed Color with a text color complementing the selection background
-    void                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bDrawBorder, sal_Bool bDrawExtBorderOnly, Color* pSelectionTextColor );
+    void                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, Color* pSelectionTextColor );
     // support rounded edges in the selection rect
-    void                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bDrawBorder, sal_Bool bDrawExtBorderOnly, long nCornerRadius, Color* pSelectionTextColor, Color* pPaintColor );
+    void                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, long nCornerRadius, Color* pSelectionTextColor, Color* pPaintColor );
 
     void                ShowTracking( const Rectangle& rRect,
                                       sal_uInt16 nFlags = SHOWTRACK_SMALL );
@@ -977,12 +977,12 @@ public:
 
     void                StartTracking( sal_uInt16 nFlags = 0 );
     void                EndTracking( sal_uInt16 nFlags = 0 );
-    sal_Bool                IsTracking() const;
+    bool                IsTracking() const;
 
     void                StartAutoScroll( sal_uInt16 nFlags );
     void                EndAutoScroll();
 
-    sal_Bool                HandleScrollCommand( const CommandEvent& rCmd,
+    bool                HandleScrollCommand( const CommandEvent& rCmd,
                                              ScrollBar* pHScrl = NULL,
                                              ScrollBar* pVScrl = NULL );
 
@@ -997,7 +997,7 @@ public:
     virtual void                    SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace );
 
     // Accessibility
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible( bool bCreate = true );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     void SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > );
 
@@ -1026,8 +1026,8 @@ public:
 
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
-    sal_Bool    IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath = sal_True );
-    void    SetAccessibilityEventsSuppressed(sal_Bool bSuppressed);
+    bool    IsAccessibilityEventsSuppressed( bool bTraverseParentPath = true );
+    void    SetAccessibilityEventsSuppressed(bool bSuppressed);
 
     /// request XCanvas render interface for this window
     ::com::sun::star::uno::Reference<
@@ -1046,8 +1046,8 @@ public:
     void                    SetWindowPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer, VCLXWindow* pVCLXWindow );
 
     // remember if it was generated by Toolkit
-    sal_Bool                IsCreatedWithToolkit() const;
-    void                    SetCreatedWithToolkit( sal_Bool b );
+    bool                IsCreatedWithToolkit() const;
+    void                    SetCreatedWithToolkit( bool b );
 
             // Deprecated - can use SetAccessibleRelationLabelFor/By nowadys
     virtual Window* GetParentLabelFor( const Window* pLabel ) const;
@@ -1259,8 +1259,8 @@ public:
     //-------------------------------------
 
     // form controls must never use native widgets, this can be toggled here
-    void    EnableNativeWidget( sal_Bool bEnable = sal_True );
-    sal_Bool    IsNativeWidgetEnabled() const;
+    void    EnableNativeWidget( bool bEnable = true );
+    bool    IsNativeWidgetEnabled() const;
 
     // a helper method for a Control's Draw method
     void PaintToDevice( OutputDevice* pDevice, const Point& rPos, const Size& rSize );

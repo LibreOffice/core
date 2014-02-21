@@ -287,7 +287,7 @@ bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
 }
 
 //-----------------------------------------------------------------------
-sal_Bool FmFieldWin::Close()
+bool FmFieldWin::Close()
 {
     return SfxFloatingWindow::Close();
 }

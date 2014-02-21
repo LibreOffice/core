@@ -1862,7 +1862,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
 
     if ( bShowSelection )
         pView->DrawSelectionBackground( CalcFocusRect( pEntry ),
-        bActiveSelection ? 1 : 2 /* highlight */, sal_False /* check */, sal_True /* border */, sal_False /* ext border only */ );
+        bActiveSelection ? 1 : 2 /* highlight */, false /* check */, true /* border */, false /* ext border only */ );
 
     PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, pOut );
 
@@ -3322,7 +3322,7 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     bGrabFocus( sal_False )
 {
     Font aFont( pParent->GetPointFont() );
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( false );
     SetControlFont( aFont );
     if( !pParent->HasFontFillColor() )
     {

@@ -178,8 +178,8 @@ namespace dbaui
 
         // Place icon left of text and both centered in the button.
         SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );
-        EnableImageDisplay( sal_True );
-        EnableTextDisplay( sal_True );
+        EnableImageDisplay( true );
+        EnableTextDisplay( true );
         SetImageAlign( IMAGEALIGN_LEFT );
         SetStyle( GetStyle() | WB_CENTER );
     }

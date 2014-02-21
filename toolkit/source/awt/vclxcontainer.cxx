@@ -157,9 +157,9 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
             if ( bGroupControl )
             {
                 if ( n == 0 )
-                    pWin->SetDialogControlStart( sal_True );
+                    pWin->SetDialogControlStart( true );
                 else
-                    pWin->SetDialogControlStart( sal_False );
+                    pWin->SetDialogControlStart( false );
             }
 
             pPrevWin = pWin;

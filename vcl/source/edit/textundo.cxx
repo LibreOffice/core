@@ -82,9 +82,9 @@ bool TextUndoManager::Undo()
 
     UndoRedoStart();
 
-    mpTextEngine->SetIsInUndo( sal_True );
+    mpTextEngine->SetIsInUndo( true );
     bool bDone = SfxUndoManager::Undo();
-    mpTextEngine->SetIsInUndo( sal_False );
+    mpTextEngine->SetIsInUndo( false );
 
     UndoRedoEnd();
 
@@ -99,9 +99,9 @@ bool TextUndoManager::Redo()
 
     UndoRedoStart();
 
-    mpTextEngine->SetIsInUndo( sal_True );
+    mpTextEngine->SetIsInUndo( true );
     bool bDone = SfxUndoManager::Redo();
-    mpTextEngine->SetIsInUndo( sal_False );
+    mpTextEngine->SetIsInUndo( false );
 
     UndoRedoEnd();
 

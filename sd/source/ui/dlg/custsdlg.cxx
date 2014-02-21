@@ -304,7 +304,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
 
     // Hack: m_pLbPages used to be MultiLB. We don't have VCL builder equivalent
     // of it yet. So enable selecting multiple items here
-    m_pLbPages->EnableMultiSelection( sal_True );
+    m_pLbPages->EnableMultiSelection( true );
 
     // shape 'em a bit
     m_pLbPages->set_width_request(m_pLbPages->approximate_char_width() * 16);

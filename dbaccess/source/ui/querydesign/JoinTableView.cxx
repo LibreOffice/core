@@ -968,7 +968,7 @@ sal_Bool OJoinTableView::ExistsAConn(const OTableWindow* pFrom) const
 
 void OJoinTableView::ClearAll()
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     HideTabWins();
 
@@ -1474,7 +1474,7 @@ void OJoinTableView::StateChanged( StateChangedType nType )
 
 void OJoinTableView::HideTabWins()
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     OTableWindowMap* pTabWins = GetTabWinMap();
     if ( pTabWins )
@@ -1489,7 +1489,7 @@ void OJoinTableView::HideTabWins()
 
     m_pView->getController().setModified(sal_True);
 
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 
 }
 

@@ -135,12 +135,12 @@ namespace pcr
             m_aControlTree.MakeVisible(m_aControlTree.First(), sal_True);
             if (m_aControlTree.FirstSelected())
                 m_aControlTree.Select(m_aControlTree.FirstSelected(), sal_False);
-            m_aNoAssignment.Check(sal_True);
+            m_aNoAssignment.Check(true);
         }
 
         if (!m_bHaveAssignableControl)
         {   // no controls which can be assigned
-            m_aNoAssignment.Check(sal_True);
+            m_aNoAssignment.Check(true);
             m_aNoAssignment.Enable(false);
         }
 

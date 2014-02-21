@@ -74,7 +74,7 @@ void PDFWriter::DrawTextLine(
                              FontStrikeout eStrikeout,
                              FontUnderline eUnderline,
                              FontUnderline eOverline,
-                             sal_Bool bUnderlineAbove )
+                             bool bUnderlineAbove )
 {
     pImplementation->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }

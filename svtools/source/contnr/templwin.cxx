@@ -717,7 +717,7 @@ void SvtFrameWindow_Impl::OpenFile( const OUString& rURL, sal_Bool bPreview, sal
                     // disabling must be done here, does not work in ctor because
                     // execute of the dialog will overwrite it
                     // ( own execute method would help )
-                    pTextWin->EnableInput( false, sal_True );
+                    pTextWin->EnableInput( false, true );
                     if ( pTextWin->IsReallyVisible() )
                     {
                         sal_Bool    b = sal_True;
@@ -1319,7 +1319,7 @@ void SvtTemplateWindow::ReadViewSettings()
 
     // the selected view (details or preview)
     pFrameWin->ToggleView( TI_DOCTEMPLATE_DOCINFO == nSelectedView );
-    aFrameWinTB.CheckItem( (sal_uInt16)nSelectedView, sal_True );
+    aFrameWinTB.CheckItem( (sal_uInt16)nSelectedView, true );
 
     // the split ratio
     sal_Int32 nSplitFileAndFrameSize = aSplitWin.GetItemSize( FILEWIN_ID ) + aSplitWin.GetItemSize( FRAMEWIN_ID );

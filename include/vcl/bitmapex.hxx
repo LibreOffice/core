@@ -58,7 +58,7 @@ private:
     Size                aBitmapSize;
     Color               aTransparentColor;
     TransparentType     eTransparent;
-    sal_Bool            bAlpha;
+    bool            bAlpha;
 
 public:
 
@@ -77,13 +77,13 @@ public:
                         ~BitmapEx();
 
     BitmapEx&           operator=( const BitmapEx& rBitmapEx );
-    sal_Bool                operator==( const BitmapEx& rBitmapEx ) const;
-    sal_Bool                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
-    sal_Bool                operator!() const { return !aBitmap; }
+    bool                operator==( const BitmapEx& rBitmapEx ) const;
+    bool                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
+    bool                operator!() const { return !aBitmap; }
 
-    sal_Bool                IsEqual( const BitmapEx& rBmpEx ) const;
+    bool                IsEqual( const BitmapEx& rBmpEx ) const;
 
-    sal_Bool                IsEmpty() const;
+    bool                IsEmpty() const;
     void                SetEmpty();
     void                Clear();
 
@@ -92,7 +92,7 @@ public:
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt, const Size& rDestSize ) const;
 
-    sal_Bool                IsTransparent() const;
+    bool                IsTransparent() const;
     TransparentType     GetTransparentType() const { return eTransparent; }
 
     Bitmap              GetBitmap( const Color* pTransReplaceColor = NULL ) const;
@@ -100,7 +100,7 @@ public:
 
     BitmapEx            GetColorTransformedBitmapEx() const;
 
-    sal_Bool                IsAlpha() const;
+    bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
     const Size&         GetSizePixel() const { return aBitmapSize; }
@@ -128,7 +128,7 @@ public:
 
         @return sal_True, if the conversion was completed successfully.
      */
-    sal_Bool                Convert( BmpConversion eConversion );
+    bool                Convert( BmpConversion eConversion );
 
     /** Reduce number of colors for the bitmap
 
@@ -140,7 +140,7 @@ public:
 
         @return sal_True, if the color reduction operation was completed successfully.
      */
-    sal_Bool                ReduceColors( sal_uInt16 nNewColorCount,
+    bool                ReduceColors( sal_uInt16 nNewColorCount,
                                       BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
@@ -152,7 +152,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    sal_Bool                Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
+    bool                Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
 
     /** Crop the bitmap
 
@@ -168,7 +168,7 @@ public:
         nothing had to be cropped, because e.g. the crop rectangle
         included the bitmap, sal_False is returned, too!
      */
-    sal_Bool                Crop( const Rectangle& rRectPixel );
+    bool                Crop( const Rectangle& rRectPixel );
 
     /** Expand the bitmap by pixel padding
 
@@ -188,9 +188,9 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    sal_Bool                Expand( sal_uLong nDX, sal_uLong nDY,
+    bool                Expand( sal_uLong nDX, sal_uLong nDY,
                                 const Color* pInitColor = NULL,
-                                sal_Bool bExpandTransparent = sal_False );
+                                bool bExpandTransparent = false );
 
     /** Copy a rectangular area from another bitmap
 
@@ -214,7 +214,7 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    sal_Bool                CopyPixel( const Rectangle& rRectDst,
+    bool                CopyPixel( const Rectangle& rRectDst,
                                    const Rectangle& rRectSrc,
                                    const BitmapEx* pBmpExSrc = NULL );
 
@@ -226,13 +226,13 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Erase( const Color& rFillColor );
+    bool                Erase( const Color& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Invert();
+    bool                Invert();
 
     /** Mirror the bitmap
 
@@ -241,7 +241,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Mirror( sal_uLong nMirrorFlags );
+    bool                Mirror( sal_uLong nMirrorFlags );
 
     /** Scale the bitmap
 
@@ -253,7 +253,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    bool                Scale( const Size& rNewSize, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Scale the bitmap
 
@@ -268,7 +268,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
+    bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Rotate bitmap by the specified angle
 
@@ -283,7 +283,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Rotate( long nAngle10, const Color& rFillColor );
+    bool                Rotate( long nAngle10, const Color& rFillColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -300,7 +300,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
+    bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -320,7 +320,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Replace( const Color* pSearchColors, const Color* pReplaceColors,
+    bool                Replace( const Color* pSearchColors, const Color* pReplaceColors,
                                  sal_uLong nColorCount, const sal_uLong* pTols = NULL );
 
     /** Change various global color characteristics
@@ -350,13 +350,13 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Adjust( short nLuminancePercent = 0,
+    bool                Adjust( short nLuminancePercent = 0,
                                 short nContrastPercent = 0,
                                 short nChannelRPercent = 0,
                                 short nChannelGPercent = 0,
                                 short nChannelBPercent = 0,
                                 double fGamma = 1.0,
-                                sal_Bool bInvert = sal_False );
+                                bool bInvert = false );
 
     /** Apply specified filter to the bitmap
 
@@ -371,7 +371,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                Filter( BmpFilter eFilter,
+    bool                Filter( BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = NULL,
                                 const Link* pProgress = NULL );
 

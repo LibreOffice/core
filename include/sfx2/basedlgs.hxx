@@ -105,7 +105,7 @@ protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const OString& rID, const OUString& rUIXMLDescription );
                             ~SfxModelessDialog();
-    virtual sal_Bool            Close();
+    virtual bool            Close();
     virtual void            Resize();
     virtual void            Move();
     virtual void            StateChanged( StateChangedType nStateChange );
@@ -144,7 +144,7 @@ protected:
                             ~SfxFloatingWindow();
 
     virtual void            StateChanged( StateChangedType nStateChange );
-    virtual sal_Bool            Close();
+    virtual bool            Close();
     virtual void            Resize();
     virtual void            Move();
     virtual bool            Notify( NotifyEvent& rNEvt );

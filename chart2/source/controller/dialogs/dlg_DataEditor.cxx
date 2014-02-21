@@ -187,12 +187,12 @@ void DataEditor::UpdateData()
     m_xBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
 }
 
-sal_Bool DataEditor::Close()
+bool DataEditor::Close()
 {
     if( ApplyChangesToModel() )
         return ModalDialog::Close();
     else
-        return sal_True;
+        return true;
 }
 
 bool DataEditor::ApplyChangesToModel()

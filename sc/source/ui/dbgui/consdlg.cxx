@@ -145,7 +145,7 @@ void ScConsolidateDlg::Init()
 
     // Hack: pLbConsAreas used to be MultiLB. We don't have VCL builder equivalent
     // of it yet. So enable selecting multiple items here
-    pLbConsAreas->EnableMultiSelection( sal_True );
+    pLbConsAreas->EnableMultiSelection( true );
 
     pLbConsAreas->set_width_request(pLbConsAreas->approximate_char_width() * 16);
     pLbConsAreas->SetDropDownLineCount(5);
@@ -263,7 +263,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-sal_Bool ScConsolidateDlg::Close()
+bool ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }

@@ -75,7 +75,7 @@ public:
     ~PrinterColor ()
     {}
 
-    sal_Bool        Is () const
+    bool        Is () const
     { return meColorspace != eInvalid; }
 
     ColorSpace      GetColorSpace () const
@@ -86,14 +86,14 @@ public:
     { return mnGreen; }
     sal_uInt16      GetBlue () const
     { return mnBlue; }
-    sal_Bool        operator== (const PrinterColor& aColor) const
+    bool        operator== (const PrinterColor& aColor) const
     {
         return aColor.Is() && this->Is()
             && mnRed   == aColor.mnRed
             && mnGreen == aColor.mnGreen
             && mnBlue  == aColor.mnBlue;
     }
-    sal_Bool        operator!= (const PrinterColor& aColor) const
+    bool        operator!= (const PrinterColor& aColor) const
     { return ! (aColor==*this); }
     PrinterColor&   operator= (const PrinterColor& aColor)
     {
@@ -189,8 +189,8 @@ private:
     sal_uInt16      mnDepth;
 
     sal_uInt16      mnPSLevel;
-    sal_Bool        mbColor;
-    sal_Bool        mbUploadPS42Fonts;
+    bool        mbColor;
+    bool        mbUploadPS42Fonts;
 
     osl::File*      mpPageHeader;
     osl::File*      mpPageBody;
@@ -219,7 +219,7 @@ private:
 
     /* bitmap drawing implementation */
 
-    sal_Bool    mbCompressBmp;
+    bool    mbCompressBmp;
 
     void    DrawPS1GrayImage      (const PrinterBmp& rBitmap, const Rectangle& rArea);
     void    writePS2ImageHeader   (const Rectangle& rArea, psp::ImageType nType);
@@ -232,7 +232,7 @@ private:
     /* clip region */
 
     std::list< Rectangle > maClipRegion;
-    sal_Bool JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
+    bool JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
                                          Point& aOldPoint, sal_Int32& nColumn );
 
     /* color settings */
@@ -247,7 +247,7 @@ private:
 
     /* font */
     friend class Font2;
-    int             getCharWidth (sal_Bool b_vert, sal_Unicode n_char,
+    int             getCharWidth (bool b_vert, sal_Unicode n_char,
                                   CharacterMetric *p_bbox);
     fontID          getCharMetric (const Font2 &rFont, sal_Unicode n_char,
                                    CharacterMetric *p_bbox);
@@ -321,8 +321,8 @@ public:
 public:
     PrinterGfx();
     ~PrinterGfx();
-    sal_Bool        Init (PrinterJob &rPrinterSpec);
-    sal_Bool        Init (const JobData& rData);
+    bool        Init (PrinterJob &rPrinterSpec);
+    bool        Init (const JobData& rData);
     void            Clear();
 
     // query depth
@@ -331,7 +331,7 @@ public:
     // clip region
     void            ResetClipRegion ();
     void            BeginSetClipRegion (sal_uInt32);
-    sal_Bool        UnionClipRegion (sal_Int32 nX, sal_Int32 nY,
+    bool        UnionClipRegion (sal_Int32 nX, sal_Int32 nY,
                                      sal_Int32 nDX, sal_Int32 nDY);
     void            EndSetClipRegion ();
 
@@ -364,7 +364,7 @@ public:
                                      const sal_uInt8* const* pFlgAry);
 
     // eps
-    sal_Bool        DrawEPS ( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);
+    bool        DrawEPS ( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);
 
     // image drawing
     void            DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,

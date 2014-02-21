@@ -96,7 +96,7 @@ IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberCharHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwInsFootNoteDlg, NumberEditHdl)
 {
-    m_pNumberCharBtn->Check( sal_True );
+    m_pNumberCharBtn->Check( true );
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() );
 
     return 0;
@@ -112,7 +112,7 @@ IMPL_LINK_NOARG_INLINE_END(SwInsFootNoteDlg, NumberAutoBtnHdl)
 
 IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
 {
-    m_pNumberCharBtn->Check( sal_True );
+    m_pNumberCharBtn->Check( true );
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
     rSh.GetCurAttr( aSet );

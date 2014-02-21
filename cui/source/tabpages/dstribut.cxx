@@ -105,34 +105,34 @@ void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 
 void SvxDistributePage::Reset(const SfxItemSet& )
 {
-    m_pBtnHorNone->SetState(sal_False);
-    m_pBtnHorLeft->SetState(sal_False);
-    m_pBtnHorCenter->SetState(sal_False);
-    m_pBtnHorDistance->SetState(sal_False);
-    m_pBtnHorRight->SetState(sal_False);
+    m_pBtnHorNone->SetState(false);
+    m_pBtnHorLeft->SetState(false);
+    m_pBtnHorCenter->SetState(false);
+    m_pBtnHorDistance->SetState(false);
+    m_pBtnHorRight->SetState(false);
 
     switch(m_eDistributeHor)
     {
-        case SvxDistributeHorizontalNone : m_pBtnHorNone->SetState(sal_True); break;
-        case SvxDistributeHorizontalLeft : m_pBtnHorLeft->SetState(sal_True); break;
-        case SvxDistributeHorizontalCenter : m_pBtnHorCenter->SetState(sal_True); break;
-        case SvxDistributeHorizontalDistance : m_pBtnHorDistance->SetState(sal_True); break;
-        case SvxDistributeHorizontalRight    : m_pBtnHorRight->SetState(sal_True);    break;
+        case SvxDistributeHorizontalNone : m_pBtnHorNone->SetState(true); break;
+        case SvxDistributeHorizontalLeft : m_pBtnHorLeft->SetState(true); break;
+        case SvxDistributeHorizontalCenter : m_pBtnHorCenter->SetState(true); break;
+        case SvxDistributeHorizontalDistance : m_pBtnHorDistance->SetState(true); break;
+        case SvxDistributeHorizontalRight    : m_pBtnHorRight->SetState(true);    break;
     }
 
-    m_pBtnVerNone->SetState(sal_False);
-    m_pBtnVerTop->SetState(sal_False);
-    m_pBtnVerCenter->SetState(sal_False);
-    m_pBtnVerDistance->SetState(sal_False);
-    m_pBtnVerBottom->SetState(sal_False);
+    m_pBtnVerNone->SetState(false);
+    m_pBtnVerTop->SetState(false);
+    m_pBtnVerCenter->SetState(false);
+    m_pBtnVerDistance->SetState(false);
+    m_pBtnVerBottom->SetState(false);
 
     switch(m_eDistributeVer)
     {
-        case SvxDistributeVerticalNone : m_pBtnVerNone->SetState(sal_True); break;
-        case SvxDistributeVerticalTop : m_pBtnVerTop->SetState(sal_True); break;
-        case SvxDistributeVerticalCenter : m_pBtnVerCenter->SetState(sal_True); break;
-        case SvxDistributeVerticalDistance : m_pBtnVerDistance->SetState(sal_True); break;
-        case SvxDistributeVerticalBottom : m_pBtnVerBottom->SetState(sal_True); break;
+        case SvxDistributeVerticalNone : m_pBtnVerNone->SetState(true); break;
+        case SvxDistributeVerticalTop : m_pBtnVerTop->SetState(true); break;
+        case SvxDistributeVerticalCenter : m_pBtnVerCenter->SetState(true); break;
+        case SvxDistributeVerticalDistance : m_pBtnVerDistance->SetState(true); break;
+        case SvxDistributeVerticalBottom : m_pBtnVerBottom->SetState(true); break;
     }
 }
 

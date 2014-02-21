@@ -53,7 +53,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     mbMarkWndOpen           ( sal_False )
 {
     // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (sal_False);
+    maBtBrowse.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();
@@ -154,7 +154,7 @@ void SvxHyperlinkInternetTp::setFTPUser(const OUString& rUser, const OUString& r
     maFtPassword.Enable ();
     maEdLogin.Enable ();
     maEdPassword.Enable ();
-    maCbAnonymous.Check(sal_False);
+    maCbAnonymous.Check(false);
 }
 
 /*************************************************************************

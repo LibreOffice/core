@@ -27,7 +27,7 @@ class VCLPLUG_GEN_PUBLIC SalI18N_KeyboardExtension
 {
 private:
 
-    sal_Bool            mbUseExtension;
+    bool            mbUseExtension;
     sal_uInt32          mnDefaultGroup;
     sal_uInt32          mnGroup;
     int                 mnEventBase;
@@ -39,9 +39,9 @@ public:
                         SalI18N_KeyboardExtension( Display *pDisplay );
     inline              ~SalI18N_KeyboardExtension();
 
-    inline sal_Bool     UseExtension() const ;      // server and client support the
+    inline bool     UseExtension() const ;      // server and client support the
                                                     // extension
-    inline void         UseExtension( sal_Bool bState );// used to disable the Extension
+    inline void         UseExtension( bool bState );// used to disable the Extension
 
     void                Dispatch( XEvent *pEvent ); // keep track of group changes
 
@@ -59,14 +59,14 @@ SalI18N_KeyboardExtension::~SalI18N_KeyboardExtension()
 {
 }
 
-inline sal_Bool
+inline bool
 SalI18N_KeyboardExtension::UseExtension() const
 {
     return mbUseExtension;
 }
 
 inline void
-SalI18N_KeyboardExtension::UseExtension( sal_Bool bState )
+SalI18N_KeyboardExtension::UseExtension( bool bState )
 {
     mbUseExtension = mbUseExtension && bState;
 }

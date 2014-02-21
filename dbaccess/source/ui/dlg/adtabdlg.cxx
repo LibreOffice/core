@@ -371,15 +371,15 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_pTableList->Show( true );  m_pCaseTables->Check( sal_True );
-        m_pQueryList->Show( false ); m_pCaseQueries->Check( sal_False );
+        m_pTableList->Show( true );  m_pCaseTables->Check( true );
+        m_pQueryList->Show( false ); m_pCaseQueries->Check( false );
         m_xCurrentList.reset( new TableListFacade( *m_pTableList, m_rContext.getConnection() ) );
         m_pTableList->GrabFocus();
         break;
 
     case Queries:
-        m_pTableList->Show( false ); m_pCaseTables->Check( sal_False );
-        m_pQueryList->Show( true );  m_pCaseQueries->Check( sal_True );
+        m_pTableList->Show( false ); m_pCaseTables->Check( false );
+        m_pQueryList->Show( true );  m_pCaseQueries->Check( true );
         m_xCurrentList.reset( new QueryListFacade( *m_pQueryList, m_rContext.getConnection() ) );
         m_pQueryList->GrabFocus();
         break;
@@ -433,7 +433,7 @@ IMPL_LINK( OAddTableDlg, TableListSelectHdl, void*, /*EMPTY_ARG*/ )
 
 IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
 {
-    return Close();
+    return int(Close());
 }
 
 IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
@@ -445,7 +445,7 @@ IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
     return 0;
 }
 
-sal_Bool OAddTableDlg::Close()
+bool OAddTableDlg::Close()
 {
     m_rContext.onWindowClosing( this );
     return ModelessDialog::Close();

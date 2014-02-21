@@ -54,8 +54,8 @@ public:
     void            setStepTime( sal_Int32 nStepTime )  { mnStepTime = nStepTime; }
     sal_Int32       getStepTime() const                 { return mnStepTime; }
 
-    void            setRepeat( sal_Bool bRepeat )       { mbRepeat = bRepeat; }
-    sal_Bool        getRepeat() const                   { return mbRepeat; }
+    void            setRepeat( bool bRepeat )       { mbRepeat = bRepeat; }
+    bool        getRepeat() const                   { return mbRepeat; }
 
     // animation control
     void start();
@@ -79,7 +79,7 @@ private:
 private:
     ::std::vector< Image >  maImageList;
 
-    sal_Bool    mbRepeat;
+    bool    mbRepeat;
     sal_Int32   mnStepTime;
     sal_Int32   mnCurStep;
     sal_Int32   mnStepCount;

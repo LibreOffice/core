@@ -989,11 +989,11 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     {
         if( pAnnotationWindow->IsProtected() || bReadOnly )
         {
-            pMenu->EnableItem( SID_ATTR_CHAR_WEIGHT, sal_False );
-            pMenu->EnableItem( SID_ATTR_CHAR_POSTURE, sal_False );
-            pMenu->EnableItem( SID_ATTR_CHAR_UNDERLINE, sal_False );
-            pMenu->EnableItem( SID_ATTR_CHAR_STRIKEOUT, sal_False );
-            pMenu->EnableItem( SID_PASTE, sal_False );
+            pMenu->EnableItem( SID_ATTR_CHAR_WEIGHT, false );
+            pMenu->EnableItem( SID_ATTR_CHAR_POSTURE, false );
+            pMenu->EnableItem( SID_ATTR_CHAR_UNDERLINE, false );
+            pMenu->EnableItem( SID_ATTR_CHAR_STRIKEOUT, false );
+            pMenu->EnableItem( SID_PASTE, false );
         }
         else
         {

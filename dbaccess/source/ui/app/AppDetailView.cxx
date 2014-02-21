@@ -107,7 +107,7 @@ void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )
         {
             // draw a selection background
             bool bIsMouseDownEntry = ( _pEntry == m_pMouseDownEntry );
-            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, sal_False, sal_True, sal_False );
+            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, false, true, false );
 
             if ( bIsMouseDownEntry )
             {

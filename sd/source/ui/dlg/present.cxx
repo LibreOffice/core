@@ -137,11 +137,11 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aCbxAutoLogo->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_SHOW_PAUSELOGO ) ).GetValue() );
 
     if( bWindow )
-        aRbtWindow->Check( sal_True );
+        aRbtWindow->Check( true );
     else if( bEndless )
-        aRbtAuto->Check( sal_True );
+        aRbtAuto->Check( true );
     else
-        aRbtStandard->Check( sal_True );
+        aRbtStandard->Check( true );
 
     InitMonitorSettings();
 
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
     if( bWindow )
     {
         aCbxAlwaysOnTop->Enable( false );
-        aCbxAlwaysOnTop->Check( sal_False );
+        aCbxAlwaysOnTop->Check( false );
     }
     else
         aCbxAlwaysOnTop->Enable();

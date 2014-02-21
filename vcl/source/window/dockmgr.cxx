@@ -73,7 +73,7 @@ public:
     virtual void    Roll();
     virtual void    PopupModeEnd();
     virtual void    Resizing( Size& rSize );
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
@@ -96,8 +96,8 @@ ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
     {
         SetSettings( pDockingWin->GetWindow()->GetSettings() );
         Enable( pDockingWin->GetWindow()->IsEnabled(), false );
-        EnableInput( pDockingWin->GetWindow()->IsInputEnabled(), sal_False );
-        AlwaysEnableInput( pDockingWin->GetWindow()->IsAlwaysEnableInput(), sal_False );
+        EnableInput( pDockingWin->GetWindow()->IsInputEnabled(), false );
+        AlwaysEnableInput( pDockingWin->GetWindow()->IsAlwaysEnableInput(), false );
         EnableAlwaysOnTop( pDockingWin->GetWindow()->IsAlwaysOnTopEnabled() );
         SetActivateMode( pDockingWin->GetWindow()->GetActivateMode() );
     }
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
     else if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
-        mpDockWin->EndDocking( maDockRect, sal_False );
+        mpDockWin->EndDocking( maDockRect, false );
     }
     else
     {
@@ -157,7 +157,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
     if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
-        mpDockWin->EndDocking( maDockRect, sal_True );
+        mpDockWin->EndDocking( maDockRect, true );
     }
     else
     {
@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
         if( ! mpDockWin->IsDocking() )
             mpDockWin->StartDocking( aMousePos, maDockRect );
 
-        sal_Bool bFloatMode = mpDockWin->Docking( aMousePos, maDockRect );
+        bool bFloatMode = mpDockWin->Docking( aMousePos, maDockRect );
 
         if( ! bFloatMode )
         {
@@ -327,7 +327,7 @@ void ImplDockFloatWin2::Resizing( Size& rSize )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplDockFloatWin2::Close()
+bool ImplDockFloatWin2::Close()
 {
     return mpDockWin->Close();
 }
@@ -363,7 +363,7 @@ ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const Window 
     return NULL;
 }
 
-sal_Bool DockingManager::IsDockable( const Window *pWindow )
+bool DockingManager::IsDockable( const Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
 
@@ -374,22 +374,22 @@ sal_Bool DockingManager::IsDockable( const Window *pWindow )
     return (pWrapper != NULL);
 }
 
-sal_Bool DockingManager::IsFloating( const Window *pWindow )
+bool DockingManager::IsFloating( const Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
         return pWrapper->IsFloatingMode();
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool DockingManager::IsLocked( const Window *pWindow )
+bool DockingManager::IsLocked( const Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper && pWrapper->IsLocked() )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 void DockingManager::Lock( const Window *pWindow )
@@ -406,7 +406,7 @@ void DockingManager::Unlock( const Window *pWindow )
         pWrapper->Unlock();
 }
 
-void DockingManager::SetFloatingMode( const Window *pWindow, sal_Bool bFloating )
+void DockingManager::SetFloatingMode( const Window *pWindow, bool bFloating )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
@@ -428,13 +428,13 @@ void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWin
                     FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
 }
 
-sal_Bool DockingManager::IsInPopupMode( const Window *pWindow )
+bool DockingManager::IsInPopupMode( const Window *pWindow )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper && pWrapper->IsInPopupMode() )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
@@ -669,9 +669,9 @@ void ImplPopupFloatWin::DrawBorder()
 
 void ImplPopupFloatWin::DrawGrip()
 {
-    sal_Bool bLinecolor     = IsLineColor();
+    bool bLinecolor     = IsLineColor();
     Color aLinecolor    = GetLineColor();
-    sal_Bool bFillcolor     = IsFillColor();
+    bool bFillcolor     = IsFillColor();
     Color aFillcolor    = GetFillColor();
 
     // draw background
@@ -684,7 +684,7 @@ void ImplPopupFloatWin::DrawGrip()
     if( mbHighlight )
     {
         Erase( aRect );
-        DrawSelectionBackground( aRect, 2, sal_False, sal_True, sal_False );
+        DrawSelectionBackground( aRect, 2, false, true, false );
     }
     else
     {
@@ -846,15 +846,15 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const Window *pWindow )
 
     mpDockingWindow = (Window*) pWindow;
     mpParent        = pWindow->GetParent();
-    mbDockable      = sal_True;
-    mbLocked        = sal_False;
+    mbDockable      = true;
+    mbLocked        = false;
     mnFloatBits     = WB_BORDER | WB_CLOSEABLE | WB_SIZEABLE | (pWindow->GetStyle() & DOCKWIN_FLOATSTYLES);
     DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow );
     if( pDockWin )
         mnFloatBits = pDockWin->GetFloatStyle();
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
-    mbStartDockingEnabled = sal_False;
+    mbStartDockingEnabled = false;
 }
 
 ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
@@ -862,23 +862,23 @@ ImplDockingWindowWrapper::~ImplDockingWindowWrapper()
     if ( IsFloatingMode() )
     {
         GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
-        SetFloatingMode( sal_False );
+        SetFloatingMode( false );
     }
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
+bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 {
     if ( !mbDockable )
-        return sal_False;
+        return false;
 
     if( !mbStartDockingEnabled )
-        return sal_False;
+        return false;
 
     maMouseOff      = rPos;
     maMouseStart    = maMouseOff;
-    mbDocking       = sal_True;
+    mbDocking       = true;
     mbLastFloatMode = IsFloatingMode();
     mbStartFloat    = mbLastFloatMode;
 
@@ -922,7 +922,7 @@ sal_Bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
     GetWindow()->ImplGetFrameWindow()->ImplUpdateAll();
 
     GetWindow()->StartTracking( STARTTRACK_KEYMOD );
-    return sal_True;
+    return true;
 }
 
 // =======================================================================
@@ -933,13 +933,13 @@ void ImplDockingWindowWrapper::ImplInitData()
 
     //GetWindow()->mpWindowImpl->mbDockWin  = sal_True;     // TODO: must be eliminated
     mpFloatWin          = NULL;
-    mbDockCanceled      = sal_False;
-    mbFloatPrevented    = sal_False;
-    mbDocking           = sal_False;
-    mbPined             = sal_False;
-    mbRollUp            = sal_False;
-    mbDockBtn           = sal_False;
-    mbHideBtn           = sal_False;
+    mbDockCanceled      = false;
+    mbFloatPrevented    = false;
+    mbDocking           = false;
+    mbPined             = false;
+    mbRollUp            = false;
+    mbDockBtn           = false;
+    mbHideBtn           = false;
     maMaxOutSize        = Size( SHRT_MAX, SHRT_MAX );
 }
 
@@ -952,13 +952,13 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
     {
         if ( rTEvt.IsTrackingEnded() )
         {
-            mbDocking = sal_False;
+            mbDocking = false;
             GetWindow()->HideTracking();
             if ( rTEvt.IsTrackingCanceled() )
             {
-                mbDockCanceled = sal_True;
+                mbDockCanceled = true;
                 EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
-                mbDockCanceled = sal_False;
+                mbDockCanceled = false;
             }
             else
                 EndDocking( Rectangle( Point( mnTrackX, mnTrackY ), Size( mnTrackWidth, mnTrackHeight ) ), mbLastFloatMode );
@@ -986,9 +986,9 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             aPos.X()    += maMouseOff.X();
             aPos.Y()    += maMouseOff.Y();
 
-            sal_Bool bFloatMode = Docking( aPos, aTrackRect );
+            bool bFloatMode = Docking( aPos, aTrackRect );
 
-            mbFloatPrevented = sal_False;
+            mbFloatPrevented = false;
             if ( mbLastFloatMode != bFloatMode )
             {
                 if ( bFloatMode )
@@ -1042,12 +1042,12 @@ void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRe
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_STARTDOCKING, &data );
-    mbDocking = sal_True;
+    mbDocking = true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
+bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
@@ -1058,7 +1058,7 @@ sal_Bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRec
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
+void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMode )
 {
     Rectangle aRect( rRect );
 
@@ -1091,15 +1091,15 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, sal_Bool bFlo
     EndDockingData data( aRect, IsFloatingMode(), IsDockingCanceled() );
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_ENDDOCKING, &data );
 
-    mbDocking = sal_False;
+    mbDocking = false;
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
-    mbStartDockingEnabled = sal_False;
+    mbStartDockingEnabled = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
+bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 {
     sal_Bool bFloating = sal_True;
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_PREPARETOGGLEFLOATING, &bFloating );
@@ -1108,10 +1108,10 @@ sal_Bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplDockingWindowWrapper::Close()
+bool ImplDockingWindowWrapper::Close()
 {
     // TODO: send event
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1128,7 +1128,7 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
-    mbStartDockingEnabled = sal_False;
+    mbStartDockingEnabled = false;
 }
 
 // -----------------------------------------------------------------------
@@ -1182,7 +1182,7 @@ void ImplDockingWindowWrapper::Resizing( Size& rSize )
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible )
+void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
 {
     if ( mpFloatWin )
         mpFloatWin->ShowTitleButton( nButton, bVisible );
@@ -1291,17 +1291,17 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
 }
 
 
-sal_Bool ImplDockingWindowWrapper::IsInPopupMode() const
+bool ImplDockingWindowWrapper::IsInPopupMode() const
 {
     if( GetFloatingWindow() )
         return GetFloatingWindow()->IsInPopupMode();
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::SetFloatingMode( sal_Bool bFloatMode )
+void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 {
     // do nothing if window is docked and locked
     if( !IsFloatingMode() && IsLocked() )
@@ -1311,7 +1311,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( sal_Bool bFloatMode )
     {
         if ( PrepareToggleFloatingMode() )
         {
-            sal_Bool bVisible = GetWindow()->IsVisible();
+            bool bVisible = GetWindow()->IsVisible();
 
             if ( bFloatMode )
             {
@@ -1478,7 +1478,7 @@ void ImplDockingWindowWrapper::SetMaxOutputSizePixel( const Size& rSize )
     maMaxOutSize = rSize;
 }
 
-sal_Bool ImplDockingWindowWrapper::IsFloatingMode() const
+bool ImplDockingWindowWrapper::IsFloatingMode() const
 {
     return (mpFloatWin != NULL);
 }
@@ -1496,7 +1496,7 @@ Rectangle  ImplDockingWindowWrapper::GetDragArea() const
 
 void ImplDockingWindowWrapper::Lock()
 {
-    mbLocked = sal_True;
+    mbLocked = true;
     // only toolbars support locking
     ToolBox *pToolBox = dynamic_cast< ToolBox * >( GetWindow() );
     if( pToolBox )
@@ -1505,14 +1505,14 @@ void ImplDockingWindowWrapper::Lock()
 
 void ImplDockingWindowWrapper::Unlock()
 {
-    mbLocked = sal_False;
+    mbLocked = false;
     // only toolbars support locking
     ToolBox *pToolBox = dynamic_cast< ToolBox * >( GetWindow() );
     if( pToolBox )
         pToolBox->Lock( mbLocked );
 }
 
-sal_Bool ImplDockingWindowWrapper::IsLocked() const
+bool ImplDockingWindowWrapper::IsLocked() const
 {
     return mbLocked;
 }

@@ -282,7 +282,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
 
     const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
     const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
-    aTemplateLb.SetUpdateMode(sal_False);
+    aTemplateLb.SetUpdateMode(false);
     aTemplateLb.Clear();
     OUString aSel = aRegionLb.GetSelectEntry();
     sal_Int32 nc = aSel.indexOf('(');
@@ -293,7 +293,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     for (sal_uInt16 i = 0; i < nCount; ++i)
         aTemplateLb.InsertEntry(aTemplates.GetName(nRegion, i));
     aTemplateLb.SelectEntryPos(0);
-    aTemplateLb.SetUpdateMode(sal_True);
+    aTemplateLb.SetUpdateMode(true);
     aTemplateLb.Invalidate();
     aTemplateLb.Update();
     TemplateSelect(&aTemplateLb);

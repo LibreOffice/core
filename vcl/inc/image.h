@@ -119,7 +119,7 @@ struct ImplImageRefData
                     ImplImageRefData() {}    // Um Warning zu umgehen
                     ~ImplImageRefData();
 
-    sal_Bool            IsEqual( const ImplImageRefData& rData );
+    bool            IsEqual( const ImplImageRefData& rData );
 };
 
 // ----------------
@@ -134,7 +134,7 @@ struct ImplImageData
                     ImplImageData( const BitmapEx& rBmpEx );
                     ~ImplImageData();
 
-    sal_Bool            IsEqual( const ImplImageData& rData );
+    bool            IsEqual( const ImplImageData& rData );
 };
 
 // -------------

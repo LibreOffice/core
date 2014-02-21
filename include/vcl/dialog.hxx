@@ -47,10 +47,10 @@ private:
     Dialog*         mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
     long            mnMousePositioned;
-    sal_Bool            mbInExecute;
-    sal_Bool            mbOldSaveBack;
-    sal_Bool            mbInClose;
-    sal_Bool            mbModalMode;
+    bool            mbInExecute;
+    bool            mbOldSaveBack;
+    bool            mbInClose;
+    bool            mbModalMode;
     bool            mbIsDefferedInit;
     bool            mbIsCalculatingInitialLayoutSize;
     Timer           maLayoutTimer;
@@ -75,7 +75,7 @@ protected:
 
     SAL_DLLPRIVATE void    setPosSizeOnContainee(Size aSize, VclContainer &rBox);
 public:
-    SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
+    SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
     SAL_DLLPRIVATE void doDeferredInit(bool bResizable);
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
@@ -109,10 +109,10 @@ public:
     VclButtonBox* get_action_area();
     VclBox* get_content_area();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     virtual short   Execute();
-    sal_Bool            IsInExecute() const { return mbInExecute; }
+    bool            IsInExecute() const { return mbInExecute; }
 
     virtual void      SetText( const OUString& rStr );
     virtual OUString  GetText() const;
@@ -124,7 +124,7 @@ public:
     virtual void    StartExecuteModal( const Link& rEndDialogHdl );
     long            GetResult() const;
 private:
-    sal_Bool            ImplStartExecuteModal();
+    bool            ImplStartExecuteModal();
     void            ImplEndExecuteModal();
 public:
 
@@ -137,9 +137,9 @@ public:
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
 
-    void            SetModalInputMode( sal_Bool bModal );
-    void            SetModalInputMode( sal_Bool bModal, sal_Bool bSubModalDialogs );
-    sal_Bool            IsModalInputMode() const { return mbModalMode; }
+    void            SetModalInputMode( bool bModal );
+    void            SetModalInputMode( bool bModal, bool bSubModalDialogs );
+    bool            IsModalInputMode() const { return mbModalMode; }
 
     void            GrabFocusToFirstControl();
 };
@@ -172,7 +172,7 @@ public:
 
 protected:
     using Window::Show;
-    void            Show( sal_Bool bVisible = sal_True );
+    void            Show( bool bVisible = true );
     using Window::Hide;
     void            Hide();
 

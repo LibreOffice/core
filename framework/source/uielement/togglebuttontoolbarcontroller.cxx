@@ -119,15 +119,15 @@ throw (::com::sun::star::uno::RuntimeException)
             OUString aLabel( m_aDropdownMenuList[i] );
             aPopup.InsertItem( sal_uInt16( i+1 ), aLabel );
             if ( aLabel == m_aCurrentSelection )
-                aPopup.CheckItem( sal_uInt16( i+1 ), sal_True );
+                aPopup.CheckItem( sal_uInt16( i+1 ), true );
             else
-                aPopup.CheckItem( sal_uInt16( i+1 ), sal_False );
+                aPopup.CheckItem( sal_uInt16( i+1 ), false );
         }
 
-        m_pToolbar->SetItemDown( m_nID, sal_True );
+        m_pToolbar->SetItemDown( m_nID, true );
         aPopup.SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
         aPopup.Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
-        m_pToolbar->SetItemDown( m_nID, sal_False );
+        m_pToolbar->SetItemDown( m_nID, false );
     }
 
     return xWindow;

@@ -43,14 +43,14 @@ class KDESalGraphics : public X11SalGraphics
             @param part Specification of the widget's part if it consists of more than one.
             @return true if the platform supports native drawing of the widget type defined by part.
         */
-        virtual sal_Bool IsNativeControlSupported( ControlType type, ControlPart part );
+        virtual bool IsNativeControlSupported( ControlType type, ControlPart part );
 
         /** Test whether the position is in the native widget.
             If the return value is TRUE, bIsInside contains information whether
             aPos was or was not inside the native widget specified by the
             type/part combination.
         */
-        virtual sal_Bool hitTestNativeControl( ControlType type, ControlPart part,
+        virtual bool hitTestNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, const Point& aPos,
                                         bool& rIsInside ) SAL_OVERRIDE;
         /** Draw the requested control described by part/nControlState.
@@ -64,7 +64,7 @@ class KDESalGraphics : public X11SalGraphics
             @param aCaption
             A caption or title string (like button text etc.)
         */
-        virtual sal_Bool drawNativeControl( ControlType type, ControlPart part,
+        virtual bool drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& aValue,
                                         const OUString& aCaption );
@@ -86,7 +86,7 @@ class KDESalGraphics : public X11SalGraphics
             @param aCaption
             A caption or title string (like button text etc.)
         */
-        virtual sal_Bool getNativeControlRegion( ControlType type, ControlPart part,
+        virtual bool getNativeControlRegion( ControlType type, ControlPart part,
                                             const Rectangle& rControlRegion, ControlState nControlState,
                                             const ImplControlValue& aValue,
                                             const OUString& aCaption,

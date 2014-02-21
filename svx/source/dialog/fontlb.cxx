@@ -94,7 +94,7 @@ SvxFontListBox::SvxFontListBox(Window* pParent, WinBits nStyle)
     , maStdFont(GetFont())
     , mbUseFont(false)
 {
-    maStdFont.SetTransparent(sal_True);
+    maStdFont.SetTransparent(true);
     maEntryFont = maStdFont;
 }
 

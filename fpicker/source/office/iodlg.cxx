@@ -2899,7 +2899,7 @@ void SvtFileDialog::AddControls_Impl( )
     {
         _pImp->_pCbAutoExtension = new CheckBox( this, SvtResId( CB_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
-        _pImp->_pCbAutoExtension->Check( sal_True );
+        _pImp->_pCbAutoExtension->Check( true );
         AddControl( _pImp->_pCbAutoExtension );
         ReleaseOwnership( _pImp->_pCbAutoExtension );
         _pImp->_pCbAutoExtension->SetClickHdl( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );

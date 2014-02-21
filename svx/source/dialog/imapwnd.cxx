@@ -465,19 +465,19 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
         sal_uIntPtr             nMarked = rMarkList.GetMarkCount();
 
-        aMenu.EnableItem( MN_URL, sal_False );
-        aMenu.EnableItem( MN_ACTIVATE, sal_False );
-        aMenu.EnableItem( MN_MACRO, sal_False );
+        aMenu.EnableItem( MN_URL, false );
+        aMenu.EnableItem( MN_ACTIVATE, false );
+        aMenu.EnableItem( MN_MACRO, false );
         aMenu.EnableItem( MN_MARK_ALL, pModel->GetPage( 0 )->GetObjCount() != pView->GetMarkedObjectCount() );
 
         if ( !nMarked )
         {
-            aMenu.EnableItem( MN_POSITION, sal_False );
-            aMenu.EnableItem( MN_FRAME_TO_TOP, sal_False );
-            aMenu.EnableItem( MN_MOREFRONT, sal_False );
-            aMenu.EnableItem( MN_MOREBACK, sal_False );
-            aMenu.EnableItem( MN_FRAME_TO_BOTTOM, sal_False );
-            aMenu.EnableItem( MN_DELETE1, sal_False );
+            aMenu.EnableItem( MN_POSITION, false );
+            aMenu.EnableItem( MN_FRAME_TO_TOP, false );
+            aMenu.EnableItem( MN_MOREFRONT, false );
+            aMenu.EnableItem( MN_MOREBACK, false );
+            aMenu.EnableItem( MN_FRAME_TO_BOTTOM, false );
+            aMenu.EnableItem( MN_DELETE1, false );
         }
         else
         {
@@ -485,18 +485,18 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
             {
                 SdrObject*  pSdrObj = GetSelectedSdrObject();
 
-                aMenu.EnableItem( MN_URL, sal_True );
-                aMenu.EnableItem( MN_ACTIVATE, sal_True );
-                aMenu.EnableItem( MN_MACRO, sal_True );
+                aMenu.EnableItem( MN_URL, true );
+                aMenu.EnableItem( MN_ACTIVATE, true );
+                aMenu.EnableItem( MN_MACRO, true );
                 aMenu.CheckItem( MN_ACTIVATE, GetIMapObj( pSdrObj )->IsActive() );
             }
 
-            aMenu.EnableItem( MN_POSITION, sal_True );
-            aMenu.EnableItem( MN_FRAME_TO_TOP, sal_True );
-            aMenu.EnableItem( MN_MOREFRONT, sal_True );
-            aMenu.EnableItem( MN_MOREBACK, sal_True );
-            aMenu.EnableItem( MN_FRAME_TO_BOTTOM, sal_True );
-            aMenu.EnableItem( MN_DELETE1, sal_True );
+            aMenu.EnableItem( MN_POSITION, true );
+            aMenu.EnableItem( MN_FRAME_TO_TOP, true );
+            aMenu.EnableItem( MN_MOREFRONT, true );
+            aMenu.EnableItem( MN_MOREBACK, true );
+            aMenu.EnableItem( MN_FRAME_TO_BOTTOM, true );
+            aMenu.EnableItem( MN_DELETE1, true );
         }
 
         aMenu.SetSelectHdl( LINK( this, IMapWindow, MenuSelectHdl ) );

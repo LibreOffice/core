@@ -79,7 +79,7 @@ public:
 
     virtual bool    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     void            StartRefInput();
 

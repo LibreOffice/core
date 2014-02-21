@@ -61,7 +61,7 @@ static Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetFamily( FAMILY_DONTKNOW );
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
-        aDefBulletFont.SetTransparent( sal_True );
+        aDefBulletFont.SetTransparent( true );
         bInit = sal_True;
     }
     return aDefBulletFont;

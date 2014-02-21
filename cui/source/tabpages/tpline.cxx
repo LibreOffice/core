@@ -205,7 +205,7 @@ SvxLineTabPage::SvxLineTabPage
     m_pSymbolHeightMF->SetModifyHdl(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     m_pSymbolRatioCB->SetClickHdl(LINK(this, SvxLineTabPage, RatioHdl_Impl));
 
-    m_pSymbolRatioCB->Check(sal_True);
+    m_pSymbolRatioCB->Check(true);
     ShowSymbolControls(sal_False);
 
     nActLineWidth = -1;
@@ -307,7 +307,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         m_pSymbolMB->GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
 
         if(aGrfNames.empty())
-            m_pSymbolMB->GetPopupMenu()->EnableItem(MN_GALLERY, sal_False);
+            m_pSymbolMB->GetPopupMenu()->EnableItem(MN_GALLERY, false);
     }
 
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
@@ -389,7 +389,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         m_pSymbolMB->GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
 
         if(aGrfNames.empty())
-            m_pSymbolMB->GetPopupMenu()->EnableItem(MN_SYMBOLS, sal_False);
+            m_pSymbolMB->GetPopupMenu()->EnableItem(MN_SYMBOLS, false);
 
         delete pView;
         delete pModel;
@@ -1359,7 +1359,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else if( rAttrs.GetItemState( XATTR_LINESTARTCENTER ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbCenterStart->EnableTriState( sal_False );
+        m_pTsbCenterStart->EnableTriState( false );
 
         if( ( ( const XLineStartCenterItem& ) rAttrs.Get( XATTR_LINESTARTCENTER ) ).GetValue() )
             m_pTsbCenterStart->SetState( STATE_CHECK );
@@ -1378,7 +1378,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     else if( rAttrs.GetItemState( XATTR_LINEENDCENTER ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbCenterEnd->EnableTriState( sal_False );
+        m_pTsbCenterEnd->EnableTriState( false );
 
         if( ( ( const XLineEndCenterItem& ) rAttrs.Get( XATTR_LINEENDCENTER ) ).GetValue() )
             m_pTsbCenterEnd->SetState( STATE_CHECK );

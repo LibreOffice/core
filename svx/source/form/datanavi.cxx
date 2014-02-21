@@ -2209,7 +2209,7 @@ namespace svxform
     }
 
     //-----------------------------------------------------------------------
-    sal_Bool DataNavigator::Close()
+    bool DataNavigator::Close()
     {
         Update( NULL );
         return SfxDockingWindow::Close();
@@ -2661,19 +2661,19 @@ namespace svxform
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pRequiredCB->Check( sal_True );
+                        m_pRequiredCB->Check( true );
                     if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pRelevantCB->Check( sal_True );
+                        m_pRelevantCB->Check( true );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pConstraintCB->Check( sal_True );
+                        m_pConstraintCB->Check( true );
                     if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pReadonlyCB->Check( sal_True );
+                        m_pReadonlyCB->Check( true );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
                         && !sTemp.isEmpty() )
-                        m_pCalculateCB->Check( sal_True );
+                        m_pCalculateCB->Check( true );
                 }
                 catch (const Exception&)
                 {

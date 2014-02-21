@@ -127,10 +127,10 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-sal_Bool ScSimpleRefDlg::Close()
+bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(m_pBtnCancel);
-    return sal_True;
+    return true;
 }
 
 //------------------------------------------------------------------------

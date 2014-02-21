@@ -913,7 +913,7 @@ void SidebarController::ShowPopupMenu (
         {
             // Don't allow the currently visible deck to be disabled.
             pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MIB_RADIOCHECK);
-            pCustomizationMenu->CheckItem(nSubMenuIndex, sal_True);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, true);
         }
         else
         {
@@ -936,7 +936,7 @@ void SidebarController::ShowPopupMenu (
     pMenu->InsertItem(MID_CUSTOMIZATION, SFX2_RESSTR(STRING_CUSTOMIZATION));
     pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
 
-    pMenu->RemoveDisabledEntries(sal_False, sal_False);
+    pMenu->RemoveDisabledEntries(false, false);
 
     return pMenu;
 }
@@ -957,11 +957,11 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
     switch (nIndex)
     {
         case MID_UNLOCK_TASK_PANEL:
-            mpParentWindow->SetFloatingMode(sal_True);
+            mpParentWindow->SetFloatingMode(true);
             break;
 
         case MID_LOCK_TASK_PANEL:
-            mpParentWindow->SetFloatingMode(sal_False);
+            mpParentWindow->SetFloatingMode(false);
             break;
 
         case MID_RESTORE_DEFAULT:

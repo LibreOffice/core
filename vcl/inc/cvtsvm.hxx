@@ -83,7 +83,7 @@ private:
     SAL_DLLPRIVATE void             ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
     SAL_DLLPRIVATE void             ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf );
     SAL_DLLPRIVATE sal_uLong            ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
-                                          VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
+                                          VirtualDevice& rSaveVDev, bool& rRop_0_1,
                                           Color& rLineCol, ::std::stack<Color*>& rLineColStack,
                                           rtl_TextEncoding& rActualCharSet );
 

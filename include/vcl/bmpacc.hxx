@@ -88,12 +88,12 @@ protected:
     ColorMask                   maColorMask;
     FncGetPixel                 mFncGetPixel;
     FncSetPixel                 mFncSetPixel;
-    sal_Bool                        mbModify;
+    bool                        mbModify;
 
 
 SAL_DLLPRIVATE  void            ImplCreate( Bitmap& rBitmap );
 SAL_DLLPRIVATE  void            ImplDestroy();
-SAL_DLLPRIVATE  sal_Bool            ImplSetAccessPointers( sal_uLong nFormat );
+SAL_DLLPRIVATE  bool            ImplSetAccessPointers( sal_uLong nFormat );
 
 public:
 
@@ -117,21 +117,21 @@ SAL_DLLPRIVATE  BitmapBuffer*   ImplGetBitmapBuffer() const { return mpBuffer; }
                                 DECL_FORMAT( _32BIT_TC_RGBA )
                                 DECL_FORMAT( _32BIT_TC_MASK )
 protected:
-                                BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify );
+                                BitmapReadAccess( Bitmap& rBitmap, bool bModify );
 
 public:
                                 BitmapReadAccess( Bitmap& rBitmap );
     virtual                     ~BitmapReadAccess();
 
-    inline sal_Bool                 operator!() const;
+    inline bool                 operator!() const;
 
     inline long                 Width() const;
     inline long                 Height() const;
     inline Point                TopLeft() const;
     inline Point                BottomRight() const;
 
-    inline sal_Bool                 IsTopDown() const;
-    inline sal_Bool                 IsBottomUp() const;
+    inline bool                 IsTopDown() const;
+    inline bool                 IsBottomUp() const;
 
     inline sal_uLong                GetScanlineFormat() const;
     inline sal_uLong                GetScanlineSize() const;
@@ -142,14 +142,14 @@ public:
     inline Scanline             GetBuffer() const;
     inline Scanline             GetScanline( long nY ) const;
 
-    inline sal_Bool                 HasPalette() const;
+    inline bool                 HasPalette() const;
     inline const BitmapPalette& GetPalette() const;
     inline sal_uInt16               GetPaletteEntryCount() const;
     inline const BitmapColor&   GetPaletteColor( sal_uInt16 nColor ) const;
     inline const BitmapColor&   GetBestPaletteColor( const BitmapColor& rBitmapColor ) const;
     sal_uInt16                      GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const;
 
-    inline sal_Bool                 HasColorMask() const;
+    inline bool                 HasColorMask() const;
     inline ColorMask&           GetColorMask() const;
 
     inline BitmapColor          GetPixelFromData( const sal_uInt8* pData, long nX ) const;
@@ -216,7 +216,7 @@ private:
 // - Inlines -
 // -----------
 
-inline sal_Bool BitmapReadAccess::operator!() const
+inline bool BitmapReadAccess::operator!() const
 {
     return( mpBuffer == NULL );
 }
@@ -251,7 +251,7 @@ inline Point BitmapReadAccess::BottomRight() const
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapReadAccess::IsTopDown() const
+inline bool BitmapReadAccess::IsTopDown() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
     return( mpBuffer ? sal::static_int_cast<sal_Bool>( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN ) : sal_False );
@@ -259,7 +259,7 @@ inline sal_Bool BitmapReadAccess::IsTopDown() const
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapReadAccess::IsBottomUp() const
+inline bool BitmapReadAccess::IsBottomUp() const
 {
     return !IsTopDown();
 }
@@ -317,7 +317,7 @@ inline Scanline BitmapReadAccess::GetScanline( long nY ) const
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapReadAccess::HasPalette() const
+inline bool BitmapReadAccess::HasPalette() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
     return( mpBuffer && !!mpBuffer->maPalette );
@@ -357,7 +357,7 @@ inline const BitmapColor& BitmapReadAccess::GetBestPaletteColor( const BitmapCol
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapReadAccess::HasColorMask() const
+inline bool BitmapReadAccess::HasColorMask() const
 {
     DBG_ASSERT( mpBuffer, "Access is not valid!" );
     const sal_uLong nFormat = BMP_SCANLINE_FORMAT( mpBuffer->mnFormat );

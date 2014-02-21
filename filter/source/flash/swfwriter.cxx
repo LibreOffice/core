@@ -50,7 +50,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mnJPEGCompressMode(nJPEGcompressMode)
 {
     mpVDev = new VirtualDevice;
-    mpVDev->EnableOutput( sal_False );
+    mpVDev->EnableOutput( false );
 
     maMovieTempFile.EnableKillingFile();
     maFontsTempFile.EnableKillingFile();

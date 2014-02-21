@@ -40,9 +40,9 @@ public:
     // overload all pure virtual methods
     virtual SalGraphics*            GetGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
-    virtual sal_Bool                    SetPrinterData( ImplJobSetup* pSetupData );
-    virtual sal_Bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData );
+    virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual bool                    SetPrinterData( ImplJobSetup* pSetupData );
+    virtual bool                    SetData( sal_uIntPtr nFlags, ImplJobSetup* pSetupData );
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
@@ -76,22 +76,22 @@ public:
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods
-    virtual sal_Bool                    StartJob( const OUString* pFileName,
+    virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,
                                               sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData );
-    virtual sal_Bool                    StartJob( const OUString*,
+    virtual bool                    StartJob( const OUString*,
                                               const OUString&,
                                               const OUString&,
                                               ImplJobSetup*,
                                               vcl::PrinterController& i_rController );
-    virtual sal_Bool                    EndJob();
-    virtual sal_Bool                    AbortJob();
+    virtual bool                    EndJob();
+    virtual bool                    AbortJob();
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData );
-    virtual sal_Bool                    EndPage();
+    virtual bool                    EndPage();
     virtual sal_uIntPtr                 GetErrorCode();
 };
 

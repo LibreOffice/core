@@ -1295,7 +1295,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
          ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
     {
-        nFound = pView->Search( rSearchItem.GetSearchOptions() , bForward );
+        nFound = pView->Search( rSearchItem.GetSearchOptions() , bForward ) ? 1 : 0;
     }
     else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
               ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )

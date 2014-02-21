@@ -68,7 +68,7 @@ public:
     virtual bool DispatchInternalEvent();
     bool         HasUserEvents() const;
 
-    sal_Bool     MouseCaptured( const SalFrame *pFrameData ) const
+    bool     MouseCaptured( const SalFrame *pFrameData ) const
                         { return m_pCapture == pFrameData; }
     SalFrame*    GetCaptureFrame() const
                         { return m_pCapture; }

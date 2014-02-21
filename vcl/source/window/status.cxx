@@ -79,7 +79,7 @@ struct ImplStatusItem
     OUString            maQuickHelpText;
     OString             maHelpId;
     void*               mpUserData;
-    sal_Bool            mbVisible;
+    bool            mbVisible;
     OUString            maAccessibleName;
     OUString            maCommand;
 };
@@ -114,12 +114,12 @@ static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
 
 // -----------------------------------------------------------------------
 
-sal_Bool StatusBar::ImplIsItemUpdate()
+bool StatusBar::ImplIsItemUpdate()
 {
     if ( !mbProgressMode && mbVisibleItems && IsReallyVisible() && IsUpdateMode() )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
@@ -138,10 +138,10 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     mpItemList      = new ImplStatusItemList;
     mpImplData->mpVirDev        = new VirtualDevice( *this );
     mnCurItemId     = 0;
-    mbFormat        = sal_True;
-    mbVisibleItems  = sal_True;
-    mbProgressMode  = sal_False;
-    mbInUserDraw    = sal_False;
+    mbFormat        = true;
+    mbVisibleItems  = true;
+    mbProgressMode  = false;
+    mbInUserDraw    = false;
     mnItemsWidth    = STATUSBAR_OFFSET_X;
     mnDX            = 0;
     mnDY            = 0;
@@ -149,7 +149,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     mnItemY         = STATUSBAR_OFFSET_Y;
     mnTextY         = STATUSBAR_OFFSET_TEXTY;
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
     SetLineColor();
 
     SetOutputSizePixel( CalcWindowSizePixel() );
@@ -180,8 +180,8 @@ StatusBar::~StatusBar()
 
 // -----------------------------------------------------------------------
 
-void StatusBar::ImplInitSettings( sal_Bool bFont,
-                                  sal_Bool bForeground, sal_Bool bBackground )
+void StatusBar::ImplInitSettings( bool bFont,
+                                  bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -228,7 +228,7 @@ void StatusBar::ImplInitSettings( sal_Bool bFont,
               IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW ) )
         {
             ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( true );
         }
     }
 }
@@ -306,7 +306,7 @@ void StatusBar::ImplFormat()
         }
     }
 
-    mbFormat = sal_False;
+    mbFormat = false;
 }
 
 // -----------------------------------------------------------------------
@@ -351,7 +351,7 @@ sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
 
 // -----------------------------------------------------------------------
 
-void StatusBar::ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth )
+void StatusBar::ImplDrawText( bool bOffScreen, long nOldTextWidth )
 {
     // prevent item box from being overwritten
     Rectangle aTextRect;
@@ -388,7 +388,7 @@ void StatusBar::ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth )
 
 // -----------------------------------------------------------------------
 
-void StatusBar::ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDrawText, sal_Bool bDrawFrame )
+void StatusBar::ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, bool bDrawFrame )
 {
     Rectangle aRect = ImplGetItemRectPos( nPos );
 
@@ -430,12 +430,12 @@ void StatusBar::ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDr
     {
         if ( bOffScreen )
         {
-            mbInUserDraw = sal_True;
+            mbInUserDraw = true;
             mpImplData->mpVirDev->EnableRTL( IsRTLEnabled() );
             UserDrawEvent aODEvt( mpImplData->mpVirDev, Rectangle( Point(), aTextRectSize ), pItem->mnId );
             UserDraw( aODEvt );
-            mpImplData->mpVirDev->EnableRTL( sal_False );
-            mbInUserDraw = sal_False;
+            mpImplData->mpVirDev->EnableRTL( false );
+            mbInUserDraw = false;
         }
         else
         {
@@ -529,7 +529,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
             pWindow->Push( PUSH_CLIPREGION );
             pWindow->IntersectClipRegion( rFramePosSize );
         }
-        sal_Bool bNativeOK = pWindow->DrawNativeControl( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        bool bNativeOK = pWindow->DrawNativeControl( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                      CTRL_STATE_ENABLED, aValue, OUString() );
         if( bNeedErase )
             pWindow->Pop();
@@ -607,7 +607,7 @@ void DrawProgress( Window* pWindow, const Point& rPos,
 
 // -----------------------------------------------------------------------
 
-void StatusBar::ImplDrawProgress( sal_Bool bPaint,
+void StatusBar::ImplDrawProgress( bool bPaint,
                                   sal_uInt16 nPercent1, sal_uInt16 nPercent2 )
 {
     bool bNative = IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL );
@@ -664,7 +664,7 @@ void StatusBar::ImplCalcProgressRect()
 
     // save the divisor for later
     mnPercentCount = 10000 / nMaxPercent;
-    sal_Bool bNativeOK = sal_False;
+    bool bNativeOK = false;
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
@@ -672,7 +672,7 @@ void StatusBar::ImplCalcProgressRect()
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != sal_False )
+                                                 aNativeControlRegion, aNativeContentRegion ) ) )
         {
             long nProgressHeight = aNativeControlRegion.GetHeight();
             if( nProgressHeight > maPrgsFrameRect.GetHeight() )
@@ -737,18 +737,18 @@ void StatusBar::Paint( const Rectangle& )
     sal_uInt16 nItemCount = sal_uInt16( mpItemList->size() );
 
     if ( mbProgressMode )
-        ImplDrawProgress( sal_True, 0, mnPercent );
+        ImplDrawProgress( true, 0, mnPercent );
     else
     {
         // draw text
         if ( !mbVisibleItems || (GetStyle() & WB_RIGHT) )
-            ImplDrawText( sal_False, 0 );
+            ImplDrawText( false, 0 );
 
         // draw items
         if ( mbVisibleItems )
         {
             for ( sal_uInt16 i = 0; i < nItemCount; i++ )
-                ImplDrawItem( sal_False, i, sal_True, sal_True );
+                ImplDrawItem( false, i, true, true );
         }
     }
 
@@ -780,7 +780,7 @@ void StatusBar::Resize()
     mnTextY = (mnCalcHeight-GetTextHeight())/2;
 
     // provoke re-formatting
-    mbFormat = sal_True;
+    mbFormat = true;
 
     if ( mbProgressMode )
         ImplCalcProgressRect();
@@ -868,18 +868,18 @@ void StatusBar::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        mbFormat = sal_True;
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        mbFormat = true;
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -898,8 +898,8 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
           )
        )
     {
-        mbFormat = sal_True;
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        mbFormat = true;
+        ImplInitSettings( true, true, true );
         long nFudge = GetTextHeight() / 4;
         for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
         {
@@ -963,7 +963,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     pItem->mnWidth          = (long)nWidth+nFudge+STATUSBAR_OFFSET;
     pItem->mnOffset         = nOffset;
     pItem->mpUserData       = 0;
-    pItem->mbVisible        = sal_True;
+    pItem->mbVisible        = true;
 
     // add item to list
     if ( nPos < mpItemList->size() ) {
@@ -972,7 +972,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
         mpItemList->push_back( pItem );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( ImplIsItemUpdate() )
         Invalidate();
 
@@ -989,7 +989,7 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
         delete (*mpItemList)[ nPos ];
         mpItemList->erase( mpItemList->begin() + nPos );
 
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( ImplIsItemUpdate() )
             Invalidate();
 
@@ -1008,9 +1008,9 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
         ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( !pItem->mbVisible )
         {
-            pItem->mbVisible = sal_True;
+            pItem->mbVisible = true;
 
-            mbFormat = sal_True;
+            mbFormat = true;
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
@@ -1030,9 +1030,9 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
         ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( pItem->mbVisible )
         {
-            pItem->mbVisible = sal_False;
+            pItem->mbVisible = false;
 
-            mbFormat = sal_True;
+            mbFormat = true;
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
@@ -1043,14 +1043,14 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
 
 // -----------------------------------------------------------------------
 
-sal_Bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
+bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->mbVisible;
     else
-        return sal_False;
+        return false;
 }
 
 void StatusBar::Clear()
@@ -1061,7 +1061,7 @@ void StatusBar::Clear()
     }
     mpItemList->clear();
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( ImplIsItemUpdate() )
         Invalidate();
 
@@ -1237,7 +1237,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             if ( pItem->mbVisible && !mbFormat && ImplIsItemUpdate() )
             {
                 Update();
-                ImplDrawItem( sal_True, nPos, sal_True, sal_False );
+                ImplDrawItem( true, nPos, true, false );
                 Flush();
             }
         }
@@ -1298,7 +1298,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
              !mbFormat && ImplIsItemUpdate() )
         {
             Update();
-            ImplDrawItem( sal_True, nPos, sal_False, sal_False );
+            ImplDrawItem( true, nPos, false, false );
             Flush();
         }
     }
@@ -1328,7 +1328,7 @@ void StatusBar::RedrawItem( sal_uInt16 nItemId )
          pItem->mbVisible && ImplIsItemUpdate() )
     {
         Update();
-        ImplDrawItem( sal_True, nPos, sal_False, sal_False );
+        ImplDrawItem( true, nPos, false, false );
         Flush();
     }
 }
@@ -1422,7 +1422,7 @@ void StatusBar::StartProgressMode( const OUString& rText )
 {
     DBG_ASSERT( !mbProgressMode, "StatusBar::StartProgressMode(): progress mode is active" );
 
-    mbProgressMode  = sal_True;
+    mbProgressMode  = true;
     mnPercent       = 0;
     maPrgsTxt       = rText;
 
@@ -1457,7 +1457,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     {
         Update();
         SetLineColor();
-        ImplDrawProgress( sal_False, mnPercent, nNewPercent );
+        ImplDrawProgress( false, mnPercent, nNewPercent );
         Flush();
     }
     mnPercent = nNewPercent;
@@ -1469,7 +1469,7 @@ void StatusBar::EndProgressMode()
 {
     DBG_ASSERT( mbProgressMode, "StatusBar::EndProgressMode(): no progress mode" );
 
-    mbProgressMode = sal_False;
+    mbProgressMode = false;
     maPrgsTxt = "";
 
     // re-trigger Paint to recreate StatusBar
@@ -1499,7 +1499,7 @@ void StatusBar::SetText( const OUString& rText )
             Update();
             long nOldTextWidth = GetTextWidth( GetText() );
             Window::SetText( rText );
-            ImplDrawText( sal_True, nOldTextWidth );
+            ImplDrawText( true, nOldTextWidth );
             Flush();
         }
     }

@@ -1580,7 +1580,7 @@ SvxConfigPage::SvxConfigPage(
 {
     aDescriptionField.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     aDescriptionField.SetAutoScroll( sal_True );
-    aDescriptionField.EnableCursor( sal_False );
+    aDescriptionField.EnableCursor( false );
 
     aMoveUpButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
     aMoveDownButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
@@ -1697,13 +1697,13 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         {
             if ( pDocData != NULL && pDocData->HasURL( m_aURLToSelect ) )
             {
-                aSaveInListBox.SelectEntryPos( nPos, sal_True );
+                aSaveInListBox.SelectEntryPos( nPos, true );
                 pCurrentSaveInData = pDocData;
                 bURLToSelectFound = true;
             }
             else if ( pModuleData->HasURL( m_aURLToSelect ) )
             {
-                aSaveInListBox.SelectEntryPos( 0, sal_True );
+                aSaveInListBox.SelectEntryPos( 0, true );
                 pCurrentSaveInData = pModuleData;
                 bURLToSelectFound = true;
             }
@@ -1715,12 +1715,12 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             // it the SaveIn listbox, otherwise select the module data
             if ( pDocData != NULL && pDocData->HasSettings() )
             {
-                aSaveInListBox.SelectEntryPos( nPos, sal_True );
+                aSaveInListBox.SelectEntryPos( nPos, true );
                 pCurrentSaveInData = pDocData;
             }
             else
             {
-                aSaveInListBox.SelectEntryPos( 0, sal_True );
+                aSaveInListBox.SelectEntryPos( 0, true );
                 pCurrentSaveInData = pModuleData;
             }
         }
@@ -1960,7 +1960,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
     nSelectionPos = nSelectionPos < aTopLevelListBox.GetEntryCount() ?
         nSelectionPos : aTopLevelListBox.GetEntryCount() - 1;
 
-    aTopLevelListBox.SelectEntryPos( nSelectionPos, sal_True );
+    aTopLevelListBox.SelectEntryPos( nSelectionPos, true );
     aTopLevelListBox.GetSelectHdl().Call( this );
 }
 
@@ -2313,7 +2313,7 @@ void SvxMenuConfigPage::Init()
 
     ReloadTopLevelListBox();
 
-    aTopLevelListBox.SelectEntryPos(0, sal_True);
+    aTopLevelListBox.SelectEntryPos(0, true);
     aTopLevelListBox.GetSelectHdl().Call(this);
 }
 
@@ -2356,9 +2356,9 @@ void SvxMenuConfigPage::UpdateButtonStates()
         aMoveUpButton.Enable( false );
         aMoveDownButton.Enable( false );
 
-        pPopup->EnableItem( ID_BEGIN_GROUP, sal_True );
-        pPopup->EnableItem( ID_RENAME, sal_False );
-        pPopup->EnableItem( ID_DELETE, sal_False );
+        pPopup->EnableItem( ID_BEGIN_GROUP, true );
+        pPopup->EnableItem( ID_RENAME, false );
+        pPopup->EnableItem( ID_DELETE, false );
 
         aDescriptionField.Clear();
 
@@ -2376,17 +2376,17 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     if ( pEntryData->IsSeparator() )
     {
-        pPopup->EnableItem( ID_DELETE, sal_True );
-        pPopup->EnableItem( ID_BEGIN_GROUP, sal_False );
-        pPopup->EnableItem( ID_RENAME, sal_False );
+        pPopup->EnableItem( ID_DELETE, true );
+        pPopup->EnableItem( ID_BEGIN_GROUP, false );
+        pPopup->EnableItem( ID_RENAME, false );
 
         aDescriptionField.Clear();
     }
     else
     {
-        pPopup->EnableItem( ID_BEGIN_GROUP, sal_True );
-        pPopup->EnableItem( ID_DELETE, sal_True );
-        pPopup->EnableItem( ID_RENAME, sal_True );
+        pPopup->EnableItem( ID_BEGIN_GROUP, true );
+        pPopup->EnableItem( ID_DELETE, true );
+        pPopup->EnableItem( ID_RENAME, true );
 
         aDescriptionField.SetNewText( pEntryData->GetHelpText() );
     }
@@ -3086,11 +3086,11 @@ void SvxToolbarConfigPage::DeleteSelectedTopLevel()
         // subtract one from the entry count
         if ( nSelectionPos != aTopLevelListBox.GetEntryCount() - 1 )
         {
-            aTopLevelListBox.SelectEntryPos( nSelectionPos + 1, sal_True );
+            aTopLevelListBox.SelectEntryPos( nSelectionPos + 1, true );
         }
         else
         {
-            aTopLevelListBox.SelectEntryPos( nSelectionPos - 1, sal_True );
+            aTopLevelListBox.SelectEntryPos( nSelectionPos - 1, true );
         }
         aTopLevelListBox.GetSelectHdl().Call( this );
 
@@ -3573,7 +3573,7 @@ void SvxToolbarConfigPage::Init()
         m_aURLToSelect += "standardbar";
     }
 
-    aTopLevelListBox.SelectEntryPos(nPos, sal_True);
+    aTopLevelListBox.SelectEntryPos(nPos, true);
     aTopLevelListBox.GetSelectHdl().Call(this);
 }
 
@@ -4404,15 +4404,15 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbarEntry, Control *, pBox )
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
     PopupMenu* pPopup = aModifyCommandButton.GetPopupMenu();
-    pPopup->EnableItem( ID_RENAME, sal_False );
-    pPopup->EnableItem( ID_DELETE, sal_False );
-    pPopup->EnableItem( ID_BEGIN_GROUP, sal_False );
-    pPopup->EnableItem( ID_DEFAULT_COMMAND, sal_False );
-    pPopup->EnableItem( ID_ICON_ONLY, sal_False );
-    pPopup->EnableItem( ID_ICON_AND_TEXT, sal_False );
-    pPopup->EnableItem( ID_TEXT_ONLY, sal_False );
-    pPopup->EnableItem( ID_CHANGE_SYMBOL, sal_False );
-    pPopup->EnableItem( ID_RESET_SYMBOL, sal_False );
+    pPopup->EnableItem( ID_RENAME, false );
+    pPopup->EnableItem( ID_DELETE, false );
+    pPopup->EnableItem( ID_BEGIN_GROUP, false );
+    pPopup->EnableItem( ID_DEFAULT_COMMAND, false );
+    pPopup->EnableItem( ID_ICON_ONLY, false );
+    pPopup->EnableItem( ID_ICON_AND_TEXT, false );
+    pPopup->EnableItem( ID_TEXT_ONLY, false );
+    pPopup->EnableItem( ID_CHANGE_SYMBOL, false );
+    pPopup->EnableItem( ID_RESET_SYMBOL, false );
 
     aDescriptionField.Clear();
 
@@ -4424,22 +4424,22 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     SvxConfigEntry* pEntryData = (SvxConfigEntry*) selection->GetUserData();
     if ( pEntryData->IsSeparator() )
-        pPopup->EnableItem( ID_DELETE, sal_True );
+        pPopup->EnableItem( ID_DELETE, true );
     else
     {
-        pPopup->EnableItem( ID_BEGIN_GROUP, sal_True );
-        pPopup->EnableItem( ID_DELETE, sal_True );
-        pPopup->EnableItem( ID_RENAME, sal_True );
-        pPopup->EnableItem( ID_ICON_ONLY, sal_True );
-        pPopup->EnableItem( ID_ICON_AND_TEXT, sal_True );
-        pPopup->EnableItem( ID_TEXT_ONLY, sal_True );
-        pPopup->EnableItem( ID_CHANGE_SYMBOL, sal_True );
+        pPopup->EnableItem( ID_BEGIN_GROUP, true );
+        pPopup->EnableItem( ID_DELETE, true );
+        pPopup->EnableItem( ID_RENAME, true );
+        pPopup->EnableItem( ID_ICON_ONLY, true );
+        pPopup->EnableItem( ID_ICON_AND_TEXT, true );
+        pPopup->EnableItem( ID_TEXT_ONLY, true );
+        pPopup->EnableItem( ID_CHANGE_SYMBOL, true );
 
         if ( !pEntryData->IsUserDefined() )
-            pPopup->EnableItem( ID_DEFAULT_COMMAND, sal_True );
+            pPopup->EnableItem( ID_DEFAULT_COMMAND, true );
 
         if ( pEntryData->IsIconModified() )
-            pPopup->EnableItem( ID_RESET_SYMBOL, sal_True );
+            pPopup->EnableItem( ID_RESET_SYMBOL, true );
 
         aDescriptionField.SetNewText( pEntryData->GetHelpText() );
     }
@@ -4560,7 +4560,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     }
 
     pNameDialog->m_pSaveInListBox->SelectEntryPos(
-        aSaveInListBox.GetSelectEntryPos(), sal_True );
+        aSaveInListBox.GetSelectEntryPos(), true );
 
     if ( pNameDialog->Execute() == RET_OK )
     {
@@ -4573,7 +4573,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 
         if ( GetSaveInData() != pData )
         {
-            aSaveInListBox.SelectEntryPos( nInsertPos, sal_True );
+            aSaveInListBox.SelectEntryPos( nInsertPos, true );
             aSaveInListBox.GetSelectHdl().Call(this);
         }
 
@@ -4587,7 +4587,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 
         nInsertPos = aTopLevelListBox.InsertEntry( pToolbar->GetName() );
         aTopLevelListBox.SetEntryData( nInsertPos, pToolbar );
-        aTopLevelListBox.SelectEntryPos( nInsertPos, sal_True );
+        aTopLevelListBox.SelectEntryPos( nInsertPos, true );
         aTopLevelListBox.GetSelectHdl().Call(this);
 
         pData->SetModified( true );
@@ -4905,7 +4905,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
                              OUStringHash,
                              ::std::equal_to< OUString > > ImageInfo;
 
-    aTbSymbol.SetPageScroll( sal_True );
+    aTbSymbol.SetPageScroll( true );
 
     bool bLargeIcons = GetImageType() & css::ui::ImageType::SIZE_LARGE;
     m_nExpectedSize = bLargeIcons ? 26 : 16;
@@ -5112,7 +5112,7 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
 
         if ( aTbSymbol.IsItemChecked( nId ) )
         {
-            aTbSymbol.CheckItem( nId, sal_False );
+            aTbSymbol.CheckItem( nId, false );
         }
     }
 
@@ -5519,7 +5519,7 @@ SvxIconChangeDialog::SvxIconChangeDialog(
     aFImageInfo.SetImage(InfoBox::GetStandardImage());
     aLineEditDescription.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     aLineEditDescription.SetAutoScroll( sal_True );
-    aLineEditDescription.EnableCursor( sal_False );
+    aLineEditDescription.EnableCursor( false );
     aLineEditDescription.SetText(aMessage);
 }
 

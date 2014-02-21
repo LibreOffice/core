@@ -44,7 +44,7 @@ using namespace vcl;
 using namespace psp;
 
 
-GlyphSet::GlyphSet (sal_Int32 nFontID, sal_Bool bVertical)
+GlyphSet::GlyphSet (sal_Int32 nFontID, bool bVertical)
         : mnFontID (nFontID),
           mbVertical (bVertical)
 {
@@ -79,7 +79,7 @@ GlyphSet::IsVertical ()
     return mbVertical;
 }
 
-sal_Bool
+bool
 GlyphSet::GetCharID (
                      sal_Unicode nChar,
                      unsigned char* nOutGlyphID,
@@ -90,7 +90,7 @@ GlyphSet::GetCharID (
            || AddCharID    (nChar, nOutGlyphID, nOutGlyphSetID);
 }
 
-sal_Bool
+bool
 GlyphSet::GetGlyphID (
                       sal_GlyphId nGlyph,
                       sal_Unicode nUnicode,
@@ -102,7 +102,7 @@ GlyphSet::GetGlyphID (
            || AddGlyphID    (nGlyph, nUnicode, nOutGlyphID, nOutGlyphSetID);
 }
 
-sal_Bool
+bool
 GlyphSet::LookupCharID (
                         sal_Unicode nChar,
                         unsigned char* nOutGlyphID,
@@ -124,16 +124,16 @@ GlyphSet::LookupCharID (
             // success: found the unicode char, return the glyphid and the glyphsetid
             *nOutGlyphSetID = nGlyphSetID;
             *nOutGlyphID    = (*aGlyph).second;
-            return sal_True;
+            return true;
         }
     }
 
     *nOutGlyphSetID = -1;
     *nOutGlyphID    =  0;
-    return sal_False;
+    return false;
 }
 
-sal_Bool
+bool
 GlyphSet::LookupGlyphID (
                         sal_GlyphId nGlyph,
                         unsigned char* nOutGlyphID,
@@ -155,13 +155,13 @@ GlyphSet::LookupGlyphID (
             // success: found the glyph id, return the mapped glyphid and the glyphsetid
             *nOutGlyphSetID = nGlyphSetID;
             *nOutGlyphID    = (*aGlyph).second;
-            return sal_True;
+            return true;
         }
     }
 
     *nOutGlyphSetID = -1;
     *nOutGlyphID    =  0;
-    return sal_False;
+    return false;
 }
 
 unsigned char
@@ -209,7 +209,7 @@ GlyphSet::AddNotdef (glyph_map_t &rGlyphMap)
     if (rGlyphMap.empty())
         rGlyphMap[0] = 0;
 }
-sal_Bool
+bool
 GlyphSet::AddCharID (
                      sal_Unicode nChar,
                      unsigned char* nOutGlyphID,
@@ -264,10 +264,10 @@ GlyphSet::AddCharID (
         *nOutGlyphID      = aGlyphSet [nChar];
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool
+bool
 GlyphSet::AddGlyphID (
                      sal_GlyphId nGlyph,
                      sal_Unicode nUnicode,
@@ -321,7 +321,7 @@ GlyphSet::AddGlyphID (
         *nOutGlyphID      = aGlyphSet [nGlyph];
     }
 
-    return sal_True;
+    return true;
 }
 
 OString
@@ -464,7 +464,7 @@ void GlyphSet::DrawGlyphs(
                           const sal_Unicode* pUnicodes,
                           sal_Int16 nLen,
                           const sal_Int32* pDeltaArray,
-                          const sal_Bool bUseGlyphs)
+                          const bool bUseGlyphs)
 {
     unsigned char *pGlyphID    = (unsigned char*)alloca (nLen * sizeof(unsigned char));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
@@ -607,17 +607,17 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         return;
     }
 
-    DrawGlyphs( rGfx, rPoint, NULL, pStr, nLen, pDeltaArray, sal_False);
+    DrawGlyphs( rGfx, rPoint, NULL, pStr, nLen, pDeltaArray, false);
 }
 
-sal_Bool
+bool
 GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 {
     // only for ps fonts
     if (meBaseType != fonttype::Type1)
-        return sal_False;
+        return false;
     if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
-        return sal_False;
+        return false;
 
     PrintFontManager &rMgr = rGfx.GetFontMgr();
 
@@ -695,7 +695,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         PSDefineReencodedFont (pOutFile, nGlyphSetID);
     }
 
-    return sal_True;
+    return true;
 }
 
 struct EncEntry
@@ -745,12 +745,12 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
         &aRequestedGlyphs[0], &aEncoding[0], nGlyphCount, NULL );
 }
 
-sal_Bool
+bool
 GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42, std::list< OString >& rSuppliedFonts )
 {
     // only for truetype fonts
     if (meBaseType != fonttype::TrueType)
-        return sal_False;
+        return false;
 
 #if defined( UNX )
     TrueTypeFont *pTTFont;
@@ -758,10 +758,10 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);
     sal_Int32 nSuccess = OpenTTFontFile(aTTFileName.getStr(), nFace, &pTTFont);
     if (nSuccess != SF_OK)
-        return sal_False;
+        return false;
     FILE* pTmpFile = tmpfile();
     if (pTmpFile == NULL)
-        return sal_False;
+        return false;
 
     // array of unicode source characters
     sal_Unicode pUChars[256];
@@ -851,7 +851,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     CloseTTFont (pTTFont);
     fclose (pTmpFile);
 
-    return sal_True;
+    return true;
 #else
     (void)rOutFile; (void)rGfx; (void)bAllowType42; (void)rSuppliedFonts;
 #  warning FIXME: Missing OpenTTFontFile outside of Unix ...

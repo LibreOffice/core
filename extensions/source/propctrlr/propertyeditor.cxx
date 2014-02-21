@@ -56,7 +56,7 @@ namespace pcr
         m_aTabControl.SetDeactivatePageHdl(LINK(this, OPropertyEditor, OnPageDeactivate));
         m_aTabControl.SetActivatePageHdl(LINK(this, OPropertyEditor, OnPageActivate));
         m_aTabControl.SetBackground(GetBackground());
-        m_aTabControl.SetPaintTransparent(sal_True);
+        m_aTabControl.SetPaintTransparent(true);
     }
 
     //------------------------------------------------------------------

@@ -56,10 +56,10 @@ void MenuButton::ImplExecuteMenu()
         Point aPos( 0, 1 );
         Size aSize = GetSizePixel();
         Rectangle aRect( aPos, aSize );
-        SetPressed( sal_True );
+        SetPressed( true );
         EndSelection();
         mnCurItemId = mpMenu->Execute( this, aRect, POPUPMENU_EXECUTE_DOWN );
-        SetPressed( sal_False );
+        SetPressed( false );
         if ( mnCurItemId )
         {
             Select();

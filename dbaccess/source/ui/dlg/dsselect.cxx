@@ -81,7 +81,7 @@ IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
     return 0;
 }
 
-sal_Bool ODatasourceSelectDialog::Close()
+bool ODatasourceSelectDialog::Close()
 {
 #ifdef HAVE_ODBC_ADMINISTRATION
     if ( m_pODBCManagement.get() && m_pODBCManagement->isRunning() )

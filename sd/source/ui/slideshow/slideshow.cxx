@@ -718,7 +718,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
-                    pWorkWindow->StartPresentationMode( sal_False, isAlwaysOnTop() ? PRESENTATION_HIDEALLAPPS : 0 );
+                    pWorkWindow->StartPresentationMode( false, isAlwaysOnTop() ? PRESENTATION_HIDEALLAPPS : 0 );
                 }
             }
         }
@@ -1237,7 +1237,7 @@ void SlideShow::StartFullscreenPresentation( )
     const sal_Int32 nDisplay (GetDisplay());
     WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
-    pWorkWindow->StartPresentationMode( sal_True, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
+    pWorkWindow->StartPresentationMode( true, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(sal_False, nDisplay);
 
     if (pWorkWindow->IsVisible())

@@ -1182,10 +1182,10 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_pLeft->Check( sal_False );
-        m_pRight->Check( sal_False );
-        m_pCenter->Check( sal_False );
-        m_pJustify->Check( sal_False );
+        m_pLeft->Check( false );
+        m_pRight->Check( false );
+        m_pCenter->Check( false );
+        m_pJustify->Check( false );
     }
     m_pLastLineLB->SelectEntryPos(nLBSelect);
 
@@ -1262,8 +1262,8 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
     switch ( eDir )
     {
         // check the default alignment for this text direction
-        case FRMDIR_HORI_LEFT_TOP :     m_pLeft->Check( sal_True ); break;
-        case FRMDIR_HORI_RIGHT_TOP :    m_pRight->Check( sal_True ); break;
+        case FRMDIR_HORI_LEFT_TOP :     m_pLeft->Check( true ); break;
+        case FRMDIR_HORI_RIGHT_TOP :    m_pRight->Check( true ); break;
         case FRMDIR_ENVIRONMENT :       /* do nothing */ break;
         default:
         {
@@ -1537,7 +1537,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         const SvxHyphenZoneItem& rHyphen =
             (const SvxHyphenZoneItem&)rSet.Get( _nWhich );
-        m_pHyphenBox->EnableTriState( sal_False );
+        m_pHyphenBox->EnableTriState( false );
 
         bIsHyphen = rHyphen.IsHyphen();
         m_pHyphenBox->SetState( bIsHyphen ? STATE_CHECK : STATE_NOCHECK );
@@ -1576,7 +1576,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 
         if ( eItemState >= SFX_ITEM_SET )
         {
-            m_pApplyCollBtn->EnableTriState( sal_False );
+            m_pApplyCollBtn->EnableTriState( false );
 
             const SvxPageModelItem& rModel =
                 (const SvxPageModelItem&)rSet.Get( _nWhich );
@@ -1590,7 +1590,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 bIsPageModel = sal_True;
 
                 m_pPageBreakBox->Enable();
-                m_pPageBreakBox->EnableTriState( sal_False );
+                m_pPageBreakBox->EnableTriState( false );
                 m_pBreakTypeFT->Enable();
                 m_pBreakTypeLB->Enable();
                 m_pBreakPositionFT->Enable();
@@ -1611,7 +1611,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
         }
         else if ( SFX_ITEM_DONTCARE == eItemState )
         {
-            m_pApplyCollBtn->EnableTriState( sal_True );
+            m_pApplyCollBtn->EnableTriState( true );
             m_pApplyCollBtn->SetState( STATE_DONTKNOW );
             m_pApplyCollBox->SetNoSelection();
         }
@@ -1638,7 +1638,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 // PageBreak not via CTRL-RETURN,
                 // then CheckBox can be freed
                 m_pPageBreakBox->Enable();
-                m_pPageBreakBox->EnableTriState( sal_False );
+                m_pPageBreakBox->EnableTriState( false );
                 m_pBreakTypeFT->Enable();
                 m_pBreakTypeLB->Enable();
                 m_pBreakPositionFT->Enable();
@@ -1701,7 +1701,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 
     if ( eItemState >= SFX_ITEM_AVAILABLE )
     {
-        m_pKeepParaBox->EnableTriState( sal_False );
+        m_pKeepParaBox->EnableTriState( false );
         const SvxFmtKeepItem& rKeep =
             (const SvxFmtKeepItem&)rSet.Get( _nWhich );
 
@@ -1722,7 +1722,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         const SvxFmtSplitItem& rSplit =
             (const SvxFmtSplitItem&)rSet.Get( _nWhich );
-        m_pKeepTogetherBox->EnableTriState( sal_False );
+        m_pKeepTogetherBox->EnableTriState( false );
 
         if ( !rSplit.GetValue() )
             m_pKeepTogetherBox->SetState( STATE_CHECK );
@@ -1739,7 +1739,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
             {
                 const SvxWidowsItem& rWidow =
                     (const SvxWidowsItem&)rSet.Get( _nWhich );
-                m_pWidowBox->EnableTriState( sal_False );
+                m_pWidowBox->EnableTriState( false );
                 const sal_uInt16 nLines = rWidow.GetValue();
 
                 sal_Bool _bEnable = nLines > 0;
@@ -1763,7 +1763,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 const SvxOrphansItem& rOrphan =
                     (const SvxOrphansItem&)rSet.Get( _nWhich );
                 const sal_uInt16 nLines = rOrphan.GetValue();
-                m_pOrphanBox->EnableTriState( sal_False );
+                m_pOrphanBox->EnableTriState( false );
 
                 sal_Bool _bEnable = nLines > 0;
                 m_pOrphanBox->SetState( _bEnable ? STATE_CHECK : STATE_NOCHECK);
@@ -2189,7 +2189,7 @@ static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBo
         rBox.Enable(false);
     else if(eState >= SFX_ITEM_AVAILABLE)
     {
-        rBox.EnableTriState( sal_False );
+        rBox.EnableTriState( false );
         rBox.Check(((const SfxBoolItem&)rSet.Get(_nWhich)).GetValue());
     }
     else
@@ -2208,7 +2208,7 @@ void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( SvxAsianTabPage, ClickHdl_Impl, CheckBox*, pBox )
 {
-    pBox->EnableTriState( sal_False );
+    pBox->EnableTriState( false );
     return 0;
 }
 

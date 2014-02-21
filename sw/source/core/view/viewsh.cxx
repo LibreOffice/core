@@ -420,7 +420,7 @@ void SwViewShell::ImplStartAction()
 void SwViewShell::ImplLockPaint()
 {
     if ( GetWin() && GetWin()->IsVisible() )
-        GetWin()->EnablePaint( sal_False ); //Also cut off the controls.
+        GetWin()->EnablePaint( false ); //Also cut off the controls.
     Imp()->LockPaint();
 }
 
@@ -439,7 +439,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
             aSize.Height()+= 20;
             if( pVout->SetOutputSize( aSize ) )
             {
-                GetWin()->EnablePaint( sal_True );
+                GetWin()->EnablePaint( true );
                 GetWin()->Validate();
 
                 Imp()->UnlockPaint();
@@ -465,7 +465,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
             else
             {
                 Imp()->UnlockPaint();
-                GetWin()->EnablePaint( sal_True );
+                GetWin()->EnablePaint( true );
                 GetWin()->Invalidate( INVALIDATE_CHILDREN );
             }
             delete pVout;
@@ -473,7 +473,7 @@ void SwViewShell::ImplUnlockPaint( sal_Bool bVirDev )
         else
         {
             Imp()->UnlockPaint();
-            GetWin()->EnablePaint( sal_True );
+            GetWin()->EnablePaint( true );
             GetWin()->Invalidate( INVALIDATE_CHILDREN );
         }
     }

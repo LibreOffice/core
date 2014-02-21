@@ -170,7 +170,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbAutoGrowHeight->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbAutoGrowHeight->EnableTriState( sal_False );
+        m_pTsbAutoGrowHeight->EnableTriState( false );
     }
     else
         m_pTsbAutoGrowHeight->SetState( STATE_DONTKNOW );
@@ -181,7 +181,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbAutoGrowWidth->SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbAutoGrowWidth->EnableTriState( sal_False );
+        m_pTsbAutoGrowWidth->EnableTriState( false );
     }
     else
         m_pTsbAutoGrowWidth->SetState( STATE_DONTKNOW );
@@ -192,7 +192,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbAutoGrowSize->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbAutoGrowSize->EnableTriState( sal_False );
+        m_pTsbAutoGrowSize->EnableTriState( false );
     }
     else
         m_pTsbAutoGrowSize->SetState( STATE_DONTKNOW );
@@ -203,7 +203,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbWordWrapText->SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbWordWrapText->EnableTriState( sal_False );
+        m_pTsbWordWrapText->EnableTriState( false );
     }
     else
         m_pTsbWordWrapText->SetState( STATE_DONTKNOW );
@@ -222,7 +222,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
         RECT_POINT eRP = RP_LB;
 
-        m_pTsbFullWidth->EnableTriState( sal_False );
+        m_pTsbFullWidth->EnableTriState( false );
 
         // Translate item values into local anchor position.
         switch (eTVA)
@@ -295,7 +295,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
                     ( ( const SdrTextFitToSizeTypeItem& )rAttrs.Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
         m_pTsbFitToSize->SetState( eFTS == SDRTEXTFIT_NONE ? STATE_NOCHECK : STATE_CHECK );
-        m_pTsbFitToSize->EnableTriState( sal_False );
+        m_pTsbFitToSize->EnableTriState( false );
     }
     else
         m_pTsbFitToSize->SetState( STATE_DONTKNOW );
@@ -305,7 +305,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         sal_Bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
         m_pTsbContour->SetState( bContour ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbContour->EnableTriState( sal_False );
+        m_pTsbContour->EnableTriState( false );
     }
     else
         m_pTsbContour->SetState( STATE_DONTKNOW );

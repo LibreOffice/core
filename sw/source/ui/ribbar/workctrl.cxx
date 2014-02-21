@@ -108,7 +108,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
             ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
             rBox.SetItemImage(GetId(), aImage);
-            rBox.SetItemImageMirrorMode( GetId(), sal_False );
+            rBox.SetItemImageMirrorMode( GetId(), false );
             rBox.SetItemImageAngle( GetId(), pItem->GetRotation() );
             rBox.SetItemImageMirrorMode( GetId(), pItem->IsMirrored() );
         }
@@ -216,13 +216,13 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
         }
         ToolBox* pToolBox = &GetToolBox();
         sal_uInt16 nId = GetId();
-        pToolBox->SetItemDown( nId, sal_True );
+        pToolBox->SetItemDown( nId, true );
 
         pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
             (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
-        pToolBox->SetItemDown( nId, sal_False );
+        pToolBox->SetItemDown( nId, false );
     }
     GetToolBox().EndSelection();
     DelPopup();
@@ -322,13 +322,13 @@ SfxPopupWindow* SwTbxFieldCtrl::CreatePopupWindow()
         }
         ToolBox* pToolBox = &GetToolBox();
         sal_uInt16 nId = GetId();
-        pToolBox->SetItemDown( nId, sal_True );
+        pToolBox->SetItemDown( nId, true );
 
         pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
             (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
-        pToolBox->SetItemDown( nId, sal_False );
+        pToolBox->SetItemDown( nId, false );
     }
     GetToolBox().EndSelection();
     DelPopup();
@@ -504,7 +504,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     aToolBox.SetPosSizePixel( Point(), aSz );
     sal_uInt16 nItemId = SwView::GetMoveType();
     aInfoField.SetText(aToolBox.GetItemText(nItemId));
-    aToolBox.CheckItem( nItemId, sal_True );
+    aToolBox.CheckItem( nItemId, true );
     Size aFTSize(aInfoField.GetSizePixel());
     Size aSepSize(aSeparator.GetSizePixel());
     aSepSize.Width() = aSz.Width();
@@ -640,7 +640,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     bRelease(true),
     m_xDispatchProvider( rDispatchProvider )
 {
-    EnableAutocomplete( sal_False );
+    EnableAutocomplete( false );
     sal_uInt16 aZoomValues[] =
     {   25, 50, 75, 100, 150, 200 };
     for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)

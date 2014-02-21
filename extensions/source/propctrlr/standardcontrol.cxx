@@ -71,9 +71,9 @@ namespace pcr
     OTimeControl::OTimeControl( Window* pParent, WinBits nWinStyle )
         :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
     {
-        getTypedControlWindow()->SetStrictFormat( sal_True );
+        getTypedControlWindow()->SetStrictFormat( true );
         getTypedControlWindow()->SetFormat( TIMEF_SEC );
-        getTypedControlWindow()->EnableEmptyFieldValue( sal_True );
+        getTypedControlWindow()->EnableEmptyFieldValue( true );
     }
 
     //------------------------------------------------------------------
@@ -117,7 +117,7 @@ namespace pcr
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
         WindowType* pControlWindow = getTypedControlWindow();
-        pControlWindow->SetStrictFormat(sal_True);
+        pControlWindow->SetStrictFormat(true);
 
         pControlWindow->SetMin( ::Date( 1,1,1600 ) );
         pControlWindow->SetFirst( ::Date( 1,1,1600 ) );
@@ -125,7 +125,7 @@ namespace pcr
         pControlWindow->SetMax( ::Date( 1, 1, 9999 ) );
 
         pControlWindow->SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
-        pControlWindow->EnableEmptyFieldValue( sal_True );
+        pControlWindow->EnableEmptyFieldValue( true );
     }
 
     //------------------------------------------------------------------
@@ -484,8 +484,8 @@ namespace pcr
     {
         getTypedControlWindow()->SetDefaultUnit( FUNIT_NONE );
 
-        getTypedControlWindow()->EnableEmptyFieldValue( sal_True );
-        getTypedControlWindow()->SetStrictFormat( sal_True );
+        getTypedControlWindow()->EnableEmptyFieldValue( true );
+        getTypedControlWindow()->SetStrictFormat( true );
         Optional< double > value( getMaxValue() );
         value.Value = -value.Value;
         setMinValue( value );
@@ -695,7 +695,7 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( sal_True );
+            getTypedControlWindow()->SetReadOnly( true );
             getTypedControlWindow()->Enable( true );
         }
     }
@@ -804,7 +804,7 @@ namespace pcr
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
         if ( ( nWinStyle & WB_READONLY ) != 0 )
         {
-            getTypedControlWindow()->SetReadOnly( sal_True );
+            getTypedControlWindow()->SetReadOnly( true );
             getTypedControlWindow()->Enable( true );
         }
     }
@@ -1030,7 +1030,7 @@ namespace pcr
         ,m_nOperationMode( eStringList )
         ,m_bDropdown( sal_False )
     {
-        SetCompoundControl( sal_True );
+        SetCompoundControl( true );
 
         m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );

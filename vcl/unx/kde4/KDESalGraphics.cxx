@@ -88,7 +88,7 @@ KDESalGraphics::~KDESalGraphics()
         delete m_image;
 }
 
-sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
+bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
     if (type == CTRL_PUSHBUTTON) return true;
 
@@ -242,7 +242,7 @@ static QRegion XRegionToQRegion( XLIB_Region xr )
 }
 #endif
 
-sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
+bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
@@ -256,7 +256,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         return false;
     }
 
-    sal_Bool returnVal = true;
+    bool returnVal = true;
 
     QRect widgetRect = region2QRect(rControlRegion);
     if( type == CTRL_SPINBOX && part == PART_ALL_BUTTONS )
@@ -672,13 +672,13 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     return returnVal;
 }
 
-sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
+bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
                                              Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
-    sal_Bool retVal = false;
+    bool retVal = false;
 
     QRect boundingRect = region2QRect( controlRegion );
     QRect contentRect = boundingRect;
@@ -950,7 +950,7 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
-sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
+bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {

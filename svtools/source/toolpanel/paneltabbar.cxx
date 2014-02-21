@@ -165,8 +165,8 @@ namespace svt
                 aSelectionRect,
                 ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
                 bActive /* check */,
-                sal_True /* border */,
-                sal_False /* ext border only */,
+                true /* border */,
+                false /* ext border only */,
                 0 /* corner radius */,
                 NULL,
                 NULL
@@ -686,7 +686,7 @@ namespace svt
 
                 Font aFont( m_rTabBar.GetFont() );
                 aFont.SetOrientation( 2700 );
-                aFont.SetVertical( sal_True );
+                aFont.SetVertical( true );
                 m_rTabBar.SetFont( aFont );
 
                 aTextPos.X() += aTextSize.Height();
@@ -788,7 +788,7 @@ namespace svt
                 return;
         }
 
-        m_rTabBar.SetUpdateMode( sal_False );
+        m_rTabBar.SetUpdateMode( false );
 
         // the aligned bounding and content rect
         const Rectangle aActualBounds = m_aNormalizer.getTransformed( aNormalizedBounds, m_eTabAlignment );
@@ -806,7 +806,7 @@ namespace svt
         // render item "foreground" layer
         m_pRenderer->postRenderItem( m_rTabBar, aActualBounds, nItemFlags );
 
-        m_rTabBar.SetUpdateMode( sal_True );
+        m_rTabBar.SetUpdateMode( true );
     }
 
     //------------------------------------------------------------------------------------------------------------------

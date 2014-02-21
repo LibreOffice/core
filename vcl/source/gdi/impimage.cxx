@@ -112,7 +112,7 @@ ImplImageData::~ImplImageData()
     delete mpImageBitmap;
 }
 
-sal_Bool ImplImageData::IsEqual( const ImplImageData& rData )
+bool ImplImageData::IsEqual( const ImplImageData& rData )
 {
     return( maBmpEx == rData.maBmpEx );
 }

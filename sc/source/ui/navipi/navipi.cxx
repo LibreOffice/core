@@ -1356,7 +1356,7 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
             aSelEntry = aEntry;
     }
 
-    aLbDocuments.SetUpdateMode( sal_True );
+    aLbDocuments.SetUpdateMode( true );
 
     aLbDocuments.SelectEntry( aSelEntry );
 }

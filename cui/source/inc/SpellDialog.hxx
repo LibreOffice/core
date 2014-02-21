@@ -95,7 +95,7 @@ public:
     const SpellErrorDescription* GetAlternatives();
 
 
-    void            ResetModified()   { GetTextEngine()->SetModified(sal_False); m_bIsUndoEditMode = false;}
+    void            ResetModified()   { GetTextEngine()->SetModified(false); m_bIsUndoEditMode = false;}
     virtual bool    IsModified() const SAL_OVERRIDE { return GetTextEngine()->IsModified(); }
 
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
@@ -222,7 +222,7 @@ public:
     ~SpellDialog();
 
     void            SetLanguage( sal_uInt16 nLang );
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     void            InvalidateDialog();
 };

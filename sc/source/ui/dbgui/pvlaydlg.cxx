@@ -284,7 +284,7 @@ ScPivotLayoutDlg::~ScPivotLayoutDlg()
 {
 }
 
-sal_Bool ScPivotLayoutDlg::Close()
+bool ScPivotLayoutDlg::Close()
 {
     return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }

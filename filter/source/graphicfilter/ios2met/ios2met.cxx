@@ -2229,7 +2229,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
     OSFont * pF=new OSFont;
     pF->pSucc=pFontList; pFontList=pF;
     pF->nID=0;
-    pF->aFont.SetTransparent(sal_True);
+    pF->aFont.SetTransparent(true);
     pF->aFont.SetAlign(ALIGN_BASELINE);
 
     nPos=pOS2MET->Tell();
@@ -2584,7 +2584,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     pOrdFile=NULL;
 
     pVirDev = new VirtualDevice();
-    pVirDev->EnableOutput(sal_False);
+    pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 
     pOS2MET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);

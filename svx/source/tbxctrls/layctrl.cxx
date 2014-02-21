@@ -140,7 +140,7 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
     Font aFont = GetFont();
     aFont.SetColor( ::Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor )  );
     aFont.SetFillColor( aBackgroundColor );
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( false );
     SetFont( aFont );
 
     SetText( rText );
@@ -460,7 +460,7 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUStri
     Font aFont( GetFont() );
     aFont.SetColor( aLineColor );
     aFont.SetFillColor( aFaceColor );
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( false );
     SetFont( aFont );
 
     nCol        = 0;

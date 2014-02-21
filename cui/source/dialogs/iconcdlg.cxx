@@ -134,16 +134,16 @@ void IconChoicePage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( true );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( false );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( false );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );

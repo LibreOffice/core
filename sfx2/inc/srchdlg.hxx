@@ -73,7 +73,7 @@ public:
 
     void                SetFocusOnEdit();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void        Move();
     virtual void        StateChanged( StateChangedType nStateChange );
 };

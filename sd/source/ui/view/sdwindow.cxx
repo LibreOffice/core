@@ -91,7 +91,7 @@ Window::Window(::Window* pParent)
     SetUniqueId(HID_SD_WIN_DOCUMENT);
 
     // #i78183# Added after discussed with AF
-    EnableRTL(sal_False);
+    EnableRTL(false);
 }
 
 
@@ -1039,7 +1039,7 @@ void Window::DropScroll(const Point& rMousePos)
     {
         return ::Window::CreateAccessible ();
     }
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(sal_False);
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc = GetAccessible(false);
     if (xAcc.get())
     {
         return xAcc;
@@ -1064,7 +1064,7 @@ void Window::SwitchView()
 {
     if (mpViewShell)
     {
-        mpViewShell->SwitchViewFireFocus(GetAccessible(sal_False));
+        mpViewShell->SwitchViewFireFocus(GetAccessible(false));
     }
 }
 

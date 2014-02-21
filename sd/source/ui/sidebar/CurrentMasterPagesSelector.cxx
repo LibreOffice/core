@@ -260,7 +260,7 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
     if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
     {
         if (rMenu.GetItemPos(SID_DELETE_MASTER_PAGE) != MENU_ITEM_NOTFOUND)
-            rMenu.EnableItem(SID_DELETE_MASTER_PAGE, sal_False);
+            rMenu.EnableItem(SID_DELETE_MASTER_PAGE, false);
     }
 
     ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
@@ -269,7 +269,7 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
         && pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {
         if (rMenu.GetItemPos(SID_TP_EDIT_MASTER) != MENU_ITEM_NOTFOUND)
-            rMenu.EnableItem(SID_TP_EDIT_MASTER, sal_False);
+            rMenu.EnableItem(SID_TP_EDIT_MASTER, false);
     }
 
     MasterPagesSelector::ProcessPopupMenu(rMenu);

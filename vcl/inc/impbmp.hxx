@@ -43,16 +43,16 @@ public:
     void                ImplSetSalBitmap( SalBitmap* pSalBitmap );
     SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap; }
 
-    sal_Bool            ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    sal_Bool            ImplCreate( const ImpBitmap& rImpBitmap );
-    sal_Bool            ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
-    sal_Bool            ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
+    bool            ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
+    bool            ImplCreate( const ImpBitmap& rImpBitmap );
+    bool            ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
+    bool            ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
     Size                ImplGetSize() const;
     sal_uInt16          ImplGetBitCount() const;
 
-    BitmapBuffer*       ImplAcquireBuffer( sal_Bool bReadOnly );
-    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, sal_Bool bReadOnly );
+    BitmapBuffer*       ImplAcquireBuffer( bool bReadOnly );
+    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
 
     sal_uLong           ImplGetRefCount() const { return mnRefCount; }
     void                ImplIncRefCount() { mnRefCount++; }

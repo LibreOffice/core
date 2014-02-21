@@ -290,14 +290,14 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
     if ( pColorTable.is() )
     {
         // filling the line color box
-        m_pLbLineColor->SetUpdateMode( sal_False );
+        m_pLbLineColor->SetUpdateMode( false );
 
         for ( long i = 0; i < pColorTable->Count(); ++i )
         {
             XColorEntry* pEntry = pColorTable->GetColor(i);
             m_pLbLineColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-        m_pLbLineColor->SetUpdateMode( sal_True );
+        m_pLbLineColor->SetUpdateMode( true );
 
         m_pLbShadowColor->CopyEntries(*m_pLbLineColor);
     }

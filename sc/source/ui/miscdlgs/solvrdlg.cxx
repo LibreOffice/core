@@ -109,7 +109,7 @@ void ScSolverDlg::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSolverDlg::Close()
+bool ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }

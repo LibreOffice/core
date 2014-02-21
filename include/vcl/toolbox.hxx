@@ -61,7 +61,7 @@ public:
     sal_uInt16      GetTargetPos() const { return mnPosTo; }
     sal_uInt16      GetSourceId() const { return mnIdFrom; }
     void*       GetData() const { return mpData; }
-    sal_Bool        IsResized() const;
+    bool        IsResized() const;
 };
 
 inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent()
@@ -82,12 +82,12 @@ inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent( ToolBox* pDropBox,
     mpData      = pUserData;
 }
 
-inline sal_Bool ToolBoxCustomizeEvent::IsResized() const
+inline bool ToolBoxCustomizeEvent::IsResized() const
 {
     if ( mnPosTo == TOOLBOX_CUSTOMIZE_RESIZE )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 #define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
@@ -204,39 +204,39 @@ private:
     private:
     SAL_DLLPRIVATE void            ImplInit( Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
-    SAL_DLLPRIVATE void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
-    SAL_DLLPRIVATE sal_Bool            ImplCalcItem();
-    SAL_DLLPRIVATE sal_uInt16          ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool bCalcHorz );
-    SAL_DLLPRIVATE void            ImplFormat( sal_Bool bResize = sal_False );
-    SAL_DLLPRIVATE void            ImplDrawSpin( sal_Bool bUpperIn, sal_Bool bLowerIn );
+    SAL_DLLPRIVATE bool            ImplCalcItem();
+    SAL_DLLPRIVATE sal_uInt16          ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
+    SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
+    SAL_DLLPRIVATE void            ImplDrawSpin( bool bUpperIn, bool bLowerIn );
     SAL_DLLPRIVATE void            ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect );
-    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, sal_Bool bPaint = sal_False, sal_Bool bLayout = sal_False );
+    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false );
     using Window::ImplInvalidate;
-    SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
+    SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
     SAL_DLLPRIVATE const OUString ImplConvertMenuString( const OUString& rStr );
-    SAL_DLLPRIVATE sal_Bool            ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat = sal_False );
-    SAL_DLLPRIVATE sal_Bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCancel = sal_False );
-    SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus = sal_False );
-    SAL_DLLPRIVATE sal_Bool            ImplChangeHighlightUpDn( sal_Bool bUp, sal_Bool bNoCycle = sal_False );
+    SAL_DLLPRIVATE bool            ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat = false );
+    SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
+    SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
+    SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
     SAL_DLLPRIVATE sal_uInt16          ImplGetItemLine( ImplToolItem* pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
-    SAL_DLLPRIVATE sal_Bool            ImplOpenItem( KeyCode aKeyCode );
-    SAL_DLLPRIVATE sal_Bool            ImplActivateItem( KeyCode aKeyCode );
+    SAL_DLLPRIVATE bool            ImplOpenItem( KeyCode aKeyCode );
+    SAL_DLLPRIVATE bool            ImplActivateItem( KeyCode aKeyCode );
     SAL_DLLPRIVATE void            ImplShowFocus();
     SAL_DLLPRIVATE void            ImplHideFocus();
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();
     SAL_DLLPRIVATE void            ImplFillLayoutData() const;
-    SAL_DLLPRIVATE sal_Bool            ImplHasClippedItems();
+    SAL_DLLPRIVATE bool            ImplHasClippedItems();
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
     SAL_DLLPRIVATE void            ImplExecuteCustomMenu();
-    SAL_DLLPRIVATE sal_Bool            ImplIsFloatingMode() const;
-    SAL_DLLPRIVATE sal_Bool            ImplIsInPopupMode() const;
+    SAL_DLLPRIVATE bool            ImplIsFloatingMode() const;
+    SAL_DLLPRIVATE bool            ImplIsInPopupMode() const;
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
-    SAL_DLLPRIVATE sal_Bool            ImplHasExternalMenubutton();
+    SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder( ImplToolItem* pItem );
 
     DECL_DLLPRIVATE_LINK(          ImplCallExecuteCustomMenu, void* );
@@ -251,7 +251,7 @@ private:
 
     SAL_DLLPRIVATE void            ImplUpdateImageList(); // called if StateChanged
 public:
-    SAL_DLLPRIVATE void            ImplFloatControl( sal_Bool bStart, FloatingWindow* pWindow = NULL );
+    SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = NULL );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
 
     static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox* pThis );
@@ -260,11 +260,11 @@ public:
                                                long& rRight, long& rBottom, const ToolBox *pThis );
     static SAL_DLLPRIVATE void ImplDrawGrip( ToolBox* pThis );
     static SAL_DLLPRIVATE void ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper );
-    static SAL_DLLPRIVATE sal_Bool ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion );
+    static SAL_DLLPRIVATE bool ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion );
     static SAL_DLLPRIVATE void ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion );
-    static SAL_DLLPRIVATE void ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, sal_Bool bIsInPopupMode );
+    static SAL_DLLPRIVATE void ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, bool bIsInPopupMode );
     static SAL_DLLPRIVATE void ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect );
-    static SAL_DLLPRIVATE void ImplErase( ToolBox* pThis, const Rectangle &rRect, sal_Bool bHighlight = sal_False, sal_Bool bHasOpenPopup = sal_False );
+    static SAL_DLLPRIVATE void ImplErase( ToolBox* pThis, const Rectangle &rRect, bool bHighlight = false, bool bHasOpenPopup = false );
     static SAL_DLLPRIVATE void ImplDrawBorder( ToolBox* pWin );
     static SAL_DLLPRIVATE const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis );
     static SAL_DLLPRIVATE Size ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uInt16 nCalcMode = 0 );
@@ -277,7 +277,7 @@ public:
     static SAL_DLLPRIVATE void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect, sal_uInt16 nLineMode );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( ToolBox* pBox, const Point& rPos );
     static SAL_DLLPRIVATE sal_uInt16 ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList );
-    static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight );
+    static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, bool bHighlight );
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
 
@@ -315,10 +315,10 @@ public:
     virtual void        LoseFocus();
     virtual void        KeyInput( const KeyEvent& rKEvt );
 
-    virtual sal_Bool        PrepareToggleFloatingMode();
+    virtual bool        PrepareToggleFloatingMode();
     virtual void        ToggleFloatingMode();
     virtual void        StartDocking();
-    virtual sal_Bool        Docking( const Point& rPos, Rectangle& rRect );
+    virtual bool        Docking( const Point& rPos, Rectangle& rRect );
     virtual void        EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
     virtual void        Resizing( Size& rSize );
     virtual Size        GetOptimalSize() const;
@@ -365,15 +365,15 @@ public:
 
     void                SetAlign( WindowAlign eNewAlign = WINDOWALIGN_TOP );
     WindowAlign         GetAlign() const { return meAlign; }
-    sal_Bool                IsHorizontal() const { return mbHorz; }
+    bool                IsHorizontal() const { return mbHorz; }
 
     void                SetLineCount( sal_uInt16 nNewLines );
     sal_uInt16              GetLineCount() const { return mnLines; }
     sal_uInt16              GetCurLine() const { return mnCurLine; }
-    void                ShowLine( sal_Bool bNext );
+    void                ShowLine( bool bNext );
 
     // Used to enable/disable scrolling one page at a time for toolbar
-    void                SetPageScroll( sal_Bool b );
+    void                SetPageScroll( bool b );
 
     sal_uInt16              GetItemCount() const;
     ToolBoxItemType     GetItemType( sal_uInt16 nPos ) const;
@@ -410,7 +410,7 @@ public:
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
-    void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
+    void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetItemText( sal_uInt16 nItemId ) const;
     void                SetItemWindow( sal_uInt16 nItemId, Window* pNewWindow );
@@ -420,18 +420,18 @@ public:
     void                StartSelection();
     void                EndSelection();
 
-    void                SetItemDown( sal_uInt16 nItemId, sal_Bool bDown, sal_Bool bRelease = sal_True );
+    void                SetItemDown( sal_uInt16 nItemId, bool bDown, bool bRelease = true );
 
     void                SetItemState( sal_uInt16 nItemId, TriState eState );
     TriState            GetItemState( sal_uInt16 nItemId ) const;
 
-    void                CheckItem( sal_uInt16 nItemId, sal_Bool bCheck = sal_True );
-    sal_Bool                IsItemChecked( sal_uInt16 nItemId ) const;
+    void                CheckItem( sal_uInt16 nItemId, bool bCheck = true );
+    bool                IsItemChecked( sal_uInt16 nItemId ) const;
 
     void                EnableItem( sal_uInt16 nItemId, bool bEnable = true );
-    sal_Bool                IsItemEnabled( sal_uInt16 nItemId ) const;
+    bool                IsItemEnabled( sal_uInt16 nItemId ) const;
 
-    void                TriggerItem( sal_uInt16 nItemId, sal_Bool bShift = sal_False, sal_Bool bCtrl = sal_False );
+    void                TriggerItem( sal_uInt16 nItemId, bool bShift = false, bool bCtrl = false );
 
     /// Shows or hides items.
     void                ShowItem(sal_uInt16 nItemId, bool bVisible = true);
@@ -443,8 +443,8 @@ public:
     /// Overload to provide HideItem via command id.
     void                HideItem(const OUString& rCommand) { ShowItem(rCommand, false); }
 
-    sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
-    sal_Bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
+    bool                IsItemVisible( sal_uInt16 nItemId ) const;
+    bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     const OUString      GetItemCommand( sal_uInt16 nItemId ) const;
@@ -485,20 +485,20 @@ public:
     WinBits             GetStyle() const { return mnWinStyle; }
 
     // enable/disable undocking
-    void                Lock( sal_Bool bLock = sal_True );
+    void                Lock( bool bLock = true );
 
     // read configuration to determine locking behaviour
-    static sal_Bool         AlwaysLocked();
+    static bool         AlwaysLocked();
 
     void                EnableMenuStrings( bool bEnable = true ) { mbMenuStrings = bEnable; }
-    sal_Bool                IsMenuStringsEnabled() const { return mbMenuStrings; }
+    bool                IsMenuStringsEnabled() const { return mbMenuStrings; }
 
     void                SetOutStyle( sal_uInt16 nNewStyle );
     sal_uInt16              GetOutStyle() const { return mnOutStyle; }
 
     void                EnableCustomize( bool bEnable = true );
-    sal_Bool                IsCustomize() { return mbCustomize; }
-    sal_Bool                IsInCustomizeMode() const { return mbCustomizeMode; }
+    bool                IsCustomize() { return mbCustomize; }
+    bool                IsInCustomizeMode() const { return mbCustomizeMode; }
 
     void                SetHelpText( const OUString& rText )
                             { DockingWindow::SetHelpText( rText ); }
@@ -540,7 +540,7 @@ public:
     // when the menu button was clicked and before the menu is executed
     void                SetMenuType( sal_uInt16 aType = TOOLBOX_MENUTYPE_CUSTOMIZE );
     sal_uInt16              GetMenuType() const;
-    sal_Bool                IsMenuEnabled() const;
+    bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
     void                UpdateCustomMenu();
     void                SetMenuButtonHdl( const Link& rLink );
@@ -551,11 +551,11 @@ public:
     // allow Click Handler to detect special key
     bool                IsShift() const { return mbIsShift; }
     // allow Click Handler to distinguish between mouse and key input
-    sal_Bool                IsKeyEvent() const { return mbIsKeyEvent; }
+    bool                IsKeyEvent() const { return mbIsKeyEvent; }
 
     // allows framework to set/query the planned popupmode
-    sal_Bool                WillUsePopupMode() const;
-    void                WillUsePopupMode( sal_Bool b);
+    bool                WillUsePopupMode() const;
+    void                WillUsePopupMode( bool b);
 
     // accessibility helpers
 
@@ -577,12 +577,12 @@ public:
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
 };
 
-inline void ToolBox::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
+inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
 {
     SetItemState( nItemId, (bCheck) ? STATE_CHECK : STATE_NOCHECK );
 }
 
-inline sal_Bool ToolBox::IsItemChecked( sal_uInt16 nItemId ) const
+inline bool ToolBox::IsItemChecked( sal_uInt16 nItemId ) const
 {
     return (GetItemState( nItemId ) == STATE_CHECK);
 }

@@ -560,15 +560,15 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
     return;
 }
 
-sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
+bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 {
     if( ! pFrame || ! pJobSetup )
-        return sal_False;
+        return false;
 
     getPaLib();
 
     if( ! pSetupFunction )
-        return sal_False;
+        return false;
 
     PrinterInfoManager& rManager = PrinterInfoManager::get();
 
@@ -594,9 +594,9 @@ sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );
         JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // This function gets the driver data and puts it into pJobSetup
@@ -604,21 +604,21 @@ sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 // data should be merged into the driver data
 // If pJobSetup->mpDriverData IS NULL, then the driver defaults
 // should be merged into the independent data
-sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
+bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
     if( pJobSetup->mpDriverData )
         return SetData( ~0, pJobSetup );
 
     copyJobDataToJobSetup( pJobSetup, m_aJobData );
 
-    return sal_True;
+    return true;
 }
 
 // This function merges the independ driver data
 // and sets the new independ data in pJobSetup
 // Only the data must be changed, where the bit
 // in nGetDataFlags is set
-sal_Bool PspSalInfoPrinter::SetData(
+bool PspSalInfoPrinter::SetData(
     sal_uLong nSetDataFlags,
     ImplJobSetup* pJobSetup )
 {
@@ -657,7 +657,7 @@ sal_Bool PspSalInfoPrinter::SetData(
             }
 
             if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )
-                return sal_False;
+                return false;
         }
 
         // merge paperbin if necessary
@@ -717,10 +717,10 @@ sal_Bool PspSalInfoPrinter::SetData(
 
         m_aJobData = aData;
         copyJobDataToJobSetup( pJobSetup, aData );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void PspSalInfoPrinter::GetPageInfo(
@@ -879,7 +879,7 @@ static OUString getTmpName()
     return aSys;
 }
 
-sal_Bool PspSalPrinter::StartJob(
+bool PspSalPrinter::StartJob(
     const OUString* pFileName,
     const OUString& rJobName,
     const OUString& rAppName,
@@ -954,11 +954,11 @@ sal_Bool PspSalPrinter::StartJob(
     return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
 }
 
-sal_Bool PspSalPrinter::EndJob()
+bool PspSalPrinter::EndJob()
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     if( m_bIsPDFWriterJob )
-        bSuccess = sal_True;
+        bSuccess = true;
     else
     {
         bSuccess = m_aPrintJob.EndJob();
@@ -984,9 +984,9 @@ sal_Bool PspSalPrinter::EndJob()
     return bSuccess;
 }
 
-sal_Bool PspSalPrinter::AbortJob()
+bool PspSalPrinter::AbortJob()
 {
-    sal_Bool bAbort = m_aPrintJob.AbortJob() ? sal_True : sal_False;
+    bool bAbort = m_aPrintJob.AbortJob() ? sal_True : sal_False;
     GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bAbort;
 }
@@ -1013,9 +1013,9 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
     return m_pGraphics;
 }
 
-sal_Bool PspSalPrinter::EndPage()
+bool PspSalPrinter::EndPage()
 {
-    sal_Bool bResult = m_aPrintJob.EndPage();
+    bool bResult = m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
     OSL_TRACE("PspSalPrinter::EndPage");
     return bResult ? sal_True : sal_False;
@@ -1060,14 +1060,14 @@ struct PDFPrintFile
     , maParameters( i_rNewParameters ) {}
 };
 
-sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
+bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
     OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
     // mark for endjob
     m_bIsPDFWriterJob = true;
     // reset IsLastPage
-    i_rController.setLastPage( sal_False );
+    i_rController.setLastPage( false );
 
     // update job data
     if( i_pSetupData )
@@ -1077,7 +1077,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
     m_aJobData.m_nPDFDevice = 1;
 
     // possibly create one job for collated output
-    sal_Bool bSinglePrintJobs = sal_False;
+    bool bSinglePrintJobs = false;
     beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
@@ -1120,7 +1120,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
     for( int nPage = 0; nPage < nAllPages && ! bAborted; nPage++ )
     {
         if( nPage == nAllPages-1 )
-            i_rController.setLastPage( sal_True );
+            i_rController.setLastPage( true );
 
         // get the page's metafile
         GDIMetaFile aPageFile;
@@ -1131,7 +1131,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
             if( nPage != nAllPages-1 )
             {
                 i_rController.createProgressDialog();
-                i_rController.setLastPage( sal_True );
+                i_rController.setLastPage( true );
                 i_rController.getFilteredPageFile( nPage, aPageFile );
             }
         }
@@ -1289,7 +1289,7 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 

@@ -247,7 +247,7 @@ Image& Image::operator=( const Image& rImage )
     return *this;
 }
 
-sal_Bool Image::operator==( const Image& rImage ) const
+bool Image::operator==( const Image& rImage ) const
 {
 
     bool bRet = false;
@@ -690,7 +690,7 @@ ImageList& ImageList::operator=( const ImageList& rImageList )
     return *this;
 }
 
-sal_Bool ImageList::operator==( const ImageList& rImageList ) const
+bool ImageList::operator==( const ImageList& rImageList ) const
 {
 
     bool bRet = false;

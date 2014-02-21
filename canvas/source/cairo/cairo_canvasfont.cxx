@@ -68,7 +68,7 @@ namespace cairocanvas
             if( pOutDev )
             {
                 const bool bOldMapState( pOutDev->IsMapModeEnabled() );
-                pOutDev->EnableMapMode(sal_False);
+                pOutDev->EnableMapMode(false);
 
                 const Size aSize = pOutDev->GetFontMetric( *maFont ).GetSize();
 

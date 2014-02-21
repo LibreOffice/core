@@ -44,9 +44,9 @@ private:
     ImplListBoxFloatingWindow*  mpFloatWin;
     sal_uInt16                      mnDDHeight;
     sal_Unicode                 mcMultiSep;
-    sal_Bool                        mbDDAutoSize        : 1;
-    sal_Bool                        mbSyntheticModify   : 1;
-    sal_Bool                        mbMatchCase         : 1;
+    bool                        mbDDAutoSize        : 1;
+    bool                        mbSyntheticModify   : 1;
+    bool                        mbMatchCase         : 1;
     sal_Int32 m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
@@ -86,7 +86,7 @@ protected:
 
 protected:
     explicit            ComboBox( WindowType nType );
-    sal_Bool            IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
+    bool            IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
 
     virtual void  FillLayoutData() const;
 public:
@@ -122,9 +122,9 @@ public:
     sal_uInt16      GetDropDownLineCount() const;
 
     void            EnableAutoSize( bool bAuto );
-    sal_Bool        IsAutoSizeEnabled() const               { return mbDDAutoSize; }
+    bool        IsAutoSizeEnabled() const               { return mbDDAutoSize; }
 
-    void            EnableDDAutoWidth( sal_Bool b );
+    void            EnableDDAutoWidth( bool b );
 
     virtual void    SetText( const OUString& rStr );
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection );
@@ -142,25 +142,25 @@ public:
     OUString        GetEntry( sal_uInt16 nPos ) const;
     sal_uInt16      GetEntryCount() const;
 
-    sal_Bool        IsTravelSelect() const;
-    sal_Bool        IsInDropDown() const;
+    bool        IsTravelSelect() const;
+    bool        IsInDropDown() const;
     void            ToggleDropDown();
 
     long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
 
     void            SetUserItemSize( const Size& rSz );
-    void            EnableUserDraw( sal_Bool bUserDraw );
+    void            EnableUserDraw( bool bUserDraw );
 
-    void            DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
+    void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
     void            SetBorderStyle( sal_uInt16 nBorderStyle );
 
     void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
 
-    void            EnableAutocomplete( sal_Bool bEnable, sal_Bool bMatchCase = sal_False );
-    sal_Bool        IsAutocompleteEnabled() const;
+    void            EnableAutocomplete( bool bEnable, bool bMatchCase = false );
+    bool        IsAutocompleteEnabled() const;
 
-    void            EnableMultiSelection( sal_Bool bMulti );
-    sal_Bool        IsMultiSelectionEnabled() const;
+    void            EnableMultiSelection( bool bMulti );
+    bool        IsMultiSelectionEnabled() const;
     void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
     sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
 
@@ -191,8 +191,8 @@ public:
 
     sal_uInt16          GetSelectEntryCount() const;
     sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
-    sal_Bool            IsEntryPosSelected( sal_uInt16 nPos ) const;
-    void            SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
+    bool            IsEntryPosSelected( sal_uInt16 nPos ) const;
+    void            SelectEntryPos( sal_uInt16 nPos, bool bSelect = true );
     void            SetNoSelection();
     Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
 

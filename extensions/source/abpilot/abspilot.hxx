@@ -77,7 +77,7 @@ namespace abp
         // RoadmapWizard
         virtual OUString            getStateDisplayName( WizardState _nState ) const;
 
-        virtual sal_Bool    Close();
+        virtual bool    Close();
 
     private:
         DECL_LINK( OnCancelClicked, void* );

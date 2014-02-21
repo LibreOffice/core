@@ -236,7 +236,7 @@ throw (RuntimeException)
     if ( !m_pStatusBar )
         return;
 
-    if ( bVisible != m_pStatusBar->IsItemVisible( m_nId ) )
+    if ( bool(bVisible) != m_pStatusBar->IsItemVisible( m_nId ) )
     {
         if ( bVisible )
             m_pStatusBar->ShowItem( m_nId );

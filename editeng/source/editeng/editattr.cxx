@@ -244,7 +244,7 @@ EditCharAttribShadow::EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_uI
 
 void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetShadow( (sal_Bool)((const SvxShadowedItem*)GetItem())->GetValue() );
+    rFont.SetShadow( ((const SvxShadowedItem*)GetItem())->GetValue() );
 }
 
 // -------------------------------------------------------------------------
@@ -280,7 +280,7 @@ EditCharAttribOutline::EditCharAttribOutline( const SvxContourItem& rAttr, sal_u
 
 void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    rFont.SetOutline( (sal_Bool)((const SvxContourItem*)GetItem())->GetValue() );
+    rFont.SetOutline( ((const SvxContourItem*)GetItem())->GetValue() );
 }
 
 // -------------------------------------------------------------------------
@@ -325,7 +325,7 @@ void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
     if ( pFldColor )
     {
         rFont.SetFillColor( *pFldColor );
-        rFont.SetTransparent( sal_False );
+        rFont.SetTransparent( false );
     }
     if ( pTxtColor )
         rFont.SetColor( *pTxtColor );

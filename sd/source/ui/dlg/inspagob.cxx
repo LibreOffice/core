@@ -80,7 +80,7 @@ void SdInsertPagesObjsDlg::Reset()
         m_pLbTree->InsertEntry( rName, aImgText, aImgText );
     }
 
-    m_pCbxMasters->Check( sal_True );
+    m_pCbxMasters->Check( true );
 }
 
 std::vector<OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )

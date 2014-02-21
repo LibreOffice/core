@@ -140,9 +140,9 @@ void ScDataBarSettingsDlg::Init()
             if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
                 mpLbPos->SelectEntryPos(i);
         }
-        mpLbPos->SetUpdateMode( sal_True );
-        mpLbNeg->SetUpdateMode( sal_True );
-        mpLbAxisCol->SetUpdateMode( sal_True );
+        mpLbPos->SetUpdateMode( true );
+        mpLbNeg->SetUpdateMode( true );
+        mpLbAxisCol->SetUpdateMode( true );
     }
     mpBtnOk->SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 

@@ -61,7 +61,7 @@ struct ImpSwap
 
     sal_uInt8*          GetData() const;
 
-    sal_Bool            IsSwapped() const { return maURL.getLength() > 0; }
+    bool            IsSwapped() const { return maURL.getLength() > 0; }
 
     void            WriteTo( SvStream& rOStm ) const;
 };
@@ -137,11 +137,11 @@ public:
                         GfxLink();
                         GfxLink( const GfxLink& );
                         GfxLink( const OUString& rPath, GfxLinkType nType );
-                        GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType, sal_Bool bOwns );
+                        GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType, bool bOwns );
                         ~GfxLink();
 
     GfxLink&            operator=( const GfxLink& );
-    sal_Bool            IsEqual( const GfxLink& ) const;
+    bool            IsEqual( const GfxLink& ) const;
 
     GfxLinkType         GetType() const;
 
@@ -149,7 +149,7 @@ public:
     sal_uInt32          GetUserId() const { return mnUserId; }
 
     sal_uInt32          GetDataSize() const;
-    void                SetData( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, sal_Bool bOwns );
+    void                SetData( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns );
     const sal_uInt8*            GetData() const;
 
     const Size&         GetPrefSize() const;
@@ -160,16 +160,16 @@ public:
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
     bool                IsPrefMapModeValid();
 
-    sal_Bool                IsNative() const;
-    sal_Bool                IsUser() const { return( GFX_LINK_TYPE_USER == meType ); }
+    bool                IsNative() const;
+    bool                IsUser() const { return( GFX_LINK_TYPE_USER == meType ); }
 
-    sal_Bool                LoadNative( Graphic& rGraphic );
+    bool                LoadNative( Graphic& rGraphic );
 
-    sal_Bool                ExportNative( SvStream& rOStream ) const;
+    bool                ExportNative( SvStream& rOStream ) const;
 
     void                SwapOut();
     void                SwapIn();
-    sal_Bool                IsSwappedOut() const { return( mpSwap != NULL ); }
+    bool                IsSwappedOut() const { return( mpSwap != NULL ); }
 
 public:
 

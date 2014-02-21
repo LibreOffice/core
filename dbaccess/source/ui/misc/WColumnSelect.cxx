@@ -67,8 +67,8 @@ OWizColumnSelect::OWizColumnSelect( Window* pParent)
     m_ibColumns_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
     m_ibColumns_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
 
-    m_lbOrgColumnNames.EnableMultiSelection(sal_True);
-    m_lbNewColumnNames.EnableMultiSelection(sal_True);
+    m_lbOrgColumnNames.EnableMultiSelection(true);
+    m_lbNewColumnNames.EnableMultiSelection(true);
 
     m_lbOrgColumnNames.SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));
     m_lbNewColumnNames.SetDoubleClickHdl(LINK(this,OWizColumnSelect,ListDoubleClickHdl));

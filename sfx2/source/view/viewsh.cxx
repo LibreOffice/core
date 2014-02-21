@@ -1206,13 +1206,13 @@ void SfxViewShell::SetWindow
     DiscardClients_Impl();
 
     // Switch View-Port
-    sal_Bool bHadFocus = pWindow ? pWindow->HasChildPathFocus( sal_True ) : sal_False;
+    sal_Bool bHadFocus = pWindow ? pWindow->HasChildPathFocus( true ) : sal_False;
     pWindow = pViewPort;
 
     if( pWindow )
     {
         // Disable automatic GUI mirroring (right-to-left) for document windows
-        pWindow->EnableRTL( sal_False );
+        pWindow->EnableRTL( false );
     }
 
     if ( bHadFocus && pWindow )

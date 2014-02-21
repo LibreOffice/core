@@ -100,17 +100,17 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 
 // PrinterOptions
 PrinterOptions::PrinterOptions() :
-    mbReduceTransparency( sal_False ),
+    mbReduceTransparency( false ),
     meReducedTransparencyMode( PRINTER_TRANSPARENCY_AUTO ),
-    mbReduceGradients( sal_False ),
+    mbReduceGradients( false ),
     meReducedGradientsMode( PRINTER_GRADIENT_STRIPES ),
     mnReducedGradientStepCount( 64 ),
-    mbReduceBitmaps( sal_False ),
+    mbReduceBitmaps( false ),
     meReducedBitmapMode( PRINTER_BITMAP_NORMAL ),
     mnReducedBitmapResolution( 200 ),
-    mbReducedBitmapsIncludeTransparency( sal_True ),
-    mbConvertToGreyscales( sal_False ),
-    mbPDFAsStandardPrintJobFormat( sal_False )
+    mbReducedBitmapsIncludeTransparency( true ),
+    mbConvertToGreyscales( false ),
+    mbPDFAsStandardPrintJobFormat( false )
 {
 }
 
@@ -167,7 +167,7 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                 if( xSet.is() )
                 {
                     sal_Int32 nValue = 0;
-                    sal_Bool  bValue = 0;
+                    bool  bValue = false;
                     if( xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bValue )
                         SetReduceTransparency( bValue );
                     if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nValue )
@@ -421,22 +421,22 @@ void Printer::ImplInitData()
 {
     mbDevOutput         = false;
     meOutDevType        = OUTDEV_PRINTER;
-    mbDefPrinter        = sal_False;
+    mbDefPrinter        = false;
     mnError             = 0;
     mnCurPage           = 0;
     mnCurPrintPage      = 0;
     mnPageQueueSize     = 0;
     mnCopyCount         = 1;
-    mbCollateCopy       = sal_False;
-    mbPrinting          = sal_False;
-    mbJobActive         = sal_False;
-    mbPrintFile         = sal_False;
-    mbInPrintPage       = sal_False;
-    mbNewJobSetup       = sal_False;
+    mbCollateCopy       = false;
+    mbPrinting          = false;
+    mbJobActive         = false;
+    mbPrintFile         = false;
+    mbInPrintPage       = false;
+    mbNewJobSetup       = false;
     mpInfoPrinter       = NULL;
     mpPrinter           = NULL;
     mpDisplayDev        = NULL;
-    mbIsQueuePrinter    = sal_False;
+    mbIsQueuePrinter    = false;
     mpPrinterOptions    = new PrinterOptions;
 
     // Add printer to the list
@@ -597,7 +597,7 @@ Printer::Printer()
     {
         ImplInit( pInfo );
         if ( !IsDisplayPrinter() )
-            mbDefPrinter = sal_True;
+            mbDefPrinter = true;
     }
     else
         ImplInitDisplay( NULL );
@@ -707,38 +707,38 @@ sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
 }
 
 
-sal_Bool Printer::HasSupport( PrinterSupport eFeature ) const
+bool Printer::HasSupport( PrinterSupport eFeature ) const
 {
     switch ( eFeature )
     {
         case SUPPORT_SET_ORIENTATION:
-            return (sal_Bool)GetCapabilities( PRINTER_CAPABILITIES_SETORIENTATION );
+            return GetCapabilities( PRINTER_CAPABILITIES_SETORIENTATION ) != 0;
         case SUPPORT_SET_PAPERBIN:
-            return (sal_Bool)GetCapabilities( PRINTER_CAPABILITIES_SETPAPERBIN );
+            return GetCapabilities( PRINTER_CAPABILITIES_SETPAPERBIN ) != 0;
         case SUPPORT_SET_PAPERSIZE:
-            return (sal_Bool)GetCapabilities( PRINTER_CAPABILITIES_SETPAPERSIZE );
+            return GetCapabilities( PRINTER_CAPABILITIES_SETPAPERSIZE ) != 0;
         case SUPPORT_SET_PAPER:
-            return (sal_Bool)GetCapabilities( PRINTER_CAPABILITIES_SETPAPER );
+            return GetCapabilities( PRINTER_CAPABILITIES_SETPAPER ) != 0;
         case SUPPORT_COPY:
             return (GetCapabilities( PRINTER_CAPABILITIES_COPIES ) != 0);
         case SUPPORT_COLLATECOPY:
             return (GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES ) != 0);
         case SUPPORT_SETUPDIALOG:
-            return (sal_Bool)GetCapabilities( PRINTER_CAPABILITIES_SUPPORTDIALOG );
+            return GetCapabilities( PRINTER_CAPABILITIES_SUPPORTDIALOG ) != 0;
         case SUPPORT_FAX:
-            return (sal_Bool) GetCapabilities( PRINTER_CAPABILITIES_FAX );
+            return GetCapabilities( PRINTER_CAPABILITIES_FAX ) != 0;
         case SUPPORT_PDF:
-            return (sal_Bool) GetCapabilities( PRINTER_CAPABILITIES_PDF );
+            return GetCapabilities( PRINTER_CAPABILITIES_PDF ) != 0;
     }
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool Printer::SetJobSetup( const JobSetup& rSetup )
+bool Printer::SetJobSetup( const JobSetup& rSetup )
 {
     if ( IsDisplayPrinter() || mbInPrintPage )
-        return sal_False;
+        return false;
 
     JobSetup aJobSetup = rSetup;
 
@@ -746,58 +746,58 @@ sal_Bool Printer::SetJobSetup( const JobSetup& rSetup )
     if ( mpInfoPrinter->SetPrinterData( aJobSetup.ImplGetData() ) )
     {
         ImplUpdateJobSetupPaper( aJobSetup );
-        mbNewJobSetup = sal_True;
+        mbNewJobSetup = true;
         maJobSetup = aJobSetup;
         ImplUpdatePageData();
         ImplUpdateFontList();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
 
-sal_Bool Printer::Setup( Window* pWindow )
+bool Printer::Setup( Window* pWindow )
 {
     if ( IsDisplayPrinter() )
-        return sal_False;
+        return false;
 
     if ( IsJobActive() || IsPrinting() )
-        return sal_False;
+        return false;
 
     JobSetup aJobSetup = maJobSetup;
     SalFrame* pFrame;
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
     if( !pWindow )
-        return sal_False;
+        return false;
 
     pFrame = pWindow->ImplGetFrame();
     ImplReleaseGraphics();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode++;
     nImplSysDialog++;
-    sal_Bool bSetup = mpInfoPrinter->Setup( pFrame, aJobSetup.ImplGetData() );
+    bool bSetup = mpInfoPrinter->Setup( pFrame, aJobSetup.ImplGetData() );
     pSVData->maAppData.mnModalMode--;
     nImplSysDialog--;
     if ( bSetup )
     {
         ImplUpdateJobSetupPaper( aJobSetup );
-        mbNewJobSetup = sal_True;
+        mbNewJobSetup = true;
         maJobSetup = aJobSetup;
         ImplUpdatePageData();
         ImplUpdateFontList();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
+bool Printer::SetPrinterProps( const Printer* pPrinter )
 {
     if ( IsJobActive() || IsPrinting() )
-        return sal_False;
+        return false;
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -844,7 +844,7 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
 
         // Construct new printer
         ImplInitDisplay( NULL );
-        return sal_True;
+        return true;
     }
 
     // Destroy old printer?
@@ -898,14 +898,14 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
     else
         SetJobSetup( pPrinter->GetJobSetup() );
 
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool Printer::SetOrientation( Orientation eOrientation )
+bool Printer::SetOrientation( Orientation eOrientation )
 {
     if ( mbInPrintPage )
-        return sal_False;
+        return false;
 
     if ( maJobSetup.ImplGetConstData()->meOrientation != eOrientation )
     {
@@ -915,26 +915,26 @@ sal_Bool Printer::SetOrientation( Orientation eOrientation )
 
         if ( IsDisplayPrinter() )
         {
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return sal_True;
+            return true;
         }
 
         ImplReleaseGraphics();
         if ( mpInfoPrinter->SetData( SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -944,10 +944,10 @@ Orientation Printer::GetOrientation() const
 }
 
 
-sal_Bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
+bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
 {
     if ( mbInPrintPage )
-        return sal_False;
+        return false;
 
     if ( (maJobSetup.ImplGetConstData()->mnPaperBin != nPaperBin) &&
          (nPaperBin < GetPaperBinCount()) )
@@ -958,26 +958,26 @@ sal_Bool Printer::SetPaperBin( sal_uInt16 nPaperBin )
 
         if ( IsDisplayPrinter() )
         {
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return sal_True;
+            return true;
         }
 
         ImplReleaseGraphics();
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERBIN, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1077,10 +1077,10 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
 }
 
 
-sal_Bool Printer::SetPaper( Paper ePaper )
+bool Printer::SetPaper( Paper ePaper )
 {
     if ( mbInPrintPage )
-        return sal_False;
+        return false;
 
     if ( maJobSetup.ImplGetConstData()->mePaperFormat != ePaper )
     {
@@ -1096,9 +1096,9 @@ sal_Bool Printer::SetPaper( Paper ePaper )
 
         if ( IsDisplayPrinter() )
         {
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return sal_True;
+            return true;
         }
 
         ImplReleaseGraphics();
@@ -1107,29 +1107,29 @@ sal_Bool Printer::SetPaper( Paper ePaper )
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool Printer::SetPaperSizeUser( const Size& rSize )
+bool Printer::SetPaperSizeUser( const Size& rSize )
 {
     return SetPaperSizeUser( rSize, false );
 }
 
-sal_Bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
+bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
 {
     if ( mbInPrintPage )
-        return sal_False;
+        return false;
 
     Size    aPixSize = LogicToPixel( rSize );
     Size    aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
@@ -1145,9 +1145,9 @@ sal_Bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
 
         if ( IsDisplayPrinter() )
         {
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return sal_True;
+            return true;
         }
 
         ImplReleaseGraphics();
@@ -1157,17 +1157,17 @@ sal_Bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1234,10 +1234,10 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
 }
 
 
-sal_Bool Printer::SetDuplexMode( DuplexMode eDuplex )
+bool Printer::SetDuplexMode( DuplexMode eDuplex )
 {
     if ( mbInPrintPage )
-        return sal_False;
+        return false;
 
     if ( maJobSetup.ImplGetConstData()->meDuplexMode != eDuplex )
     {
@@ -1247,26 +1247,26 @@ sal_Bool Printer::SetDuplexMode( DuplexMode eDuplex )
 
         if ( IsDisplayPrinter() )
         {
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
-            return sal_True;
+            return true;
         }
 
         ImplReleaseGraphics();
         if ( mpInfoPrinter->SetData( SAL_JOBSET_DUPLEXMODE, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
-            mbNewJobSetup = sal_True;
+            mbNewJobSetup = true;
             maJobSetup = aJobSetup;
             ImplUpdatePageData();
             ImplUpdateFontList();
-            return sal_True;
+            return true;
         }
         else
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1303,11 +1303,11 @@ OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
 }
 
 
-sal_Bool Printer::SetCopyCount( sal_uInt16 nCopy, sal_Bool bCollate )
+bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
 {
     mnCopyCount = nCopy;
     mbCollateCopy = bCollate;
-    return sal_True;
+    return true;
 }
 
 
@@ -1338,15 +1338,15 @@ sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 }
 
 
-sal_Bool Printer::EndJob()
+bool Printer::EndJob()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !IsJobActive() )
         return bRet;
 
     DBG_ASSERT( !mbInPrintPage, "Printer::EndJob() - StartPage() without EndPage() called" );
 
-    mbJobActive = sal_False;
+    mbJobActive = false;
 
     if ( mpPrinter )
     {
@@ -1354,7 +1354,7 @@ sal_Bool Printer::EndJob()
 
         mnCurPage = 0;
 
-        mbPrinting      = sal_False;
+        mbPrinting      = false;
         mnCurPrintPage  = 0;
         maJobName = OUString();
 
@@ -1389,7 +1389,7 @@ void Printer::ImplStartPage()
         // PrintJob not aborted ???
         if ( IsJobActive() )
         {
-            mbInPrintPage = sal_True;
+            mbInPrintPage = true;
             mnCurPage++;
             mnCurPrintPage++;
         }
@@ -1402,7 +1402,7 @@ void Printer::ImplEndPage()
     if ( !IsJobActive() )
         return;
 
-    mbInPrintPage = sal_False;
+    mbInPrintPage = false;
 
     if ( mpPrinter )
     {
@@ -1411,7 +1411,7 @@ void Printer::ImplEndPage()
         mbDevOutput = false;
 
         mpJobGraphics = NULL;
-        mbNewJobSetup = sal_False;
+        mbNewJobSetup = false;
     }
 }
 

@@ -240,7 +240,7 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
     bool bMapMerk=rWin.IsMapModeEnabled();
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
-    rWin.EnableMapMode(sal_False);
+    rWin.EnableMapMode(false);
 
     Size aSiz( aGlueHalfSize );
     Rectangle aRect(aPt.X()-aSiz.Width(),aPt.Y()-aSiz.Height(),

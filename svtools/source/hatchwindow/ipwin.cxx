@@ -632,7 +632,7 @@ bool SvResizeWindow::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_LOSEFOCUS && m_bActive )
     {
-        sal_Bool bHasFocus = HasChildPathFocus(sal_True);
+        sal_Bool bHasFocus = HasChildPathFocus(true);
         if ( !bHasFocus )
         {
             m_bActive = sal_False;

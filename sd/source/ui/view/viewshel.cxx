@@ -211,7 +211,7 @@ void ViewShell::construct(void)
     {
         // Create scroll bars and the filler between the scroll bars.
         mpHorizontalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_HSCROLL | WB_DRAG)));
-        mpHorizontalScrollBar->EnableRTL (sal_False);
+        mpHorizontalScrollBar->EnableRTL (false);
         mpHorizontalScrollBar->SetRange(Range(0, 32000));
         mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
 
@@ -705,7 +705,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                             rCEvt.IsMouseEvent(),(const void *) &aWheelData );
                         bDone = pWin->HandleScrollCommand( aReWrite,
                             mpHorizontalScrollBar.get(),
-                            mpVerticalScrollBar.get()) == sal_True;
+                            mpVerticalScrollBar.get());
                     }
                 }
             }
@@ -1550,7 +1550,7 @@ void ViewShell::SwitchActiveViewFireFocus()
 {
     if (mpContentWindow)
     {
-        SwitchViewFireFocus(mpContentWindow->GetAccessible(sal_False));
+        SwitchViewFireFocus(mpContentWindow->GetAccessible(false));
     }
 }
 // move these two methods from DrawViewShell.

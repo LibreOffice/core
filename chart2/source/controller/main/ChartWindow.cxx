@@ -52,9 +52,9 @@ ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, 
     adjustHighContrastMode();
     // chart does not depend on exact pixel painting => enable antialiased drawing
     SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | GetAntialiasing() );
-    EnableRTL( sal_False );
+    EnableRTL( false );
     if( pParent )
-        pParent->EnableRTL( sal_False );// #i96215# necessary for a correct position of the context menu in rtl mode
+        pParent->EnableRTL( false );// #i96215# necessary for a correct position of the context menu in rtl mode
 }
 
 ChartWindow::~ChartWindow()

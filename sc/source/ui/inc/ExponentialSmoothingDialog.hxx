@@ -33,7 +33,7 @@ public:
 
     virtual ~ScExponentialSmoothingDialog();
 
-    virtual sal_Bool Close();
+    virtual bool Close();
 
 protected:
     virtual sal_Int16 GetUndoNameId();

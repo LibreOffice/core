@@ -196,7 +196,7 @@ sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
     {
         if( !rKEvt.GetKeyCode().IsShift() )
         {
-            if( mpBrowser1->mpThemes->HasChildPathFocus( sal_True ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else if( mpBrowser2->GetViewWindow()->HasFocus() )
                 mpBrowser2->maViewBox.GrabFocus();
@@ -207,7 +207,7 @@ sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
         }
         else
         {
-            if( mpBrowser1->mpThemes->HasChildPathFocus( sal_True ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
                 mpBrowser1->maNewTheme.GrabFocus();
             else if( mpBrowser1->maNewTheme.HasFocus() )
                 mpBrowser2->maViewBox.GrabFocus();
@@ -221,7 +221,7 @@ sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
     return bRet;
 }
 
-sal_Bool GalleryBrowser::Close()
+bool GalleryBrowser::Close()
 {
     return SfxDockingWindow::Close();
 }

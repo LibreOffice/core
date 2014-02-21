@@ -1918,7 +1918,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
 {
     Font aPrevFont( rFont );
     rFont.SetAlign( ALIGN_BASELINE );
-    rFont.SetTransparent( sal_True );
+    rFont.SetTransparent( true );
 
     sal_uInt16 nWhich_FontInfo = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
     sal_uInt16 nWhich_Language = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );

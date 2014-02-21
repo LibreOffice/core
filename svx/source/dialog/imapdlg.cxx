@@ -159,7 +159,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
     aTbxIMapDlg1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbxIMapDlg1.SetSizePixel( aTbxIMapDlg1.CalcWindowSizePixel() );
     aTbxIMapDlg1.SetSelectHdl( LINK( this, SvxIMapDlg, TbxClickHdl ) );
-    aTbxIMapDlg1.CheckItem( TBI_SELECT, sal_True );
+    aTbxIMapDlg1.CheckItem( TBI_SELECT, true );
     TbxClickHdl( &aTbxIMapDlg1 );
 
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
@@ -218,7 +218,7 @@ void SvxIMapDlg::Resize()
     }
 }
 
-sal_Bool SvxIMapDlg::Close()
+bool SvxIMapDlg::Close()
 {
     sal_Bool bRet = sal_True;
 
@@ -347,7 +347,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_SELECT ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             pIMapWnd->SetEditMode( sal_True );
             if( pTbx->IsKeyEvent() )
             {
@@ -361,7 +361,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_RECT ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             pIMapWnd->SetObjKind( OBJ_RECT );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -373,7 +373,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_CIRCLE ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             pIMapWnd->SetObjKind( OBJ_CIRC );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -385,7 +385,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_POLY ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             pIMapWnd->SetObjKind( OBJ_POLY );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -397,7 +397,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_FREEPOLY ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             pIMapWnd->SetObjKind( OBJ_FREEFILL );
             if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
             {
@@ -599,7 +599,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
     if ( !rInfo.bOneMarked )
     {
-        aTbxIMapDlg1.CheckItem( TBI_ACTIVE, sal_False );
+        aTbxIMapDlg1.CheckItem( TBI_ACTIVE, false );
         aTbxIMapDlg1.EnableItem( TBI_ACTIVE, false );
         aTbxIMapDlg1.EnableItem( TBI_MACRO, false );
         aTbxIMapDlg1.EnableItem( TBI_PROPERTY, false );
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
         SetEditingObject( pOwnData->pUpdateEditingObject );
 
         // After changes => default selection
-        aTbxIMapDlg1.CheckItem( TBI_SELECT, sal_True );
+        aTbxIMapDlg1.CheckItem( TBI_SELECT, true );
         pIMapWnd->SetEditMode( sal_True );
     }
 
@@ -787,13 +787,13 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
             break;
         }
 
-        aTbxIMapDlg1.CheckItem( nId, sal_True );
+        aTbxIMapDlg1.CheckItem( nId, true );
     }
     else
     {
-        aTbxIMapDlg1.CheckItem( TBI_POLYEDIT, sal_False );
-        aTbxIMapDlg1.CheckItem( TBI_POLYMOVE, sal_True );
-        aTbxIMapDlg1.CheckItem( TBI_POLYINSERT, sal_False );
+        aTbxIMapDlg1.CheckItem( TBI_POLYEDIT, false );
+        aTbxIMapDlg1.CheckItem( TBI_POLYMOVE, true );
+        aTbxIMapDlg1.CheckItem( TBI_POLYINSERT, false );
         pWnd->SetPolyEditMode( 0 );
     }
 

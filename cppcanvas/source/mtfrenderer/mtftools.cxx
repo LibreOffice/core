@@ -239,7 +239,7 @@ namespace cppcanvas
             rVDev.GetFontMetric();
 
             // will restore map mode below
-            const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( sal_False );
+            const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( false );
 
             const ::FontMetric aMetric = rVDev.GetFontMetric();
 

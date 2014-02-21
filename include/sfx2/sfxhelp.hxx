@@ -36,8 +36,8 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
 
 private:
     SAL_DLLPRIVATE sal_Bool Start_Impl( const OUString& rURL, const Window* pWindow, const OUString& rKeyword );
-    SAL_DLLPRIVATE virtual sal_Bool SearchKeyword( const OUString& rKeyWord );
-    SAL_DLLPRIVATE virtual sal_Bool Start( const OUString& rURL, const Window* pWindow );
+    SAL_DLLPRIVATE virtual bool SearchKeyword( const OUString& rKeyWord );
+    SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const Window* pWindow );
     SAL_DLLPRIVATE OUString GetHelpModuleName_Impl();
     SAL_DLLPRIVATE OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
 

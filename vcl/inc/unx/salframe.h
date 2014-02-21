@@ -89,11 +89,11 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     Rectangle       maRestorePosSize;
     sal_uIntPtr         nStyle_;
     SalExtStyle     mnExtStyle;
-    sal_Bool            bAlwaysOnTop_;
-    sal_Bool            bViewable_;
-    sal_Bool            bMapped_;
-    sal_Bool            mbInShow;
-    sal_Bool            bDefaultPosition_;  // client is centered initially
+    bool            bAlwaysOnTop_;
+    bool            bViewable_;
+    bool            bMapped_;
+    bool            mbInShow;
+    bool            bDefaultPosition_;  // client is centered initially
     bool            m_bXEmbed;
     int             nVisibility_;
     int             m_nWorkArea;
@@ -192,7 +192,7 @@ public:
               sal_uIntPtr           GetStyle() const { return nStyle_; }
 
     XLIB_Cursor     GetCursor() const { return hCursor_; }
-    sal_Bool            IsCaptured() const { return nCaptured_ == 1; }
+    bool            IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
     void            HandleExtTextEvent (XClientMessageEvent *pEvent);
 #endif
@@ -217,7 +217,7 @@ public:
     // call with false to setup graphics with window (GetWindow())
     virtual void                updateGraphics( bool bClear );
 
-    virtual sal_Bool                PostEvent( void* pData );
+    virtual bool                PostEvent( void* pData );
 
     virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
@@ -234,7 +234,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual bool                GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nMonitor );
     virtual void                StartPresentation( sal_Bool bStart );
     virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
@@ -248,7 +248,7 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
     virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep();

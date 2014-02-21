@@ -95,24 +95,24 @@ struct ImplToolItem
     // the default size is the precomputed size for standard items
     // ie those that are just ordinary buttons (no windows or text etc.)
     // bCheckMaxWidth indicates that item windows must not exceed maxWidth in which case they will be painted as buttons
-    Size                GetSize( sal_Bool bHorz, sal_Bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
+    Size                GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
 
     // only useful for buttons: returns if the text or image part or both can be drawn according to current button drawing style
-    void DetermineButtonDrawStyle( ButtonType eButtonType, sal_Bool& rbImage, sal_Bool& rbText ) const;
+    void DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbImage, bool& rbText ) const;
 
     // returns the rectangle which contains the drop down arrow
     // or an empty rect if there is none
     // bHorz denotes the toolbox alignment
-    Rectangle   GetDropDownRect( sal_Bool bHorz ) const;
+    Rectangle   GetDropDownRect( bool bHorz ) const;
 
     // returns sal_True if the toolbar item is currently clipped, which can happen for docked toolbars
-    sal_Bool IsClipped() const;
+    bool IsClipped() const;
 
     // returns sal_True if the toolbar item is currently hidden i.e. they are unchecked in the toolbar Customize menu
-    sal_Bool IsItemHidden() const;
+    bool IsItemHidden() const;
 
 private:
-    void init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits, sal_Bool bEmptyBtn);
+    void init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits, bool bEmptyBtn);
 };
 
 namespace vcl
@@ -163,7 +163,7 @@ struct ImplToolBoxPrivateData
     vcl::IImageListProvider* mpImageListProvider;
     vcl::ImageListType       meImageListType;
 
-    sal_Bool    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
+    bool    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
             mbAssumeDocked:1,       // only used during calculations to override current floating/popup mode
             mbAssumeFloating:1,
             mbAssumePopupMode:1,

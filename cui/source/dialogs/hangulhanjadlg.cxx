@@ -731,7 +731,7 @@ namespace svx
         {
             sal_Bool bBoxChecked = pBox->IsChecked();
             if (bBoxChecked)
-                pOtherBox->Check( sal_False );
+                pOtherBox->Check( false );
             pOtherBox->Enable( !bBoxChecked );
         }
 
@@ -830,7 +830,7 @@ namespace svx
     //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetByCharacter( bool _bByCharacter )
     {
-        m_aReplaceByChar.Check( static_cast<sal_Bool>(_bByCharacter) );
+        m_aReplaceByChar.Check( _bByCharacter );
         m_aSuggestions.DisplayListBox( !_bByCharacter );
     }
 
@@ -840,16 +840,16 @@ namespace svx
             HHC::ConversionDirection _ePrimaryConversionDirection )
     {
         // default state: try both direction
-        m_aHangulOnly.Check( sal_False );
+        m_aHangulOnly.Check( false );
         m_aHangulOnly.Enable( true );
-        m_aHanjaOnly.Check( sal_False );
+        m_aHanjaOnly.Check( false );
         m_aHanjaOnly.Enable( true );
 
         if (!_bTryBothDirections)
         {
             CheckBox *pBox = _ePrimaryConversionDirection == HHC::eHangulToHanja?
                                     &m_aHangulOnly : &m_aHanjaOnly;
-            pBox->Check( sal_True );
+            pBox->Check( true );
             OnConversionDirectionClicked( pBox );
         }
     }

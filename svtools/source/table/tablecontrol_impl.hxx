@@ -496,8 +496,8 @@ namespace svt { namespace table
        virtual void BeginDrag();
        virtual void CreateAnchor();
        virtual void DestroyAnchor();
-       virtual sal_Bool SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor);
-       virtual sal_Bool IsSelectionAtPoint( const Point& rPoint );
+       virtual bool SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor);
+       virtual bool IsSelectionAtPoint( const Point& rPoint );
        virtual void DeselectAtPoint( const Point& rPoint );
        virtual void DeselectAll();
     };

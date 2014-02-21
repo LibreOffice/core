@@ -344,7 +344,7 @@ void DockingWindow::Hide ()
     Show(false);
 }
 
-sal_Bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     if (!IsDockingPrevented() && aDockingRect.IsInside(rPos))
     {
@@ -383,7 +383,7 @@ void DockingWindow::ToggleFloatingMode()
     DockThis();
 }
 
-sal_Bool DockingWindow::PrepareToggleFloatingMode()
+bool DockingWindow::PrepareToggleFloatingMode()
 {
     if (IsFloatingMode())
     {

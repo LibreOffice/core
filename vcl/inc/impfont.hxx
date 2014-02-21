@@ -75,7 +75,7 @@ private:
     FontEmphasisMark    meEmphasisMark;
     short               mnOrientation;
     FontKerning         mnKerning;
-    sal_Bool                mbWordLine:1,
+    bool                mbWordLine:1,
                         mbOutline:1,
                         mbConfigLookup:1,   // there was a config lookup
                         mbShadow:1,

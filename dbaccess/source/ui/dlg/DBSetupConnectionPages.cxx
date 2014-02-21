@@ -767,7 +767,7 @@ using namespace ::com::sun::star;
 
         m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_pCBStartTableWizard->SetClickHdl(getControlModifiedLink());
-        m_pRBRegisterDataSource->SetState(sal_True);
+        m_pRBRegisterDataSource->SetState(true);
     }
 
     OFinalDBPageSetup::~OFinalDBPageSetup()

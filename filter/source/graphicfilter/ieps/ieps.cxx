@@ -135,7 +135,7 @@ static void MakeAsMeta(Graphic &rGraphic)
         aSize = Application::GetDefaultDevice()->LogicToLogic( aSize,
             aBmp.GetPrefMapMode(), MAP_100TH_MM );
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( false );
     aMtf.Record( &aVDev );
     aVDev.DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
@@ -395,7 +395,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     VirtualDevice   aVDev;
     Font            aFont;
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( false );
     aMtf.Record( &aVDev );
     aVDev.SetLineColor( Color( COL_RED ) );
     aVDev.SetFillColor();
@@ -633,7 +633,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                     VirtualDevice   aVDev;
                                     GDIMetaFile     aMtf;
                                     Size            aSize;
-                                    aVDev.EnableOutput( sal_False );
+                                    aVDev.EnableOutput( false );
                                     aMtf.Record( &aVDev );
                                     aSize = aBitmap.GetPrefSize();
                                     if( !aSize.Width() || !aSize.Height() )
@@ -668,7 +668,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                     if ( nSecurityCount)
                     {
                         bGraphicLinkCreated = sal_True;
-                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, sal_True ) ;
+                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
                         GDIMetaFile aMtf;
 
                         long nWidth =  nNumb[2] - nNumb[0] + 1;

@@ -85,7 +85,7 @@ namespace vcl
         StringEntryIdentifier pStartedWith = pSearchEntry;
         while ( pSearchEntry )
         {
-            if ( rI18nHelper.MatchString( _searchString, sEntryText ) != 0 )
+            if ( rI18nHelper.MatchString( _searchString, sEntryText ) )
                 break;
 
             pSearchEntry = _engineData.rEntryList.NextEntry( pSearchEntry, sEntryText );

@@ -420,7 +420,7 @@ public:
 
     virtual void        Select();
 
-    virtual sal_Bool        ShowDropDown( sal_Bool bShow );
+    virtual bool        ShowDropDown( sal_Bool bShow );
     virtual Calendar*   CreateCalendar( Window* pParent );
     Calendar*           GetCalendar();
 

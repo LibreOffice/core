@@ -45,7 +45,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )
+OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, bool bSUPD )
 {
     // create variable library name suffixes
     OUString aDLLSuffix = OUString::createFromAscii( SAL_STRINGIFY( DLLPOSTFIX ) );

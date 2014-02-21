@@ -378,7 +378,7 @@ namespace svxform
 
     protected:
         virtual void                Resize();
-        virtual sal_Bool            Close();
+        virtual bool            Close();
         virtual void                GetFocus();
         virtual Size                CalcDockingSize( SfxChildAlignment );
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );

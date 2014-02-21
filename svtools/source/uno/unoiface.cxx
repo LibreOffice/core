@@ -110,7 +110,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         pWindow = new CalendarField( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
-        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( sal_True );
+        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
         *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }

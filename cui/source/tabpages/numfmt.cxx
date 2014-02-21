@@ -80,7 +80,7 @@ SvxNumberPreview::SvxNumberPreview(Window* pParent, WinBits nStyle)
     , mnChar(0x0)
 {
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     SetFont( aFont );
     InitSettings( sal_True, sal_True );
@@ -285,7 +285,7 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     m_pEdComment->Hide();
 
-    m_pCbSourceFormat->Check( sal_False );
+    m_pCbSourceFormat->Check( false );
     m_pCbSourceFormat->Disable();
     m_pCbSourceFormat->Hide();
 
@@ -451,7 +451,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         if ( pBoolItem )
             m_pCbSourceFormat->Check( pBoolItem->GetValue() );
         else
-            m_pCbSourceFormat->Check( sal_False );
+            m_pCbSourceFormat->Check( false );
         m_pCbSourceFormat->Enable();
         m_pCbSourceFormat->Show();
     }
@@ -614,8 +614,8 @@ void SvxNumberFormatTabPage::Obstructing()
     m_pFtOptions->Disable();
     m_pEdDecimals->SetText( OUString() );
     m_pEdLeadZeroes->SetText( OUString() );
-    m_pBtnNegRed->Check( sal_False );
-    m_pBtnThousand->Check( sal_False );
+    m_pBtnNegRed->Check( false );
+    m_pBtnThousand->Check( false );
     m_pWndPreview->NotifyChange( OUString() );
 
     m_pLbCategory->SelectEntryPos( 0 );
@@ -972,8 +972,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
             m_pBtnThousand->Disable();
             m_pEdDecimals->SetText( OUString::number( 0 ) );
             m_pEdLeadZeroes->SetText( OUString::number( 0 ) );
-            m_pBtnNegRed->Check( sal_False );
-            m_pBtnThousand->Check( sal_False );
+            m_pBtnNegRed->Check( false );
+            m_pBtnThousand->Check( false );
     }
 }
 

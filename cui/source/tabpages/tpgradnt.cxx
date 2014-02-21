@@ -132,7 +132,7 @@ SvxGradientTabPage::SvxGradientTabPage
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
     // #i76307# always paint the preview in LTR, because this is what the document does
-    m_pCtlPreview->EnableRTL( sal_False );
+    m_pCtlPreview->EnableRTL( false );
 
     setPreviewsToSamePlace(pParent, this);
 }

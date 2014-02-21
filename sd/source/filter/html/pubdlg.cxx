@@ -724,8 +724,8 @@ void SdPublishingDlg::SetDefaults()
     SdPublishingDesign aDefault;
     SetDesign(&aDefault);
 
-    pPage1_NewDesign->Check(sal_True);
-    pPage1_OldDesign->Check(sal_False);
+    pPage1_NewDesign->Check(true);
+    pPage1_OldDesign->Check(false);
     UpdatePage();
 }
 
@@ -905,8 +905,8 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 {
     if(pButton == pPage1_NewDesign)
     {
-        pPage1_NewDesign->Check(sal_True); // because of DesignDeleteHdl
-        pPage1_OldDesign->Check(sal_False);
+        pPage1_NewDesign->Check(true); // because of DesignDeleteHdl
+        pPage1_OldDesign->Check(false);
         pPage1_Designs->Disable();
         pPage1_DelDesign->Disable();
         m_pDesign = NULL;
@@ -916,7 +916,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
     }
     else
     {
-        pPage1_NewDesign->Check(sal_False);
+        pPage1_NewDesign->Check(false);
         pPage1_Designs->Enable();
         pPage1_DelDesign->Enable();
 
@@ -1038,7 +1038,7 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
 IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl)
 {
     // if one bitmap-button is chosen, then disable TextOnly
-    pPage5_TextOnly->Check(sal_False);
+    pPage5_TextOnly->Check(false);
     return 0;
 }
 
@@ -1078,7 +1078,7 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
             m_aALinkColor = aDlg.GetColor();
     }
 
-    pPage6_User->Check(sal_True);
+    pPage6_User->Check(true);
     pPage6_Preview->SetColors( m_aBackColor, m_aTextColor, m_aLinkColor,
                                m_aVLinkColor, m_aALinkColor );
     pPage6_Preview->Invalidate();

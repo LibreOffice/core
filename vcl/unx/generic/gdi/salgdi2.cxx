@@ -118,7 +118,7 @@ inline GC X11SalGraphics::GetMonoGC( Pixmap hPixmap )
     if( !bMonoGC_ )
     {
         SetClipRegion( pMonoGC_ );
-        bMonoGC_ = sal_True;
+        bMonoGC_ = true;
     }
 
     return pMonoGC_;
@@ -134,7 +134,7 @@ inline GC X11SalGraphics::GetCopyGC()
     if( !bCopyGC_ )
     {
         SetClipRegion( pCopyGC_ );
-        bCopyGC_ = sal_True;
+        bCopyGC_ = true;
     }
     return pCopyGC_;
 }
@@ -151,7 +151,7 @@ GC X11SalGraphics::GetInvertGC()
     if( !bInvertGC_ )
     {
         SetClipRegion( pInvertGC_ );
-        bInvertGC_ = sal_True;
+        bInvertGC_ = true;
     }
     return pInvertGC_;
 }
@@ -198,7 +198,7 @@ GC X11SalGraphics::GetInvert50GC()
     if( !bInvert50GC_ )
     {
         SetClipRegion( pInvert50GC_ );
-        bInvert50GC_ = sal_True;
+        bInvert50GC_ = true;
     }
     return pInvert50GC_;
 }
@@ -215,7 +215,7 @@ inline GC X11SalGraphics::GetStippleGC()
     {
         XSetFunction( GetXDisplay(), pStippleGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pStippleGC_ );
-        bStippleGC_ = sal_True;
+        bStippleGC_ = true;
     }
 
     return pStippleGC_;
@@ -577,7 +577,7 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect& rPosAry,
         DBG_TESTTRANS( aBG );
 
         // #105055# Disable XOR temporarily
-        sal_Bool bOldXORMode( bXORMode_ );
+        bool bOldXORMode( bXORMode_ );
         bXORMode_ = false;
 
         // copy pixmap #2 (result) to background

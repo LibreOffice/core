@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 UnxFilePickerNotifyThread::UnxFilePickerNotifyThread( UnxFilePicker *pUnxFilePicker )
     : m_pUnxFilePicker( pUnxFilePicker ),
-      m_bExit( sal_False ),
+      m_bExit( false ),
       m_eNotifyType( Nothing ),
       m_nControlId( 0 )
 {
@@ -54,7 +54,7 @@ void SAL_CALL UnxFilePickerNotifyThread::exit()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_bExit = sal_True;
+    m_bExit = true;
 
     m_aExitCondition.reset();
     m_aNotifyCondition.set();

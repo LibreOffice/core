@@ -28,9 +28,9 @@
 void ProgressBar::ImplInit()
 {
     mnPercent   = 0;
-    mbCalcNew   = sal_True;
+    mbCalcNew   = true;
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 }
 
 static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
@@ -66,8 +66,8 @@ ProgressBar::~ProgressBar()
 {
 }
 
-void ProgressBar::ImplInitSettings( sal_Bool bFont,
-                                    sal_Bool bForeground, sal_Bool bBackground )
+void ProgressBar::ImplInitSettings( bool bFont,
+                                    bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -89,8 +89,8 @@ void ProgressBar::ImplInitSettings( sal_Bool bFont,
         {
             if( (GetStyle() & WB_BORDER) )
                 SetBorderStyle( WINDOW_BORDER_REMOVEBORDER );
-            EnableChildTransparentMode( sal_True );
-            SetPaintTransparent( sal_True );
+            EnableChildTransparentMode( true );
+            SetPaintTransparent( true );
             SetBackground();
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
         }
@@ -131,7 +131,7 @@ void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
 {
     if ( mbCalcNew )
     {
-        mbCalcNew = sal_False;
+        mbCalcNew = false;
 
         Size aSize = GetOutputSizePixel();
         mnPrgsHeight = aSize.Height()-(PROGRESSBAR_WIN_OFFSET*2);
@@ -164,7 +164,7 @@ void ProgressBar::Paint( const Rectangle& )
 
 void ProgressBar::Resize()
 {
-    mbCalcNew = sal_True;
+    mbCalcNew = true;
     if ( IsReallyVisible() )
         Invalidate();
 }
@@ -175,7 +175,7 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 
     if ( nNewPercent < mnPercent )
     {
-        mbCalcNew = sal_True;
+        mbCalcNew = true;
         mnPercent = nNewPercent;
         if ( IsReallyVisible() )
         {
@@ -203,12 +203,12 @@ void ProgressBar::StateChanged( StateChangedType nType )
 */
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 
@@ -220,7 +220,7 @@ void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 

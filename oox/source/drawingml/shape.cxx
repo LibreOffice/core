@@ -1018,7 +1018,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         mpTempStream.Seek( STREAM_SEEK_TO_BEGIN );
 
         Graphic aGraphic;
-        GraphicFilter aFilter( sal_False );
+        GraphicFilter aFilter( false );
         if ( aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast < Sequence < PropertyValue >* > ( NULL ), NULL ) != GRFILTER_OK )
         {
             SAL_WARN( "oox.drawingml", OSL_THIS_FUNC

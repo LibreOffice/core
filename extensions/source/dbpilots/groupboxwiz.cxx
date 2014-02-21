@@ -218,7 +218,7 @@ namespace dbp
         m_aExistingRadios.SetSelectHdl(LINK(this, ORadioSelectionPage, OnEntrySelected));
 
         implCheckMoveButtons();
-        m_aExistingRadios.EnableMultiSelection(sal_True);
+        m_aExistingRadios.EnableMultiSelection(true);
 
         getDialog()->defaultButton(&m_aMoveRight);
 

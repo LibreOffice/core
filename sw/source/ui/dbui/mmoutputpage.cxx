@@ -373,7 +373,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         &m_aSendAllRB, &m_aSendDocumentsPB,
         0
     };
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
     Control** pControl = aControls;
     do
     {
@@ -515,7 +515,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
     }
     m_aFromRB.GetClickHdl().Call(m_aFromRB.IsChecked() ? &m_aFromRB : 0);
 
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     return 0;
 }
 

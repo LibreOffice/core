@@ -600,12 +600,12 @@ Bool2String( const uno::Any& rAny )
 static bool
 String2Bool( uno::Any& rAny, const gchar * value )
 {
-    sal_Bool bValue;
+    bool bValue;
 
     if( strncmp( value, STRNCMP_PARAM( "true" ) ) )
-        bValue = sal_True;
+        bValue = true;
     else if( strncmp( value, STRNCMP_PARAM( "false" ) ) )
-        bValue = sal_False;
+        bValue = false;
     else
         return false;
 

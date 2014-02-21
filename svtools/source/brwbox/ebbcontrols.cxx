@@ -45,7 +45,7 @@ namespace svt
                    :ComboBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
         EnableAutoSize(false);
-        EnableAutocomplete(sal_True);
+        EnableAutocomplete(true);
         SetDropDownLineCount(5);
     }
 
@@ -152,7 +152,7 @@ namespace svt
                   :ListBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
         EnableAutoSize(false);
-        EnableMultiSelection(sal_False);
+        EnableMultiSelection(false);
         SetDropDownLineCount(20);
     }
 
@@ -252,7 +252,7 @@ namespace svt
             SetBackground( rParentBackground );
         else
         {
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( true );
             SetBackground();
         }
 
@@ -261,7 +261,7 @@ namespace svt
         pBox = new TriStateBox(this,WB_CENTER|WB_VCENTER);
         pBox->SetLegacyNoTextAlign( true );
         pBox->EnableChildTransparentMode();
-        pBox->SetPaintTransparent( sal_True );
+        pBox->SetPaintTransparent( true );
         pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );
         pBox->Show();
     }
@@ -535,7 +535,7 @@ namespace svt
     //------------------------------------------------------------------
     void MultiLineTextCell::Modify()
     {
-        GetTextEngine()->SetModified( sal_True );
+        GetTextEngine()->SetModified( true );
         MultiLineEdit::Modify();
     }
 

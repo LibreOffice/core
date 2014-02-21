@@ -103,10 +103,10 @@ public:
     void            GetBoundRect( const Rectangle& rRect, Rectangle &rBoundRect, Point& rCenter ) const;
 
     Gradient&       operator=( const Gradient& rGradient );
-    sal_Bool            operator==( const Gradient& rGradient ) const;
-    sal_Bool            operator!=( const Gradient& rGradient ) const
+    bool            operator==( const Gradient& rGradient ) const;
+    bool            operator!=( const Gradient& rGradient ) const
                         { return !(Gradient::operator==( rGradient )); }
-    sal_Bool            IsSameInstance( const Gradient& rGradient ) const
+    bool            IsSameInstance( const Gradient& rGradient ) const
                         { return (mpImplGradient == rGradient.mpImplGradient); }
 
     friend VCL_DLLPUBLIC SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient );

@@ -2656,7 +2656,7 @@ void ImpLBSelEng::DestroyAnchor()
     pImp->pAnchor = 0;
 }
 
-sal_Bool ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
+bool ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
 {
     SvTreeListEntry* pNewCursor = pImp->MakePointVisible( rPoint );
     if( pNewCursor != pImp->pCursor  )
@@ -2674,7 +2674,7 @@ sal_Bool ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelect
     return false;
 }
 
-sal_Bool ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
+bool ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
 {
     SvTreeListEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( pEntry )

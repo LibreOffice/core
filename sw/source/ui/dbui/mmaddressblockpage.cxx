@@ -1056,7 +1056,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
     // The first line has to be -(nThumb * m_nYOffset) in the negative
     long nMove = m_nFirstYPos - (*m_aMatches.begin())->GetPosPixel().Y() - (nThumb * m_nYOffset);
 
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     long nIndex;
     ::std::vector<FixedInfo*>::iterator aFIIter;
     for(nIndex = 0, aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter, ++nIndex)
@@ -1066,7 +1066,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
         lcl_Move(*aLBIter, nMove);
     for(nIndex = 0, aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter, ++nIndex)
         lcl_Move(*aFIIter, nMove);
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 
     return 0;
 }
@@ -1264,9 +1264,9 @@ AddressMultiLineEdit::AddressMultiLineEdit(Window* pParent, WinBits nBits)
     : VclMultiLineEdit(pParent, nBits)
     , m_pParentDialog(NULL)
 {
-    GetTextView()->SupportProtectAttribute(sal_True);
+    GetTextView()->SupportProtectAttribute(true);
     StartListening(*GetTextEngine());
-    EnableFocusSelectionHide(sal_False);
+    EnableFocusSelectionHide(false);
 }
 
 Size AddressMultiLineEdit::GetOptimalSize() const
@@ -1348,7 +1348,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
             sal_Int32 nEnd = nStart == -1 ? -1 : sPara.indexOf( '>', nStart );
             nIndex = nEnd;
             if(nStart != -1 && nEnd != -1)
-                pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, sal_False );
+                pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, false );
             else
                 break;
         }

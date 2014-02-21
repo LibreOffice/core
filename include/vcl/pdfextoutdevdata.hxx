@@ -75,16 +75,16 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 
     const OutputDevice& mrOutDev;
 
-    sal_Bool                        mbTaggedPDF;
-    sal_Bool                        mbExportNotes;
-    sal_Bool                        mbExportNotesPages;
-    sal_Bool                        mbTransitionEffects;
-    sal_Bool                        mbUseLosslessCompression;
-    sal_Bool                        mbReduceImageResolution;
-    sal_Bool                        mbExportFormFields;
-    sal_Bool                        mbExportBookmarks;
-    sal_Bool                        mbExportHiddenSlides;
-    sal_Bool                        mbExportNDests; //i56629
+    bool                        mbTaggedPDF;
+    bool                        mbExportNotes;
+    bool                        mbExportNotesPages;
+    bool                        mbTransitionEffects;
+    bool                        mbUseLosslessCompression;
+    bool                        mbReduceImageResolution;
+    bool                        mbExportFormFields;
+    bool                        mbExportBookmarks;
+    bool                        mbExportHiddenSlides;
+    bool                        mbExportNDests; //i56629
     sal_Int32                       mnFormsFormat;
     sal_Int32                       mnPage;
     com::sun::star::lang::Locale    maDocLocale;
@@ -100,48 +100,48 @@ public :
     PDFExtOutDevData( const OutputDevice& rOutDev );
     virtual ~PDFExtOutDevData();
 
-    sal_Bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction );
+    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction );
     void ResetSyncData();
 
     void PlayGlobalActions( PDFWriter& rWriter );
 
 
 
-    sal_Bool    GetIsExportNotes() const;
-    void        SetIsExportNotes( const sal_Bool bExportNotes );
+    bool    GetIsExportNotes() const;
+    void        SetIsExportNotes( const bool bExportNotes );
 
-    sal_Bool    GetIsExportNotesPages() const;
-    void        SetIsExportNotesPages( const sal_Bool bExportNotesPages );
+    bool    GetIsExportNotesPages() const;
+    void        SetIsExportNotesPages( const bool bExportNotesPages );
 
-    sal_Bool    GetIsExportTaggedPDF() const;
-    void        SetIsExportTaggedPDF( const sal_Bool bTaggedPDF );
+    bool    GetIsExportTaggedPDF() const;
+    void        SetIsExportTaggedPDF( const bool bTaggedPDF );
 
-    sal_Bool    GetIsExportTransitionEffects() const;
-    void        SetIsExportTransitionEffects( const sal_Bool bTransitionalEffects );
+    bool    GetIsExportTransitionEffects() const;
+    void        SetIsExportTransitionEffects( const bool bTransitionalEffects );
 
-    sal_Bool    GetIsExportFormFields() const;
-    void        SetIsExportFormFields( const sal_Bool bExportFormFields );
+    bool    GetIsExportFormFields() const;
+    void        SetIsExportFormFields( const bool bExportFormFields );
 
     void        SetFormsFormat( const sal_Int32 nFormsFormat );
 
-    sal_Bool    GetIsExportBookmarks() const;
-    void        SetIsExportBookmarks( const sal_Bool bExportBookmarks );
+    bool    GetIsExportBookmarks() const;
+    void        SetIsExportBookmarks( const bool bExportBookmarks );
 
-    sal_Bool    GetIsExportHiddenSlides() const;
-    void        SetIsExportHiddenSlides( const sal_Bool bExportHiddenSlides );
+    bool    GetIsExportHiddenSlides() const;
+    void        SetIsExportHiddenSlides( const bool bExportHiddenSlides );
 
-    sal_Bool    GetIsExportNamedDestinations() const; //i56629
-    void        SetIsExportNamedDestinations( const sal_Bool bExportNDests ); //i56629
+    bool    GetIsExportNamedDestinations() const; //i56629
+    void        SetIsExportNamedDestinations( const bool bExportNDests ); //i56629
 
     // PageNumber, Compression is being set by the PDFExport
     sal_Int32   GetCurrentPageNumber() const;
     void        SetCurrentPageNumber( const sal_Int32 nPage );
 
-    sal_Bool    GetIsLosslessCompression() const;
-    void        SetIsLosslessCompression( const sal_Bool bLosslessCompression );
+    bool    GetIsLosslessCompression() const;
+    void        SetIsLosslessCompression( const bool bLosslessCompression );
 
-    sal_Bool    GetIsReduceImageResolution() const;
-    void        SetIsReduceImageResolution( const sal_Bool bReduceImageResolution );
+    bool    GetIsReduceImageResolution() const;
+    void        SetIsReduceImageResolution( const bool bReduceImageResolution );
 
     const com::sun::star::lang::Locale& GetDocumentLocale() const;
     void        SetDocumentLocale( const com::sun::star::lang::Locale& rLoc );

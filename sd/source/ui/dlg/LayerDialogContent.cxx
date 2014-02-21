@@ -76,7 +76,7 @@ LayerDialogContent::~LayerDialogContent (void)
 
 
 
-sal_Bool LayerDialogContent::Close (void)
+bool LayerDialogContent::Close (void)
 {
     return SfxDockingWindow::Close();
 }

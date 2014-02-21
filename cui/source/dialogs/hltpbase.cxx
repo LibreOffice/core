@@ -190,7 +190,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT, *m_pResMgr) );
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
-        mpBtScript->EnableTextDisplay (sal_False);
+        mpBtScript->EnableTextDisplay (false);
 
         mpBtScript->SetAccessibleRelationMemberOf( mpGrpMore );
         mpBtScript->SetAccessibleRelationLabeledBy( mpFtForm );

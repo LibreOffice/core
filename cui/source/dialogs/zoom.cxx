@@ -362,7 +362,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
         m_pBookModeChk->Enable();
     else
     {
-        m_pBookModeChk->Check( sal_False );
+        m_pBookModeChk->Check( false );
         m_pBookModeChk->Disable();
     }
 

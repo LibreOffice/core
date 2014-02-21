@@ -166,7 +166,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     Init(); // general initialisation
 
     // initialise TypeListBox
-    m_pTypeLB->SetUpdateMode(sal_False);
+    m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
 
     // fill Type-Listbox
@@ -233,7 +233,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     if (!IsFldEdit())
         RestorePos(m_pTypeLB);
 
-    m_pTypeLB->SetUpdateMode(sal_True);
+    m_pTypeLB->SetUpdateMode(true);
 
     nFldDlgFmtSel = 0;
 
@@ -477,7 +477,7 @@ void SwFldRefPage::UpdateSubType()
     if (IsFldEdit() && sOldSel.isEmpty())
         sOldSel = OUString::number( pRefFld->GetSeqNo() + 1 );
 
-    m_pSelectionLB->SetUpdateMode(sal_False);
+    m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
     // #i83479#
     m_pSelectionToolTipLB->SetUpdateMode(sal_False);
@@ -650,7 +650,7 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        m_pSelectionLB->SetUpdateMode(sal_True);
+        m_pSelectionLB->SetUpdateMode(true);
 
         // enable or disable
         bool bEnable = m_pSelectionLB->GetEntryCount() != 0;

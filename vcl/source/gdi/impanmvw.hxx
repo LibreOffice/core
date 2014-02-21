@@ -47,10 +47,10 @@ private:
     VirtualDevice*  mpRestore;
     sal_uLong           mnActPos;
     Disposal        meLastDisposal;
-    sal_Bool            mbPause;
-    sal_Bool            mbMarked;
-    sal_Bool            mbHMirr;
-    sal_Bool            mbVMirr;
+    bool            mbPause;
+    bool            mbMarked;
+    bool            mbHMirr;
+    bool            mbVMirr;
 
     void            ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
     void            ImplDraw( sal_uLong nPos, VirtualDevice* pVDev );
@@ -62,7 +62,7 @@ public:
                                   OutputDevice* pFirstFrameOutDev = NULL );
                     ~ImplAnimView();
 
-    sal_Bool            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
+    bool            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
     void            ImplDrawToPos( sal_uLong nPos );
     void            ImplDraw( sal_uLong nPos );
     void            ImplRepaint();
@@ -73,11 +73,11 @@ public:
     const Size&     ImplGetOutSize() const { return maSz; }
     const Size&     ImplGetOutSizePix() const { return maSzPix; }
 
-    void            ImplPause( sal_Bool bPause ) { mbPause = bPause; }
-    sal_Bool            ImplIsPause() const { return mbPause; }
+    void            ImplPause( bool bPause ) { mbPause = bPause; }
+    bool            ImplIsPause() const { return mbPause; }
 
-    void            ImplSetMarked( sal_Bool bMarked ) { mbMarked = bMarked; }
-    sal_Bool            ImplIsMarked() const { return mbMarked; }
+    void            ImplSetMarked( bool bMarked ) { mbMarked = bMarked; }
+    bool            ImplIsMarked() const { return mbMarked; }
 };
 
 #endif

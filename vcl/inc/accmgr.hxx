@@ -41,13 +41,13 @@ public:
                         }
                         ~ImplAccelManager();
 
-    sal_Bool                InsertAccel( Accelerator* pAccel );
+    bool                InsertAccel( Accelerator* pAccel );
     void                RemoveAccel( Accelerator* pAccel );
 
-    void                EndSequence( sal_Bool bCancel = sal_False );
-    void                FlushAccel() { EndSequence( sal_True ); }
+    void                EndSequence( bool bCancel = false );
+    void                FlushAccel() { EndSequence( true ); }
 
-    sal_Bool                IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat );
+    bool                IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat );
 };
 
 #endif // INCLUDED_VCL_INC_ACCMGR_HXX

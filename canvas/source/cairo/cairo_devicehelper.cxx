@@ -262,7 +262,7 @@ namespace cairocanvas
 
             const ::Point aEmptyPoint;
             bool bOldMap( mpRefDevice->IsMapModeEnabled() );
-            mpRefDevice->EnableMapMode( sal_False );
+            mpRefDevice->EnableMapMode( false );
             const ::Bitmap aTempBitmap(mpRefDevice->GetBitmap(aEmptyPoint, mpRefDevice->GetOutputSizePixel()));
             WriteDIB(aTempBitmap, aStream, false, true);
             mpRefDevice->EnableMapMode( bOldMap );

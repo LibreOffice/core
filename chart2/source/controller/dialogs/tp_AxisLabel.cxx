@@ -67,7 +67,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
     m_pOrientHlp->Enable( true );
 
 
-    m_pCbStacked->EnableTriState( sal_False );
+    m_pCbStacked->EnableTriState( false );
     m_pOrientHlp->AddDependentWindow( *m_pFlOrient );
     m_pOrientHlp->AddDependentWindow( *m_pFtRotate, STATE_CHECK );
 
@@ -146,12 +146,12 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     SfxItemState aState = rInAttrs.GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_pCbShowDescription->EnableTriState( sal_True );
+        m_pCbShowDescription->EnableTriState( true );
         m_pCbShowDescription->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_pCbShowDescription->EnableTriState( sal_False );
+        m_pCbShowDescription->EnableTriState( false );
         sal_Bool bCheck = sal_False;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
@@ -194,12 +194,12 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_pCbTextOverlap->EnableTriState( sal_True );
+        m_pCbTextOverlap->EnableTriState( true );
         m_pCbTextOverlap->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_pCbTextOverlap->EnableTriState( sal_False );
+        m_pCbTextOverlap->EnableTriState( false );
         sal_Bool bCheck = sal_False;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
@@ -213,12 +213,12 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_pCbTextBreak->EnableTriState( sal_True );
+        m_pCbTextBreak->EnableTriState( true );
         m_pCbTextBreak->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_pCbTextBreak->EnableTriState( sal_False );
+        m_pCbTextBreak->EnableTriState( false );
         sal_Bool bCheck = sal_False;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();

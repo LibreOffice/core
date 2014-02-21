@@ -60,9 +60,9 @@ void MessBox::ImplInitMessBoxData()
 {
     mpVCLMultiLineEdit  = NULL;
     mpFixedImage        = NULL;
-    mbHelpBtn           = sal_False;
+    mbHelpBtn           = false;
     mpCheckBox          = NULL;
-    mbCheck             = sal_False;
+    mbCheck             = false;
 }
 
 // -----------------------------------------------------------------------
@@ -209,7 +209,7 @@ void MessBox::ImplPosControls()
         if ( !mbHelpBtn )
         {
             AddButton( BUTTON_HELP, RET_HELP, BUTTONDIALOG_HELPBUTTON, 3 );
-            mbHelpBtn = sal_True;
+            mbHelpBtn = true;
         }
     }
     else
@@ -217,7 +217,7 @@ void MessBox::ImplPosControls()
         if ( mbHelpBtn )
         {
             RemoveButton( RET_HELP );
-            mbHelpBtn = sal_False;
+            mbHelpBtn = false;
         }
     }
 
@@ -393,8 +393,8 @@ void MessBox::ImplPosControls()
     mpVCLMultiLineEdit->SetText( aMessText );
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
     mpVCLMultiLineEdit->Show();
-    mpVCLMultiLineEdit->SetPaintTransparent(sal_True);
-    mpVCLMultiLineEdit->EnableCursor(sal_False);
+    mpVCLMultiLineEdit->SetPaintTransparent(true);
+    mpVCLMultiLineEdit->EnableCursor(false);
     SetPageSizePixel( aPageSize );
 }
 
@@ -411,14 +411,14 @@ void MessBox::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-sal_Bool MessBox::GetCheckBoxState() const
+bool MessBox::GetCheckBoxState() const
 {
     return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
 }
 
 // -----------------------------------------------------------------------
 
-void MessBox::SetCheckBoxState( sal_Bool bCheck )
+void MessBox::SetCheckBoxState( bool bCheck )
 {
     if( mpCheckBox ) mpCheckBox->Check( bCheck );
     mbCheck = bCheck;

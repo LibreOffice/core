@@ -578,7 +578,7 @@ UpdateDialog::~UpdateDialog()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool UpdateDialog::Close() {
+bool UpdateDialog::Close() {
     m_thread->stop();
     return ModalDialog::Close();
 }

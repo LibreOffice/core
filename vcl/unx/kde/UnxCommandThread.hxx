@@ -81,7 +81,7 @@ protected:
     ::osl::Mutex                m_aMutex;
 
     YieldingCondition           m_aExecCondition;
-    sal_Bool                    m_aResult;
+    bool                    m_aResult;
 
     ::osl::Condition            m_aGetCurrentFilterCondition;
     OUString             m_aGetCurrentFilter;
@@ -100,7 +100,7 @@ public:
     ~UnxFilePickerCommandThread();
 
     YieldingCondition& SAL_CALL execCondition() { return m_aExecCondition; }
-    sal_Bool SAL_CALL           result();
+    bool SAL_CALL           result();
 
     ::osl::Condition& SAL_CALL  getCurrentFilterCondition() { return m_aGetCurrentFilterCondition; }
     OUString SAL_CALL    getCurrentFilter();

@@ -226,7 +226,7 @@ namespace vcl
         Size                                    maDetailsCollapsedSize;
         Size                                    maDetailsExpandedSize;
 
-        sal_Bool                                mbShowLayoutPage;
+        bool                                mbShowLayoutPage;
 
         Size getJobPageSize();
         void updateNup();

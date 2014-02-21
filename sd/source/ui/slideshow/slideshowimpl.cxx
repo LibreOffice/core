@@ -2204,7 +2204,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
         const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
         if( nPageNumberCount <= 1 )
         {
-            pMenu->EnableItem( CM_GOTO, sal_False );
+            pMenu->EnableItem( CM_GOTO, false );
         }
         else
         {
@@ -2274,7 +2274,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
                     break;
             }
 
-            pWidthMenu->EnableItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator), sal_True);
+            pWidthMenu->EnableItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator), true);
             if( nWidth ==  mdUserPaintStrokeWidth)
                 pWidthMenu->CheckItem( (sal_uInt16)(CM_WIDTH_PEN + nIterator) );
         }

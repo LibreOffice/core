@@ -321,7 +321,7 @@ private:
 
 protected:
     virtual void Resize();
-    virtual sal_Bool Close();
+    virtual bool Close();
     virtual Size CalcDockingSize( SfxChildAlignment );
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
 

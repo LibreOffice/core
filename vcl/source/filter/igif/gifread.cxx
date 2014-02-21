@@ -543,7 +543,7 @@ void GIFReader::CreateNewBitmaps()
     aAnimBmp.aPosPix = Point( nImagePosX, nImagePosY );
     aAnimBmp.aSizePix = Size( nImageWidth, nImageHeight );
     aAnimBmp.nWait = ( nTimer != 65535 ) ? nTimer : ANIMATION_TIMEOUT_ON_CLICK;
-    aAnimBmp.bUserInput = sal_False;
+    aAnimBmp.bUserInput = false;
 
     if( nGCDisposalMethod == 2 )
         aAnimBmp.eDisposal = DISPOSE_BACK;

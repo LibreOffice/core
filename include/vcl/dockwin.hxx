@@ -30,24 +30,24 @@ struct DockingData
 {
     Point       maMousePos;     // in
     Rectangle   maTrackRect;    // in/out
-    sal_Bool        mbFloating;     // out
-    sal_Bool        mbLivemode;     // in
-    sal_Bool        mbInteractive;  // in
+    bool        mbFloating;     // out
+    bool        mbLivemode;     // in
+    bool        mbInteractive;  // in
 
     DockingData() {};
-    DockingData( const Point& rPt, const Rectangle& rRect, sal_Bool b) :
-        maMousePos( rPt ), maTrackRect( rRect ), mbFloating( b ), mbLivemode( sal_False ), mbInteractive( sal_True )
+    DockingData( const Point& rPt, const Rectangle& rRect, bool b) :
+        maMousePos( rPt ), maTrackRect( rRect ), mbFloating( b ), mbLivemode( false ), mbInteractive( true )
         {};
 };
 
 struct EndDockingData
 {
     Rectangle   maWindowRect;    // in
-    sal_Bool        mbFloating;      // in
-    sal_Bool        mbCancelled;     // in
+    bool        mbFloating;      // in
+    bool        mbCancelled;     // in
 
     EndDockingData() {};
-    EndDockingData( const Rectangle& rRect, sal_Bool b, sal_Bool bCancelled ) :
+    EndDockingData( const Rectangle& rRect, bool b, bool bCancelled ) :
         maWindowRect( rRect ), mbFloating( b ), mbCancelled( bCancelled )
         {};
 };
@@ -55,10 +55,10 @@ struct EndDockingData
 struct EndPopupModeData
 {
     Point       maFloatingPos;    // in
-    sal_Bool        mbTearoff;        // in
+    bool        mbTearoff;        // in
 
     EndPopupModeData() {};
-    EndPopupModeData( const Point& rPos, sal_Bool bTearoff ) :
+    EndPopupModeData( const Point& rPos, bool bTearoff ) :
         maFloatingPos( rPos ), mbTearoff( bTearoff )
         {};
 };
@@ -102,7 +102,7 @@ private:
     sal_Int32       mnDockRight;
     sal_Int32       mnDockBottom;
     WinBits         mnFloatBits;
-    sal_Bool            mbDockCanceled:1,
+    bool            mbDockCanceled:1,
                     mbFloatPrevented:1,
                     mbDockable:1,
                     mbDocking:1,
@@ -120,21 +120,21 @@ private:
     void            ImplInitData();
 
                     DECL_LINK( PopupModeEnd, void* );
-    void            ImplEnableStartDocking( sal_Bool bEnable = sal_True )  { mbStartDockingEnabled = bEnable; }
-    sal_Bool            ImplStartDockingEnabled()               { return mbStartDockingEnabled; }
+    void            ImplEnableStartDocking( bool bEnable = true )  { mbStartDockingEnabled = bEnable; }
+    bool            ImplStartDockingEnabled()               { return mbStartDockingEnabled; }
 
 public:
     ImplDockingWindowWrapper( const Window *pWindow );
     virtual ~ImplDockingWindowWrapper();
 
     Window*         GetWindow()     { return mpDockingWindow; }
-    sal_Bool            ImplStartDocking( const Point& rPos );
+    bool            ImplStartDocking( const Point& rPos );
 
     // those methods actually call the corresponding handlers
     void            StartDocking( const Point& rPos, Rectangle& rRect );
-    sal_Bool            Docking( const Point& rPos, Rectangle& rRect );
-    void            EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
-    sal_Bool            PrepareToggleFloatingMode();
+    bool            Docking( const Point& rPos, Rectangle& rRect );
+    void            EndDocking( const Rectangle& rRect, bool bFloatMode );
+    bool            PrepareToggleFloatingMode();
     void            ToggleFloatingMode();
 
     void            SetDragArea( const Rectangle& rRect );
@@ -142,33 +142,33 @@ public:
 
     void            Lock();
     void            Unlock();
-    sal_Bool            IsLocked() const;
+    bool            IsLocked() const;
 
     void            StartPopupMode( ToolBox* pParentToolBox, sal_uLong nPopupModeFlags );
-    sal_Bool            IsInPopupMode() const;
+    bool            IsInPopupMode() const;
 
     void            TitleButtonClick( sal_uInt16 nButton );
     void            Pin();
     void            Roll();
     void            PopupModeEnd();
     void            Resizing( Size& rSize );
-    sal_Bool            Close();
+    bool            Close();
     void            Tracking( const TrackingEvent& rTEvt );
     long            Notify( NotifyEvent& rNEvt );
 
-    void            ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible = sal_True );
+    void            ShowTitleButton( sal_uInt16 nButton, bool bVisible = true );
 
     void            SetMinOutputSizePixel( const Size& rSize );
 
     void            SetMaxOutputSizePixel( const Size& rSize );
 
-    sal_Bool            IsDocking() const { return mbDocking; }
-    sal_Bool            IsDockable() const { return mbDockable; }
-    sal_Bool            IsDockingCanceled() const { return mbDockCanceled; }
-    sal_Bool            IsFloatingPrevented() const { return mbFloatPrevented; }
+    bool            IsDocking() const { return mbDocking; }
+    bool            IsDockable() const { return mbDockable; }
+    bool            IsDockingCanceled() const { return mbDockCanceled; }
+    bool            IsFloatingPrevented() const { return mbFloatPrevented; }
 
-    void            SetFloatingMode( sal_Bool bFloatMode = sal_False );
-    sal_Bool            IsFloatingMode() const;
+    void            SetFloatingMode( bool bFloatMode = false );
+    bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
 
     void            SetFloatStyle( WinBits nWinStyle );
@@ -197,19 +197,19 @@ public:
     void RemoveWindow( const Window *pWin );
 
     ImplDockingWindowWrapper*  GetDockingWindowWrapper( const Window *pWin );
-    sal_Bool IsDockable( const Window *pWin );
+    bool IsDockable( const Window *pWin );
 
-    sal_Bool IsFloating( const Window *pWin );
-    void SetFloatingMode( const Window *pWin, sal_Bool bFloating );
+    bool IsFloating( const Window *pWin );
+    void SetFloatingMode( const Window *pWin, bool bFloating );
 
     void Lock( const Window *pWin );
     void Unlock( const Window *pWin );
-    sal_Bool IsLocked( const Window *pWin );
+    bool IsLocked( const Window *pWin );
 
     void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin );
     void    StartPopupMode( ToolBox *pParentToolBox, const Window *pWin, sal_uLong nPopupModeFlags );
 
-    sal_Bool    IsInPopupMode( const Window *pWin );
+    bool    IsInPopupMode( const Window *pWin );
     void    EndPopupMode( const Window *pWin );
 
     // required because those methods are not virtual in Window (!!!) and must
@@ -246,7 +246,7 @@ private:
     sal_Int32           mnDockRight;
     sal_Int32           mnDockBottom;
     WinBits         mnFloatBits;
-    sal_Bool            mbDockCanceled:1,
+    bool            mbDockCanceled:1,
                     mbDockPrevented:1,
                     mbFloatPrevented:1,
                     mbDockable:1,
@@ -273,7 +273,7 @@ protected:
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
-    SAL_DLLPRIVATE sal_Bool    ImplStartDocking( const Point& rPos );
+    SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
 
 protected:
                     DockingWindow( WindowType nType );
@@ -284,9 +284,9 @@ public:
                     ~DockingWindow();
 
     virtual void    StartDocking();
-    virtual sal_Bool    Docking( const Point& rPos, Rectangle& rRect );
+    virtual bool    Docking( const Point& rPos, Rectangle& rRect );
     virtual void    EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
-    virtual sal_Bool    PrepareToggleFloatingMode();
+    virtual bool    PrepareToggleFloatingMode();
     virtual void    ToggleFloatingMode();
 
     virtual void    TitleButtonClick( sal_uInt16 nButton );
@@ -294,18 +294,18 @@ public:
     virtual void    Roll();
     virtual void    PopupModeEnd();
     virtual void    Resizing( Size& rSize );
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    Tracking( const TrackingEvent& rTEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            SetPin( sal_Bool bPin );
-    sal_Bool            IsPined() const;
+    void            SetPin( bool bPin );
+    bool            IsPined() const;
 
     void            RollUp();
     void            RollDown();
-    sal_Bool            IsRollUp() const;
+    bool            IsRollUp() const;
 
     void            SetRollUpOutputSizePixel( const Size& rSize );
     Size            GetRollUpOutputSizePixel() const;
@@ -315,14 +315,14 @@ public:
 
     void            SetMaxOutputSizePixel( const Size& rSize );
 
-    sal_Bool            IsDocking() const { return mbDocking; }
-    sal_Bool            IsDockable() const { return mbDockable; }
-    sal_Bool            IsDockingCanceled() const { return mbDockCanceled; }
-    sal_Bool            IsDockingPrevented() const { return mbDockPrevented; }
-    sal_Bool            IsFloatingPrevented() const { return mbFloatPrevented; }
+    bool            IsDocking() const { return mbDocking; }
+    bool            IsDockable() const { return mbDockable; }
+    bool            IsDockingCanceled() const { return mbDockCanceled; }
+    bool            IsDockingPrevented() const { return mbDockPrevented; }
+    bool            IsFloatingPrevented() const { return mbFloatPrevented; }
 
-    void            SetFloatingMode( sal_Bool bFloatMode = sal_False );
-    sal_Bool            IsFloatingMode() const;
+    void            SetFloatingMode( bool bFloatMode = false );
+    bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
 
     void            SetFloatingPos( const Point& rNewPos );
@@ -343,14 +343,14 @@ public:
     Size            GetOutputSizePixel() const;
 };
 
-inline void DockingWindow::SetPin( sal_Bool bPin )
+inline void DockingWindow::SetPin( bool bPin )
 {
     if ( mpFloatWin )
         mpFloatWin->SetPin( bPin );
     mbPined = bPin;
 }
 
-inline sal_Bool DockingWindow::IsPined() const
+inline bool DockingWindow::IsPined() const
 {
     if ( mpFloatWin )
         return mpFloatWin->IsPined();
@@ -361,17 +361,17 @@ inline void DockingWindow::RollUp()
 {
     if ( mpFloatWin )
         mpFloatWin->RollUp();
-    mbRollUp = sal_True;
+    mbRollUp = true;
 }
 
 inline void DockingWindow::RollDown()
 {
     if ( mpFloatWin )
         mpFloatWin->RollDown();
-    mbRollUp = sal_False;
+    mbRollUp = false;
 }
 
-inline sal_Bool DockingWindow::IsRollUp() const
+inline bool DockingWindow::IsRollUp() const
 {
     if ( mpFloatWin )
         return mpFloatWin->IsRollUp();

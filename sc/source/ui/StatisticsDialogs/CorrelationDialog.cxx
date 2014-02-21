@@ -28,7 +28,7 @@ ScCorrelationDialog::ScCorrelationDialog(
             "CorrelationDialog", "modules/scalc/ui/correlationdialog.ui" )
 {}
 
-sal_Bool ScCorrelationDialog::Close()
+bool ScCorrelationDialog::Close()
 {
     return DoClose( ScCorrelationDialogWrapper::GetChildWindowId() );
 }

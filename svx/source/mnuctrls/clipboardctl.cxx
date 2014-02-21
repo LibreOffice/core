@@ -83,13 +83,13 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
 
         ToolBox& rBox = GetToolBox();
         sal_uInt16 nId = GetId();
-        rBox.SetItemDown( nId, sal_True );
+        rBox.SetItemDown( nId, true );
 
         pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
             (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ?
                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
-        rBox.SetItemDown( nId, sal_False );
+        rBox.SetItemDown( nId, false );
 
         SfxUInt32Item aItem( SID_CLIPBOARD_FORMAT_ITEMS, pPopup->GetCurItemId() );
 

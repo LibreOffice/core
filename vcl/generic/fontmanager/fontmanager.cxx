@@ -233,7 +233,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             table[ i ] = 256*nPage + i;
 
         int nCharacters = nPage < 255 ? 256 : 254;
-        MapString( pTTFont, table, nCharacters, NULL, 0 );
+        MapString( pTTFont, table, nCharacters, NULL, false );
         TTSimpleGlyphMetrics* pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, 0 );
         if( pMetrics )
         {
@@ -252,7 +252,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
         for( i = 0; i < 256; i++ )
             table_vert[ i ] = 256*nPage + i;
-        MapString( pTTFont, table_vert, nCharacters, NULL, 1 );
+        MapString( pTTFont, table_vert, nCharacters, NULL, true );
         pMetrics = GetTTSimpleCharMetrics( pTTFont, nPage*256, nCharacters, 1 );
         if( pMetrics )
         {

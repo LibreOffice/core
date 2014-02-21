@@ -68,7 +68,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     aBulletFont.SetFamily( FAMILY_DONTKNOW );
     aBulletFont.SetPitch( PITCH_DONTKNOW );
     aBulletFont.SetWeight( WEIGHT_DONTKNOW );
-    aBulletFont.SetTransparent( sal_True );
+    aBulletFont.SetTransparent( true );
 
     cBullet = 0x2022;
     cByInputBullet = cBullet;

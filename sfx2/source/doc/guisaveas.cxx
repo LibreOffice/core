@@ -1713,7 +1713,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
     // Launch PDF viewer
     if ( nStoreMode & PDFEXPORT_REQUESTED ) {
         FilterConfigItem aItem( "Office.Common/Filter/PDF/Export/" );
-        sal_Bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", sal_False );
+        sal_Bool aViewPDF = aItem.ReadBool( "ViewPDFAfterExport", false );
 
         if ( aViewPDF==sal_True ) {
             uno::Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );

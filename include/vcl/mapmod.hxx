@@ -46,7 +46,7 @@ private:
     Point           maOrigin;
     Fraction        maScaleX;
     Fraction        maScaleY;
-    sal_Bool            mbSimple;
+    bool            mbSimple;
 
     friend SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rMapMode );
     friend SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rMapMode );
@@ -94,11 +94,11 @@ public:
                         { return mpImplMapMode->maScaleY; }
 
     MapMode&        operator=( const MapMode& rMapMode );
-    sal_Bool            operator==( const MapMode& rMapMode ) const;
-    sal_Bool            operator!=( const MapMode& rMapMode ) const
+    bool            operator==( const MapMode& rMapMode ) const;
+    bool            operator!=( const MapMode& rMapMode ) const
                         { return !(MapMode::operator==( rMapMode )); }
-    sal_Bool            IsDefault() const;
-    sal_Bool            IsSameInstance( const MapMode& rMapMode ) const
+    bool            IsDefault() const;
+    bool            IsSameInstance( const MapMode& rMapMode ) const
                         { return (mpImplMapMode == rMapMode.mpImplMapMode); }
 
     friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );

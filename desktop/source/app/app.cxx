@@ -703,7 +703,7 @@ void Desktop::DeInit()
     SAL_INFO( "desktop.app", "FINISHED WITH Destop::DeInit" );
 }
 
-sal_Bool Desktop::QueryExit()
+bool Desktop::QueryExit()
 {
     try
     {

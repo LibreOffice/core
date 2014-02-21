@@ -110,15 +110,15 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mnMaxPageWidth              = 0;
     mnActPageId                 = 0;
     mnCurPageId                 = 0;
-    mbFormat                    = sal_True;
-    mbRestoreHelpId             = sal_False;
-    mbRestoreUnqId              = sal_False;
-    mbSmallInvalidate           = sal_False;
+    mbFormat                    = true;
+    mbRestoreHelpId             = false;
+    mbRestoreUnqId              = false;
+    mbSmallInvalidate           = false;
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpListBox    = NULL;
 
 
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     if( (nStyle & WB_DROPDOWN) )
     {
@@ -131,7 +131,7 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     // if the tabcontrol is drawn (ie filled) by a native widget, make sure all contols will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
 
     if ( pParent->IsDialog() )
         pParent->AddChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
@@ -152,8 +152,8 @@ const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) c
 
 // -----------------------------------------------------------------------
 
-void TabControl::ImplInitSettings( sal_Bool bFont,
-                                   sal_Bool bForeground, sal_Bool bBackground )
+void TabControl::ImplInitSettings( bool bFont,
+                                   bool bForeground, bool bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -168,17 +168,17 @@ void TabControl::ImplInitSettings( sal_Bool bFont,
         {
             // set transparent mode for NWF tabcontrols to have
             // the background always cleared properly
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( true );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( true );
             SetBackground();
             ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( false );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( false );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -461,7 +461,7 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
     if ( mbFormat || (mnLastWidth != nWidth) || (mnLastHeight != nHeight) )
     {
         Font aFont( GetFont() );
-        aFont.SetTransparent( sal_True );
+        aFont.SetTransparent( true );
         SetFont( aFont );
 
         Size            aSize;
@@ -524,7 +524,7 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
 
             Rectangle aNewRect( Point( nX, nY ), aSize );
             if ( mbSmallInvalidate && (it->maRect != aNewRect) )
-                mbSmallInvalidate = sal_False;
+                mbSmallInvalidate = false;
             it->maRect = aNewRect;
             it->mnLine = nLines;
             it->mbFullVisible = true;
@@ -621,7 +621,7 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
 
         mnLastWidth     = nWidth;
         mnLastHeight    = nHeight;
-        mbFormat        = sal_False;
+        mbFormat        = false;
     }
 
     return size_t(nItemPos) < mpTabCtrlData->maItemList.size() ? mpTabCtrlData->maItemList[nItemPos].maRect : Rectangle();
@@ -693,12 +693,12 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
         // also set the help id of the parent window to that of the tab page
         if ( GetHelpId().isEmpty() )
         {
-            mbRestoreHelpId = sal_True;
+            mbRestoreHelpId = true;
             pCtrlParent->SetHelpId( pPage->GetHelpId() );
         }
         if ( pCtrlParent->GetUniqueId().isEmpty() )
         {
-            mbRestoreUnqId = sal_True;
+            mbRestoreUnqId = true;
             pCtrlParent->SetUniqueId( pPage->GetUniqueId() );
         }
 
@@ -735,7 +735,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
 // -----------------------------------------------------------------------
 
-sal_Bool TabControl::ImplPosCurTabPage()
+bool TabControl::ImplPosCurTabPage()
 {
     // resize/position current TabPage
     ImplTabItem* pItem = ImplGetItem( GetCurPageId() );
@@ -745,19 +745,19 @@ sal_Bool TabControl::ImplPosCurTabPage()
         {
             Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
             pItem->mpTabPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
-            return sal_True;
+            return true;
         }
         Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
         pItem->mpTabPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-void TabControl::ImplActivateTabPage( sal_Bool bNext )
+void TabControl::ImplActivateTabPage( bool bNext )
 {
     sal_uInt16 nCurPos = GetPagePos( GetCurPageId() );
 
@@ -851,7 +851,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     bool                    bLeftBorder = true;
     bool                    bRightBorder = true;
     sal_uInt16                  nOff;
-    sal_Bool                    bNativeOK = sal_False;
+    bool                    bNativeOK = false;
 
     sal_uInt16 nOff2 = 0;
     sal_uInt16 nOff3 = 0;
@@ -890,7 +890,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         }
     }
 
-    if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) == sal_True )
+    if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
     {
         Rectangle           aCtrlRegion( pItem->maRect );
         ControlState        nState = 0;
@@ -989,7 +989,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     // set font accordingly, current item is painted bold
     // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     SetFont( aFont );
 
     Size aTabSize = aRect.GetSize();
@@ -1043,7 +1043,7 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
             {
                 if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEUP) )
                 {
-                    ImplActivateTabPage( sal_False );
+                    ImplActivateTabPage( false );
                     nRet = true;
                 }
             }
@@ -1051,7 +1051,7 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
             {
                 if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEDOWN) )
                 {
-                    ImplActivateTabPage( sal_True );
+                    ImplActivateTabPage( true );
                     nRet = true;
                 }
             }
@@ -1117,7 +1117,7 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
 
         if ( (nKeyCode == KEY_LEFT) || (nKeyCode == KEY_RIGHT) )
         {
-            sal_Bool bNext = (nKeyCode == KEY_RIGHT);
+            bool bNext = (nKeyCode == KEY_RIGHT);
             ImplActivateTabPage( bNext );
         }
     }
@@ -1176,8 +1176,8 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         aRect.Right()+=10;
     }
 
-    sal_Bool bNativeOK = sal_False;
-    if( ! bLayout && (bNativeOK = IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) ) == sal_True )
+    bool bNativeOK = false;
+    if( ! bLayout && (bNativeOK = IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) ) )
     {
         const ImplControlValue aControlValue;
 
@@ -1312,7 +1312,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         ImplShowFocus();
 
     if( ! bLayout )
-        mbSmallInvalidate = sal_True;
+        mbSmallInvalidate = true;
 }
 
 // -----------------------------------------------------------------------
@@ -1336,10 +1336,10 @@ void TabControl::setAllocation(const Size &rAllocation)
         mpTabCtrlData->mpListBox->SetPosSizePixel( aNewPos, aNewSize );
     }
 
-    mbFormat = sal_True;
+    mbFormat = true;
 
     // resize/position active TabPage
-    sal_Bool bTabPage = ImplPosCurTabPage();
+    bool bTabPage = ImplPosCurTabPage();
 
     // check what needs to be invalidated
     Size aNewSize = rAllocation;
@@ -1350,7 +1350,7 @@ void TabControl::setAllocation(const Size &rAllocation)
         if ( !it->mbFullVisible ||
              (it->maRect.Right()-2 >= nNewWidth) )
         {
-            mbSmallInvalidate = sal_False;
+            mbSmallInvalidate = false;
             break;
         }
     }
@@ -1579,17 +1579,17 @@ void TabControl::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM)  ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -1605,7 +1605,7 @@ void TabControl::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
@@ -1796,7 +1796,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     pItem->maText           = rText;
     pItem->mbFullVisible    = false;
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsUpdateMode() )
         Invalidate();
 
@@ -1845,7 +1845,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
             }
         }
 
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsUpdateMode() )
             Invalidate();
 
@@ -1867,7 +1867,7 @@ void TabControl::Clear()
 
     ImplFreeLayoutData();
 
-    mbFormat = sal_True;
+    mbFormat = true;
     if ( IsUpdateMode() )
         Invalidate();
 
@@ -1883,7 +1883,7 @@ void TabControl::EnablePage( sal_uInt16 i_nPageId, bool i_bEnable )
     if ( pItem && pItem->mbEnabled != i_bEnable )
     {
         pItem->mbEnabled = i_bEnable;
-        mbFormat = sal_True;
+        mbFormat = true;
         if( mpTabCtrlData->mpListBox )
             mpTabCtrlData->mpListBox->SetEntryFlags( GetPagePos( i_nPageId ),
                                                      i_bEnable ? 0 : (LISTBOX_ENTRY_FLAG_DISABLE_SELECTION | LISTBOX_ENTRY_FLAG_DRAW_DISABLED) );
@@ -1993,7 +1993,7 @@ void TabControl::SetCurPageId( sal_uInt16 nPageId )
             mnActPageId = nPageId;
         else
         {
-            mbFormat = sal_True;
+            mbFormat = true;
             sal_uInt16 nOldId = mnCurPageId;
             mnCurPageId = nPageId;
             ImplChangeTabPage( nPageId, nOldId );
@@ -2086,7 +2086,7 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
     if ( pItem && pItem->maText != rText )
     {
         pItem->maText = rText;
-        mbFormat = sal_True;
+        mbFormat = true;
         if( mpTabCtrlData->mpListBox )
         {
             sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2186,7 +2186,7 @@ void TabControl::SetPageImage( sal_uInt16 i_nPageId, const Image& i_rImage )
     if ( pItem )
     {
         pItem->maTabImage = i_rImage;
-        mbFormat = sal_True;
+        mbFormat = true;
         if ( IsUpdateMode() )
             Invalidate();
     }

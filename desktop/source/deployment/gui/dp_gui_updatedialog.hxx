@@ -86,7 +86,7 @@ public:
 
     ~UpdateDialog();
 
-    virtual sal_Bool Close();
+    virtual bool Close();
 
     virtual short Execute();
 

@@ -132,37 +132,37 @@ class VCL_DLLPUBLIC GraphicDescriptor
     sal_uInt16          nBitsPerPixel;
     sal_uInt16          nPlanes;
     sal_uInt16          nFormat;
-    sal_Bool            bCompressed;
-    sal_Bool            bOwnStream;
+    bool            bCompressed;
+    bool            bOwnStream;
 
     void                ImpConstruct();
 
-    sal_Bool            ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectJPG( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPCD( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectXBM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectXPM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPBM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPGM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPPM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectRAS( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectTGA( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectEPS( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectDXF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectMET( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectPCT( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectSGF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectWMF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectSGV( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectEMF( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectSVG( SvStream& rStm, sal_Bool bExtendedInfo );
-    sal_Bool            ImpDetectMOV( SvStream& rStm, sal_Bool bExtendedInfo );
+    bool            ImpDetectBMP( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectGIF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectJPG( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPCD( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPCX( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPNG( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectTIF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectXBM( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectXPM( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPBM( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPGM( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPPM( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectRAS( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectTGA( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPSD( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectEPS( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectDXF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectMET( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPCT( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectSGF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectSVM( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectWMF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectSGV( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectEMF( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectSVG( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectMOV( SvStream& rStm, bool bExtendedInfo );
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );
 
@@ -189,7 +189,7 @@ public:
 
         if bExtendedInfo == sal_True the file header is used to derive
         as many properties as possible (size, color, etc.) */
-    virtual sal_Bool    Detect( sal_Bool bExtendedInfo = sal_False );
+    virtual bool    Detect( sal_Bool bExtendedInfo = sal_False );
 
     /** @return the file format, GFF_NOT if no format was recognized */
     sal_uInt16          GetFileFormat() const { return nFormat; }
@@ -207,7 +207,7 @@ public:
     sal_uInt16          GetPlanes() const { return nPlanes; }
 
     /** @return true if the graphic is compressed */
-    sal_Bool            IsCompressed() const { return bCompressed; }
+    bool            IsCompressed() const { return bCompressed; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
     static OUString GetImportFormatShortName( sal_uInt16 nFormat );
@@ -238,13 +238,13 @@ protected:
     OUString       aFilterPath;
     FilterConfigCache*  pConfig;
     FilterErrorEx*      pErrorEx;
-    sal_Bool            bAbort;
-    sal_Bool            bUseConfig;
+    bool            bAbort;
+    bool            bUseConfig;
     long                nExpGraphHint;
 
 public:
 
-                    GraphicFilter( sal_Bool bUseConfig = sal_True );
+                    GraphicFilter( bool bUseConfig = true );
                     ~GraphicFilter();
 
     void            SetFilterPath( const OUString& rFilterPath ) { aFilterPath = rFilterPath; };
@@ -260,7 +260,7 @@ public:
     OUString        GetImportFormatShortName( sal_uInt16 nFormat );
     OUString        GetImportOSFileType( sal_uInt16 nFormat );
     OUString        GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
-    sal_Bool            IsImportPixelFormat( sal_uInt16 nFormat );
+    bool            IsImportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          GetExportFormatCount();
     sal_uInt16          GetExportFormatNumber( const OUString& rFormatName );
@@ -274,7 +274,7 @@ public:
     OUString        GetExportFormatShortName( sal_uInt16 nFormat );
     OUString        GetExportOSFileType( sal_uInt16 nFormat );
     OUString        GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
-    sal_Bool            IsExportPixelFormat( sal_uInt16 nFormat );
+    bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                     sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
@@ -309,7 +309,7 @@ public:
                                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
                                    WMF_EXTERNALHEADER *pExtHeader = NULL );
 
-    void            Abort() { bAbort = sal_True; }
+    void            Abort() { bAbort = true; }
 
     const FilterErrorEx&    GetLastError() const;
     void                    ResetLastError();

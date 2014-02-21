@@ -318,7 +318,7 @@ namespace frm
                     {
                         pItemWindow = new FixedText( m_pToolbar, WB_VCENTER );
                         pItemWindow->SetBackground();
-                        pItemWindow->SetPaintTransparent(sal_True);
+                        pItemWindow->SetPaintTransparent(true);
                     }
                     m_aChildWins.push_back( pItemWindow );
 
@@ -663,7 +663,7 @@ namespace frm
         SetFirst( 1 );
         SetSpinSize( 1 );
         SetDecimalDigits( 0 );
-        SetStrictFormat( sal_True );
+        SetStrictFormat( true );
         SetBorderStyle( WINDOW_BORDER_MONO );
     }
 

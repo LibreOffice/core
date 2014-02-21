@@ -134,7 +134,7 @@ FindTextFieldControl::FindTextFieldControl( Window* pParent, WinBits nStyle,
     m_xContext(xContext)
 {
     SetPlaceholderText(SVX_RESSTR(RID_SVXSTR_FINDBAR_FIND));
-    EnableAutocomplete(sal_True, sal_True);
+    EnableAutocomplete(true, true);
 }
 
 FindTextFieldControl::~FindTextFieldControl()

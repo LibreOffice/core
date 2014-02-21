@@ -44,7 +44,7 @@ namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 Throbber::Throbber( Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet )
     :ImageControl( i_parentWindow, i_style )
-    ,mbRepeat( sal_True )
+    ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
     ,mnStepCount( 0 )
@@ -59,7 +59,7 @@ Throbber::Throbber( Window* i_parentWindow, WinBits i_style, const ImageSet i_im
 
 Throbber::Throbber( Window* i_parentWindow, const ResId& i_resId, const ImageSet i_imageSet )
     :ImageControl( i_parentWindow, i_resId )
-    ,mbRepeat( sal_True )
+    ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
     ,mnStepCount( 0 )

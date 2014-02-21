@@ -78,9 +78,9 @@ void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 // -----------------------------------------------------------------------
 void OEndMarker::ImplInitSettings()
 {
-    EnableChildTransparentMode( sal_True );
+    EnableChildTransparentMode( true );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-    SetPaintTransparent( sal_True );
+    SetPaintTransparent( true );
 
     SetBackground( Wallpaper( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor)  );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );

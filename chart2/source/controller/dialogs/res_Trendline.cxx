@@ -178,12 +178,12 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SET_INTERCEPT, true, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_pCB_SetIntercept->EnableTriState( sal_True );
+        m_pCB_SetIntercept->EnableTriState( true );
         m_pCB_SetIntercept->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_pCB_SetIntercept->EnableTriState( sal_False );
+        m_pCB_SetIntercept->EnableTriState( false );
         if( aState == SFX_ITEM_SET )
             m_pCB_SetIntercept->Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
@@ -191,12 +191,12 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, true, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_pCB_ShowEquation->EnableTriState( sal_True );
+        m_pCB_ShowEquation->EnableTriState( true );
         m_pCB_ShowEquation->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_pCB_ShowEquation->EnableTriState( sal_False );
+        m_pCB_ShowEquation->EnableTriState( false );
         if( aState == SFX_ITEM_SET )
             m_pCB_ShowEquation->Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
@@ -204,12 +204,12 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, true, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_pCB_ShowCorrelationCoeff->EnableTriState( sal_True );
+        m_pCB_ShowCorrelationCoeff->EnableTriState( true );
         m_pCB_ShowCorrelationCoeff->SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_pCB_ShowCorrelationCoeff->EnableTriState( sal_False );
+        m_pCB_ShowCorrelationCoeff->EnableTriState( false );
         if( aState == SFX_ITEM_SET )
             m_pCB_ShowCorrelationCoeff->Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }

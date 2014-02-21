@@ -88,22 +88,22 @@ private:
     sal_uInt16              mnCurItemId;
     sal_uInt16              mnPercent;
     sal_uInt16              mnPercentCount;
-    sal_Bool                mbVisibleItems;
-    sal_Bool                mbFormat;
-    sal_Bool                mbProgressMode;
-    sal_Bool                mbInUserDraw;
+    bool                mbVisibleItems;
+    bool                mbFormat;
+    bool                mbProgressMode;
+    bool                mbInUserDraw;
     Link                maClickHdl;
     Link                maDoubleClickHdl;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void      ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void      ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void      ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void      ImplFormat();
-    SAL_DLLPRIVATE sal_Bool      ImplIsItemUpdate();
+    SAL_DLLPRIVATE bool      ImplIsItemUpdate();
     using OutputDevice::ImplDrawText;
-    SAL_DLLPRIVATE void      ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth );
-    SAL_DLLPRIVATE void      ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDrawText, sal_Bool bDrawFrame );
-    SAL_DLLPRIVATE void      ImplDrawProgress( sal_Bool bPaint,
+    SAL_DLLPRIVATE void      ImplDrawText( bool bOffScreen, long nOldTextWidth );
+    SAL_DLLPRIVATE void      ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, bool bDrawFrame );
+    SAL_DLLPRIVATE void      ImplDrawProgress( bool bPaint,
                                                sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
     SAL_DLLPRIVATE void      ImplCalcProgressRect();
     SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
@@ -134,9 +134,9 @@ public:
 
     void                ShowItem( sal_uInt16 nItemId );
     void                HideItem( sal_uInt16 nItemId );
-    sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
+    bool                IsItemVisible( sal_uInt16 nItemId ) const;
 
-    sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
+    bool                AreItemsVisible() const { return mbVisibleItems; }
 
     void                RedrawItem( sal_uInt16 nItemId );
 
@@ -178,7 +178,7 @@ public:
     void                StartProgressMode( const OUString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );
     void                EndProgressMode();
-    sal_Bool                IsProgressMode() const { return mbProgressMode; }
+    bool                IsProgressMode() const { return mbProgressMode; }
 
     void                SetText( const OUString& rText );
 

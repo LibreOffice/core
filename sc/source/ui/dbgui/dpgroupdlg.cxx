@@ -246,8 +246,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     for( size_t nIdx = 0 ; nIdx < nCount; ++nIdx )
         maLbUnits.InsertEntry( ScGlobal::GetRscString( nDatePartResIds[nIdx] ) );
 
-    maEdStart.SetShowDateCentury( sal_True );
-    maEdEnd.SetShowDateCentury( sal_True );
+    maEdStart.SetShowDateCentury( true );
+    maEdEnd.SetShowDateCentury( true );
 
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );

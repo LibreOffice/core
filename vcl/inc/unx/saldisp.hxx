@@ -139,11 +139,11 @@ public:
     inline  Pixel               GetUsed() const { return m_nUsed; }
     inline  int                 GetClass() const { return m_aVisual.GetClass(); }
 
-    sal_Bool            GetXPixels( XColor  &rColor,
+    bool            GetXPixels( XColor  &rColor,
                                     int      r,
                                     int      g,
                                     int      b ) const;
-    inline  sal_Bool            GetXPixel( XColor  &rColor,
+    inline  bool            GetXPixel( XColor  &rColor,
                                            int      r,
                                            int      g,
                                            int      b ) const;
@@ -262,7 +262,7 @@ protected:
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
 
     // Keyboard
-    sal_Bool        bNumLockFromXS_;    // Num Lock handled by X Server
+    bool        bNumLockFromXS_;    // Num Lock handled by X Server
     int             nNumLockIndex_;     // modifier index in modmap
     int             nNumLockMask_;      // keyevent state mask for
     KeySym          nShiftKeySym_;      // first shift modifier
@@ -290,7 +290,7 @@ protected:
     void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
     static SalDisplay *GetSalDisplay( Display* display );
-    static sal_Bool BestVisual( Display     *pDisp,
+    static bool BestVisual( Display     *pDisp,
                                 int          nScreen,
                                 XVisualInfo &rVI );
 
@@ -340,7 +340,7 @@ public:
     const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }
-    sal_Bool        IsDisplay() const { return !!pXLib_; }
+    bool        IsDisplay() const { return !!pXLib_; }
     GC              GetMonoGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aMonoGC; }
     GC              GetCopyGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aCopyGC; }
     GC              GetAndInvertedGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aAndInvertedGC; }
@@ -376,7 +376,7 @@ public:
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }
 
     const std::list< SalFrame* >& getFrames() const { return m_aFrames; }
-    sal_Bool            IsNumLockFromXS() const { return bNumLockFromXS_; }
+    bool            IsNumLockFromXS() const { return bNumLockFromXS_; }
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 
@@ -403,7 +403,7 @@ public:
     virtual void        Yield();
     virtual void        PostUserEvent();
 
-    sal_Bool            IsEvent();
+    bool            IsEvent();
     void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };
 

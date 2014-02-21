@@ -707,7 +707,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
     // We now have always a link to the background
     bLinkOnly = sal_True;
-    m_pBtnLink->Check( sal_True );
+    m_pBtnLink->Check( true );
     m_pBtnLink->Show( false );
 
     delete pTemp;
@@ -1536,7 +1536,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
         // activate preview, so that the user sees which
         // graphic he has chosen
         if ( !m_pBtnLink->IsChecked() && !m_pBtnPreview->IsChecked() )
-            m_pBtnPreview->Check( sal_True );
+            m_pBtnPreview->Check( true );
         // timer-delayed loading of the graphic
         pPageImpl->pLoadTimer->Start();
     }
@@ -1844,8 +1844,8 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             aBgdGraphicPath = "";
 
             if ( rUserData.isEmpty() )
-                m_pBtnPreview->Check( sal_False );
-            m_pBtnLink->Check( sal_False );
+                m_pBtnPreview->Check( false );
+            m_pBtnLink->Check( false );
             m_pBtnLink->Disable();
             m_pPreviewWin2->NotifyChange( NULL );
             SetGraphicPosition_Impl( GPOS_TILED );  // tiles as default
@@ -1866,13 +1866,13 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 #endif
             aBgdGraphicPath = aStrLink;
-            m_pBtnLink->Check( sal_True );
+            m_pBtnLink->Check( true );
             m_pBtnLink->Enable();
         }
         else
         {
             aBgdGraphicPath = "";
-            m_pBtnLink->Check( sal_False );
+            m_pBtnLink->Check( false );
             m_pBtnLink->Disable();
         }
 
@@ -1913,7 +1913,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                 bIsGraphicValid = sal_False;
 
                 if ( rUserData.isEmpty() )
-                    m_pBtnPreview->Check( sal_False );
+                    m_pBtnPreview->Check( false );
             }
         }
 

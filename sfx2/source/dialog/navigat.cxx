@@ -72,14 +72,14 @@ void SfxNavigator::Resizing( Size &rSize )
         pCon->Resizing( rSize );
 }
 
-sal_Bool SfxNavigator::Close()
+bool SfxNavigator::Close()
 {
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
     DBG_ASSERT( pCon, "No Context!" );
     if ( !pCon || pCon->Close() )
         return SfxDockingWindow::Close();
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

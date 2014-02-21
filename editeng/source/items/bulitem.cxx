@@ -211,7 +211,7 @@ void SvxBulletItem::SetDefaultFont_Impl()
 {
     aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
     aFont.SetAlign( ALIGN_BOTTOM);
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
 }
 
 // -----------------------------------------------------------------------

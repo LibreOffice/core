@@ -121,11 +121,11 @@ public:
 
     inline              ~BitmapColor() {};
 
-    inline sal_Bool         operator==( const BitmapColor& rBitmapColor ) const;
-    inline sal_Bool         operator!=( const BitmapColor& rBitmapColor ) const;
+    inline bool         operator==( const BitmapColor& rBitmapColor ) const;
+    inline bool         operator!=( const BitmapColor& rBitmapColor ) const;
     inline BitmapColor& operator=( const BitmapColor& rBitmapColor );
 
-    inline sal_Bool         IsIndex() const;
+    inline bool         IsIndex() const;
 
     inline sal_uInt8        GetRed() const;
     inline void         SetRed( sal_uInt8 cRed );
@@ -184,9 +184,9 @@ public:
     inline                      ~BitmapPalette();
 
     inline BitmapPalette&       operator=( const BitmapPalette& rBitmapPalette );
-    inline sal_Bool             operator==( const BitmapPalette& rBitmapPalette ) const;
-    inline sal_Bool             operator!=( const BitmapPalette& rBitmapPalette ) const;
-    inline sal_Bool             operator!();
+    inline bool             operator==( const BitmapPalette& rBitmapPalette ) const;
+    inline bool             operator!=( const BitmapPalette& rBitmapPalette ) const;
+    inline bool             operator!();
 
     inline sal_uInt16           GetEntryCount() const;
     inline void                 SetEntryCount( sal_uInt16 nCount );
@@ -323,7 +323,7 @@ inline BitmapColor::BitmapColor( sal_uInt8 cIndex ) :
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
+inline bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
 {
     return( ( mcBlueOrIndex == rBitmapColor.mcBlueOrIndex ) &&
             ( mbIndex ? rBitmapColor.mbIndex :
@@ -332,7 +332,7 @@ inline sal_Bool BitmapColor::operator==( const BitmapColor& rBitmapColor ) const
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapColor::operator!=( const BitmapColor& rBitmapColor ) const
+inline bool BitmapColor::operator!=( const BitmapColor& rBitmapColor ) const
 {
     return !( *this == rBitmapColor );
 }
@@ -351,7 +351,7 @@ inline BitmapColor& BitmapColor::operator=( const BitmapColor& rBitmapColor )
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapColor::IsIndex() const
+inline bool BitmapColor::IsIndex() const
 {
     return mbIndex;
 }
@@ -580,19 +580,19 @@ inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPale
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette ) const
+inline bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( rBitmapPalette.mnCount == mnCount )
     {
-        bRet = sal_True;
+        bRet = true;
 
         for( sal_uInt16 i = 0; i < mnCount; i++ )
         {
             if( mpBitmapColor[ i ] != rBitmapPalette.mpBitmapColor[ i ] )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }
@@ -603,14 +603,14 @@ inline sal_Bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette )
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapPalette::operator!=( const BitmapPalette& rBitmapPalette ) const
+inline bool BitmapPalette::operator!=( const BitmapPalette& rBitmapPalette ) const
 {
     return !( *this == rBitmapPalette );
 }
 
 // ------------------------------------------------------------------
 
-inline sal_Bool BitmapPalette::operator!()
+inline bool BitmapPalette::operator!()
 {
     return( !mnCount || !mpBitmapColor );
 }
@@ -678,11 +678,11 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
 
     if( mpBitmapColor && mnCount )
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
 
         for( long j = 0L; ( j < mnCount ) && !bFound; j++ )
             if( rCol == mpBitmapColor[ j ] )
-                nRetIndex = ( (sal_uInt16) j ), bFound = sal_True;
+                nRetIndex = ( (sal_uInt16) j ), bFound = true;
 
         if( !bFound )
         {

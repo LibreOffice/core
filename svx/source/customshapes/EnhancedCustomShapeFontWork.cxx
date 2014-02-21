@@ -261,7 +261,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             VirtualDevice aVirDev( 1 );
             aVirDev.SetMapMode( MAP_100TH_MM );
             aVirDev.SetFont( aFont );
-            aVirDev.EnableRTL( sal_True );
+            aVirDev.EnableRTL( true );
             if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
                 aVirDev.SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
 
@@ -281,7 +281,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 {
                     FWCharacterData aCharacterData;
                     OUString aCharText( (sal_Unicode)rText[ i ] );
-                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, sal_True, nWidth, pDXArry ) )
+                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, true, nWidth, pDXArry ) )
                     {
                         sal_Int32 nTextWidth = aVirDev.GetTextWidth( aCharText);
                         std::vector< PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
@@ -339,7 +339,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     aVirDev.SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, sal_True, nWidth, pDXArry ) )
+                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, true, nWidth, pDXArry ) )
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }

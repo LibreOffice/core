@@ -791,8 +791,8 @@ void ScColorScale2FrmtEntry::Init()
             if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
                 maLbColMax.SelectEntryPos(i);
         }
-        maLbColMin.SetUpdateMode( sal_True );
-        maLbColMax.SetUpdateMode( sal_True );
+        maLbColMin.SetUpdateMode( true );
+        maLbColMax.SetUpdateMode( true );
     }
 }
 
@@ -954,9 +954,9 @@ void ScColorScale3FrmtEntry::Init()
             if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
                 maLbColMax.SelectEntryPos(i);
         }
-        maLbColMin.SetUpdateMode( sal_True );
-        maLbColMiddle.SetUpdateMode( sal_True );
-        maLbColMax.SetUpdateMode( sal_True );
+        maLbColMin.SetUpdateMode( true );
+        maLbColMiddle.SetUpdateMode( true );
+        maLbColMax.SetUpdateMode( true );
     }
 }
 

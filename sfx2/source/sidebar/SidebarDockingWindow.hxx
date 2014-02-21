@@ -40,7 +40,7 @@ public:
         WinBits nBits);
     virtual ~SidebarDockingWindow (void);
 
-    virtual sal_Bool Close (void);
+    virtual bool Close (void);
 
     SfxChildWindow* GetChildWindow (void);
 

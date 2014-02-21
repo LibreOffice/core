@@ -68,10 +68,10 @@ public:
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
 
-    sal_Bool            operator!() const { return( !mpImplData ? true : false ); }
+    bool            operator!() const { return( !mpImplData ? true : false ); }
     Image&          operator=( const Image& rImage );
-    sal_Bool            operator==( const Image& rImage ) const;
-    sal_Bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
+    bool            operator==( const Image& rImage ) const;
+    bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
 
 private:
 
@@ -122,8 +122,8 @@ public:
     void            GetImageNames( ::std::vector< OUString >& rNames ) const;
 
     ImageList&      operator=( const ImageList& rImageList );
-    sal_Bool            operator==( const ImageList& rImageList ) const;
-    sal_Bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
+    bool            operator==( const ImageList& rImageList ) const;
+    bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
 private:
 

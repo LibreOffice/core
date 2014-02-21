@@ -66,9 +66,9 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterD
     maCBUseNativeDecoration.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
                                              Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( SVG_PROP_TINYPROFILE ), sal_False ) );
-    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( SVG_PROP_EMBEDFONTS ), sal_True ) );
-    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( SVG_PROP_NATIVEDECORATION ), sal_True ) );
+    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( SVG_PROP_TINYPROFILE ), false ) );
+    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( SVG_PROP_EMBEDFONTS ), true ) );
+    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( SVG_PROP_NATIVEDECORATION ), true ) );
 
     maBTOK.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
                             Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
@@ -118,7 +118,7 @@ IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
         {
             mbOldNativeDecoration = maCBUseNativeDecoration.IsChecked();
 
-            maCBUseNativeDecoration.Check( sal_False );
+            maCBUseNativeDecoration.Check( false );
             maCBUseNativeDecoration.Disable();
         }
         else

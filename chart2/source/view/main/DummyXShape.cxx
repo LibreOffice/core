@@ -1212,16 +1212,16 @@ bool DummyChart::initWindow()
         winData.nSize = sizeof(winData);
         OSL_TRACE("using VisualID %08X", vi->visualid);
         winData.pVisual = (void*)(vi->visual);
-        pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, sal_False));
+        pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, false));
         pChildSysData = pWindow->GetSystemData();
     }
 
     if (!pWindow || !pChildSysData)
         return false;
 
-    pWindow->SetMouseTransparent( sal_True );
+    pWindow->SetMouseTransparent( true );
     pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-    pWindow->EnableEraseBackground( sal_False );
+    pWindow->EnableEraseBackground( false );
     pWindow->SetControlForeground();
     pWindow->SetControlBackground();
 

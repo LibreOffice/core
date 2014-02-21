@@ -1178,7 +1178,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     m_aTBPreview.EndSelection();
 
     // tell the toolbox that the item is pressed down
-    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, sal_True );
+    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, true );
 
     // simulate a mouse move (so the "down" state is really painted)
     Point aPoint = m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
@@ -1210,7 +1210,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     // "cleanup" the toolbox state
     MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
     m_aTBPreview.MouseMove( aLeave );
-    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, sal_False);
+    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, false);
     if ( nSelectedAction )
     {
         m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));

@@ -666,7 +666,7 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
         nCurPos = GetSelectEntryPos();
     else if ( EVENT_LOSEFOCUS == nType
         && Application::GetFocusWindow()
-        && !IsWindowOrChild( Application::GetFocusWindow(), sal_True ) )
+        && !IsWindowOrChild( Application::GetFocusWindow(), true ) )
     {
         if ( !bSelect )
             SelectEntryPos( nCurPos );

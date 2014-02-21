@@ -44,29 +44,29 @@ public:
     sal_uInt16          GetIndex() const    { return mnIndex; }
     sal_uInt16&         GetIndex()          { return mnIndex; }
 
-    inline sal_Bool     operator == ( const TextPaM& rPaM ) const;
-    inline sal_Bool     operator != ( const TextPaM& rPaM ) const;
-    inline sal_Bool     operator < ( const TextPaM& rPaM ) const;
-    inline sal_Bool     operator > ( const TextPaM& rPaM ) const;
+    inline bool     operator == ( const TextPaM& rPaM ) const;
+    inline bool     operator != ( const TextPaM& rPaM ) const;
+    inline bool     operator < ( const TextPaM& rPaM ) const;
+    inline bool     operator > ( const TextPaM& rPaM ) const;
 };
 
-inline sal_Bool TextPaM::operator == ( const TextPaM& rPaM ) const
+inline bool TextPaM::operator == ( const TextPaM& rPaM ) const
 {
     return ( ( mnPara == rPaM.mnPara ) && ( mnIndex == rPaM.mnIndex ) ) ? sal_True : sal_False;
 }
 
-inline sal_Bool TextPaM::operator != ( const TextPaM& rPaM ) const
+inline bool TextPaM::operator != ( const TextPaM& rPaM ) const
 {
     return !( *this == rPaM );
 }
 
-inline sal_Bool TextPaM::operator < ( const TextPaM& rPaM ) const
+inline bool TextPaM::operator < ( const TextPaM& rPaM ) const
 {
     return ( ( mnPara < rPaM.mnPara ) ||
              ( ( mnPara == rPaM.mnPara ) && mnIndex < rPaM.mnIndex ) ) ? sal_True : sal_False;
 }
 
-inline sal_Bool TextPaM::operator > ( const TextPaM& rPaM ) const
+inline bool TextPaM::operator > ( const TextPaM& rPaM ) const
 {
     return ( ( mnPara > rPaM.mnPara ) ||
              ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex ) ) ? sal_True : sal_False;
@@ -91,18 +91,18 @@ public:
 
     void            Justify();
 
-    sal_Bool            HasRange() const    { return maStartPaM != maEndPaM; }
+    bool            HasRange() const    { return maStartPaM != maEndPaM; }
 
-    inline sal_Bool     operator == ( const TextSelection& rSel ) const;
-    inline sal_Bool     operator != ( const TextSelection& rSel ) const;
+    inline bool     operator == ( const TextSelection& rSel ) const;
+    inline bool     operator != ( const TextSelection& rSel ) const;
 };
 
-inline sal_Bool TextSelection::operator == ( const TextSelection& rSel ) const
+inline bool TextSelection::operator == ( const TextSelection& rSel ) const
 {
     return ( ( maStartPaM == rSel.maStartPaM ) && ( maEndPaM == rSel.maEndPaM ) );
 }
 
-inline sal_Bool TextSelection::operator != ( const TextSelection& rSel ) const
+inline bool TextSelection::operator != ( const TextSelection& rSel ) const
 {
     return !( *this == rSel );
 }

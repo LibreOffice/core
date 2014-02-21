@@ -318,7 +318,7 @@ void OQueryTableView::ClearAll()
 {
     OJoinTableView::ClearAll();
 
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
     m_pView->getController().setModified(sal_True);
 }
 

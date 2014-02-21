@@ -371,12 +371,12 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         virtual ~TabitemValue();
         virtual TabitemValue* clone() const;
 
-        sal_Bool isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
-        sal_Bool isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
-        sal_Bool isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
-        sal_Bool isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
-        sal_Bool isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
-        sal_Bool isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        bool isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
+        bool isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
+        bool isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
+        bool isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
+        bool isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
+        bool isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
 };
 
 /* SpinbuttonValue:
@@ -412,11 +412,11 @@ class VCL_DLLPUBLIC ToolbarValue : public ImplControlValue
 {
 public:
     ToolbarValue() : ImplControlValue( CTRL_TOOLBAR, BUTTONVALUE_DONTKNOW, 0 )
-    { mbIsTopDockingArea = sal_False; }
+    { mbIsTopDockingArea = false; }
     virtual ~ToolbarValue();
     virtual ToolbarValue* clone() const;
     Rectangle           maGripRect;
-    sal_Bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
+    bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar
 };
 

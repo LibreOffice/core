@@ -111,7 +111,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtCreate.EnableTextDisplay (sal_False);
+    maBtCreate.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();

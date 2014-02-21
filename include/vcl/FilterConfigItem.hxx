@@ -38,12 +38,12 @@ class VCL_DLLPUBLIC FilterConfigItem
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
 
-    sal_Bool    bModified;
+    bool    bModified;
 
-    sal_Bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
+    bool ImplGetPropertyValue( ::com::sun::star::uno::Any& rAny,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet,
                         const OUString& rPropName,
-                            sal_Bool bTestPropertyAvailability );
+                            bool bTestPropertyAvailability );
 
     void     ImpInitTree( const OUString& rTree );
 
@@ -51,7 +51,7 @@ class VCL_DLLPUBLIC FilterConfigItem
     static ::com::sun::star::beans::PropertyValue* GetPropertyValue(
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
                     const OUString& rName );
-    static  sal_Bool WritePropertyValue(
+    static  bool WritePropertyValue(
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
                     const ::com::sun::star::beans::PropertyValue& rPropValue );
 
@@ -66,14 +66,14 @@ public :
     // 1. FilterData PropertySequence
     // 2. configuration
     // 3. given default
-    sal_Bool    ReadBool( const OUString& rKey, sal_Bool bDefault );
+    bool    ReadBool( const OUString& rKey, bool bDefault );
     sal_Int32   ReadInt32( const OUString& rKey, sal_Int32 nDefault );
     OUString
                 ReadString( const OUString& rKey, const OUString& rDefault );
 
     // try to store to configuration
     // and always stores into the FilterData sequence
-    void        WriteBool( const OUString& rKey, sal_Bool bValue );
+    void        WriteBool( const OUString& rKey, bool bValue );
     void        WriteInt32( const OUString& rKey, sal_Int32 nValue );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const;

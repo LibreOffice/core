@@ -289,17 +289,17 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
     return *this;
 }
 
-sal_Bool Graphic::operator==( const Graphic& rGraphic ) const
+bool Graphic::operator==( const Graphic& rGraphic ) const
 {
     return( *mpImpGraphic == *rGraphic.mpImpGraphic );
 }
 
-sal_Bool Graphic::operator!=( const Graphic& rGraphic ) const
+bool Graphic::operator!=( const Graphic& rGraphic ) const
 {
     return( *mpImpGraphic != *rGraphic.mpImpGraphic );
 }
 
-sal_Bool Graphic::operator!() const
+bool Graphic::operator!() const
 {
     return( GRAPHIC_NONE == mpImpGraphic->ImplGetType() );
 }
@@ -336,27 +336,27 @@ void Graphic::SetDefaultType()
     mpImpGraphic->ImplSetDefaultType();
 }
 
-sal_Bool Graphic::IsSupportedGraphic() const
+bool Graphic::IsSupportedGraphic() const
 {
     return mpImpGraphic->ImplIsSupportedGraphic();
 }
 
-sal_Bool Graphic::IsTransparent() const
+bool Graphic::IsTransparent() const
 {
     return mpImpGraphic->ImplIsTransparent();
 }
 
-sal_Bool Graphic::IsAlpha() const
+bool Graphic::IsAlpha() const
 {
     return mpImpGraphic->ImplIsAlpha();
 }
 
-sal_Bool Graphic::IsAnimated() const
+bool Graphic::IsAnimated() const
 {
     return mpImpGraphic->ImplIsAnimated();
 }
 
-sal_Bool Graphic::IsEPS() const
+bool Graphic::IsEPS() const
 {
     return mpImpGraphic->ImplIsEPS();
 }
@@ -516,31 +516,31 @@ sal_uLong Graphic::GetDocFilePos() const
     return mpImpGraphic->ImplGetDocFilePos();
 }
 
-sal_Bool Graphic::SwapOut()
+bool Graphic::SwapOut()
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapOut();
 }
 
-sal_Bool Graphic::SwapOut( SvStream* pOStream )
+bool Graphic::SwapOut( SvStream* pOStream )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapOut( pOStream );
 }
 
-sal_Bool Graphic::SwapIn()
+bool Graphic::SwapIn()
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapIn();
 }
 
-sal_Bool Graphic::SwapIn( SvStream* pStrm )
+bool Graphic::SwapIn( SvStream* pStrm )
 {
     ImplTestRefCount();
     return mpImpGraphic->ImplSwapIn( pStrm );
 }
 
-sal_Bool Graphic::IsSwapOut() const
+bool Graphic::IsSwapOut() const
 {
     return mpImpGraphic->ImplIsSwapOut();
 }
@@ -556,7 +556,7 @@ GfxLink Graphic::GetLink() const
     return mpImpGraphic->ImplGetLink();
 }
 
-sal_Bool Graphic::IsLink() const
+bool Graphic::IsLink() const
 {
     return mpImpGraphic->ImplIsLink();
 }
@@ -566,7 +566,7 @@ sal_uLong Graphic::GetChecksum() const
     return mpImpGraphic->ImplGetChecksum();
 }
 
-sal_Bool Graphic::ExportNative( SvStream& rOStream ) const
+bool Graphic::ExportNative( SvStream& rOStream ) const
 {
     return mpImpGraphic->ImplExportNative( rOStream );
 }

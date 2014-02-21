@@ -72,7 +72,7 @@ ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
 
     for ( sal_uInt16 nPos = 0; nPos < SAL_N_ELEMENTS(aTable); nPos += 2 )
         if ( ( aTable[nPos] != ( aTable[nPos] & nValueSet ) ) )
-            EnableItem( aTable[nPos+1], sal_False );
+            EnableItem( aTable[nPos+1], false );
 }
 
 // -----------------------------------------------------------------------

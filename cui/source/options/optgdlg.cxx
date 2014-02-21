@@ -1582,7 +1582,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     {
         m_pWesternLanguageLB->GrabFocus();
         m_pCurrentDocCB->Enable(true);
-        m_pCurrentDocCB->Check(sal_True);
+        m_pCurrentDocCB->Check(true);
     }
 }
 
@@ -1618,7 +1618,7 @@ namespace
     void lcl_checkLanguageCheckBox(CheckBox* _rCB,sal_Bool _bNewValue,sal_Bool _bOldValue)
     {
         if ( _bNewValue )
-            _rCB->Check(sal_True);
+            _rCB->Check(true);
         else
             _rCB->Check( _bOldValue );
 // #i15082# do not call SaveValue() in running dialog...

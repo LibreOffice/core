@@ -239,7 +239,7 @@ void ScContentTree::ClearAll()
     //the InitRoot() method won't be called. Then if a user click or press key to update the navigator tree, crash happens.
     //So the solution is to disable the UpdateMode of Control, then call Clear(), then recover the update mode
     sal_Bool bOldUpdate = Control::IsUpdateMode();
-    Control::SetUpdateMode(sal_False);
+    Control::SetUpdateMode(false);
     Clear();
     Control::SetUpdateMode(bOldUpdate);
     for (sal_uInt16 i=1; i<SC_CONTENT_COUNT; i++)

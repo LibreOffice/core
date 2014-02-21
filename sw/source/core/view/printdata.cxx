@@ -281,7 +281,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     // print range selection
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = "PrintRange";
-    aPrintRangeOpt.mbInternalOnly = sal_True;
+    aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("printrange", OUString(aLocalizedStrings.GetString(26)),
                                                            OUString(),
                                                            aPrintRangeOpt);
@@ -309,7 +309,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         aChoices, 0 /* always default to 'All pages' */,
                                                         aChoicesDisabled);
     // show an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange",
@@ -330,7 +330,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     aHelpIds.realloc( 2 );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText";
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox";
-    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( OUString( "PrintProspect" ), 0, sal_False );
+    vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( OUString( "PrintProspect" ), 0, false );
     aAnnotOpt.mbEnabled = bHasPostIts;
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt("writercomments",
                                                            aLocalizedStrings.GetString( 17 ),
@@ -389,7 +389,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         uno::Sequence< OUString > aBRTLChoices( 2 );
         aBRTLChoices[0] = aLocalizedStrings.GetString( 24 );
         aBRTLChoices[1] = aLocalizedStrings.GetString( 25 );
-        vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
+        vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
         uno::Sequence< OUString > aBRTLHelpIds( 1 );
         aBRTLHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox";
         aBrochureRTLOpt.maGroupHint = "LayoutPage";
@@ -444,8 +444,8 @@ bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
     // take care of different property names for the option.
 
     bool bRes = bIsPDFExport ?
-            !getBoolValue( "IsSkipEmptyPages", sal_True ) :
-            getBoolValue( "PrintEmptyPages", sal_True );
+            !getBoolValue( "IsSkipEmptyPages", true ) :
+            getBoolValue( "PrintEmptyPages", true );
     return bRes;
 }
 
@@ -463,7 +463,7 @@ bool SwPrintUIOptions::IsPrintGraphics() const
     // take care of different property names for the option.
     // for compatibility the old name should win (may still be used for PDF export or via Uno API)
 
-    bool bRes = getBoolValue( "PrintPicturesAndObjects", sal_True );
+    bool bRes = getBoolValue( "PrintPicturesAndObjects", true );
     bRes = getBoolValue( "PrintGraphics", bRes );
     return bRes;
 }
@@ -473,7 +473,7 @@ bool SwPrintUIOptions::IsPrintDrawings() const
     // take care of different property names for the option.
     // for compatibility the old name should win (may still be used for PDF export or via Uno API)
 
-    bool bRes = getBoolValue( "PrintPicturesAndObjects", sal_True );
+    bool bRes = getBoolValue( "PrintPicturesAndObjects", true );
     bRes = getBoolValue( "PrintDrawings", bRes );
     return bRes;
 }

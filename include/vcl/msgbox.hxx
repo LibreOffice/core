@@ -36,10 +36,10 @@ protected:
     FixedImage*         mpFixedImage;
     OUString            maMessText;
     Image               maImage;
-    sal_Bool            mbHelpBtn;
+    bool            mbHelpBtn;
     CheckBox*           mpCheckBox;
     OUString            maCheckBoxText;
-    sal_Bool            mbCheck;
+    bool            mbCheck;
 
     SAL_DLLPRIVATE void ImplInitMessBoxData();
     SAL_DLLPRIVATE void ImplInitButtons();
@@ -64,8 +64,8 @@ public:
 
     void                SetCheckBoxText( const OUString& rText ) { maCheckBoxText = rText;}
     const OUString&     GetCheckBoxText() const { return maCheckBoxText;}
-    void                SetCheckBoxState( sal_Bool bCheck );
-    sal_Bool            GetCheckBoxState() const;
+    void                SetCheckBoxState( bool bCheck );
+    bool            GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize() const;
 };

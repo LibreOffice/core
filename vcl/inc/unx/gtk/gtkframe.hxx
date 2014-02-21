@@ -323,7 +323,7 @@ public:
     // and false else; if true was returned the event should
     // be swallowed
     bool Dispatch( const XEvent* pEvent );
-    void grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents = sal_False );
+    void grabPointer( bool bGrab, bool bOwnerEvents = false );
 
     GtkSalDisplay*  getDisplay();
     GdkDisplay*     getGdkDisplay();
@@ -356,7 +356,7 @@ public:
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual sal_Bool                PostEvent( void* pData );
+    virtual bool                PostEvent( void* pData );
 
     virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
@@ -379,7 +379,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual sal_Bool            GetWindowState( SalFrameState* pState );
+    virtual bool            GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( sal_Bool bStart );
@@ -405,7 +405,7 @@ public:
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
 
     virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS

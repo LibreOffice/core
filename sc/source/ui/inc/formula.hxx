@@ -83,7 +83,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
     virtual ::com::sun::star::table::CellAddress getReferencePosition() const;
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     // sc::IAnyRefDialog
     virtual void ShowReference(const OUString& _sRef);

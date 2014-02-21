@@ -358,7 +358,7 @@ void BibToolBar::Click()
     {
         if(pDatMan)
             pDatMan->CreateMappingDialog(GetParent());
-        CheckItem( nId, sal_False );
+        CheckItem( nId, false );
     }
     else if(nId == TBC_BT_CHANGESOURCE)
     {
@@ -368,7 +368,7 @@ void BibToolBar::Click()
             if(!sNew.isEmpty())
                 pDatMan->setActiveDataSource(sNew);
         }
-        CheckItem( nId, sal_False );
+        CheckItem( nId, false );
     }
 }
 
@@ -484,13 +484,13 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
     {
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
-        SetItemDown(TBC_BT_AUTOFILTER,sal_True);
+        SetItemDown(TBC_BT_AUTOFILTER,true);
         nId = aPopupMenu.Execute(this, GetItemRect(TBC_BT_AUTOFILTER));
 
 
         if(nId>0)
         {
-            aPopupMenu.CheckItem(nSelMenuItem,sal_False);
+            aPopupMenu.CheckItem(nSelMenuItem,false);
             aPopupMenu.CheckItem(nId);
             nSelMenuItem=nId;
             aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
@@ -507,7 +507,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
         Point aPoint;
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
         MouseMove( aLeave );
-        SetItemDown(TBC_BT_AUTOFILTER,sal_False);
+        SetItemDown(TBC_BT_AUTOFILTER,false);
 
 
     }

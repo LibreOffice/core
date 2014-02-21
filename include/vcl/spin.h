@@ -26,10 +26,10 @@ class OutputDevice;
 void ImplDrawSpinButton( OutputDevice* pOutDev,
                          const Rectangle& rUpperRect,
                          const Rectangle& rLowerRect,
-                         sal_Bool bUpperIn, sal_Bool bLowerIn,
-                         sal_Bool bUpperEnabled = sal_True,
-                         sal_Bool bLowerEnabled = sal_True,
-                         sal_Bool bHorz = sal_False, sal_Bool bMirrorHorz = sal_False );
+                         bool bUpperIn, bool bLowerIn,
+                         bool bUpperEnabled = sal_True,
+                         bool bLowerEnabled = sal_True,
+                         bool bHorz = sal_False, bool bMirrorHorz = sal_False );
 
 #endif // INCLUDED_VCL_SPIN_H
 

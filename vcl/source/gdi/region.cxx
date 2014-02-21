@@ -1598,9 +1598,9 @@ SvStream& ReadRegion(SvStream& rIStrm, Region& rRegion)
 
             if(aCompat.GetVersion() >= 2)
             {
-                sal_Bool bHasPolyPolygon(sal_False);
+                bool bHasPolyPolygon(false);
 
-                rIStrm.ReadUChar( bHasPolyPolygon );
+                rIStrm.ReadCharAsBool( bHasPolyPolygon );
 
                 if(bHasPolyPolygon)
                 {
@@ -1674,7 +1674,7 @@ SvStream& WriteRegion( SvStream& rOStrm, const Region& rRegion )
     }
 
     // write polypolygon if available
-    const sal_Bool bHasPolyPolygon(rRegion.HasPolyPolygonOrB2DPolyPolygon());
+    const bool bHasPolyPolygon(rRegion.HasPolyPolygonOrB2DPolyPolygon());
     rOStrm.WriteUChar( bHasPolyPolygon );
 
     if(bHasPolyPolygon)

@@ -41,7 +41,7 @@ protected:
     Link            maDownHdlLink;
     Link            maFirstHdlLink;
     Link            maLastHdlLink;
-    sal_Bool            mbRepeat:1,
+    bool            mbRepeat:1,
                     mbSpin:1,
                     mbInitialUp:1,
                     mbInitialDown:1,
@@ -74,7 +74,7 @@ public:
     explicit        SpinField( Window* pParent, const ResId& );
     virtual         ~SpinField();
 
-    virtual sal_Bool    ShowDropDown( sal_Bool bShow );
+    virtual bool    ShowDropDown( sal_Bool bShow );
 
     virtual void    Up();
     virtual void    Down();

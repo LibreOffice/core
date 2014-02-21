@@ -183,7 +183,7 @@ throw ( css::uno::RuntimeException )
     {
         if ( !rEvent.IsEnabled )
         {
-            maPopupMenu.EnableItem( MN_ADD, sal_False );
+            maPopupMenu.EnableItem( MN_ADD, false );
         }
     }
     else if ( rURL == CMD_SID_GALLERY_BG_BRUSH )
@@ -251,21 +251,21 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
 
     if( mpTheme->IsReadOnly() || !mpTheme->GetObjectCount() )
     {
-        maPopupMenu.EnableItem( MN_DELETE, sal_False );
-        maPopupMenu.EnableItem( MN_TITLE, sal_False );
+        maPopupMenu.EnableItem( MN_DELETE, false );
+        maPopupMenu.EnableItem( MN_TITLE, false );
 
         if( mpTheme->IsReadOnly() )
-            maPopupMenu.EnableItem( MN_PASTECLIPBOARD, sal_False );
+            maPopupMenu.EnableItem( MN_PASTECLIPBOARD, false );
 
         if( !mpTheme->GetObjectCount() )
-            maPopupMenu.EnableItem( MN_COPYCLIPBOARD, sal_False );
+            maPopupMenu.EnableItem( MN_COPYCLIPBOARD, false );
     }
     else
     {
         maPopupMenu.EnableItem( MN_DELETE, !mbPreview );
-        maPopupMenu.EnableItem( MN_TITLE, sal_True );
-        maPopupMenu.EnableItem( MN_COPYCLIPBOARD, sal_True );
-        maPopupMenu.EnableItem( MN_PASTECLIPBOARD, sal_True );
+        maPopupMenu.EnableItem( MN_TITLE, true );
+        maPopupMenu.EnableItem( MN_COPYCLIPBOARD, true );
+        maPopupMenu.EnableItem( MN_PASTECLIPBOARD, true );
     }
 
 #ifdef GALLERY_USE_CLIPBOARD
@@ -291,8 +291,8 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
             maPopupMenu.EnableItem( MN_PASTECLIPBOARD, sal_False );
     }
 #else
-    maPopupMenu.EnableItem( MN_COPYCLIPBOARD, sal_False );
-    maPopupMenu.EnableItem( MN_PASTECLIPBOARD, sal_False );
+    maPopupMenu.EnableItem( MN_COPYCLIPBOARD, false );
+    maPopupMenu.EnableItem( MN_PASTECLIPBOARD, false );
 #endif
 
     // update status
@@ -328,10 +328,10 @@ void GalleryThemePopup::ExecutePopup( Window *pWindow, const ::Point &aPos )
     }
 
     if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) || ( eObjKind == SGA_OBJ_SOUND ) )
-        maPopupMenu.EnableItem( MN_BACKGROUND, sal_False );
+        maPopupMenu.EnableItem( MN_BACKGROUND, false );
     else
     {
-        maPopupMenu.EnableItem( MN_BACKGROUND, sal_True );
+        maPopupMenu.EnableItem( MN_BACKGROUND, true );
         maPopupMenu.SetPopupMenu( MN_BACKGROUND, &maBackgroundPopup );
         maBackgroundPopup.SetSelectHdl( LINK( this, GalleryThemePopup, BackgroundMenuSelectHdl ) );
     }
@@ -780,7 +780,7 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 
     maViewBox.EnableItem( TBX_ID_ICON, true );
     maViewBox.EnableItem( TBX_ID_LIST, true );
-    maViewBox.CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, sal_True );
+    maViewBox.CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, true );
 
     if(maInfoBar.GetText().isEmpty())
         mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
@@ -810,8 +810,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 maViewBox.EnableItem( TBX_ID_ICON, true );
                 maViewBox.EnableItem( TBX_ID_LIST, true );
 
-                maViewBox.CheckItem( TBX_ID_ICON, sal_True );
-                maViewBox.CheckItem( TBX_ID_LIST, sal_False );
+                maViewBox.CheckItem( TBX_ID_ICON, true );
+                maViewBox.CheckItem( TBX_ID_LIST, false );
             }
             break;
 
@@ -828,8 +828,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 maViewBox.EnableItem( TBX_ID_ICON, true );
                 maViewBox.EnableItem( TBX_ID_LIST, true );
 
-                maViewBox.CheckItem( TBX_ID_ICON, sal_False );
-                maViewBox.CheckItem( TBX_ID_LIST, sal_True );
+                maViewBox.CheckItem( TBX_ID_ICON, false );
+                maViewBox.CheckItem( TBX_ID_LIST, true );
             }
             break;
 

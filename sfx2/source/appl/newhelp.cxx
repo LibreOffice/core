@@ -470,8 +470,8 @@ IndexBox_Impl::IndexBox_Impl( Window* pParent, const ResId& rResId ) :
     ComboBox( pParent, rResId )
 
 {
-    EnableAutocomplete( sal_True );
-    EnableUserDraw( sal_True );
+    EnableAutocomplete( true );
+    EnableUserDraw( true );
 }
 
 // -----------------------------------------------------------------------
@@ -490,7 +490,7 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         rUDEvt.GetDevice()->DrawText( aPos, ( nPos !=-1 ) ? aEntry.copy( nPos + 1 ) : aEntry );
     }
     else
-        DrawEntry( rUDEvt, sal_False, sal_True, sal_True );
+        DrawEntry( rUDEvt, false, true, true );
 }
 
 // -----------------------------------------------------------------------
@@ -617,7 +617,7 @@ void IndexTabPage_Impl::InitializeIndex()
         append[k] =  ' ';
 
     sfx2::KeywordInfo aInfo;
-    aIndexCB.SetUpdateMode( sal_False );
+    aIndexCB.SetUpdateMode( false );
 
     try
     {
@@ -714,7 +714,7 @@ void IndexTabPage_Impl::InitializeIndex()
         OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
-    aIndexCB.SetUpdateMode( sal_True );
+    aIndexCB.SetUpdateMode( true );
 
     if ( !sKeyword.isEmpty() )
         aKeywordLink.Call( this );

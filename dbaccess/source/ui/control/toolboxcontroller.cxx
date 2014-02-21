@@ -240,7 +240,7 @@ namespace dbaui
         Point aPoint = pToolBox->GetItemRect( m_nToolBoxId ).TopLeft();
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
         pToolBox->MouseMove( aLeave );
-        pToolBox->SetItemDown( m_nToolBoxId, sal_False);
+        pToolBox->SetItemDown( m_nToolBoxId, false);
 
         if ( nSelected )
         {

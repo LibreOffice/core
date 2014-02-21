@@ -356,10 +356,10 @@ void Dialog::ImplInitDialogData()
     mpWindowImpl->mbDialog  = true;
     mpDialogParent          = NULL;
     mpPrevExecuteDlg        = NULL;
-    mbInExecute             = sal_False;
-    mbOldSaveBack           = sal_False;
-    mbInClose               = sal_False;
-    mbModalMode             = sal_False;
+    mbInExecute             = false;
+    mbOldSaveBack           = false;
+    mbInClose               = false;
+    mbModalMode             = false;
     mpContentArea           = NULL;
     mpActionArea            = NULL;
     mbIsCalculatingInitialLayoutSize = false;
@@ -401,7 +401,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
             while ( pExeDlg )
             {
                 // only if visible and enabled
-                if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, sal_True ) &&
+                if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, true ) &&
                      pExeDlg->IsReallyVisible() &&
                      pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode() )
                 {
@@ -467,7 +467,7 @@ void Dialog::ImplInitSettings()
     else if( IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG ) )
     {
         mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
     }
     // fallback to settings color
     else
@@ -627,8 +627,8 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
             if( mbInExecute && mbModalMode )
             {
                 // do not change modal counter (pSVData->maAppData.mnModalDialog)
-                SetModalInputMode( sal_False );
-                SetModalInputMode( sal_True );
+                SetModalInputMode( false );
+                SetModalInputMode( true );
 
                 // #93022# def-button might have changed after show
                 if( !mnMousePositioned )
@@ -753,23 +753,23 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Dialog::Close()
+bool Dialog::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
     ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
     if ( aDelData.IsDead() )
-        return sal_False;
+        return false;
     ImplRemoveDel( &aDelData );
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
-        return sal_False;
+        return false;
 
-    mbInClose = sal_True;
+    mbInClose = true;
 
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
-        sal_Bool bRet = sal_True;
+        bool bRet = true;
         ImplAddDel( &aDelData );
         PushButton* pButton = ImplGetCancelButton( this );
         if ( pButton )
@@ -780,10 +780,10 @@ sal_Bool Dialog::Close()
             if ( pButton )
                 pButton->Click();
             else
-                bRet = sal_False;
+                bRet = false;
         }
         if ( aDelData.IsDead() )
-            return sal_True;
+            return true;
         ImplRemoveDel( &aDelData );
         return bRet;
     }
@@ -791,19 +791,19 @@ sal_Bool Dialog::Close()
     if ( IsInExecute() )
     {
         EndDialog( sal_False );
-        mbInClose = sal_False;
-        return sal_True;
+        mbInClose = false;
+        return true;
     }
     else
     {
-        mbInClose = sal_False;
+        mbInClose = false;
         return SystemWindow::Close();
     }
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Dialog::ImplStartExecuteModal()
+bool Dialog::ImplStartExecuteModal()
 {
     if ( mbInExecute )
     {
@@ -813,7 +813,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
         aErrorStr.append(ImplGetDialogText(this));
         OSL_FAIL(aErrorStr.getStr());
 #endif
-        return sal_False;
+        return false;
     }
 
     switch ( Application::GetDialogCancelMode() )
@@ -825,7 +825,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
             "vcl",
             "Dialog \"" << ImplGetDialogText(this).getStr()
                 << "\"cancelled in silent mode");
-        return sal_False;
+        return false;
     default:
         assert(false); // this cannot happen
         // fall through
@@ -859,15 +859,15 @@ sal_Bool Dialog::ImplStartExecuteModal()
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-    EnableInput( true, sal_True );
+    EnableInput( true, true );
 
     if ( GetParent() )
     {
         NotifyEvent aNEvt( EVENT_EXECUTEDIALOG, this );
         GetParent()->Notify( aNEvt );
     }
-    mbInExecute = sal_True;
-    SetModalInputMode( sal_True );
+    mbInExecute = true;
+    SetModalInputMode( true );
     mbOldSaveBack = IsSaveBackgroundEnabled();
     EnableSaveBackground();
 
@@ -877,7 +877,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
     Show();
 
     pSVData->maAppData.mnModalMode++;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1007,7 +1007,7 @@ void Dialog::EndDialog( long nResult )
 {
     if ( mbInExecute )
     {
-        SetModalInputMode( sal_False );
+        SetModalInputMode( false );
 
         // remove dialog from the list of dialogs which are being executed
         ImplSVData* pSVData = ImplGetSVData();
@@ -1055,7 +1055,7 @@ void Dialog::EndDialog( long nResult )
             mpDialogImpl->mbStartedModal = false;
             mpDialogImpl->mnResult = -1;
         }
-        mbInExecute = sal_False;
+        mbInExecute = false;
     }
 }
 
@@ -1076,7 +1076,7 @@ void Dialog::EndAllDialogs( Window* pParent )
    while ( pModDialog )
    {
      pTempModDialog = pModDialog->mpPrevExecuteDlg;
-     if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, sal_True ) ) )
+     if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, true ) ) )
      {
         pModDialog->EndDialog( sal_False );
         pModDialog->PostUserEvent( Link() );
@@ -1087,7 +1087,7 @@ void Dialog::EndAllDialogs( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-void Dialog::SetModalInputMode( sal_Bool bModal )
+void Dialog::SetModalInputMode( bool bModal )
 {
     if ( bModal == mbModalMode )
         return;
@@ -1101,8 +1101,8 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
         // Diable the prev Modal Dialog, because our dialog must close at first,
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, sal_True ) )
-            mpPrevExecuteDlg->EnableInput( false, sal_True, sal_True, this );
+        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
+            mpPrevExecuteDlg->EnableInput( false, true, true, this );
 
         // determine next overlap dialog parent
         Window* pParent = GetParent();
@@ -1129,9 +1129,9 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
         }
 
         // Enable the prev Modal Dialog
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, sal_True ) )
+        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
         {
-            mpPrevExecuteDlg->EnableInput( true, sal_True, sal_True, this );
+            mpPrevExecuteDlg->EnableInput( true, true, true, this );
             // ensure continued modality of prev dialog
             // do not change modality counter
 
@@ -1144,10 +1144,10 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
 
             if( pPrevModalDlg &&
             ( pPrevModalDlg == mpPrevExecuteDlg
-                || !pPrevModalDlg->IsWindowOrChild( this, sal_True ) ) )
+                || !pPrevModalDlg->IsWindowOrChild( this, true ) ) )
             {
-                mpPrevExecuteDlg->SetModalInputMode( sal_False );
-                mpPrevExecuteDlg->SetModalInputMode( sal_True );
+                mpPrevExecuteDlg->SetModalInputMode( false );
+                mpPrevExecuteDlg->SetModalInputMode( true );
             }
         }
     }
@@ -1155,7 +1155,7 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
 
 // -----------------------------------------------------------------------
 
-void Dialog::SetModalInputMode( sal_Bool bModal, sal_Bool bSubModalDialogs )
+void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
 {
     if ( bSubModalDialogs )
     {
@@ -1164,7 +1164,7 @@ void Dialog::SetModalInputMode( sal_Bool bModal, sal_Bool bSubModalDialogs )
         while ( pOverlap )
         {
             if ( pOverlap->IsDialog() )
-                ((Dialog*)pOverlap)->SetModalInputMode( bModal, sal_True );
+                ((Dialog*)pOverlap)->SetModalInputMode( bModal, true );
             pOverlap = pOverlap->mpWindowImpl->mpNext;
         }
     }
@@ -1237,7 +1237,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
         ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
         aImplWin.SetText( GetText() );
         aImplWin.setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
-        aImplWin.SetDisplayActive( sal_True );
+        aImplWin.SetDisplayActive( true );
         aImplWin.InitView();
 
         aImplWin.Draw( Rectangle( aPos, aSize ), pDev, aPos );

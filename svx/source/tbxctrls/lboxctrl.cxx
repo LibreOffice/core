@@ -97,7 +97,7 @@ SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
     pListBox = new ListBox( this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
     FreeResource();
-    pListBox->EnableMultiSelection( sal_True, sal_True );
+    pListBox->EnableMultiSelection( true, true );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     AddStatusListener( rCommandURL );
 }

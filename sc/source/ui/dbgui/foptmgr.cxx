@@ -129,7 +129,7 @@ void ScFilterOptionsMgr::Init()
             pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
-        pBtnDestPers->Check( sal_True );         // beim Aufruf immer an
+        pBtnDestPers->Check( true );         // beim Aufruf immer an
         pLbCopyArea->SelectEntryPos( 0 );
         pEdCopyArea->SetText( EMPTY_OUSTRING );
 
@@ -182,7 +182,7 @@ void ScFilterOptionsMgr::Init()
                            rQueryData.nDestTab
                          ).Format(SCA_ABS_3D, pDoc, eConv);
 
-            pBtnCopyResult->Check( sal_True );
+            pBtnCopyResult->Check( true );
             pEdCopyArea->SetText( aString );
             EdAreaModifyHdl( pEdCopyArea );
             pLbCopyArea->Enable();

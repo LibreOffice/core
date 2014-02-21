@@ -580,8 +580,8 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     m_pLbAuthor->SetAccessibleName(m_pCbAuthor->GetText());
     m_pEdComment->SetAccessibleName(m_pCbComment->GetText());
 
-    m_pDfDate->SetShowDateCentury( sal_True );
-    m_pDfDate2->SetShowDateCentury( sal_True );
+    m_pDfDate->SetShowDateCentury( true );
+    m_pDfDate2->SetShowDateCentury( true );
 
     m_pLbDate->SelectEntryPos(0);
     m_pLbDate->SetSelectHdl( LINK( this, SvxTPFilter, SelDateHdl ) );

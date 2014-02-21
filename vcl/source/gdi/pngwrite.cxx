@@ -51,7 +51,7 @@ public:
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData = NULL );
                 ~PNGWriterImpl();
 
-    sal_Bool    Write( SvStream& rOStm );
+    bool    Write( SvStream& rOStm );
 
     std::vector< vcl::PNGWriter::ChunkData >&   GetChunks();
 
@@ -62,7 +62,7 @@ private:
     sal_Int32           mnCompLevel;
     sal_Int32           mnInterlaced;
     sal_uInt32          mnMaxChunkSize;
-    sal_Bool                mbStatus;
+    bool                mbStatus;
 
     BitmapReadAccess*   mpAccess;
     BitmapReadAccess*   mpMaskAccess;
@@ -77,7 +77,7 @@ private:
     sal_uInt8               mnBitsPerPixel;
     sal_uInt8               mnFilterType;           // 0 oder 4;
     sal_uLong               mnBBP;                  // bytes per pixel ( needed for filtering )
-    sal_Bool                mbTrueAlpha;
+    bool                mbTrueAlpha;
     sal_uLong               mnCRC;
 
     void                ImplWritepHYs( const BitmapEx& rBitmapEx );
@@ -85,7 +85,7 @@ private:
     sal_uLong               ImplGetFilter( sal_uLong nY, sal_uLong nXStart=0, sal_uLong nXAdd=1 );
     void                ImplClearFirstScanline();
     void                ImplWriteTransparent();
-    sal_Bool                ImplWriteHeader();
+    bool                ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplOpenChunk( sal_uLong nChunkType );
     void                ImplWriteChunk( sal_uInt8 nNumb );
@@ -97,7 +97,7 @@ private:
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
         mnCompLevel     ( PNG_DEF_COMPRESSION ),
-        mbStatus        ( sal_True ),
+        mbStatus        ( true ),
         mpAccess        ( NULL ),
         mpMaskAccess    ( NULL ),
         mpZCodec        ( new ZCodec( DEFAULT_IN_BUFSIZE, DEFAULT_OUT_BUFSIZE, MAX_MEM_USAGE ) ),
@@ -157,14 +157,14 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                     aBmp.ReleaseAccess( mpAccess ), mpAccess = 0;
                 }
                 else
-                    mbStatus = sal_False;
+                    mbStatus = false;
             }
             else
             {
                 mpAccess = aBmp.AcquireReadAccess();    // sal_True RGB with alphachannel
                 if( mpAccess )
                 {
-                    if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) != sal_False )
+                    if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) )
                     {
                         AlphaMask aMask( rBmpEx.GetAlpha() );
                         mpMaskAccess = aMask.AcquireReadAccess();
@@ -178,7 +178,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                             aMask.ReleaseAccess( mpMaskAccess ), mpMaskAccess = 0;
                         }
                         else
-                            mbStatus = sal_False;
+                            mbStatus = false;
                     }
                     else
                     {
@@ -194,12 +194,12 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                             aMask.ReleaseAccess( mpMaskAccess ), mpMaskAccess = 0;
                         }
                         else
-                            mbStatus = sal_False;
+                            mbStatus = false;
                     }
                     aBmp.ReleaseAccess( mpAccess ), mpAccess = 0;
                 }
                 else
-                    mbStatus = sal_False;
+                    mbStatus = false;
             }
         }
         else
@@ -218,7 +218,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 aBmp.ReleaseAccess( mpAccess ), mpAccess = 0;
             }
             else
-                mbStatus = sal_False;
+                mbStatus = false;
         }
         if ( mbStatus )
         {
@@ -233,7 +233,7 @@ PNGWriterImpl::~PNGWriterImpl()
     delete mpZCodec;
 }
 
-sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
+bool PNGWriterImpl::Write( SvStream& rOStm )
 {
    /* png signature is always an array of 8 bytes */
     sal_uInt16 nOldMode = rOStm.GetNumberFormatInt();
@@ -269,7 +269,7 @@ std::vector< vcl::PNGWriter::ChunkData >& PNGWriterImpl::GetChunks()
     return maChunkSeq;
 }
 
-sal_Bool PNGWriterImpl::ImplWriteHeader()
+bool PNGWriterImpl::ImplWriteHeader()
 {
     ImplOpenChunk(PNGCHUNK_IHDR);
     ImplWriteChunk( sal_uInt32( mnWidth =  mpAccess->Width() ) );
@@ -301,7 +301,7 @@ sal_Bool PNGWriterImpl::ImplWriteHeader()
         ImplCloseChunk();
     }
     else
-        mbStatus = sal_False;
+        mbStatus = false;
     return mbStatus;
 }
 
@@ -505,7 +505,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
                 break;
 
                 default :
-                    mbStatus = sal_False;
+                    mbStatus = false;
                 break;
             }
         }
@@ -658,7 +658,7 @@ PNGWriter::~PNGWriter()
     delete mpImpl;
 }
 
-sal_Bool PNGWriter::Write( SvStream& rIStm )
+bool PNGWriter::Write( SvStream& rIStm )
 {
     return mpImpl->Write( rIStm );
 }

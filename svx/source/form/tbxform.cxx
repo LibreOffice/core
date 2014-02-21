@@ -63,7 +63,7 @@ SvxFmAbsRecWin::SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pControlle
     SetSizePixel( Size(70,19) );
 
     SetDecimalDigits(0);
-    SetStrictFormat(sal_True);
+    SetStrictFormat(true);
 }
 
 // -----------------------------------------------------------------------
@@ -395,7 +395,7 @@ Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );
     pFixedText->SetBackground();
-    pFixedText->SetPaintTransparent(sal_True);
+    pFixedText->SetPaintTransparent(true);
     return pFixedText;
 }
 

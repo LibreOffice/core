@@ -501,14 +501,14 @@ void SwSrcEditWindow::CreateTextEngine()
 
     pTextEngine = new ExtTextEngine;
     pTextView = new ExtTextView( pTextEngine, pOutWin );
-    pTextView->SetAutoIndentMode(sal_True);
+    pTextView->SetAutoIndentMode(true);
     pOutWin->SetTextView(pTextView);
 
-    pTextEngine->SetUpdateMode( sal_False );
+    pTextEngine->SetUpdateMode( false );
     pTextEngine->InsertView( pTextView );
 
     Font aFont;
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( false );
     aFont.SetFillColor( rCol );
     SetPointFont( aFont );
     aFont = GetFont();
@@ -519,10 +519,10 @@ void SwSrcEditWindow::CreateTextEngine()
     aSyntaxIdleTimer.SetTimeout( SYNTAX_HIGHLIGHT_TIMEOUT );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
-    pTextEngine->EnableUndo( sal_True );
-    pTextEngine->SetUpdateMode( sal_True );
+    pTextEngine->EnableUndo( true );
+    pTextEngine->SetUpdateMode( true );
 
-    pTextView->ShowCursor( sal_True, sal_True );
+    pTextView->ShowCursor( true, true );
     InitScrollBars();
     StartListening( *pTextEngine );
 
@@ -560,14 +560,14 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     {
         long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( sal_False, sal_True );
+        pTextView->ShowCursor( false, true );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     }
     else
     {
         long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( sal_False, sal_True );
+        pTextView->ShowCursor( false, true );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
@@ -640,17 +640,17 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         sal_Bool bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara, (sal_Bool)sal_True );
+        pTextEngine->RemoveAttribs( nPara, true );
         OUString aSource( pTextEngine->GetText( nPara ) );
-        pTextEngine->SetUpdateMode( sal_False );
+        pTextEngine->SetUpdateMode( false );
         ImpDoHighlight( aSource, nPara );
         TextView* pTmp = pTextEngine->GetActiveView();
-        pTmp->SetAutoScroll(sal_False);
+        pTmp->SetAutoScroll(false);
         pTextEngine->SetActiveView(0);
-        pTextEngine->SetUpdateMode( sal_True );
+        pTextEngine->SetUpdateMode( true );
         pTextEngine->SetActiveView(pTmp);
-        pTmp->SetAutoScroll(sal_True);
-        pTmp->ShowCursor( sal_False/*pTmp->IsAutoScroll()*/ );
+        pTmp->SetAutoScroll(true);
+        pTmp->ShowCursor( false/*pTmp->IsAutoScroll()*/ );
 
         if(!bTempModified)
             ClearModifyFlag();
@@ -723,7 +723,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         sal_uInt16 nLine = nLineOff+r.nLine; //
-        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, sal_True );
+        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, true );
     }
 }
 

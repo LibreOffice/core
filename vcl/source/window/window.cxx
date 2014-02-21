@@ -450,10 +450,10 @@ bool Window::ImplCheckUIFont( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl )
+void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
 {
     StyleSettings aTmpSt( rSettings.GetStyleSettings() );
-    aTmpSt.SetHighContrastMode( sal_False );
+    aTmpSt.SetHighContrastMode( false );
     rSettings.SetStyleSettings( aTmpSt );
     ImplGetFrame()->UpdateSettings( rSettings );
     // reset default border width for layouters
@@ -635,7 +635,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
     {
-        sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
+        bool bTmp = false, bAutoHCMode = true;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
             comphelper::getProcessComponentContext(),
             OUString("org.openoffice.Office.Common/Accessibility") );    // note: case sensitive !
@@ -660,7 +660,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     if( bForceHCMode )
     {
         aStyleSettings = rSettings.GetStyleSettings();
-        aStyleSettings.SetHighContrastMode( sal_True );
+        aStyleSettings.SetHighContrastMode( true );
         aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
         rSettings.SetStyleSettings( aStyleSettings );
     }
@@ -790,7 +790,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpOverlapData->mpSaveBackRgn    = NULL;
         mpWindowImpl->mpOverlapData->mpNextBackWin    = NULL;
         mpWindowImpl->mpOverlapData->mnSaveBackSize   = 0;
-        mpWindowImpl->mpOverlapData->mbSaveBack       = sal_False;
+        mpWindowImpl->mpOverlapData->mbSaveBack       = false;
         mpWindowImpl->mpOverlapData->mnTopLevel       = 1;
     }
 
@@ -906,21 +906,21 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpFrameData->mnMouseCode        = 0;
         mpWindowImpl->mpFrameData->mnMouseMode        = 0;
         mpWindowImpl->mpFrameData->meMapUnit          = MAP_PIXEL;
-        mpWindowImpl->mpFrameData->mbHasFocus         = sal_False;
-        mpWindowImpl->mpFrameData->mbInMouseMove      = sal_False;
-        mpWindowImpl->mpFrameData->mbMouseIn          = sal_False;
-        mpWindowImpl->mpFrameData->mbStartDragCalled  = sal_False;
-        mpWindowImpl->mpFrameData->mbNeedSysWindow    = sal_False;
-        mpWindowImpl->mpFrameData->mbMinimized        = sal_False;
-        mpWindowImpl->mpFrameData->mbStartFocusState  = sal_False;
-        mpWindowImpl->mpFrameData->mbInSysObjFocusHdl = sal_False;
-        mpWindowImpl->mpFrameData->mbInSysObjToTopHdl = sal_False;
-        mpWindowImpl->mpFrameData->mbSysObjFocus      = sal_False;
+        mpWindowImpl->mpFrameData->mbHasFocus         = false;
+        mpWindowImpl->mpFrameData->mbInMouseMove      = false;
+        mpWindowImpl->mpFrameData->mbMouseIn          = false;
+        mpWindowImpl->mpFrameData->mbStartDragCalled  = false;
+        mpWindowImpl->mpFrameData->mbNeedSysWindow    = false;
+        mpWindowImpl->mpFrameData->mbMinimized        = false;
+        mpWindowImpl->mpFrameData->mbStartFocusState  = false;
+        mpWindowImpl->mpFrameData->mbInSysObjFocusHdl = false;
+        mpWindowImpl->mpFrameData->mbInSysObjToTopHdl = false;
+        mpWindowImpl->mpFrameData->mbSysObjFocus      = false;
         mpWindowImpl->mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpWindowImpl->mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
         mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
         mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
-        mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = sal_False;
+        mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 
         if ( pRealParent && IsTopWindow() )
         {
@@ -966,7 +966,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
             OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
-            pSVData->maAppData.mbSettingsInit = sal_True;
+            pSVData->maAppData.mbSettingsInit = true;
         }
 
         // If we create a Window with default size, query this
@@ -1095,7 +1095,7 @@ void Window::ImplInsertWindow( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
+void Window::ImplRemoveWindow( bool bRemoveFrameData )
 {
     // remove window from the lists
     if ( !mpWindowImpl->mbFrame )
@@ -1295,8 +1295,8 @@ void Window::ImplLoadRes( const ResId& rResId )
 
     sal_uLong nObjMask = aHeader.nObjMask;
 
-    sal_Bool  bPos  = sal_False;
-    sal_Bool  bSize = sal_False;
+    bool  bPos  = false;
+    bool  bSize = false;
     Point aPos;
     Size  aSize;
 
@@ -1305,7 +1305,7 @@ void Window::ImplLoadRes( const ResId& rResId )
         // use size as per resource
         MapUnit ePosMap = MAP_PIXEL;
 
-        bPos = sal_True;
+        bPos = true;
 
         if ( nObjMask & WINDOW_XYMAPMODE )
             ePosMap = (MapUnit)ReadLongRes();
@@ -1320,7 +1320,7 @@ void Window::ImplLoadRes( const ResId& rResId )
         // use size as per resource
         MapUnit eSizeMap = MAP_PIXEL;
 
-        bSize = sal_True;
+        bSize = true;
 
         if ( nObjMask & WINDOW_WHMAPMODE )
             eSizeMap = (MapUnit)ReadLongRes();
@@ -1393,7 +1393,7 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mpTrackRect      = NULL;
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
-        mpWindowImpl->mpWinData->mbMouseOver      = sal_False;
+        mpWindowImpl->mpWinData->mbMouseOver      = false;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? sal_False : sal_True; // sal_True: try to draw this control with native theme API
    }
 
@@ -1491,22 +1491,22 @@ sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplIsRealParentPath( const Window* pWindow ) const
+bool Window::ImplIsRealParentPath( const Window* pWindow ) const
 {
     pWindow = pWindow->GetParent();
     while ( pWindow )
     {
         if ( pWindow == this )
-            return sal_True;
+            return true;
         pWindow = pWindow->GetParent();
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplIsChild( const Window* pWindow, sal_Bool bSystemWindow ) const
+bool Window::ImplIsChild( const Window* pWindow, bool bSystemWindow ) const
 {
     do
     {
@@ -1516,19 +1516,19 @@ sal_Bool Window::ImplIsChild( const Window* pWindow, sal_Bool bSystemWindow ) co
         pWindow = pWindow->ImplGetParent();
 
         if ( pWindow == this )
-            return sal_True;
+            return true;
     }
     while ( pWindow );
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplIsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow ) const
+bool Window::ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
 {
     if ( this == pWindow )
-        return sal_True;
+        return true;
     return ImplIsChild( pWindow, bSystemWindow );
 }
 
@@ -1553,7 +1553,7 @@ int Window::ImplTestMousePointerSet()
 PointerStyle Window::ImplGetMousePointer() const
 {
     PointerStyle    ePointerStyle;
-    sal_Bool            bWait = sal_False;
+    bool            bWait = false;
 
     if ( IsEnabled() && IsInputEnabled() && ! IsInModalMode() )
         ePointerStyle = GetPointer().GetStyle();
@@ -1573,7 +1573,7 @@ PointerStyle Window::ImplGetMousePointer() const
             if ( pWindow->mpWindowImpl->mnWaitCount )
             {
                 ePointerStyle = POINTER_WAIT;
-                bWait = sal_True;
+                bWait = true;
             }
             else
             {
@@ -1596,7 +1596,7 @@ PointerStyle Window::ImplGetMousePointer() const
 
 void Window::ImplResetReallyVisible()
 {
-    sal_Bool bBecameReallyInvisible = mpWindowImpl->mbReallyVisible;
+    bool bBecameReallyInvisible = mpWindowImpl->mbReallyVisible;
 
     mbDevOutput     = false;
     mpWindowImpl->mbReallyVisible = false;
@@ -1637,7 +1637,7 @@ void Window::ImplSetReallyVisible()
     if( !mpWindowImpl->mbReallyShown )
         ImplCallInitShow();
 
-    sal_Bool bBecameReallyVisible = !mpWindowImpl->mbReallyVisible;
+    bool bBecameReallyVisible = !mpWindowImpl->mbReallyVisible;
 
     mbDevOutput     = true;
     mpWindowImpl->mbReallyVisible = true;
@@ -1814,9 +1814,9 @@ void Window::ImplLogicToPoint( Font& rFont ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
+bool Window::ImplSysObjClip( const Region* pOldRegion )
 {
-    sal_Bool bUpdate = sal_True;
+    bool bUpdate = true;
 
     if ( mpWindowImpl->mpSysObj )
     {
@@ -1955,9 +1955,9 @@ void Window::ImplUpdateSysObjClip()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
+bool Window::ImplSetClipFlagChildren( bool bSysObjOnlySmaller )
 {
-    sal_Bool bUpdate = sal_True;
+    bool bUpdate = true;
     if ( mpWindowImpl->mpSysObj )
     {
         Region* pOldRegion = NULL;
@@ -1971,7 +1971,7 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
         while ( pWindow )
         {
             if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
-                bUpdate = sal_False;
+                bUpdate = false;
             pWindow = pWindow->mpWindowImpl->mpNext;
         }
 
@@ -1979,7 +1979,7 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
         {
             mbInitClipRegion = true;
             mpWindowImpl->mbInitWinClipRegion = true;
-            bUpdate = sal_False;
+            bUpdate = false;
         }
 
         delete pOldRegion;
@@ -1993,7 +1993,7 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
     while ( pWindow )
     {
         if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
-            bUpdate = sal_False;
+            bUpdate = false;
         pWindow = pWindow->mpWindowImpl->mpNext;
     }
     }
@@ -2002,15 +2002,15 @@ sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplSetClipFlagOverlapWindows( sal_Bool bSysObjOnlySmaller )
+bool Window::ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller )
 {
-    sal_Bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
+    bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
     Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( !pWindow->ImplSetClipFlagOverlapWindows( bSysObjOnlySmaller ) )
-            bUpdate = sal_False;
+            bUpdate = false;
         pWindow = pWindow->mpWindowImpl->mpNext;
     }
 
@@ -2019,11 +2019,11 @@ sal_Bool Window::ImplSetClipFlagOverlapWindows( sal_Bool bSysObjOnlySmaller )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplSetClipFlag( sal_Bool bSysObjOnlySmaller )
+bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
 {
     if ( !ImplIsOverlapWindow() )
     {
-        sal_Bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
+        bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
         Window* pParent = ImplGetParent();
         if ( pParent &&
@@ -2040,7 +2040,7 @@ sal_Bool Window::ImplSetClipFlag( sal_Bool bSysObjOnlySmaller )
             while ( pWindow )
             {
                 if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
-                    bUpdate = sal_False;
+                    bUpdate = false;
                 pWindow = pWindow->mpWindowImpl->mpNext;
             }
         }
@@ -2120,7 +2120,7 @@ void Window::ImplExcludeOverlapWindows2( Region& rRegion )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplClipBoundaries( Region& rRegion, sal_Bool bThis, sal_Bool bOverlaps )
+void Window::ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps )
 {
     if ( bThis )
         ImplIntersectWindowClipRegion( rRegion );
@@ -2155,9 +2155,9 @@ void Window::ImplClipBoundaries( Region& rRegion, sal_Bool bThis, sal_Bool bOver
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplClipChildren( Region& rRegion )
+bool Window::ImplClipChildren( Region& rRegion )
 {
-    sal_Bool    bOtherClip = sal_False;
+    bool    bOtherClip = false;
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
@@ -2169,7 +2169,7 @@ sal_Bool Window::ImplClipChildren( Region& rRegion )
                  ((nClipMode & PARENTCLIPMODE_CLIP) || (GetStyle() & WB_CLIPCHILDREN)) )
                 pWindow->ImplExcludeWindowRegion( rRegion );
             else
-                bOtherClip = sal_True;
+                bOtherClip = true;
         }
 
         pWindow = pWindow->mpWindowImpl->mpNext;
@@ -2223,7 +2223,7 @@ void Window::ImplInitWinClipRegion()
         ImplClipSiblings( mpWindowImpl->maWinClipRegion );
 
     // Clip Parent Boundaries
-    ImplClipBoundaries( mpWindowImpl->maWinClipRegion, sal_False, sal_True );
+    ImplClipBoundaries( mpWindowImpl->maWinClipRegion, false, true );
 
     // Clip Children
     if ( (GetStyle() & WB_CLIPCHILDREN) || mpWindowImpl->mbClipChildren )
@@ -2335,7 +2335,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& 
 // -----------------------------------------------------------------------
 
 void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                    sal_Bool bChildren, sal_Bool bParent, sal_Bool bSiblings )
+                                    bool bChildren, bool bParent, bool bSiblings )
 {
     Region  aRegion( rSourceRect );
     if ( mpWindowImpl->mbWinRegion )
@@ -2554,7 +2554,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 
     // #98943# draw toolbox selection
     if( !aSelectionRect.IsEmpty() )
-        DrawSelectionBackground( aSelectionRect, 3, sal_False, sal_True, sal_False );
+        DrawSelectionBackground( aSelectionRect, 3, false, true, false );
 
     delete pChildRegion;
 
@@ -2695,7 +2695,7 @@ void Window::ImplInvalidateOverlapFrameRegion( const Region& rRegion )
 {
     Region aRegion = rRegion;
 
-    ImplClipBoundaries( aRegion, sal_True, sal_True );
+    ImplClipBoundaries( aRegion, true, true );
     if ( !aRegion.IsEmpty() )
         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
 
@@ -2733,7 +2733,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
         ImplInvalidateAllOverlapBackgrounds();
 
     // check what has to be redrawn
-    sal_Bool bInvalidateAll = !pRegion;
+    bool bInvalidateAll = !pRegion;
 
     // take Transparent-Invalidate into account
     Window* pOpaqueWindow = this;
@@ -2746,7 +2746,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             {
                 pOpaqueWindow = pTempWindow;
                 nFlags |= INVALIDATE_CHILDREN;
-                bInvalidateAll = sal_False;
+                bInvalidateAll = false;
                 break;
             }
 
@@ -2767,7 +2767,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             nFlags |= INVALIDATE_CHILDREN;
     }
     if ( (nFlags & INVALIDATE_NOCHILDREN) && mpWindowImpl->mpFirstChild )
-        bInvalidateAll = sal_False;
+        bInvalidateAll = false;
     if ( bInvalidateAll )
         ImplInvalidateFrameRegion( NULL, nFlags );
     else
@@ -2788,7 +2788,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             else
                 aRegion.Intersect( *pRegion );
         }
-        ImplClipBoundaries( aRegion, sal_True, sal_True );
+        ImplClipBoundaries( aRegion, true, true );
         if ( nFlags & INVALIDATE_NOCHILDREN )
         {
             nFlags &= ~INVALIDATE_CHILDREN;
@@ -2815,7 +2815,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
 
 void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
                                        long nHorzScroll, long nVertScroll,
-                                       sal_Bool bChildren )
+                                       bool bChildren )
 {
     if ( (mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALL)) == IMPL_PAINT_PAINT )
     {
@@ -2830,7 +2830,7 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
-            pWindow->ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, sal_True );
+            pWindow->ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, true );
             pWindow = pWindow->mpWindowImpl->mpNext;
         }
     }
@@ -2840,7 +2840,7 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
 
 void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
                                            long nHorzScroll, long nVertScroll,
-                                           sal_Bool bChildren )
+                                           bool bChildren )
 {
     // also shift Paint-Region when paints need processing
     ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, bChildren );
@@ -2924,7 +2924,7 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
 {
     // assemble region
-    sal_Bool    bValidateAll = !pRegion;
+    bool    bValidateAll = !pRegion;
     sal_uInt16  nOrgFlags = nFlags;
     if ( !(nFlags & (VALIDATE_CHILDREN | VALIDATE_NOCHILDREN)) )
     {
@@ -2934,7 +2934,7 @@ void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
             nFlags |= VALIDATE_CHILDREN;
     }
     if ( (nFlags & VALIDATE_NOCHILDREN) && mpWindowImpl->mpFirstChild )
-        bValidateAll = sal_False;
+        bValidateAll = false;
     if ( bValidateAll )
         ImplValidateFrameRegion( NULL, nFlags );
     else
@@ -2943,7 +2943,7 @@ void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
         Region      aRegion( aRect );
         if ( pRegion )
             aRegion.Intersect( *pRegion );
-        ImplClipBoundaries( aRegion, sal_True, sal_True );
+        ImplClipBoundaries( aRegion, true, true );
         if ( nFlags & VALIDATE_NOCHILDREN )
         {
             nFlags &= ~VALIDATE_CHILDREN;
@@ -2991,16 +2991,16 @@ void Window::ImplScroll( const Rectangle& rRect,
     }
 
     Region  aInvalidateRegion;
-    sal_Bool    bScrollChildren = (nFlags & SCROLL_CHILDREN) != 0;
-    sal_Bool    bErase = (nFlags & SCROLL_NOERASE) == 0;
+    bool    bScrollChildren = (nFlags & SCROLL_CHILDREN) != 0;
+    bool    bErase = (nFlags & SCROLL_NOERASE) == 0;
 
     if ( !mpWindowImpl->mpFirstChild )
-        bScrollChildren = sal_False;
+        bScrollChildren = false;
 
     OutputDevice *pOutDev = GetOutDev();
 
     // --- RTL --- check if this window requires special action
-    sal_Bool bReMirror = ( ImplIsAntiparallel() );
+    bool bReMirror = ( ImplIsAntiparallel() );
 
     Rectangle aRectMirror( rRect );
     if( bReMirror )
@@ -3015,7 +3015,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( !(nFlags & SCROLL_NOINVALIDATE) )
     {
-        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, sal_True, sal_False );
+        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, true, false );
 
         // --- RTL ---
         // if the scrolling on the device is performed in the opposite direction
@@ -3025,7 +3025,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         if ( !aInvalidateRegion.IsEmpty() )
         {
             aInvalidateRegion.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
-            bErase = sal_True;
+            bErase = true;
         }
         if ( !(nFlags & SCROLL_NOWINDOWINVALIDATE) )
         {
@@ -3047,7 +3047,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     aRegion.Exclude( aInvalidateRegion );
 
-    ImplClipBoundaries( aRegion, sal_False, sal_True );
+    ImplClipBoundaries( aRegion, false, true );
     if ( !bScrollChildren )
     {
         if ( nOrgFlags & SCROLL_NOCHILDREN )
@@ -3133,19 +3133,19 @@ void Window::ImplScroll( const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-void Window::ImplUpdateAll( sal_Bool bOverlapWindows )
+void Window::ImplUpdateAll( bool bOverlapWindows )
 {
     if ( !mpWindowImpl->mbReallyVisible )
         return;
 
-    sal_Bool bFlush = sal_False;
+    bool bFlush = false;
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
         Point aPoint( 0, 0 );
         Region aRegion( Rectangle( aPoint, Size( mnOutWidth, mnOutHeight ) ) );
         ImplInvalidateOverlapFrameRegion( aRegion );
         if ( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) )
-            bFlush = sal_True;
+            bFlush = true;
     }
 
     // an update changes the OverlapWindow, such that for later paints
@@ -3204,9 +3204,9 @@ void Window::ImplUpdateWindowPtr()
 
 // -----------------------------------------------------------------------
 
-void Window::ImplUpdateOverlapWindowPtr( sal_Bool bNewFrame )
+void Window::ImplUpdateOverlapWindowPtr( bool bNewFrame )
 {
-    sal_Bool bVisible = IsVisible();
+    bool bVisible = IsVisible();
     Show( false );
     ImplRemoveWindow( bNewFrame );
     Window* pRealParent = mpWindowImpl->mpRealParent;
@@ -3233,9 +3233,9 @@ void Window::ImplUpdateOverlapWindowPtr( sal_Bool bNewFrame )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplUpdatePos()
+bool Window::ImplUpdatePos()
 {
-    sal_Bool bSysChild = sal_False;
+    bool bSysChild = false;
 
     if ( ImplIsOverlapWindow() )
     {
@@ -3254,12 +3254,12 @@ sal_Bool Window::ImplUpdatePos()
     while ( pChild )
     {
         if ( pChild->ImplUpdatePos() )
-            bSysChild = sal_True;
+            bSysChild = true;
         pChild = pChild->mpWindowImpl->mpNext;
     }
 
     if ( mpWindowImpl->mpSysObj )
-        bSysChild = sal_True;
+        bSysChild = true;
 
     return bSysChild;
 }
@@ -3283,9 +3283,9 @@ void Window::ImplUpdateSysObjPos()
 void Window::ImplPosSizeWindow( long nX, long nY,
                                 long nWidth, long nHeight, sal_uInt16 nFlags )
 {
-    sal_Bool    bNewPos         = sal_False;
-    sal_Bool    bNewSize        = sal_False;
-    sal_Bool    bCopyBits       = sal_False;
+    bool    bNewPos         = false;
+    bool    bNewSize        = false;
+    bool    bCopyBits       = false;
     long    nOldOutOffX     = mnOutOffX;
     long    nOldOutOffY     = mnOutOffY;
     long    nOldOutWidth    = mnOutWidth;
@@ -3307,17 +3307,17 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         if ( mnOutWidth && mnOutHeight && !mpWindowImpl->mbPaintTransparent &&
              !mpWindowImpl->mbInitWinClipRegion && !mpWindowImpl->maWinClipRegion.IsEmpty() &&
              !HasPaintEvent() )
-            bCopyBits = sal_True;
+            bCopyBits = true;
     }
 
-    sal_Bool bnXRecycled = sal_False; // avoid duplicate mirroring in RTL case
+    bool bnXRecycled = false; // avoid duplicate mirroring in RTL case
     if ( nFlags & WINDOW_POSSIZE_WIDTH )
     {
         if(!( nFlags & WINDOW_POSSIZE_X ))
         {
             nX = mpWindowImpl->mnX;
             nFlags |= WINDOW_POSSIZE_X;
-            bnXRecycled = sal_True; // we're using a mnX which was already mirrored in RTL case
+            bnXRecycled = true; // we're using a mnX which was already mirrored in RTL case
         }
 
         if ( nWidth < 0 )
@@ -3325,8 +3325,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         if ( nWidth != mnOutWidth )
         {
             mnOutWidth = nWidth;
-            bNewSize = sal_True;
-            bCopyBits = sal_False;
+            bNewSize = true;
+            bCopyBits = false;
         }
     }
     if ( nFlags & WINDOW_POSSIZE_HEIGHT )
@@ -3336,8 +3336,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         if ( nHeight != mnOutHeight )
         {
             mnOutHeight = nHeight;
-            bNewSize = sal_True;
-            bCopyBits = sal_False;
+            bNewSize = true;
+            bCopyBits = false;
         }
     }
 
@@ -3388,12 +3388,12 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 pOverlapRegion = new Region();
                 ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
-                                       *pOverlapRegion, sal_False, sal_True, sal_True );
+                                       *pOverlapRegion, false, true, true );
             }
             mpWindowImpl->mnX = nX;
             mpWindowImpl->maPos.X() = nOrgX;
             mpWindowImpl->mnAbsScreenX = aPtDev.X();    // --- RTL --- (store real screen pos)
-            bNewPos = sal_True;
+            bNewPos = true;
         }
     }
     if ( nFlags & WINDOW_POSSIZE_Y )
@@ -3406,17 +3406,17 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 pOverlapRegion = new Region();
                 ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
-                                       *pOverlapRegion, sal_False, sal_True, sal_True );
+                                       *pOverlapRegion, false, true, true );
             }
             mpWindowImpl->mnY = nY;
             mpWindowImpl->maPos.Y() = nY;
-            bNewPos = sal_True;
+            bNewPos = true;
         }
     }
 
     if ( bNewPos || bNewSize )
     {
-        sal_Bool bUpdateSysObjPos = sal_False;
+        bool bUpdateSysObjPos = false;
         if ( bNewPos )
             bUpdateSysObjPos = ImplUpdatePos();
 
@@ -3469,7 +3469,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 mpWindowImpl->mbCallResize = true;
         }
 
-        sal_Bool bUpdateSysObjClip = sal_False;
+        bool bUpdateSysObjClip = false;
         if ( IsReallyVisible() )
         {
             if ( bNewPos || bNewSize )
@@ -3480,7 +3480,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
                     ImplInvalidateAllOverlapBackgrounds();
                 // set Clip-Flag
-                bUpdateSysObjClip = !ImplSetClipFlag( sal_True );
+                bUpdateSysObjClip = !ImplSetClipFlag( true );
             }
 
             // invalidate window content ?
@@ -3488,8 +3488,8 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             {
                 if ( bNewPos )
                 {
-                    sal_Bool bInvalidate = sal_False;
-                    sal_Bool bParentPaint = sal_True;
+                    bool bInvalidate = false;
+                    bool bParentPaint = true;
                     if ( !ImplIsOverlapWindow() )
                         bParentPaint = mpWindowImpl->mpParent->IsPaintEnabled();
                     if ( bCopyBits && bParentPaint && !HasPaintEvent() )
@@ -3499,7 +3499,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                                    Size( mnOutWidth, mnOutHeight ) ) );
                         if ( mpWindowImpl->mbWinRegion )
                             aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-                        ImplClipBoundaries( aRegion, sal_False, sal_True );
+                        ImplClipBoundaries( aRegion, false, true );
                         if ( !pOverlapRegion->IsEmpty() )
                         {
                             pOverlapRegion->Move( mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY );
@@ -3511,7 +3511,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             ImplMoveAllInvalidateRegions( Rectangle( Point( nOldOutOffX, nOldOutOffY ),
                                                                      Size( nOldOutWidth, nOldOutHeight ) ),
                                                           mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
-                                                          sal_True );
+                                                          true );
                             SalGraphics* pGraphics = ImplGetFrameGraphics();
                             if ( pGraphics )
                             {
@@ -3526,10 +3526,10 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                                          SAL_COPYAREA_WINDOWINVALIDATE, this );
                                 }
                                 else
-                                    bInvalidate = sal_True;
+                                    bInvalidate = true;
                             }
                             else
-                                bInvalidate = sal_True;
+                                bInvalidate = true;
                             if ( !bInvalidate )
                             {
                                 if ( !pOverlapRegion->IsEmpty() )
@@ -3537,10 +3537,10 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             }
                         }
                         else
-                            bInvalidate = sal_True;
+                            bInvalidate = true;
                     }
                     else
-                        bInvalidate = sal_True;
+                        bInvalidate = true;
                     if ( bInvalidate )
                         ImplInvalidateFrameRegion( NULL, INVALIDATE_CHILDREN );
                 }
@@ -3552,7 +3552,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                     aRegion.Exclude( *pOldRegion );
                     if ( mpWindowImpl->mbWinRegion )
                         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-                    ImplClipBoundaries( aRegion, sal_False, sal_True );
+                    ImplClipBoundaries( aRegion, false, true );
                     if ( !aRegion.IsEmpty() )
                         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
                 }
@@ -3565,7 +3565,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 Region aRegion( *pOldRegion );
                 if ( !mpWindowImpl->mbPaintTransparent )
                     ImplExcludeWindowRegion( aRegion );
-                ImplClipBoundaries( aRegion, sal_False, sal_True );
+                ImplClipBoundaries( aRegion, false, true );
                 if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
                     ImplInvalidateParentFrameRegion( aRegion );
             }
@@ -3673,7 +3673,7 @@ void Window::ImplToTop( sal_uInt16 nFlags )
                 mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap = mpWindowImpl->mpPrev;
 
             // take AlwaysOnTop into account
-            sal_Bool    bOnTop = IsAlwaysOnTopEnabled();
+            bool    bOnTop = IsAlwaysOnTopEnabled();
             Window* pNextWin = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
             if ( !bOnTop )
             {
@@ -3781,7 +3781,7 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplFocusToTop( sal_uInt16 nFlags, sal_Bool bReallyVisible )
+void Window::ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible )
 {
     // do we need to fetch the focus?
     if ( !(nFlags & TOTOP_NOGRABFOCUS) )
@@ -3800,7 +3800,7 @@ void Window::ImplFocusToTop( sal_uInt16 nFlags, sal_Bool bReallyVisible )
             pFocusWindow = pFocusWindow->ImplGetParent();
         }
         if ( (pFocusWindow->mpWindowImpl->mnActivateMode & ACTIVATE_MODE_GRABFOCUS) &&
-             !pFocusWindow->HasChildPathFocus( sal_True ) )
+             !pFocusWindow->HasChildPathFocus( true ) )
             pFocusWindow->GrabFocus();
     }
 
@@ -3844,7 +3844,7 @@ void Window::ImplHideAllOverlaps()
 
 // -----------------------------------------------------------------------
 
-void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, sal_Bool bModChanged )
+void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
 {
     if ( mpWindowImpl->mpFrameData->mbMouseIn && mpWindowImpl->mpFrameWindow->mpWindowImpl->mbReallyVisible )
     {
@@ -3853,15 +3853,15 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, sal_Bool bModChanged )
         long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
         sal_uInt16  nCode   = nMouseCode;
         sal_uInt16  nMode   = mpWindowImpl->mpFrameData->mnMouseMode;
-        sal_Bool    bLeave;
+        bool    bLeave;
         // check for MouseLeave
         if ( ((nX < 0) || (nY < 0) ||
               (nX >= mpWindowImpl->mpFrameWindow->mnOutWidth) ||
               (nY >= mpWindowImpl->mpFrameWindow->mnOutHeight)) &&
              !ImplGetSVData()->maWinData.mpCaptureWin )
-            bLeave = sal_True;
+            bLeave = true;
         else
-            bLeave = sal_False;
+            bLeave = false;
         nMode |= MOUSE_SYNTHETIC;
         if ( bModChanged )
             nMode |= MOUSE_MODIFIERCHANGED;
@@ -4051,13 +4051,13 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     // which is done using ToTop
     ImplSVData* pSVData = ImplGetSVData();
 
-    sal_Bool bAsyncFocusWaiting = sal_False;
+    bool bAsyncFocusWaiting = false;
     Window *pFrame = pSVData->maWinData.mpFirstFrame;
     while( pFrame  )
     {
         if( pFrame != mpWindowImpl->mpFrameWindow && pFrame->mpWindowImpl->mpFrameData->mnFocusId )
         {
-            bAsyncFocusWaiting = sal_True;
+            bAsyncFocusWaiting = true;
             break;
         }
         pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
@@ -4065,7 +4065,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
 
     bool bHasFocus = IsWindowFocused(*mpWindowImpl);
 
-    sal_Bool bMustNotGrabFocus = sal_False;
+    bool bMustNotGrabFocus = false;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
 
     Window *pParent = this;
@@ -4075,7 +4075,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         // otherwise we cannot set the focus in a floating toolbox
         if( ( (pParent->mpWindowImpl->mbFloatWin && ((FloatingWindow*)pParent)->GrabsFocus()) || ( pParent->GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( pParent->GetStyle() & WB_MOVEABLE ) )
         {
-            bMustNotGrabFocus = sal_True;
+            bMustNotGrabFocus = true;
             break;
         }
         pParent = pParent->mpWindowImpl->mpParent;
@@ -4397,7 +4397,7 @@ Window::~Window()
         }
     }
 
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( sal_False );
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
 
@@ -4436,7 +4436,7 @@ Window::~Window()
     if ( true ) // always perform these tests in non-pro versions
     {
         OStringBuffer aErrorStr;
-        sal_Bool        bError = sal_False;
+        bool        bError = false;
         Window*     pTempWin;
         if (mpWindowImpl->mpFrameData != 0)
         {
@@ -4445,7 +4445,7 @@ Window::~Window()
             {
                 if ( ImplIsRealParentPath( pTempWin ) )
                 {
-                    bError = sal_True;
+                    bError = true;
                     aErrorStr.append(lcl_createWindowInfo(*pTempWin));
                 }
                 pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
@@ -4465,13 +4465,13 @@ Window::~Window()
             }
         }
 
-        bError = sal_False;
+        bError = false;
         pTempWin = pSVData->maWinData.mpFirstFrame;
         while ( pTempWin )
         {
             if ( ImplIsRealParentPath( pTempWin ) )
             {
-                bError = sal_True;
+                bError = true;
                 aErrorStr.append(lcl_createWindowInfo(*pTempWin));
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
@@ -4589,11 +4589,11 @@ Window::~Window()
     }
 
     // check if the focus window is our child
-    sal_Bool bHasFocussedChild = sal_False;
+    bool bHasFocussedChild = false;
     if( pSVData->maWinData.mpFocusWin && ImplIsRealParentPath( pSVData->maWinData.mpFocusWin ) )
     {
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
-        bHasFocussedChild = sal_True;
+        bHasFocussedChild = true;
 #if OSL_DEBUG_LEVEL > 0
         OStringBuffer aTempStr("Window (");
         aTempStr.append(OUStringToOString(GetText(),
@@ -4684,18 +4684,18 @@ Window::~Window()
     ImplDelData* pDelData = mpWindowImpl->mpFirstDel;
     while ( pDelData )
     {
-        pDelData->mbDel = sal_True;
+        pDelData->mbDel = true;
         pDelData->mpWindow = NULL;  // #112873# pDel is not associated with a Window anymore
         pDelData = pDelData->mpNext;
     }
 
     // remove window from the lists
-    ImplRemoveWindow( sal_True );
+    ImplRemoveWindow( true );
 
     // de-register as "top window child" at our parent, if necessary
     if ( mpWindowImpl->mbFrame )
     {
-        sal_Bool bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
+        bool bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
         if ( mpWindowImpl->mpRealParent && bIsTopWindow )
         {
             ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
@@ -5100,11 +5100,11 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
     {
         if( rNEvt.GetType() == EVENT_GETFOCUS )
         {
-            sal_Bool bCompoundFocusChanged = sal_False;
+            bool bCompoundFocusChanged = false;
             if ( mpWindowImpl->mbCompoundControl && !mpWindowImpl->mbCompoundControlHasFocus && HasChildPathFocus() )
             {
                 mpWindowImpl->mbCompoundControlHasFocus = true;
-                bCompoundFocusChanged = sal_True;
+                bCompoundFocusChanged = true;
             }
 
             if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
@@ -5112,11 +5112,11 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
         }
         else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
         {
-            sal_Bool bCompoundFocusChanged = sal_False;
+            bool bCompoundFocusChanged = false;
             if ( mpWindowImpl->mbCompoundControl && mpWindowImpl->mbCompoundControlHasFocus && !HasChildPathFocus() )
             {
                 mpWindowImpl->mbCompoundControlHasFocus = false ;
-                bCompoundFocusChanged = sal_True;
+                bCompoundFocusChanged = true;
             }
 
             if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
@@ -5145,7 +5145,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
-            sal_Bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
+            bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
             if ( pMEvt->IsLeft() )
             {
                 if ( pMEvt->IsMod1() && (pMEvt->GetClicks() == 2) )
@@ -5165,7 +5165,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         else if ( rNEvt.GetType() == EVENT_MOUSEMOVE )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
-            sal_Bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
+            bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
             if ( pMEvt->IsLeft() )
             {
                 // check if a single click initiated this sequence ( ImplStartDockingEnabled() )
@@ -5336,7 +5336,7 @@ sal_uLong Window::PostUserEvent( const Link& rLink, void* pCaller )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
+bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
 
     ImplSVEvent* pSVEvent = new ImplSVEvent;
@@ -5344,17 +5344,17 @@ sal_Bool Window::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pC
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = this;
-    pSVEvent->mbCall    = sal_True;
+    pSVEvent->mbCall    = true;
     ImplAddDel( &(pSVEvent->maDelData) );
     rEventId = (sal_uLong)pSVEvent;
     if ( mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
-        return sal_True;
+        return true;
     else
     {
         rEventId = 0;
         ImplRemoveDel( &(pSVEvent->maDelData) );
         delete pSVEvent;
-        return sal_False;
+        return false;
     }
 }
 
@@ -5376,28 +5376,28 @@ void Window::RemoveUserEvent( sal_uLong nUserEvent )
         pSVEvent->mpWindow = NULL;
     }
 
-    pSVEvent->mbCall = sal_False;
+    pSVEvent->mbCall = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsLocked( sal_Bool bChildren ) const
+bool Window::IsLocked( bool bChildren ) const
 {
     if ( mpWindowImpl->mnLockCount != 0 )
-        return sal_True;
+        return true;
 
     if ( bChildren || mpWindowImpl->mbChildNotify )
     {
         Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
-            if ( pChild->IsLocked( sal_True ) )
-                return sal_True;
+            if ( pChild->IsLocked( true ) )
+                return true;
             pChild = pChild->mpWindowImpl->mpNext;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -5540,7 +5540,7 @@ long Window::CalcTitleWidth() const
 
 // -----------------------------------------------------------------------
 
-void Window::EnableClipSiblings( sal_Bool bClipSiblings )
+void Window::EnableClipSiblings( bool bClipSiblings )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -5551,7 +5551,7 @@ void Window::EnableClipSiblings( sal_Bool bClipSiblings )
 
 // -----------------------------------------------------------------------
 
-void Window::SetMouseTransparent( sal_Bool bTransparent )
+void Window::SetMouseTransparent( bool bTransparent )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -5565,7 +5565,7 @@ void Window::SetMouseTransparent( sal_Bool bTransparent )
 
 // -----------------------------------------------------------------------
 
-void Window::SetPaintTransparent( sal_Bool bTransparent )
+void Window::SetPaintTransparent( bool bTransparent )
 {
 
     // transparency is not useful for frames as the background would have to be provided by a different frame
@@ -5643,7 +5643,7 @@ long Window::GetCursorExtTextInputWidth() const
 
 // -----------------------------------------------------------------------
 
-void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical ) {
+void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, bool bVertical ) {
 
     ImplWinData* pWinData = ImplGetWinData();
     delete[] pWinData->mpCompositionCharRects;
@@ -5701,15 +5701,15 @@ void Window::SetSettings( const AllSettings& rSettings, sal_Bool bChild )
 
 // -----------------------------------------------------------------------
 
-void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
+void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        mpWindowImpl->mpBorderWindow->UpdateSettings( rSettings, sal_False );
+        mpWindowImpl->mpBorderWindow->UpdateSettings( rSettings, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->UpdateSettings( rSettings, sal_True );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->UpdateSettings( rSettings, true );
     }
 
     AllSettings aOldSettings(*mxSettings);
@@ -5970,7 +5970,7 @@ const Region& Window::GetWindowRegionPixel() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsWindowRegionPixel() const
+bool Window::IsWindowRegionPixel() const
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -6091,13 +6091,13 @@ void Window::SetParent( Window* pNewParent )
     // check if the taskpanelist would change and move the window pointer accordingly
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
     SystemWindow *pNewSysWin = NULL;
-    sal_Bool bChangeTaskPaneList = sal_False;
+    bool bChangeTaskPaneList = false;
     if( pSysWin && pSysWin->ImplIsInTaskPaneList( this ) )
     {
         pNewSysWin = ImplGetLastSystemWindow( pNewParent );
         if( pNewSysWin && pNewSysWin != pSysWin )
         {
-            bChangeTaskPaneList = sal_True;
+            bChangeTaskPaneList = true;
             pSysWin->GetTaskPaneList()->RemoveWindow( this );
         }
     }
@@ -6126,7 +6126,7 @@ void Window::SetParent( Window* pNewParent )
     if ( mpWindowImpl->mbFrame )
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
-    sal_Bool bVisible = IsVisible();
+    bool bVisible = IsVisible();
     Show( false, SHOW_NOFOCUSCHANGE );
 
     // check if the overlap window changes
@@ -6144,9 +6144,9 @@ void Window::SetParent( Window* pNewParent )
     }
 
     // convert windows in the hierarchy
-    sal_Bool bFocusOverlapWin = HasChildPathFocus( sal_True );
-    sal_Bool bFocusWin = HasChildPathFocus();
-    sal_Bool bNewFrame = pNewParent->mpWindowImpl->mpFrameWindow != mpWindowImpl->mpFrameWindow;
+    bool bFocusOverlapWin = HasChildPathFocus( true );
+    bool bFocusWin = HasChildPathFocus();
+    bool bNewFrame = pNewParent->mpWindowImpl->mpFrameWindow != mpWindowImpl->mpFrameWindow;
     if ( bNewFrame )
     {
         if ( mpWindowImpl->mpFrameData->mpFocusWin )
@@ -6207,7 +6207,7 @@ void Window::SetParent( Window* pNewParent )
         }
 
         // update activate-status at next overlap window
-        if ( HasChildPathFocus( sal_True ) )
+        if ( HasChildPathFocus( true ) )
             ImplCallFocusChangeActivate( pNewOverlapWindow, pOldOverlapWindow );
     }
 
@@ -6256,7 +6256,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
     ImplDelData aDogTag( this );
 
-    sal_Bool bRealVisibilityChanged = sal_False;
+    bool bRealVisibilityChanged = false;
     mpWindowImpl->mbVisible = bVisible;
 
     if ( !bVisible )
@@ -6284,12 +6284,12 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         if ( mpWindowImpl->mbReallyVisible )
         {
             Region  aInvRegion;
-            sal_Bool    bSaveBack = sal_False;
+            bool    bSaveBack = false;
 
             if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )
             {
                 if ( ImplRestoreOverlapBackground( aInvRegion ) )
-                    bSaveBack = sal_True;
+                    bSaveBack = true;
             }
 
             if ( !bSaveBack )
@@ -6383,7 +6383,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
             {
                 ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
-                ImplFocusToTop( 0, sal_False );
+                ImplFocusToTop( 0, false );
             }
 
             // save background
@@ -6428,7 +6428,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
-            sal_Bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
+            bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
             mpWindowImpl->mpFrame->Show( sal_True, bNoActivate );
             if( aDogTag.IsDead() )
                 return;
@@ -6617,16 +6617,16 @@ bool Window::IsCallHandlersOnInputDisabled() const
 
 // -----------------------------------------------------------------------
 
-void Window::EnableInput( bool bEnable, sal_Bool bChild )
+void Window::EnableInput( bool bEnable, bool bChild )
 {
 
-    sal_Bool bNotify = (bEnable != mpWindowImpl->mbInputDisabled);
+    bool bNotify = (bEnable != mpWindowImpl->mbInputDisabled);
     if ( mpWindowImpl->mpBorderWindow )
     {
-        mpWindowImpl->mpBorderWindow->EnableInput( bEnable, sal_False );
+        mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
              ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, sal_True );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, true );
     }
 
     if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||
@@ -6682,7 +6682,7 @@ void Window::EnableInput( bool bEnable, sal_Bool bChild )
 
 // -----------------------------------------------------------------------
 
-void Window::EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
+void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
                           const Window* pExcludeWindow )
 {
 
@@ -6697,11 +6697,11 @@ void Window::EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
         while ( pSysWin )
         {
             // Is Window in the path from this window
-            if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pSysWin, sal_True ) )
+            if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pSysWin, true ) )
             {
                 // Is Window not in the exclude window path or not the
                 // exclude window, than change the status
-                if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pSysWin, sal_True ) )
+                if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pSysWin, true ) )
                     pSysWin->EnableInput( bEnable, bChild );
             }
             pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
@@ -6714,11 +6714,11 @@ void Window::EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
             if( pFrameWin->ImplIsFloatingWindow() )
             {
                 // Is Window in the path from this window
-                if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pFrameWin, sal_True ) )
+                if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( pFrameWin, true ) )
                 {
                     // Is Window not in the exclude window path or not the
                     // exclude window, than change the status
-                    if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, sal_True ) )
+                    if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( pFrameWin, true ) )
                         pFrameWin->EnableInput( bEnable, bChild );
                 }
             }
@@ -6733,11 +6733,11 @@ void Window::EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
             while( p != rList.end() )
             {
                 // Is Window in the path from this window
-                if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( (*p), sal_True ) )
+                if ( ImplGetFirstOverlapWindow()->ImplIsWindowOrChild( (*p), true ) )
                 {
                     // Is Window not in the exclude window path or not the
                     // exclude window, than change the status
-                    if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), sal_True ) )
+                    if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), true ) )
                         (*p)->EnableInput( bEnable, bChild );
                 }
                 ++p;
@@ -6748,18 +6748,18 @@ void Window::EnableInput( bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
 
 // -----------------------------------------------------------------------
 
-void Window::AlwaysEnableInput( sal_Bool bAlways, sal_Bool bChild )
+void Window::AlwaysEnableInput( bool bAlways, bool bChild )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->AlwaysEnableInput( bAlways, sal_False );
+        mpWindowImpl->mpBorderWindow->AlwaysEnableInput( bAlways, false );
 
     if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled )
     {
         mpWindowImpl->meAlwaysInputMode = AlwaysInputEnabled;
 
         if ( bAlways )
-            EnableInput( true, sal_False );
+            EnableInput( true, false );
     }
     else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled )
     {
@@ -6779,18 +6779,18 @@ void Window::AlwaysEnableInput( sal_Bool bAlways, sal_Bool bChild )
 
 // -----------------------------------------------------------------------
 
-void Window::AlwaysDisableInput( sal_Bool bAlways, sal_Bool bChild )
+void Window::AlwaysDisableInput( bool bAlways, bool bChild )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->AlwaysDisableInput( bAlways, sal_False );
+        mpWindowImpl->mpBorderWindow->AlwaysDisableInput( bAlways, false );
 
     if( bAlways && mpWindowImpl->meAlwaysInputMode != AlwaysInputDisabled )
     {
         mpWindowImpl->meAlwaysInputMode = AlwaysInputDisabled;
 
         if ( bAlways )
-            EnableInput( false, sal_False );
+            EnableInput( false, false );
     }
     else if( ! bAlways && mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled )
     {
@@ -6824,7 +6824,7 @@ void Window::SetActivateMode( sal_uInt16 nMode )
         if ( mpWindowImpl->mnActivateMode )
         {
             if ( (mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW)) &&
-                 !HasChildPathFocus( sal_True ) )
+                 !HasChildPathFocus( true ) )
             {
                 mpWindowImpl->mbActive = false;
                 Deactivate();
@@ -6969,7 +6969,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 
         if ( mpWindowImpl->mbInitWinClipRegion || !mpWindowImpl->maWinClipRegion.IsEmpty() )
         {
-            sal_Bool bInitWinClipRegion = mpWindowImpl->mbInitWinClipRegion;
+            bool bInitWinClipRegion = mpWindowImpl->mbInitWinClipRegion;
             ImplSetClipFlag();
 
             // When ClipRegion was not initialised, assume
@@ -7027,7 +7027,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
-void Window::EnableAlwaysOnTop( sal_Bool bEnable )
+void Window::EnableAlwaysOnTop( bool bEnable )
 {
 
     mpWindowImpl->mbAlwaysOnTop = bEnable;
@@ -7292,18 +7292,18 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
 Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // with decoration
-    return ImplGetWindowExtentsRelative( pRelativeWindow, sal_False );
+    return ImplGetWindowExtentsRelative( pRelativeWindow, false );
 }
 
 Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // without decoration
-    return ImplGetWindowExtentsRelative( pRelativeWindow, sal_True );
+    return ImplGetWindowExtentsRelative( pRelativeWindow, true );
 }
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, sal_Bool bClientOnly ) const
+Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, bool bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
@@ -7414,17 +7414,17 @@ void Window::Validate( sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::HasPaintEvent() const
+bool Window::HasPaintEvent() const
 {
 
     if ( !mpWindowImpl->mbReallyVisible )
-        return sal_False;
+        return false;
 
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
-        return sal_True;
+        return true;
 
     if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT )
-        return sal_True;
+        return true;
 
     if ( !ImplIsOverlapWindow() )
     {
@@ -7433,12 +7433,12 @@ sal_Bool Window::HasPaintEvent() const
         {
             pTempWindow = pTempWindow->ImplGetParent();
             if ( pTempWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINTCHILDREN | IMPL_PAINT_PAINTALLCHILDREN) )
-                return sal_True;
+                return true;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -7455,14 +7455,14 @@ void Window::Update()
     if ( !mpWindowImpl->mbReallyVisible )
         return;
 
-    sal_Bool bFlush = sal_False;
+    bool bFlush = false;
     if ( mpWindowImpl->mpFrameWindow->mpWindowImpl->mbPaintFrame )
     {
         Point aPoint( 0, 0 );
         Region aRegion( Rectangle( aPoint, Size( mnOutWidth, mnOutHeight ) ) );
         ImplInvalidateOverlapFrameRegion( aRegion );
         if ( mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) )
-            bFlush = sal_True;
+            bFlush = true;
     }
 
     // First we should skip all windows which are Paint-Transparent
@@ -7503,7 +7503,7 @@ void Window::Update()
          }
 
         pUpdateWindow->ImplCallPaint( NULL, pUpdateWindow->mpWindowImpl->mnPaintFlags );
-        bFlush = sal_True;
+        bFlush = true;
     }
 
     if ( bFlush )
@@ -7529,7 +7529,7 @@ void Window::Sync()
 
 // -----------------------------------------------------------------------
 
-void Window::SetUpdateMode( sal_Bool bUpdate )
+void Window::SetUpdateMode( bool bUpdate )
 {
 
     mpWindowImpl->mbNoUpdate = !bUpdate;
@@ -7546,7 +7546,7 @@ void Window::GrabFocus()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::HasFocus() const
+bool Window::HasFocus() const
 {
 
     // #107575# the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
@@ -7578,7 +7578,7 @@ void Window::SetFakeFocus( bool bFocus )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::HasChildPathFocus( sal_Bool bSystemWindow ) const
+bool Window::HasChildPathFocus( bool bSystemWindow ) const
 {
 
     // #107575#, the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
@@ -7593,7 +7593,7 @@ sal_Bool Window::HasChildPathFocus( sal_Bool bSystemWindow ) const
     Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
     if ( pFocusWin )
         return ImplIsWindowOrChild( pFocusWin, bSystemWindow );
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -7637,7 +7637,7 @@ void Window::ReleaseMouse()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsMouseCaptured() const
+bool Window::IsMouseCaptured() const
 {
 
     return (this == ImplGetSVData()->maWinData.mpCaptureWin);
@@ -7728,7 +7728,7 @@ Point Window::GetLastPointerPosPixel()
 
 // -----------------------------------------------------------------------
 
-void Window::ShowPointer( sal_Bool bVisible )
+void Window::ShowPointer( bool bVisible )
 {
 
     if ( mpWindowImpl->mbNoPtrVisible != !bVisible )
@@ -7767,7 +7767,7 @@ Window::PointerState Window::GetPointerState()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsMouseOver()
+bool Window::IsMouseOver()
 {
     return ImplGetWinData()->mbMouseOver;
 }
@@ -8069,7 +8069,7 @@ Window* Window::GetWindow( sal_uInt16 nType ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsChild( const Window* pWindow, sal_Bool bSystemWindow ) const
+bool Window::IsChild( const Window* pWindow, bool bSystemWindow ) const
 {
 
     do
@@ -8080,20 +8080,20 @@ sal_Bool Window::IsChild( const Window* pWindow, sal_Bool bSystemWindow ) const
         pWindow = pWindow->ImplGetParent();
 
         if ( pWindow == this )
-            return sal_True;
+            return true;
     }
     while ( pWindow );
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow ) const
+bool Window::IsWindowOrChild( const Window* pWindow, bool bSystemWindow ) const
 {
 
     if ( this == pWindow )
-        return sal_True;
+        return true;
     return ImplIsChild( pWindow, bSystemWindow );
 }
 
@@ -8265,7 +8265,7 @@ uno::Reference< XDropTarget > Window::GetDropTarget()
                                 uno::Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
                         }
                         else
-                            mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = sal_True;
+                            mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = true;
 
                     }
                     catch (const RuntimeException&)
@@ -8438,7 +8438,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
 // Accessibility
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::GetAccessible( sal_Bool bCreate )
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Window::GetAccessible( bool bCreate )
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
     /* // do not optimize accessible hierarchy at all to better reflect real VCL hierarchy
@@ -8468,28 +8468,28 @@ void Window::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::
 }
 
 // skip all border windows that are no top level frames
-sal_Bool Window::ImplIsAccessibleCandidate() const
+bool Window::ImplIsAccessibleCandidate() const
 {
     if( !mpWindowImpl->mbBorderWin )
-        return sal_True;
+        return true;
     else
         // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menus!) are closeable
         if( mpWindowImpl->mbFrame && mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
-            return sal_True;
+            return true;
         else
-            return sal_False;
+            return false;
 }
 
-sal_Bool Window::ImplIsAccessibleNativeFrame() const
+bool Window::ImplIsAccessibleNativeFrame() const
 {
     if( mpWindowImpl->mbFrame )
         // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menus!) are closeable
         if( (mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
-            return sal_True;
+            return true;
         else
-            return sal_False;
+            return false;
     else
-        return sal_False;
+        return false;
 }
 
 sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const
@@ -8507,7 +8507,7 @@ sal_uInt16 Window::ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirst
     return nChildren;
 }
 
-Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, sal_Bool bTopLevel ) const
+Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, sal_uInt16 nFirstWindowType, bool bTopLevel ) const
 {
 
     if( bTopLevel )
@@ -8519,7 +8519,7 @@ Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& 
         Window *pTmpChild = pChild;
 
         if( !pChild->ImplIsAccessibleCandidate() )
-            pTmpChild = pChild->ImplGetAccessibleCandidateChild( nChild, rChildCount, WINDOW_FIRSTCHILD, sal_False );
+            pTmpChild = pChild->ImplGetAccessibleCandidateChild( nChild, rChildCount, WINDOW_FIRSTCHILD, false );
 
         if ( nChild == rChildCount )
             return pTmpChild;
@@ -9018,7 +9018,7 @@ Window* Window::GetAccessibleRelationLabeledBy() const
     return NULL;
 }
 
-sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
+bool Window::IsAccessibilityEventsSuppressed( bool bTraverseParentPath )
 {
     if( !bTraverseParentPath )
         return mpWindowImpl->mbSuppressAccessibilityEvents;
@@ -9028,15 +9028,15 @@ sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
         while ( pParent && pParent->mpWindowImpl)
         {
             if( pParent->mpWindowImpl->mbSuppressAccessibilityEvents )
-                return sal_True;
+                return true;
             else
                 pParent = pParent->mpWindowImpl->mpParent; // do not use GetParent() to find borderwindows that are frames
         }
-        return sal_False;
+        return false;
     }
 }
 
-void Window::SetAccessibilityEventsSuppressed(sal_Bool bSuppressed)
+void Window::SetAccessibilityEventsSuppressed(bool bSuppressed)
 {
     mpWindowImpl->mbSuppressAccessibilityEvents = bSuppressed;
 }
@@ -9057,21 +9057,21 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
 
 // -----------------------------------------------------------------------
 
-void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bDrawBorder, sal_Bool bDrawExtBorderOnly )
+void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly )
 {
     DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, NULL, NULL );
 }
 
-void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bDrawBorder, sal_Bool bDrawExtBorderOnly, Color* pSelectionTextColor )
+void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, Color* pSelectionTextColor )
 {
     DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, pSelectionTextColor, NULL );
 }
 
 void Window::DrawSelectionBackground( const Rectangle& rRect,
                                       sal_uInt16 highlight,
-                                      sal_Bool bChecked,
-                                      sal_Bool bDrawBorder,
-                                      sal_Bool bDrawExtBorderOnly,
+                                      bool bChecked,
+                                      bool bDrawBorder,
+                                      bool bDrawExtBorderOnly,
                                       long nCornerRadius,
                                       Color* pSelectionTextColor,
                                       Color* pPaintColor
@@ -9089,8 +9089,8 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     Color aSelectionBorderCol( pPaintColor ? *pPaintColor : rStyles.GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
 
-    sal_Bool bDark = rStyles.GetFaceColor().IsDark();
-    sal_Bool bBright = ( rStyles.GetFaceColor() == Color( COL_WHITE ) );
+    bool bDark = rStyles.GetFaceColor().IsDark();
+    bool bBright = ( rStyles.GetFaceColor() == Color( COL_WHITE ) );
 
     int c1 = aSelectionBorderCol.GetLuminance();
     int c2 = GetDisplayBackground().GetColor().GetLuminance();
@@ -9236,7 +9236,7 @@ Window* Window::GetPreferredKeyInputWindow()
 }
 
 
-sal_Bool Window::IsScrollable() const
+bool Window::IsScrollable() const
 {
     // check for scrollbars
     Window *pChild = mpWindowImpl->mpFirstChild;
@@ -9250,14 +9250,14 @@ sal_Bool Window::IsScrollable() const
     return false;
 }
 
-sal_Bool Window::IsTopWindow() const
+bool Window::IsTopWindow() const
 {
     if ( mpWindowImpl->mbInDtor )
-        return sal_False;
+        return false;
 
     // topwindows must be frames or they must have a borderwindow which is a frame
     if( !mpWindowImpl->mbFrame && (!mpWindowImpl->mpBorderWindow || (mpWindowImpl->mpBorderWindow && !mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) ) )
-        return sal_False;
+        return false;
 
     ImplGetWinData();
     if( mpWindowImpl->mpWinData->mnIsTopWindow == (sal_uInt16)~0)    // still uninitialized
@@ -9276,7 +9276,7 @@ void Window::ImplMirrorFramePos( Point &pt ) const
 }
 
 // frame based modal counter (dialogs are not modal to the whole application anymore)
-sal_Bool Window::IsInModalMode() const
+bool Window::IsInModalMode() const
 {
     return (mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode != 0);
 }
@@ -9318,12 +9318,12 @@ void Window::ImplDecModalCount()
     }
 }
 
-void Window::ImplIsInTaskPaneList( sal_Bool mbIsInTaskList )
+void Window::ImplIsInTaskPaneList( bool mbIsInTaskList )
 {
     mpWindowImpl->mbIsInTaskPaneList = mbIsInTaskList;
 }
 
-void Window::ImplNotifyIconifiedState( sal_Bool bIconified )
+void Window::ImplNotifyIconifiedState( bool bIconified )
 {
     mpWindowImpl->mpFrameWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
     // #109206# notify client window as well to have toolkit topwindow listeners notified
@@ -9331,15 +9331,15 @@ void Window::ImplNotifyIconifiedState( sal_Bool bIconified )
         mpWindowImpl->mpFrameWindow->mpWindowImpl->mpClientWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
 }
 
-sal_Bool Window::HasActiveChildFrame()
+bool Window::HasActiveChildFrame()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Window *pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
     while( pFrameWin )
     {
         if( pFrameWin != mpWindowImpl->mpFrameWindow )
         {
-            sal_Bool bDecorated = sal_False;
+            bool bDecorated = false;
             Window *pChildFrame = pFrameWin->ImplGetWindow();
             // #i15285# unfortunately WB_MOVEABLE is the same as WB_TABSTOP which can
             // be removed for ToolBoxes to influence the keyboard accessibility
@@ -9351,9 +9351,9 @@ sal_Bool Window::HasActiveChildFrame()
             if( bDecorated || (pFrameWin->mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) ) )
                 if( pChildFrame && pChildFrame->IsVisible() && pChildFrame->IsActive() )
                 {
-                    if( ImplIsChild( pChildFrame, sal_True ) )
+                    if( ImplIsChild( pChildFrame, true ) )
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         break;
                     }
                 }
@@ -9368,11 +9368,11 @@ LanguageType Window::GetInputLanguage() const
     return mpWindowImpl->mpFrame->GetInputLanguage();
 }
 
-void Window::EnableNativeWidget( sal_Bool bEnable )
+void Window::EnableNativeWidget( bool bEnable )
 {
     static const char* pNoNWF = getenv( "SAL_NO_NWF" );
     if( pNoNWF && *pNoNWF )
-        bEnable = sal_False;
+        bEnable = false;
 
     if( bEnable != ImplGetWinData()->mbEnableNativeWidget )
     {
@@ -9397,7 +9397,7 @@ void Window::EnableNativeWidget( sal_Bool bEnable )
     }
 }
 
-sal_Bool Window::IsNativeWidgetEnabled() const
+bool Window::IsNativeWidgetEnabled() const
 {
     return ImplGetWinData()->mbEnableNativeWidget;
 }
@@ -9517,9 +9517,9 @@ uno::Reference< rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
 
 void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rPos )
 {
-    sal_Bool bRVisible = mpWindowImpl->mbReallyVisible;
+    bool bRVisible = mpWindowImpl->mbReallyVisible;
     mpWindowImpl->mbReallyVisible = mpWindowImpl->mbVisible;
-    sal_Bool bDevOutput = mbDevOutput;
+    bool bDevOutput = mbDevOutput;
     mbDevOutput = true;
 
     const OutputDevice *pOutDev = GetOutDev();
@@ -9527,7 +9527,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     long nOldDPIY = pOutDev->ImplGetDPIY();
     mnDPIX = i_pTargetOutDev->ImplGetDPIX();
     mnDPIY = i_pTargetOutDev->ImplGetDPIY();
-    sal_Bool bOutput = IsOutputEnabled();
+    bool bOutput = IsOutputEnabled();
     EnableOutput();
 
     DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
@@ -9658,7 +9658,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
         Hide();
     }
 
-    sal_Bool bVisible = mpWindowImpl->mbVisible;
+    bool bVisible = mpWindowImpl->mbVisible;
     mpWindowImpl->mbVisible = true;
 
     if( mpWindowImpl->mpBorderWindow )

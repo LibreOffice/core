@@ -55,15 +55,15 @@ using namespace psp;
 namespace psp
 {
 
-sal_Bool
+bool
 AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
           sal_uInt32 nBlockSize = nBLOCKSIZE)
 {
     if ((pDst == NULL) || (pSrc == NULL))
-        return sal_False;
+        return false;
 
     if (pSrc->setPos(osl_Pos_Absolut, 0) != osl::FileBase::E_None)
-        return sal_False;
+        return false;
 
     if (nBlockSize == 0)
         nBlockSize = nBLOCKSIZE;
@@ -80,7 +80,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
     }
     while ((nIn > 0) && (nIn == nOut));
 
-    return sal_True;
+    return true;
 }
 
 } // namespace psp
@@ -129,7 +129,7 @@ sal_uInt16
 PrinterJob::GetDepth () const
 {
     sal_Int32 nLevel = GetPostscriptLevel();
-    sal_Bool  bColor = IsColorPrinter ();
+    bool  bColor = IsColorPrinter ();
 
     return nLevel > 1 && bColor ? 24 : 8;
 }
@@ -151,10 +151,10 @@ PrinterJob::GetPostscriptLevel (const JobData *pJobData) const
     return nPSLevel;
 }
 
-sal_Bool
+bool
 PrinterJob::IsColorPrinter () const
 {
-    sal_Bool bColor = sal_False;
+    bool bColor = false;
 
     if( m_aLastJobData.m_nColorDevice )
         bColor = m_aLastJobData.m_nColorDevice == -1 ? sal_False : sal_True;
@@ -298,7 +298,7 @@ static bool isAscii( const OUString& rStr )
     return true;
 }
 
-sal_Bool
+bool
 PrinterJob::StartJob (
                       const OUString& rFileName,
                       int nMode,
@@ -325,7 +325,7 @@ PrinterJob::StartJob (
     mpJobHeader  = CreateSpoolFile (OUString("psp_head"), aExt);
     mpJobTrailer = CreateSpoolFile (OUString("psp_tail"), aExt);
     if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
-        return sal_False;
+        return false;
 
     // write document header according to Document Structuring Conventions (DSC)
     WritePS (mpJobHeader,
@@ -406,15 +406,15 @@ PrinterJob::StartJob (
     m_aLastJobData.m_pParser = NULL;
     m_aLastJobData.m_aContext.setParser( NULL );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool
+bool
 PrinterJob::EndJob ()
 {
     // no pages ? that really means no print job
     if( maPageList.empty() )
-        return sal_False;
+        return false;
 
     // write document setup (done here because it
     // includes the accumulated fonts
@@ -422,7 +422,7 @@ PrinterJob::EndJob ()
         writeSetup( mpJobHeader, m_aDocumentJobData );
     m_pGraphics->OnEndJob();
     if( ! (mpJobHeader && mpJobTrailer) )
-        return sal_False;
+        return false;
 
     // write document trailer according to Document Structuring Conventions (DSC)
     OStringBuffer aTrailer(512);
@@ -447,7 +447,7 @@ PrinterJob::EndJob ()
     FILE* pDestFILE = NULL;
 
     /* create a destination either as file or as a pipe */
-    sal_Bool bSpoolToFile = !maFileName.isEmpty();
+    bool bSpoolToFile = !maFileName.isEmpty();
     if (bSpoolToFile)
     {
         const OString aFileName = OUStringToOString (maFileName,
@@ -462,7 +462,7 @@ PrinterJob::EndJob ()
                 {
                     close( nFile );
                     unlink( aFileName.getStr() );
-                    return sal_False;
+                    return false;
                 }
             }
             else
@@ -472,14 +472,14 @@ PrinterJob::EndJob ()
             pDestFILE = fopen (aFileName.getStr(), "w");
 
         if (pDestFILE == NULL)
-            return sal_False;
+            return false;
     }
     else
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get ();
         pDestFILE = rPrinterInfoManager.startSpool( m_aLastJobData.m_aPrinterName, m_bQuickJob );
         if (pDestFILE == NULL)
-            return sal_False;
+            return false;
     }
 
     /* spool the document parts to the destination */
@@ -489,7 +489,7 @@ PrinterJob::EndJob ()
     AppendPS (pDestFILE, mpJobHeader, pBuffer);
     mpJobHeader->close();
 
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
     std::list< osl::File* >::iterator pPageBody;
     std::list< osl::File* >::iterator pPageHead;
     for (pPageBody  = maPageList.begin(), pPageHead  = maHeaderList.begin();
@@ -506,7 +506,7 @@ PrinterJob::EndJob ()
             }
         }
         else
-            bSuccess = sal_False;
+            bSuccess = false;
         if( *pPageBody )
         {
             osl::File::RC nError = (*pPageBody)->open(osl_File_OpenFlag_Read);
@@ -517,7 +517,7 @@ PrinterJob::EndJob ()
             }
         }
         else
-            bSuccess = sal_False;
+            bSuccess = false;
     }
 
     AppendPS (pDestFILE, mpJobTrailer, pBuffer);
@@ -533,18 +533,18 @@ PrinterJob::EndJob ()
         if (!rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName,
             maJobTitle, pDestFILE, m_aDocumentJobData, true ))
         {
-            bSuccess = sal_False;
+            bSuccess = false;
         }
     }
 
     return bSuccess;
 }
 
-sal_Bool
+bool
 PrinterJob::AbortJob ()
 {
     m_pGraphics->OnEndJob();
-    return sal_False;
+    return false;
 }
 
 void
@@ -581,7 +581,7 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
 }
 
 
-sal_Bool
+bool
 PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
@@ -596,7 +596,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     maPageList.push_back (pPageBody);
 
     if( ! (pPageHeader && pPageBody) )
-        return sal_False;
+        return false;
 
     // write page header according to Document Structuring Conventions (DSC)
     WritePS (pPageHeader, "%%Page: ");
@@ -652,7 +652,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     return false;
 }
 
-sal_Bool
+bool
 PrinterJob::EndPage ()
 {
     m_pGraphics->OnEndPage();
@@ -661,7 +661,7 @@ PrinterJob::EndPage ()
     osl::File* pPageBody   = maPageList.back();
 
     if( ! (pPageBody && pPageHeader) )
-        return sal_False;
+        return false;
 
     // copy page to paper and write page trailer according to DSC
 
@@ -677,7 +677,7 @@ PrinterJob::EndPage ()
     pPageHeader->close();
     pPageBody->close();
 
-    return sal_True;
+    return true;
 }
 
 struct less_ppd_key : public ::std::binary_function<double, double, bool>

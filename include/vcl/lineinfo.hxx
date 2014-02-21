@@ -75,9 +75,9 @@ public:
                     ~LineInfo();
 
     LineInfo&       operator=( const LineInfo& rLineInfo );
-    sal_Bool            operator==( const LineInfo& rLineInfo ) const;
-    sal_Bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
-    sal_Bool            IsSameInstance( const LineInfo& rLineInfo ) const { return( mpImplLineInfo == rLineInfo.mpImplLineInfo ); }
+    bool            operator==( const LineInfo& rLineInfo ) const;
+    bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
+    bool            IsSameInstance( const LineInfo& rLineInfo ) const { return( mpImplLineInfo == rLineInfo.mpImplLineInfo ); }
 
     void            SetStyle( LineStyle eStyle );
     LineStyle       GetStyle() const { return mpImplLineInfo->meStyle; }
@@ -106,7 +106,7 @@ public:
     void SetLineCap(com::sun::star::drawing::LineCap eLineCap);
     com::sun::star::drawing::LineCap GetLineCap() const { return mpImplLineInfo->meLineCap; }
 
-    sal_Bool            IsDefault() const;
+    bool            IsDefault() const;
 
     friend VCL_DLLPUBLIC SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo );

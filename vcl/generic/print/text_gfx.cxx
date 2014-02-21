@@ -598,7 +598,7 @@ PrinterGfx::drawText(
 }
 
 int
-PrinterGfx::getCharWidth (sal_Bool b_vert, sal_Unicode n_char, CharacterMetric *p_bbox)
+PrinterGfx::getCharWidth (bool b_vert, sal_Unicode n_char, CharacterMetric *p_bbox)
 {
     b_vert = b_vert && (getVerticalDeltaAngle(n_char) != 0);
     int w = b_vert ? p_bbox->height : p_bbox->width;

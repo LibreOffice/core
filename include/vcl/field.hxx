@@ -44,20 +44,20 @@ private:
     Edit*                   mpField;
     LocaleDataWrapper*      mpLocaleDataWrapper;
     Link                    maErrorLink;
-    sal_Bool                    mbReformat;
-    sal_Bool                    mbStrictFormat;
-    sal_Bool                    mbEmptyFieldValue;
-    sal_Bool                    mbEmptyFieldValueEnabled;
-    sal_Bool                    mbDefaultLocale;
+    bool                    mbReformat;
+    bool                    mbStrictFormat;
+    bool                    mbEmptyFieldValue;
+    bool                    mbEmptyFieldValueEnabled;
+    bool                    mbDefaultLocale;
 
 protected:
     SAL_DLLPRIVATE void     ImplSetText( const OUString& rText, Selection* pNewSel = NULL );
-    SAL_DLLPRIVATE sal_Bool     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
+    SAL_DLLPRIVATE bool     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
 
-    void                    SetEmptyFieldValueData( sal_Bool bValue ) { mbEmptyFieldValue = bValue; }
+    void                    SetEmptyFieldValueData( bool bValue ) { mbEmptyFieldValue = bValue; }
 
     SAL_DLLPRIVATE LocaleDataWrapper& ImplGetLocaleDataWrapper() const;
-    sal_Bool                    IsDefaultLocale() const { return mbDefaultLocale; }
+    bool                    IsDefaultLocale() const { return mbDefaultLocale; }
 
 public:
     explicit                FormatterBase( Edit* pField = NULL );
@@ -68,11 +68,11 @@ public:
     void                    SetField( Edit* pField )    { mpField = pField; }
     Edit*                   GetField() const            { return mpField; }
 
-    sal_Bool                    MustBeReformatted() const   { return mbReformat; }
-    void                    MarkToBeReformatted( sal_Bool b ) { mbReformat = b; }
+    bool                    MustBeReformatted() const   { return mbReformat; }
+    void                    MarkToBeReformatted( bool b ) { mbReformat = b; }
 
-    void                    SetStrictFormat( sal_Bool bStrict );
-    sal_Bool                    IsStrictFormat() const { return mbStrictFormat; }
+    void                    SetStrictFormat( bool bStrict );
+    bool                    IsStrictFormat() const { return mbStrictFormat; }
 
     virtual void            Reformat();
     virtual void            ReformatAll();
@@ -87,10 +87,10 @@ public:
     const Link&             GetErrorHdl() const                 { return maErrorLink; }
 
     void                    SetEmptyFieldValue();
-    sal_Bool                    IsEmptyFieldValue() const;
+    bool                    IsEmptyFieldValue() const;
 
-    void                    EnableEmptyFieldValue( sal_Bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
-    sal_Bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
+    void                    EnableEmptyFieldValue( bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
+    bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
 };
 
 
@@ -108,7 +108,7 @@ private:
     OUString               maLiteralMask;
     sal_uInt16             mnFormatFlags;
     bool                   mbSameMask;
-    sal_Bool               mbInPattKeyInput;
+    bool               mbInPattKeyInput;
 
 protected:
                             PatternFormatter();
@@ -116,7 +116,7 @@ protected:
     SAL_DLLPRIVATE void ImplSetMask(const OString& rEditMask,
         const OUString& rLiteralMask);
     SAL_DLLPRIVATE bool     ImplIsSameMask() const { return mbSameMask; }
-    SAL_DLLPRIVATE sal_Bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
+    SAL_DLLPRIVATE bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
 public:
     virtual                 ~PatternFormatter();
@@ -132,7 +132,7 @@ public:
 
     void                    SetString( const OUString& rStr );
     OUString                GetString() const;
-    sal_Bool                IsStringModified() const { return !(GetString() == maFieldString ); }
+    bool                IsStringModified() const { return !(GetString() == maFieldString ); }
 };
 
 // --------------------
@@ -152,8 +152,8 @@ protected:
     sal_Int64               mnCorrectedValue;
     sal_uInt16                  mnType;
     sal_uInt16                  mnDecimalDigits;
-    sal_Bool                    mbThousandSep;
-    sal_Bool                    mbShowTrailingZeros;
+    bool                    mbThousandSep;
+    bool                    mbShowTrailingZeros;
 
     // the members below are used in all derivatives of NumericFormatter
     // not in NumericFormatter itself.
@@ -170,7 +170,7 @@ protected:
     void                    FieldLast();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE sal_Bool ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE bool ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( sal_Int64 nNewValue );
     SAL_DLLPRIVATE void     ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection = NULL );
 
@@ -194,18 +194,18 @@ public:
     void                    SetDecimalDigits( sal_uInt16 nDigits );
     sal_uInt16                  GetDecimalDigits() const;
 
-    void                    SetUseThousandSep( sal_Bool b );
-    sal_Bool                    IsUseThousandSep() const { return mbThousandSep; }
+    void                    SetUseThousandSep( bool b );
+    bool                    IsUseThousandSep() const { return mbThousandSep; }
 
-    void                    SetShowTrailingZeros( sal_Bool bShowTrailingZeros );
-    sal_Bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
+    void                    SetShowTrailingZeros( bool bShowTrailingZeros );
+    bool                    IsShowTrailingZeros() const { return mbShowTrailingZeros; }
 
 
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     virtual sal_Int64       GetValue() const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
-    sal_Bool                    IsValueModified() const;
+    bool                    IsValueModified() const;
     sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
@@ -232,7 +232,7 @@ protected:
                             MetricFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE sal_Bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
+    SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
 public:
     virtual                 ~MetricFormatter();
@@ -283,7 +283,7 @@ private:
 
 protected:
                             CurrencyFormatter();
-    SAL_DLLPRIVATE sal_Bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE bool     ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr );
 
 public:
     virtual                 ~CurrencyFormatter();
@@ -311,11 +311,11 @@ private:
     Date                    maMin;
     Date                    maMax;
     Date                    maCorrectedDate;
-    sal_Bool                    mbLongFormat;
-    sal_Bool                    mbShowDateCentury;
+    bool                    mbLongFormat;
+    bool                    mbShowDateCentury;
     sal_uInt16                  mnDateFormat;
     sal_uLong                   mnExtDateFormat;
-    sal_Bool                    mbEnforceValidValue;
+    bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();
 
@@ -324,7 +324,7 @@ protected:
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
-    SAL_DLLPRIVATE sal_Bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr,
+    SAL_DLLPRIVATE bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr,
                                               const AllSettings& rSettings );
     SAL_DLLPRIVATE void     ImplSetUserDate( const Date& rNewDate,
                                              Selection* pNewSelection = NULL );
@@ -333,7 +333,7 @@ protected:
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Date& rDate );
     CalendarWrapper&        GetCalendarWrapper() const;
 
-    SAL_DLLPRIVATE sal_Bool     ImplAllowMalformedInput() const;
+    SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
     virtual                 ~DateFormatter();
@@ -345,7 +345,7 @@ public:
 
 
     void                    SetExtDateFormat( ExtDateFieldFormat eFormat );
-    ExtDateFieldFormat      GetExtDateFormat( sal_Bool bResolveSystemFormat = sal_False ) const;
+    ExtDateFieldFormat      GetExtDateFormat( bool bResolveSystemFormat = false ) const;
 
     void                    SetMin( const Date& rNewMin );
     const Date&             GetMin() const { return maMin; }
@@ -358,17 +358,17 @@ public:
     // MT: Remove these methods too, ExtDateFormat should be enough!
     //     What should happen if using DDMMYYYY, but ShowCentury=sal_False?
     // --------------------------------------------------------------
-    void                    SetLongFormat( sal_Bool bLong );
-    sal_Bool                    IsLongFormat() const { return mbLongFormat; }
-    void                    SetShowDateCentury( sal_Bool bShowCentury );
-    sal_Bool                    IsShowDateCentury() const { return mbShowDateCentury; }
+    void                    SetLongFormat( bool bLong );
+    bool                    IsLongFormat() const { return mbLongFormat; }
+    void                    SetShowDateCentury( bool bShowCentury );
+    bool                    IsShowDateCentury() const { return mbShowDateCentury; }
     // --------------------------------------------------------------
 
     void                    SetDate( const Date& rNewDate );
     void                    SetUserDate( const Date& rNewDate );
     Date                    GetDate() const;
     void                    SetEmptyDate();
-    sal_Bool                    IsEmptyDate() const;
+    bool                    IsEmptyDate() const;
     Date                    GetCorrectedDate() const { return maCorrectedDate; }
 
     void                    ResetLastDate() { maLastDate = Date( 0, 0, 0 ); }
@@ -390,8 +390,8 @@ public:
         In addition, if this is set to false, the text in the field will \em not be corrected
         when the control loses the focus - instead, the invalid input will be preserved.
     */
-    void                    EnforceValidValue( sal_Bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
-    inline sal_Bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
+    void                    EnforceValidValue( bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
+    inline bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
 
@@ -408,8 +408,8 @@ private:
     Time                    maCorrectedTime;
     TimeFieldFormat         meFormat;
     sal_uInt16                  mnTimeFormat;
-    sal_Bool                    mbDuration;
-    sal_Bool                    mbEnforceValidValue;
+    bool                    mbDuration;
+    bool                    mbEnforceValidValue;
 
     SAL_DLLPRIVATE void     ImplInit();
 
@@ -419,10 +419,10 @@ protected:
                             TimeFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE sal_Bool     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
+    SAL_DLLPRIVATE bool     ImplTimeReformat( const OUString& rStr, OUString& rOutStr );
     SAL_DLLPRIVATE void     ImplNewFieldValue( const Time& rTime );
     SAL_DLLPRIVATE void     ImplSetUserTime( const Time& rNewTime, Selection* pNewSelection = NULL );
-    SAL_DLLPRIVATE sal_Bool     ImplAllowMalformedInput() const;
+    SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
 
@@ -447,14 +447,14 @@ public:
     void                    SetFormat( TimeFieldFormat eNewFormat );
     TimeFieldFormat         GetFormat() const { return meFormat; }
 
-    void                    SetDuration( sal_Bool mbDuration );
-    sal_Bool                    IsDuration() const { return mbDuration; }
+    void                    SetDuration( bool mbDuration );
+    bool                    IsDuration() const { return mbDuration; }
 
     void                    SetTime( const Time& rNewTime );
     void                    SetUserTime( const Time& rNewTime );
     Time                    GetTime() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
-    sal_Bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
+    bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
     Time                    GetCorrectedTime() const { return maCorrectedTime; }
 
     static Time             GetInvalidTime() { return Time( 99, 99, 99 ); }
@@ -471,8 +471,8 @@ public:
         In addition, if this is set to false, the text in the field will <em>not</em> be corrected
         when the control loses the focus - instead, the invalid input will be preserved.
     */
-    void                    EnforceValidValue( sal_Bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
-    inline sal_Bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
+    void                    EnforceValidValue( bool _bEnforce ) { mbEnforceValidValue = _bEnforce; }
+    inline bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
 
@@ -628,7 +628,7 @@ private:
     Date                    maLast;
 
 protected:
-    SAL_DLLPRIVATE void     ImplDateSpinArea( sal_Bool bUp );
+    SAL_DLLPRIVATE void     ImplDateSpinArea( bool bUp );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
@@ -664,7 +664,7 @@ private:
     Time                    maLast;
 
 protected:
-    SAL_DLLPRIVATE void     ImplTimeSpinArea( sal_Bool bUp );
+    SAL_DLLPRIVATE void     ImplTimeSpinArea( bool bUp );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:

@@ -251,7 +251,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbBelowRefEdge->SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs.Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbBelowRefEdge->EnableTriState( sal_False );
+        m_pTsbBelowRefEdge->EnableTriState( false );
     }
     else
     {
@@ -280,7 +280,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbParallel->SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs.Get( SDRATTR_MEASURETEXTROTA90 ) ).
                         GetValue() ? STATE_NOCHECK : STATE_CHECK );
-        m_pTsbParallel->EnableTriState( sal_False );
+        m_pTsbParallel->EnableTriState( false );
     }
     else
     {
@@ -293,7 +293,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     {
         m_pTsbShowUnit->SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs.Get( SDRATTR_MEASURESHOWUNIT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbShowUnit->EnableTriState( sal_False );
+        m_pTsbShowUnit->EnableTriState( false );
     }
     else
     {
@@ -330,8 +330,8 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         {
             if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTHPOS ) != SFX_ITEM_DONTCARE )
             {
-                m_pTsbAutoPosV->EnableTriState( sal_False );
-                m_pTsbAutoPosH->EnableTriState( sal_False );
+                m_pTsbAutoPosV->EnableTriState( false );
+                m_pTsbAutoPosH->EnableTriState( false );
 
                 SdrMeasureTextHPos eHPos = (SdrMeasureTextHPos)
                             ( ( const SdrMeasureTextHPosItem& )rAttrs.Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();

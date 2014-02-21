@@ -201,7 +201,7 @@ sal_Bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAng
     aColor=ConvertColor((sal_uInt8)nColor);
 
     aFont.SetColor(aColor);
-    aFont.SetTransparent(sal_True);
+    aFont.SetTransparent(true);
     aFont.SetFamily(FAMILY_SWISS);
     aFont.SetSize(Size(0,nHeight));
     aFont.SetAlign(ALIGN_BASELINE);
@@ -805,7 +805,7 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
         aParentLayerDXFLineInfo.fDistance = 0;
     }
 
-    pVirDev->EnableOutput(sal_False);
+    pVirDev->EnableOutput(false);
     rMTF.Record(pVirDev);
 
     aActLineColor = pVirDev->GetLineColor();

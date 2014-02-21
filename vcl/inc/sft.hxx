@@ -505,7 +505,7 @@ namespace vcl
  * MapString() replaces the UCS-2 characters in str with glyphIDs.
  * @ingroup sft
  */
-    int VCL_DLLPUBLIC MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, int bvertical);
+    int VCL_DLLPUBLIC MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, bool bvertical);
 
 /**
  * Maps a Unicode (UCS-2) character to a glyph ID and returns it. Missing glyph has

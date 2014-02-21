@@ -55,7 +55,7 @@ private:
     LocaleDataWrapper*              mpLocaleDataWrapper;
     utl::TransliterationWrapper*    mpTransliterationWrapper;
 
-    sal_Bool                        mbTransliterateIgnoreCase;
+    bool                        mbTransliterateIgnoreCase;
 
     SAL_DLLPRIVATE void             ImplDestroyWrappers();
 
@@ -72,10 +72,10 @@ public:
 
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;
 
-    sal_Bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
-    sal_Bool    MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const;
+    bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
+    bool    MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const;
 
-    OUString    GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep = sal_True, sal_Bool bTrailingZeros = sal_True ) const;
+    OUString    GetNum( long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep = true, bool bTrailingZeros = true ) const;
 
     static OUString filterFormattingChars( const OUString& );
 };

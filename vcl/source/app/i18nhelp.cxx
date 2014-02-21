@@ -40,7 +40,7 @@ vcl::I18nHelper::I18nHelper(  const ::com::sun::star::uno::Reference< ::com::sun
     m_xContext = rxContext;
     mpLocaleDataWrapper = NULL;
     mpTransliterationWrapper= NULL;
-    mbTransliterateIgnoreCase = sal_False;
+    mbTransliterateIgnoreCase = false;
 }
 
 vcl::I18nHelper::~I18nHelper()
@@ -119,7 +119,7 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = sal_False;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = false;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
@@ -130,7 +130,7 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
     return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );
 }
 
-sal_Bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 ) const
+bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
@@ -138,7 +138,7 @@ sal_Bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rS
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = sal_True;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = true;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
@@ -148,11 +148,11 @@ sal_Bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rS
     return ImplGetTransliterationWrapper().isMatch( aStr1, aStr2 );
 }
 
-sal_Bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const
+bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
-    sal_Bool bEqual = sal_False;
+    bool bEqual = false;
     sal_Int32 n = rString.indexOf( '~' );
     if ( n != -1 )
     {
@@ -163,7 +163,7 @@ sal_Bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cM
 }
 
 
-OUString vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
+OUString vcl::I18nHelper::GetNum( long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep, bool bTrailingZeros ) const
 {
     return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }

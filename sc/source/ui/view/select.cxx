@@ -296,7 +296,7 @@ void ScViewFunctionSet::SetAnchorFlag( bool bSet )
     bAnchor = bSet;
 }
 
-sal_Bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
+bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -692,7 +692,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
     return true;
 }
 
-sal_Bool ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+bool ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
@@ -806,7 +806,7 @@ void ScHeaderFunctionSet::DestroyAnchor()
     bAnchor = false;
 }
 
-sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
+bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -907,7 +907,7 @@ sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bo
     return true;
 }
 
-sal_Bool ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+bool ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     SCsCOL  nPosX;
     SCsROW  nPosY;

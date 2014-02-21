@@ -66,16 +66,16 @@ protected:
     void                ShowSelection();
     void                HideSelection();
     void                ShowSelection( const TextSelection& rSel );
-    void                ImpShowHideSelection( sal_Bool bShow, const TextSelection* pRange = NULL );
+    void                ImpShowHideSelection( bool bShow, const TextSelection* pRange = NULL );
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
-    void                ImpSetSelection( const TextSelection& rNewSel, sal_Bool bUI );
-    sal_Bool                IsInSelection( const TextPaM& rPaM );
+    void                ImpSetSelection( const TextSelection& rNewSel, bool bUI );
+    bool                IsInSelection( const TextPaM& rPaM );
 
     void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
-    void                ImpPaint( const Rectangle& rRect, sal_Bool bUseVirtDev );
-    void                ImpShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_Bool bEndKey );
+    void                ImpPaint( const Rectangle& rRect, bool bUseVirtDev );
+    void                ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bEndKey );
     void                ImpHighlight( const TextSelection& rSel );
     void                ImpSetSelection( const TextSelection& rSelection );
     Point               ImpGetOutputStartPos( const Point& rStartDocPos ) const;
@@ -84,7 +84,7 @@ protected:
     void                ImpShowDDCursor();
 
     bool                ImplTruncateNewText( OUString& rNewText ) const;
-    sal_Bool            ImplCheckTextLen( const OUString& rNewText );
+    bool            ImplCheckTextLen( const OUString& rNewText );
 
     VirtualDevice*      GetVirtualDevice();
 
@@ -110,25 +110,25 @@ public:
     void                Invalidate();
     void                Scroll( long nHorzScroll, long nVertScroll );
 
-    void                ShowCursor( sal_Bool bGotoCursor = sal_True, sal_Bool bForceVisCursor = sal_True );
+    void                ShowCursor( bool bGotoCursor = true, bool bForceVisCursor = true );
     void                HideCursor();
 
-    void                EnableCursor( sal_Bool bEnable );
-    sal_Bool                IsCursorEnabled() const;
+    void                EnableCursor( bool bEnable );
+    bool                IsCursorEnabled() const;
 
     const TextSelection&    GetSelection() const;
     TextSelection&      GetSelection();
     void                SetSelection( const TextSelection& rNewSel );
-    void                SetSelection( const TextSelection& rNewSel, sal_Bool bGotoCursor );
-    sal_Bool                HasSelection() const;
+    void                SetSelection( const TextSelection& rNewSel, bool bGotoCursor );
+    bool                HasSelection() const;
 
     OUString            GetSelected();
     OUString            GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
-    void                InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
+    void                InsertText( const OUString& rNew, bool bSelect = false );
 
-    sal_Bool            KeyInput( const KeyEvent& rKeyEvent );
+    bool            KeyInput( const KeyEvent& rKeyEvent );
     void                Paint( const Rectangle& rRect );
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -145,7 +145,7 @@ public:
     void                Undo();
     void                Redo();
 
-    sal_Bool            Read( SvStream& rInput );
+    bool            Read( SvStream& rInput );
 
     void                SetStartDocPos( const Point& rPos );
     const Point&        GetStartDocPos() const;
@@ -153,21 +153,21 @@ public:
     Point               GetDocPos( const Point& rWindowPos ) const;
     Point               GetWindowPos( const Point& rDocPos ) const;
 
-    void                SetInsertMode( sal_Bool bInsert );
-    sal_Bool            IsInsertMode() const;
+    void                SetInsertMode( bool bInsert );
+    bool            IsInsertMode() const;
 
-    void                SetAutoIndentMode( sal_Bool bAutoIndent );
+    void                SetAutoIndentMode( bool bAutoIndent );
 
-    void                SetReadOnly( sal_Bool bReadOnly );
-    sal_Bool            IsReadOnly() const;
+    void                SetReadOnly( bool bReadOnly );
+    bool            IsReadOnly() const;
 
-    void                SetAutoScroll( sal_Bool bAutoScroll );
-    sal_Bool            IsAutoScroll() const;
+    void                SetAutoScroll( bool bAutoScroll );
+    bool            IsAutoScroll() const;
 
-    sal_Bool            SetCursorAtPoint( const Point& rPointPixel );
-    sal_Bool            IsSelectionAtPoint( const Point& rPointPixel );
+    bool            SetCursorAtPoint( const Point& rPointPixel );
+    bool            IsSelectionAtPoint( const Point& rPointPixel );
 
-    void                SetPaintSelection( sal_Bool bPaint);
+    void                SetPaintSelection( bool bPaint);
 
     void                EraseVirtualDevice();
 
@@ -193,7 +193,7 @@ public:
         TEXTATTR_PROTECTED set as one entitity. Drag and dropped text is automatically
         attibuted as protected.
      */
-    void                SupportProtectAttribute(sal_Bool bSupport);
+    void                SupportProtectAttribute(bool bSupport);
 
     /**
         Returns the number in paragraph of the line in which the cursor is blinking

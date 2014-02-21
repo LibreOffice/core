@@ -24,7 +24,7 @@
 #include "unx/i18n_xkb.hxx"
 
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
-    : mbUseExtension( sal_True ),
+    : mbUseExtension( true ),
       mnDefaultGroup( 0 )
 {
     mpDisplay = pDisplay;
@@ -53,9 +53,9 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
         int nExtMajorVersion = XkbMajorVersion;
         int nExtMinorVersion = XkbMinorVersion;
 
-        mbUseExtension = (sal_Bool)XkbQueryExtension( mpDisplay,
+        mbUseExtension = XkbQueryExtension( mpDisplay,
             &nMajorExtOpcode, (int*)&mnEventBase, (int*)&mnErrorBase,
-            &nExtMajorVersion, &nExtMinorVersion );
+            &nExtMajorVersion, &nExtMinorVersion ) != 0;
     }
 
     // query notification for changes of the keyboard group

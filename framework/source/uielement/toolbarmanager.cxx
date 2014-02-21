@@ -403,7 +403,7 @@ void ToolBarManager::UpdateImageOrientation()
             {
                 if ( pIter->second.bRotated )
                 {
-                    m_pToolBar->SetItemImageMirrorMode( nId, sal_False );
+                    m_pToolBar->SetItemImageMirrorMode( nId, false );
                     m_pToolBar->SetItemImageAngle( nId, m_lImageRotation );
                 }
                 if ( pIter->second.bMirrored )
@@ -1708,25 +1708,25 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
         if ( !bIsFloating )
         {
-            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_DOCKTOOLBAR, sal_False );
-            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_DOCKALLTOOLBAR, sal_False );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_DOCKTOOLBAR, false );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_DOCKALLTOOLBAR, false );
             Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
             if( xDockable.is() )
                 aPopupMenu.CheckItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, xDockable->isLocked() );
         }
         else
-            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
 
         if ( SvtMiscOptions().DisableUICustomization() )
         {
-            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, sal_False );
-            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
-            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, sal_False );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, false );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, false );
+            aPopupMenu.EnableItem( MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false );
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
         if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
-            aPopupMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, sal_False);
+            aPopupMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
 
         for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {

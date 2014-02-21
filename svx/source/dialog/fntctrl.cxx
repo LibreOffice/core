@@ -93,7 +93,7 @@ namespace
     // -----------------------------------------------------------------------
     void initFont(Font& _rFont)
     {
-        _rFont.SetTransparent(sal_True);
+        _rFont.SetTransparent(true);
         _rFont.SetAlign(ALIGN_BASELINE);
     }
     // -----------------------------------------------------------------------
@@ -119,7 +119,7 @@ namespace
     void setFont( const SvxFont& rNewFont, SvxFont& rImplFont )
     {
         rImplFont = rNewFont;
-        rImplFont.SetTransparent( sal_True );
+        rImplFont.SetTransparent( true );
         rImplFont.SetAlign( ALIGN_BASELINE );
     }
 

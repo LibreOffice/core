@@ -106,8 +106,8 @@ namespace
             VirtualDevice aVirtualDeviceMask(*Application::GetDefaultDevice(), 1L);
 
             // Prepare VirtualDevices and their states
-            aVirtualDevice.EnableMapMode(sal_False);
-            aVirtualDeviceMask.EnableMapMode(sal_False);
+            aVirtualDevice.EnableMapMode(false);
+            aVirtualDeviceMask.EnableMapMode(false);
             aVirtualDevice.SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
             aVirtualDeviceMask.SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
             aVirtualDevice.Erase();

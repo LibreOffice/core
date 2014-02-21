@@ -115,10 +115,10 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     m_pFrame     = NULL;
 
     bWindow_     = pDisplay->IsDisplay();
-    bVirDev_     = sal_True;
+    bVirDev_     = true;
 }
 
-sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
+bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
                                     long nDX, long nDY,
                                     sal_uInt16 nBitCount,
                                     SalX11Screen nXScreen,
@@ -157,7 +157,7 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
     else
     {
         hDrawable_ = hDrawable;
-        bExternPixmap_ = sal_True;
+        bExternPixmap_ = true;
     }
 
     pGraphics_->Init( this, pColormap, bDeleteColormap );
@@ -174,8 +174,8 @@ X11SalVirtualDevice::X11SalVirtualDevice() :
     nDX_                    = 0;
     nDY_                    = 0;
     nDepth_                 = 0;
-    bGraphics_              = sal_False;
-    bExternPixmap_          = sal_False;
+    bGraphics_              = false;
+    bExternPixmap_          = false;
 }
 
 X11SalVirtualDevice::~X11SalVirtualDevice()
@@ -194,18 +194,18 @@ SalGraphics* X11SalVirtualDevice::GetGraphics()
         return NULL;
 
     if( pGraphics_ )
-        bGraphics_ = sal_True;
+        bGraphics_ = true;
 
     return pGraphics_;
 }
 
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
-{ bGraphics_ = sal_False; }
+{ bGraphics_ = false; }
 
-sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
+bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( bExternPixmap_ )
-        return sal_False;
+        return false;
 
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;
@@ -224,7 +224,7 @@ sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
             nDX_ = 1;
             nDY_ = 1;
         }
-        return sal_False;
+        return false;
     }
 
     if( GetDrawable() )
@@ -237,7 +237,7 @@ sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     if( pGraphics_ )
         InitGraphics( this );
 
-    return sal_True;
+    return true;
 }
 
 void X11SalVirtualDevice::GetSize( long& rWidth, long& rHeight )

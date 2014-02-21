@@ -116,7 +116,7 @@ void ScTabOpDlg::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScTabOpDlg::Close()
+bool ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }

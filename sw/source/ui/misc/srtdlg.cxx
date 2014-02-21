@@ -174,7 +174,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
     else
     {
         m_pColumnRB->Enable(false);
-        m_pRowRB->Check(sal_True);
+        m_pRowRB->Check(true);
         m_pColLbl->SetText(aColTxt);
     }
 
@@ -223,7 +223,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
     if(!m_pDelimTabRB->IsChecked())
     {
         m_pDelimEdt->SetText(OUString(cDeli));
-        m_pDelimFreeRB->Check(sal_True);
+        m_pDelimFreeRB->Check(true);
         DelimHdl(m_pDelimFreeRB);
     }
     else
@@ -414,7 +414,7 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
     else if(!m_pKeyCB1->IsChecked() &&
                 !m_pKeyCB2->IsChecked() &&
                     !m_pKeyCB3->IsChecked())
-        pCheck->Check(sal_True);
+        pCheck->Check(true);
     return 0;
 }
 

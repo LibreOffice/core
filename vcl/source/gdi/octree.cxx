@@ -217,7 +217,7 @@ void Octree::ImplReduce()
         }
     }
 
-    pNode->bLeaf = sal_True;
+    pNode->bLeaf = true;
     pNode->nRed = nRedSum;
     pNode->nGreen = nGreenSum;
     pNode->nBlue = nBlueSum;

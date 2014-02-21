@@ -101,7 +101,7 @@ void SfxMenuImageControl_Impl::Update()
         const SfxSlot* pSlot = pPool->GetSlot( nslotId );
         if ( pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ) )
         {
-            pSVMenu->SetItemImageMirrorMode( nslotId, sal_False );
+            pSVMenu->SetItemImageMirrorMode( nslotId, false );
             pSVMenu->SetItemImageAngle( nslotId, lRotation );
         }
 

@@ -25,7 +25,7 @@ SdInsertPasteDlg::SdInsertPasteDlg(Window* pWindow)
 {
     get(m_pRbBefore, "before");
     get(m_pRbAfter, "after");
-    m_pRbAfter->Check( sal_True );
+    m_pRbAfter->Check( true );
 }
 
 bool SdInsertPasteDlg::IsInsertBefore() const

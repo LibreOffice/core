@@ -34,9 +34,9 @@ private:
     long                mnStartSplitPos;
     Point               maDragPos;
     Rectangle           maDragRect;
-    sal_Bool                mbHorzSplit;
-    sal_Bool                mbDragFull;
-    sal_Bool                mbKbdSplitting;
+    bool                mbHorzSplit;
+    bool                mbDragFull;
+    bool                mbKbdSplitting;
     long                mbInKeyEvent;
     long                mnKeyboardStepSize;
     Link                maStartSplitHdl;
@@ -48,7 +48,7 @@ private:
     SAL_DLLPRIVATE void      ImplSplitMousePos( Point& rPos );
     SAL_DLLPRIVATE void      ImplStartKbdSplitting();
     SAL_DLLPRIVATE void      ImplKbdTracking( KeyCode aKeyCode );
-    SAL_DLLPRIVATE sal_Bool      ImplSplitterActive();
+    SAL_DLLPRIVATE bool      ImplSplitterActive();
     SAL_DLLPRIVATE Splitter* ImplFindSibling();
     SAL_DLLPRIVATE void      ImplRestoreSplitter();
     SAL_DLLPRIVATE void      ImplInitHorVer(bool bNew);
@@ -93,7 +93,7 @@ public:
     virtual void        SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }
 
-    sal_Bool            IsHorizontal() const { return mbHorzSplit; }
+    bool            IsHorizontal() const { return mbHorzSplit; }
     void                SetHorizontal(bool bNew);
 
     // set the stepsize of the splitter for cursor movement

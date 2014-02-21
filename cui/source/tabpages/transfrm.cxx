@@ -762,8 +762,8 @@ void SvxPositionSizeTabPage::Construct()
             m_pTsbAutoGrowHeight->SetClickHdl( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
 
             // is used as flag to evaluate if its selectable
-            m_pTsbAutoGrowWidth->EnableTriState( sal_False );
-            m_pTsbAutoGrowHeight->EnableTriState( sal_False );
+            m_pTsbAutoGrowWidth->EnableTriState( false );
+            m_pTsbAutoGrowHeight->EnableTriState( false );
         }
     }
 
@@ -932,7 +932,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
         {
             sal_Bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
             m_pTsbPosProtect->SetState( bProtected ? STATE_CHECK : STATE_NOCHECK );
-            m_pTsbPosProtect->EnableTriState( sal_False );
+            m_pTsbPosProtect->EnableTriState( false );
         }
         else
         {
@@ -975,7 +975,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
     {
         m_pTsbSizeProtect->SetState( ( (const SfxBoolItem*)pItem )->GetValue()
                               ? STATE_CHECK : STATE_NOCHECK );
-        m_pTsbSizeProtect->EnableTriState( sal_False );
+        m_pTsbSizeProtect->EnableTriState( false );
     }
     else
         m_pTsbSizeProtect->SetState( STATE_DONTKNOW );

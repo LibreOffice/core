@@ -58,7 +58,7 @@ private:
     /// bitfield
     void                    InitSettings();
 
-    virtual sal_Bool        Close();
+    virtual bool        Close();
     virtual void            Resize();
     virtual void            GetFocus();
 

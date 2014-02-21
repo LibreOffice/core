@@ -39,8 +39,8 @@ void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    SetMouseTransparent( sal_True );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    SetMouseTransparent( true );
+    ImplInitSettings( true, true, true );
 }
 
 // -----------------------------------------------------------------------
@@ -67,8 +67,8 @@ const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) con
 
 // -----------------------------------------------------------------------
 
-void GroupBox::ImplInitSettings( sal_Bool bFont,
-                                 sal_Bool bForeground, sal_Bool bBackground )
+void GroupBox::ImplInitSettings( bool bFont,
+                                 bool bForeground, bool bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -79,16 +79,16 @@ void GroupBox::ImplInitSettings( sal_Bool bFont,
               !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
              !IsControlBackground() )
         {
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( true );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( true );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( false );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( false );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -280,17 +280,17 @@ void GroupBox::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM)  ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -306,7 +306,7 @@ void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }

@@ -50,8 +50,8 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     mbMarkWndOpen   ( sal_False )
 {
     // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (sal_False);
-    maBtFileopen.EnableTextDisplay (sal_False);
+    maBtBrowse.EnableTextDisplay (false);
+    maBtFileopen.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();

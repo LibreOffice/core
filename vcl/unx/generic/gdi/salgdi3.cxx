@@ -118,7 +118,7 @@ X11SalGraphics::GetFontGC()
     {
         XSetForeground( pDisplay, pFontGC_, nTextPixel_ );
         SetClipRegion( pFontGC_ );
-        bFontGC_ = sal_True;
+        bFontGC_ = true;
     }
 
     return pFontGC_;
@@ -492,7 +492,7 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
     {
         nTextColor_     = nSalColor;
         nTextPixel_     = GetPixel( nSalColor );
-        bFontGC_        = sal_False;
+        bFontGC_        = false;
     }
 }
 
@@ -718,7 +718,7 @@ SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
 
 //--------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::CreateFontSubset(
+bool X11SalGraphics::CreateFontSubset(
                                    const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
                                    sal_GlyphId* pGlyphIds,

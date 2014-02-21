@@ -705,7 +705,7 @@ namespace dbaui
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aNFRowCount.SetModifyHdl(getControlModifiedLink());
 
-        m_aNFRowCount.SetUseThousandSep(sal_False);
+        m_aNFRowCount.SetUseThousandSep(false);
         m_iNormalPort = 389;
         m_iSSLPort    = 636;
         m_aCBUseSSL.SetClickHdl(LINK(this, OLDAPDetailsPage,OnCheckBoxClick));

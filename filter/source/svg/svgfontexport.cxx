@@ -81,7 +81,7 @@ void SVGFontExport::implCollectGlyphs()
     VirtualDevice                   aVDev;
     ObjectVector::const_iterator    aIter( maObjects.begin() );
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( false );
 
     while( aIter != maObjects.end() )
     {

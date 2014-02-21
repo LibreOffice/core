@@ -1370,7 +1370,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
         if(!m_pAddStylesCB->IsChecked() && !m_pFromHeadingsCB->IsChecked() && !m_pTOXMarksCB->IsChecked())
         {
             //TODO: InfoBox?
-            pBox->Check(sal_True);
+            pBox->Check(true);
         }
         m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
@@ -3080,7 +3080,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     Size aEditSize(GetOutputSizePixel());
     aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
     pButton->SetSizePixel(aEditSize);
-    pButton->Check(sal_True);
+    pButton->Check(true);
     pButton->Show();
     SetActiveControl(pButton);
 
@@ -3811,7 +3811,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
     sYes = pBuilder->get<Window>("yes")->GetText();
     sNo = pBuilder->get<Window>("no")->GetText();
 
-    aCellCheckBox.GetBox().EnableTriState(sal_False);
+    aCellCheckBox.GetBox().EnableTriState(false);
     xController = new ::svt::EditCellController(&aCellEdit);
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 

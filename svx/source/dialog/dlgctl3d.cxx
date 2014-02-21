@@ -83,7 +83,7 @@ void Svx3DPreviewControl::Construct()
 {
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
-    EnableRTL (sal_False);
+    EnableRTL (false);
     SetMapMode( MAP_100TH_MM );
 
     // Model

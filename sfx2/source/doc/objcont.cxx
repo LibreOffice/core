@@ -127,7 +127,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
     ::boost::shared_ptr<GDIMetaFile> pFile(new GDIMetaFile);
 
     VirtualDevice aDevice;
-    aDevice.EnableOutput( sal_False );
+    aDevice.EnableOutput( false );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );

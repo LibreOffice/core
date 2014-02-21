@@ -32,9 +32,9 @@
  *  Returns sal_True if the platform supports native
  *  drawing of the control defined by nPart
  */
-sal_Bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
+bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 {
-    return( sal_False );
+    return false;
 }
 
 
@@ -45,13 +45,13 @@ sal_Bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-sal_Bool SalGraphics::hitTestNativeControl( ControlType,
+bool SalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
                               const Point&,
                               bool& )
 {
-    return( sal_False );
+    return false;
 }
 
 
@@ -64,14 +64,14 @@ sal_Bool SalGraphics::hitTestNativeControl( ControlType,
  *  aValue:         An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-sal_Bool SalGraphics::drawNativeControl(    ControlType,
+bool SalGraphics::drawNativeControl(    ControlType,
                             ControlPart,
                             const Rectangle&,
                             ControlState,
                             const ImplControlValue&,
                             const OUString& )
 {
-    return( sal_False );
+    return false;
 }
 
 /*
@@ -87,7 +87,7 @@ sal_Bool SalGraphics::drawNativeControl(    ControlType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-sal_Bool SalGraphics::getNativeControlRegion(  ControlType,
+bool SalGraphics::getNativeControlRegion(  ControlType,
                                 ControlPart,
                                 const Rectangle&,
                                 ControlState,
@@ -96,7 +96,7 @@ sal_Bool SalGraphics::getNativeControlRegion(  ControlType,
                                 Rectangle &,
                                 Rectangle & )
 {
-    return( sal_False );
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

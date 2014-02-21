@@ -149,7 +149,7 @@ void            ScTPValidationValue::RefInputDonePostHdl()
 }
 
 
-sal_Bool ScValidationDlg::Close()
+bool ScValidationDlg::Close()
 {
     if( m_bOwnRefHdlr )
     {

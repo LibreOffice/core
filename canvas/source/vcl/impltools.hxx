@@ -154,7 +154,7 @@ namespace vclcanvas
                 if( mpOutDev )
                 {
                     mpOutDev->Push();
-                    mpOutDev->EnableMapMode(sal_False);
+                    mpOutDev->EnableMapMode(false);
                     mpOutDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
                 }
             }

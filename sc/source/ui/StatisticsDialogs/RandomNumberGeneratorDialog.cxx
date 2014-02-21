@@ -136,7 +136,7 @@ void ScRandomNumberGeneratorDialog::SetActive()
     RefInputDone();
 }
 
-sal_Bool ScRandomNumberGeneratorDialog::Close()
+bool ScRandomNumberGeneratorDialog::Close()
 {
     return DoClose( ScRandomNumberGeneratorDialogWrapper::GetChildWindowId() );
 }

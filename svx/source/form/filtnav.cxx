@@ -1712,7 +1712,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             aContextMenu.EnableItem( SID_FM_FILTER_IS_NOT_NULL,
                 bEdit );
 
-            aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+            aContextMenu.RemoveDisabledEntries(true, true);
             sal_uInt16 nSlotId = aContextMenu.Execute( this, aWhere );
             switch( nSlotId )
             {
@@ -1948,14 +1948,14 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 }
 
 //-----------------------------------------------------------------------
-sal_Bool FmFilterNavigatorWin::Close()
+bool FmFilterNavigatorWin::Close()
 {
     if ( m_pNavigator && m_pNavigator->IsEditingActive() )
         m_pNavigator->EndEditing();
 
     if ( m_pNavigator && m_pNavigator->IsEditingActive() )
         // the EndEditing was vetoed (perhaps of an syntax error or such)
-        return sal_False;
+        return false;
 
     UpdateContent( NULL );
     return SfxDockingWindow::Close();

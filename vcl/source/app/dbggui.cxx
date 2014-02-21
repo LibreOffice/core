@@ -346,7 +346,7 @@ private:
 public:
                     DbgWindow();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    Resize();
     virtual bool    PreNotify( NotifyEvent& rNEvt );
     void            InsertLine( const OUString& rLine );
@@ -455,7 +455,7 @@ DbgWindow::DbgWindow() :
 
 // -----------------------------------------------------------------------
 
-sal_Bool DbgWindow::Close()
+bool DbgWindow::Close()
 {
     // remember window position
     OString aState( GetWindowState() );
@@ -469,7 +469,7 @@ sal_Bool DbgWindow::Close()
 
     delete this;
     ImplGetSVData()->maWinData.mpDbgWin = NULL;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -626,7 +626,7 @@ DbgDialog::DbgDialog() :
     maXtorThis.Show();
     maXtorThis.SetText("T~his");
     if ( pData->nTestFlags & DBG_TEST_XTOR_THIS )
-        maXtorThis.Check( sal_True );
+        maXtorThis.Check( true );
     maXtorThis.SetPosSizePixel( LogicToPixel( Point( 10, 15 ), aAppMap ),
                                 aButtonSize );
     }
@@ -635,7 +635,7 @@ DbgDialog::DbgDialog() :
     maXtorFunc.Show();
     maXtorFunc.SetText("~Function");
     if ( pData->nTestFlags & DBG_TEST_XTOR_FUNC )
-        maXtorFunc.Check( sal_True );
+        maXtorFunc.Check( true );
     maXtorFunc.SetPosSizePixel( LogicToPixel( Point( 75, 15 ), aAppMap ),
                                 aButtonSize );
     }
@@ -644,7 +644,7 @@ DbgDialog::DbgDialog() :
     maXtorExit.Show();
     maXtorExit.SetText("E~xit");
     if ( pData->nTestFlags & DBG_TEST_XTOR_EXIT )
-        maXtorExit.Check( sal_True );
+        maXtorExit.Check( true );
     maXtorExit.SetPosSizePixel( LogicToPixel( Point( 140, 15 ), aAppMap ),
                                 aButtonSize );
     }
@@ -653,7 +653,7 @@ DbgDialog::DbgDialog() :
     maXtorReport.Show();
     maXtorReport.SetText("~Report");
     if ( pData->nTestFlags & DBG_TEST_XTOR_REPORT )
-        maXtorReport.Check( sal_True );
+        maXtorReport.Check( true );
     maXtorReport.SetPosSizePixel( LogicToPixel( Point( 205, 15 ), aAppMap ),
                                   aButtonSize );
     }
@@ -662,7 +662,7 @@ DbgDialog::DbgDialog() :
     maXtorTrace.Show();
     maXtorTrace.SetText("~Trace");
     if ( pData->nTestFlags & DBG_TEST_XTOR_TRACE )
-        maXtorTrace.Check( sal_True );
+        maXtorTrace.Check( true );
     maXtorTrace.SetPosSizePixel( LogicToPixel( Point( 270, 15 ), aAppMap ),
                                  aButtonSize );
     }
@@ -678,7 +678,7 @@ DbgDialog::DbgDialog() :
     maProf.Show();
     maProf.SetText("~Profiling");
     if ( pData->nTestFlags & DBG_TEST_PROFILING )
-        maProf.Check( sal_True );
+        maProf.Check( true );
     maProf.SetPosSizePixel( LogicToPixel( Point( 10, 95 ), aAppMap ),
                             aButtonSize );
     }
@@ -687,7 +687,7 @@ DbgDialog::DbgDialog() :
     maRes.Show();
     maRes.SetText("~Resourcen");
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
-        maRes.Check( sal_True );
+        maRes.Check( true );
     maRes.SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
                            aButtonSize );
     }
@@ -696,7 +696,7 @@ DbgDialog::DbgDialog() :
     maDialog.Show();
     maDialog.SetText("~Dialog");
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
-        maDialog.Check( sal_True );
+        maDialog.Check( true );
     maDialog.SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
                               aButtonSize );
     }
@@ -705,7 +705,7 @@ DbgDialog::DbgDialog() :
     maBoldAppFont.Show();
     maBoldAppFont.SetText("~Bold AppFont");
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
-        maBoldAppFont.Check( sal_True );
+        maBoldAppFont.Check( true );
     maBoldAppFont.SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
                                    aButtonSize );
     maBoldAppFont.SaveValue();
@@ -730,7 +730,7 @@ DbgDialog::DbgDialog() :
     maOverwrite.Show();
     maOverwrite.SetText("Overwrite ~File");
     if ( pData->bOverwrite )
-        maOverwrite.Check( sal_True );
+        maOverwrite.Check( true );
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
                                  aButtonSize );
     }
@@ -739,7 +739,7 @@ DbgDialog::DbgDialog() :
     maHookOSLBox.Show();
     maHookOSLBox.SetText("Reroute osl debug ~messages");
     if ( pData->bHookOSLAssert )
-        maHookOSLBox.Check( sal_True );
+        maHookOSLBox.Check( true );
     maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
                                   LogicToPixel( Size( 100, 12 ), aAppMap ) );
     }
@@ -1075,7 +1075,7 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
 
 void DbgInfoDialog::SetInfoText( const OUString& rStr )
 {
-    maListBox.SetUpdateMode( sal_False );
+    maListBox.SetUpdateMode( false );
     maListBox.Clear();
     OUString aStr = convertLineEnd(rStr, LINEEND_LF);
     sal_Int32 nStrIndex = 0;
@@ -1118,7 +1118,7 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
         nStrIndex = nFoundIndex+1;
     }
     while ( nFoundIndex != -1 );
-    maListBox.SetUpdateMode( sal_True );
+    maListBox.SetUpdateMode( true );
 }
 
 // =======================================================================

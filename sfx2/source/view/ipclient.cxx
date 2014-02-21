@@ -1046,7 +1046,7 @@ void SfxInPlaceClient::DeactivateObject()
                 if ( xController.is() )
                 {
                     Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
-                    bHasFocus = pWindow->HasChildPathFocus( sal_True );
+                    bHasFocus = pWindow->HasChildPathFocus( true );
                 }
             }
 

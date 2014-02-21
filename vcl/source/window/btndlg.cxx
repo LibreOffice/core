@@ -42,7 +42,7 @@ void ButtonDialog::ImplInitButtonDialogData()
     mnButtonSize            = 0;
     mnCurButtonId           = 0;
     mnFocusButtonId         = BUTTONDIALOG_BUTTON_NOTFOUND;
-    mbFormat                = sal_True;
+    mbFormat                = true;
 }
 
 ButtonDialog::ButtonDialog( WindowType nType ) :
@@ -204,7 +204,7 @@ void ButtonDialog::ImplPosControls()
 
     SetOutputSizePixel( aDlgSize );
 
-    mbFormat = sal_False;
+    mbFormat = false;
 }
 
 IMPL_LINK( ButtonDialog, ImplClickHdl, PushButton*, pBtn )
@@ -285,7 +285,7 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
         mnFocusButtonId = nId;
 
-    mbFormat = sal_True;
+    mbFormat = true;
 }
 
 void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
@@ -318,7 +318,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
 
     maItemList.push_back(pItem);
 
-    mbFormat = sal_True;
+    mbFormat = true;
 }
 
 void ButtonDialog::RemoveButton( sal_uInt16 nId )
@@ -353,7 +353,7 @@ void ButtonDialog::Clear()
     }
 
     maItemList.clear();
-    mbFormat = sal_True;
+    mbFormat = true;
 }
 
 sal_uInt16 ButtonDialog::GetButtonId( sal_uInt16 nButton ) const
@@ -381,7 +381,7 @@ void ButtonDialog::SetButtonText( sal_uInt16 nId, const OUString& rText )
     if ( pItem )
     {
         pItem->mpPushButton->SetText( rText );
-        mbFormat = sal_True;
+        mbFormat = true;
     }
 }
 

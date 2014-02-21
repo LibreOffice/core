@@ -63,11 +63,11 @@ private:
     long                mnPrgsHeight;
     sal_uInt16              mnPercent;
     sal_uInt16              mnPercentCount;
-    sal_Bool                mbCalcNew;
+    bool                mbCalcNew;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void             ImplInit();
-    SAL_DLLPRIVATE void             ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void             ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc );
 
 public:

@@ -1868,7 +1868,7 @@ throw (RuntimeException)
                 MenuBar* pMenuBar = pSysWindow->GetMenuBar();
                 if ( pMenuBar )
                 {
-                    pMenuBar->SetDisplayable( sal_False );
+                    pMenuBar->SetDisplayable( false );
                     bNotify = true;
                 }
             }
@@ -2592,7 +2592,7 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     if ( pSysWindow && bMenuVisible && pSetMenuBar )
     {
         pSysWindow->SetMenuBar( pSetMenuBar );
-        pSetMenuBar->SetDisplayable( sal_True );
+        pSetMenuBar->SetDisplayable( true );
         return sal_True;
     }
 

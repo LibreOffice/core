@@ -37,13 +37,13 @@ private:
     VirtualDevice*      mpPrev;
     VirtualDevice*      mpNext;
     sal_uInt16              mnBitCount;
-    sal_Bool                mbScreenComp;
+    bool                mbScreenComp;
     sal_Int8            mnAlphaDepth;
     sal_uInt8               meRefDevMode;
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
-    SAL_DLLPRIVATE sal_Bool InnerImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
-    SAL_DLLPRIVATE sal_Bool ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
+    SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
+    SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
 
     // Copy assignment is forbidden and not implemented.
     VirtualDevice (const VirtualDevice &);
@@ -108,9 +108,9 @@ public:
 
     virtual             ~VirtualDevice();
 
-    sal_Bool                SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase = sal_True );
-    sal_Bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
-    sal_Bool                SetOutputSize( const Size& rNewSize, sal_Bool bErase = sal_True )
+    bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
+    bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer );
+    bool                SetOutputSize( const Size& rNewSize, bool bErase = true )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 
     // reference device modes for different compatibility levels

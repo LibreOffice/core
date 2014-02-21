@@ -72,11 +72,11 @@ namespace rptui
         UpdateLocker( Window& _rWindow )
             :m_rWindow( _rWindow )
         {
-            _rWindow.SetUpdateMode( sal_False );
+            _rWindow.SetUpdateMode( false );
         }
         ~UpdateLocker()
         {
-            m_rWindow.SetUpdateMode( sal_True );
+            m_rWindow.SetUpdateMode( true );
         }
     };
 

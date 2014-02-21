@@ -122,9 +122,9 @@ public:
     void            SetScrollBarRanges();
     void            InitScrollBars();
     sal_uLong           Read( SvStream& rInput)
-                        {return pTextEngine->Read(rInput);}
+    {return pTextEngine->Read(rInput) ? 1 : 0;}
     sal_uLong           Write( SvStream& rOutput)
-                        {return pTextEngine->Write(rOutput);}
+    {return pTextEngine->Write(rOutput) ? 1 : 0;}
 
     ExtTextView*    GetTextView()
                         {return pTextView;}
@@ -137,7 +137,7 @@ public:
     virtual void    Invalidate( sal_uInt16 nFlags = 0 );
 
     void            ClearModifyFlag()
-                        { pTextEngine->SetModified(sal_False); }
+                        { pTextEngine->SetModified(false); }
     sal_Bool            IsModified() const
                         { return pTextEngine->IsModified();}
     void            CreateScrollbars();

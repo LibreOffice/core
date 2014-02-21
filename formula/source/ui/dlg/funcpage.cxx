@@ -121,7 +121,7 @@ void FuncPage::UpdateFunctionList()
     (void)nCategory;
 
     aLbFunction.Clear();
-    aLbFunction.SetUpdateMode( sal_False );
+    aLbFunction.SetUpdateMode( false );
     //------------------------------------------------------
 
     if ( nSelPos > 0 )
@@ -156,7 +156,7 @@ void FuncPage::UpdateFunctionList()
     }
 
     //------------------------------------------------------
-    aLbFunction.SetUpdateMode( sal_True );
+    aLbFunction.SetUpdateMode( true );
     aLbFunction.SelectEntryPos(0);
 
     if(IsVisible()) SelHdl(&aLbFunction);

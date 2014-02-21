@@ -1644,7 +1644,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mbClipAttrChanged( sal_False )
 {
     mpVDev = new VirtualDevice;
-    mpVDev->EnableOutput( sal_False );
+    mpVDev->EnableOutput( false );
     maTargetMapMode = MAP_100TH_MM;
     maTextWriter.setVirtualDevice( mpVDev, maTargetMapMode );
 }

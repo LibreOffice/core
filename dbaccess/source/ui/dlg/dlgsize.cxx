@@ -40,7 +40,7 @@ DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAl
         m_nStandard = _nAlternativeStandard;
     m_pCB_STANDARD->SetClickHdl(LINK(this,DlgSize,CbClickHdl));
 
-    m_pMF_VALUE->EnableEmptyFieldValue(sal_True);
+    m_pMF_VALUE->EnableEmptyFieldValue(true);
     sal_Bool bDefault = -1 == nVal;
     m_pCB_STANDARD->Check(bDefault);
     if (bDefault)

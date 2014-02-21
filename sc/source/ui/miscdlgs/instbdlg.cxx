@@ -203,7 +203,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         }
     }
 
-    m_pLbTables->SetUpdateMode( sal_True );
+    m_pLbTables->SetUpdateMode( true );
 
     if(m_pLbTables->GetEntryCount()==1)
         m_pLbTables->SelectEntryPos(0);

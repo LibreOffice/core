@@ -62,7 +62,7 @@ ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Ed
 {
     m_pSubEdit = new Edit(this,0);
     SetSubEdit(m_pSubEdit);
-    m_pSubEdit->EnableRTL( sal_False );
+    m_pSubEdit->EnableRTL( false );
     m_pSubEdit->SetPosPixel( Point() );
 
     m_aFormula.SetText(OUString("..."));

@@ -334,7 +334,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 
     // We need this query, because the edit get a losefous event,
     // when it shows the context menu or the insert symbol dialog
-    if ( !HasFocus() && HasChildPathFocus( sal_True ) )
+    if ( !HasFocus() && HasChildPathFocus( true ) )
     {
         maLoseFocusTimer.SetTimeout( 30 );
         maLoseFocusTimer.SetTimeoutHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 
     // We need this query, because the edit get a losefous event,
     // when it shows the context menu or the insert symbol dialog
-    if ( HasChildPathFocus( sal_True ) )
+    if ( HasChildPathFocus( true ) )
         maLoseFocusTimer.Start();
     else
         GetParent()->EndEditMode( sal_True );

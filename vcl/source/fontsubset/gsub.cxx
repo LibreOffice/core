@@ -325,7 +325,7 @@ void ReleaseGSUB(struct _TrueTypeFont* pTTFile)
         delete pGlyphSubstitution;
 }
 
-int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int /*wmode*/ )
+int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, bool /*wmode*/ )
 {
     GlyphSubstitution* pGlyphSubstitution = (GlyphSubstitution*)pTTFile->pGSubstitution;
     if( pGlyphSubstitution != 0 )

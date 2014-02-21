@@ -130,33 +130,33 @@ public:
 
     sal_uInt16          GetClicks() const       { return mnClicks; }
 
-    sal_Bool            IsEnterWindow() const
+    bool            IsEnterWindow() const
                         { return ((mnMode & MOUSE_ENTERWINDOW) != 0); }
-    sal_Bool            IsLeaveWindow() const
+    bool            IsLeaveWindow() const
                         { return ((mnMode & MOUSE_LEAVEWINDOW) != 0); }
-    sal_Bool            IsSynthetic() const
+    bool            IsSynthetic() const
                         { return ((mnMode & MOUSE_SYNTHETIC) != 0); }
-    sal_Bool            IsModifierChanged() const
+    bool            IsModifierChanged() const
                         { return ((mnMode & MOUSE_MODIFIERCHANGED) != 0); }
 
     sal_uInt16          GetButtons() const
                         { return (mnCode & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)); }
-    sal_Bool            IsLeft() const
+    bool            IsLeft() const
                         { return ((mnCode & MOUSE_LEFT) != 0); }
-    sal_Bool            IsMiddle() const
+    bool            IsMiddle() const
                         { return ((mnCode & MOUSE_MIDDLE) != 0); }
-    sal_Bool            IsRight() const
+    bool            IsRight() const
                         { return ((mnCode & MOUSE_RIGHT) != 0); }
 
     sal_uInt16          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
     bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
-    sal_Bool            IsMod1() const
+    bool            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
-    sal_Bool            IsMod2() const
+    bool            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
-    sal_Bool            IsMod3() const
+    bool            IsMod3() const
                         { return ((mnCode & KEY_MOD3) != 0); }
 };
 
@@ -251,7 +251,7 @@ class VCL_DLLPUBLIC HelpEvent
 private:
     Point           maPos;
     sal_uInt16          mnMode;
-    sal_Bool            mbKeyboardActivated;
+    bool            mbKeyboardActivated;
 
 public:
     explicit        HelpEvent();
@@ -260,27 +260,27 @@ public:
 
     const Point&    GetMousePosPixel() const;
     sal_uInt16          GetMode() const { return mnMode; }
-    sal_Bool            KeyboardActivated() const { return mbKeyboardActivated; }
-    void            SetKeyboardActivated( sal_Bool bKeyboard ) { mbKeyboardActivated = bKeyboard; }
+    bool            KeyboardActivated() const { return mbKeyboardActivated; }
+    void            SetKeyboardActivated( bool bKeyboard ) { mbKeyboardActivated = bKeyboard; }
 };
 
 inline HelpEvent::HelpEvent()
 {
     mnMode  = HELPMODE_CONTEXT;
-    mbKeyboardActivated = sal_True;
+    mbKeyboardActivated = true;
 }
 
 inline HelpEvent::HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode ) :
             maPos( rMousePos )
 {
     mnMode  = nHelpMode;
-    mbKeyboardActivated = sal_False;
+    mbKeyboardActivated = false;
 }
 
 inline HelpEvent::HelpEvent( sal_uInt16 nHelpMode )
 {
     mnMode  = nHelpMode;
-    mbKeyboardActivated = sal_True;
+    mbKeyboardActivated = true;
 }
 
 // -----------------
@@ -353,12 +353,12 @@ public:
 
     const MouseEvent&   GetMouseEvent() const { return maMEvt; }
 
-    sal_Bool                IsTrackingRepeat() const
+    bool                IsTrackingRepeat() const
                             { return ((mnFlags & TRACKING_REPEAT) != 0); }
 
-    sal_Bool                IsTrackingEnded() const
+    bool                IsTrackingEnded() const
                             { return ((mnFlags & ENDTRACK_END) != 0); }
-    sal_Bool                IsTrackingCanceled() const
+    bool                IsTrackingCanceled() const
                             { return ((mnFlags & ENDTRACK_CANCEL) != 0); }
     sal_uInt16              GetTrackingFlags() const { return mnFlags; }
 };

@@ -415,7 +415,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
             aOuterPix.Bottom()+=nPixSiz;
 
             bool bMerk(pWin->IsMapModeEnabled());
-            pWin->EnableMapMode(sal_False);
+            pWin->EnableMapMode(false);
             pWin->Invalidate(aOuterPix);
             pWin->EnableMapMode(bMerk);
         }

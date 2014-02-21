@@ -37,7 +37,7 @@ public:
 class TextCharAttribList : private TextCharAttribs
 {
 private:
-    sal_Bool            mbHasEmptyAttribs;
+    bool            mbHasEmptyAttribs;
 
                     TextCharAttribList( const TextCharAttribList& ) : TextCharAttribs() {}
 
@@ -45,7 +45,7 @@ public:
                     TextCharAttribList();
                     ~TextCharAttribList();
 
-    void            Clear( sal_Bool bDestroyAttribs );
+    void            Clear( bool bDestroyAttribs );
     sal_uInt16          Count() const               { return TextCharAttribs::size(); }
 
     TextCharAttrib* GetAttrib( sal_uInt16 n ) const { return TextCharAttribs::operator[]( n ); }
@@ -56,14 +56,14 @@ public:
     void            DeleteEmptyAttribs();
     void            ResortAttribs();
 
-    sal_Bool            HasEmptyAttribs() const { return mbHasEmptyAttribs; }
-    sal_Bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
+    bool            HasEmptyAttribs() const { return mbHasEmptyAttribs; }
+    bool&           HasEmptyAttribs()       { return mbHasEmptyAttribs; }
 
     TextCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
     TextCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos, sal_uInt16 nMaxPos = 0xFFFF ) const;
     TextCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
-    sal_Bool            HasBoundingAttrib( sal_uInt16 nBound );
+    bool            HasAttrib( sal_uInt16 nWhich ) const;
+    bool            HasBoundingAttrib( sal_uInt16 nBound );
 };
 
 
@@ -91,7 +91,7 @@ public:
     void                InsertText( sal_uInt16 nPos, sal_Unicode c );
     void                RemoveText( sal_uInt16 nPos, sal_uInt16 nChars );
 
-    TextNode*           Split( sal_uInt16 nPos, sal_Bool bKeepEndigAttribs );
+    TextNode*           Split( sal_uInt16 nPos, bool bKeepEndigAttribs );
     void                Append( const TextNode& rNode );
 };
 
@@ -117,7 +117,7 @@ public:
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
     TextPaM             InsertText( const TextPaM& rPaM, const OUString& rStr );
 
-    TextPaM             InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs );
+    TextPaM             InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs );
     TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
     sal_uLong           GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
@@ -127,7 +127,7 @@ public:
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
     sal_uInt16          GetLeftMargin() const       { return mnLeftMargin; }
 
-    sal_Bool            IsValidPaM( const TextPaM& rPaM );
+    bool            IsValidPaM( const TextPaM& rPaM );
 };
 
 #endif // INCLUDED_VCL_SOURCE_EDIT_TEXTDOC_HXX

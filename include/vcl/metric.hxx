@@ -47,8 +47,8 @@ public:
     FontType            GetType() const;
 
     FontInfo&           operator=( const FontInfo& );
-    sal_Bool                operator==( const FontInfo& ) const;
-    sal_Bool                operator!=( const FontInfo& rInfo ) const
+    bool                operator==( const FontInfo& ) const;
+    bool                operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
 };
 
@@ -71,8 +71,8 @@ public:
     long                GetSlant() const;
 
     FontMetric&         operator=( const FontMetric& rMetric );
-    sal_Bool                operator==( const FontMetric& rMetric ) const;
-    sal_Bool                operator!=( const FontMetric& rMetric ) const
+    bool                operator==( const FontMetric& rMetric ) const;
+    bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 };
 
@@ -123,20 +123,20 @@ class VCL_DLLPUBLIC TextRectInfo
 private:
     long            mnMaxWidth;
     sal_uInt16          mnLineCount;
-    sal_Bool            mbEllipsis;
+    bool            mbEllipsis;
 
 public:
                     TextRectInfo();
 
     sal_uInt16          GetLineCount() const { return mnLineCount; }
     long            GetMaxLineWidth() const { return mnMaxWidth; }
-    sal_Bool            IsEllipses() const { return mbEllipsis; }
+    bool            IsEllipses() const { return mbEllipsis; }
 
-    sal_Bool            operator ==( const TextRectInfo& rInfo ) const
+    bool            operator ==( const TextRectInfo& rInfo ) const
                         { return ((mnMaxWidth   == rInfo.mnMaxWidth)    &&
                                   (mnLineCount  == rInfo.mnLineCount)   &&
                                   (mbEllipsis   == rInfo.mbEllipsis)); }
-    sal_Bool            operator !=( const TextRectInfo& rInfo ) const
+    bool            operator !=( const TextRectInfo& rInfo ) const
                         { return !(TextRectInfo::operator==( rInfo )); }
 };
 
@@ -144,7 +144,7 @@ inline TextRectInfo::TextRectInfo()
 {
     mnMaxWidth      = 0;
     mnLineCount     = 0;
-    mbEllipsis      = sal_False;
+    mbEllipsis      = false;
 }
 
 #endif // INCLUDED_VCL_METRIC_HXX

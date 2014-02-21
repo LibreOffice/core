@@ -46,7 +46,7 @@ public:
                             SfxChildWindow* pChildWin ,
                             Window* pParent );
     virtual             ~SfxRecordingFloat_Impl();
-    virtual sal_Bool        Close();
+    virtual bool        Close();
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual void        StateChanged( StateChangedType nStateChange );
 

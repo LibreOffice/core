@@ -140,7 +140,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-sal_Bool DockingAreaWindow::IsHorizontal() const
+bool DockingAreaWindow::IsHorizontal() const
 {
     return ( mpImplData->meAlign == WINDOWALIGN_TOP || mpImplData->meAlign == WINDOWALIGN_BOTTOM );
 }
@@ -164,7 +164,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
-    EnableNativeWidget( sal_True ); // only required because the toolkit curently switches this flag off
+    EnableNativeWidget( true ); // only required because the toolkit curently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         ToolbarValue        aControlValue;
@@ -173,7 +173,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         {
             // give NWF a hint that this dockingarea is adjacent to the menubar
             // useful for special gradient effects that should cover both windows
-            aControlValue.mbIsTopDockingArea = sal_True;
+            aControlValue.mbIsTopDockingArea = true;
         }
         ControlState        nState = CTRL_STATE_ENABLED;
 

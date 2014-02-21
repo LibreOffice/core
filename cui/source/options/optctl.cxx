@@ -32,8 +32,8 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
     // #i48117#: by default restricted and type&replace have to be switched on
     if(bIsSequenceChecking)
     {
-        m_pTypeReplaceCB->Check( sal_True );
-        m_pRestrictedCB->Check( sal_True );
+        m_pTypeReplaceCB->Check( true );
+        m_pRestrictedCB->Check( true );
     }
     return 0;
 }
@@ -92,8 +92,8 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
         bModified = sal_True;
     }
 
-    sal_Bool bLogicalChecked = m_pMovementLogicalRB->IsChecked();
-    sal_Bool bVisualChecked = m_pMovementVisualRB->IsChecked();
+    bool bLogicalChecked = m_pMovementLogicalRB->IsChecked();
+    bool bVisualChecked = m_pMovementVisualRB->IsChecked();
     if ( bLogicalChecked != m_pMovementLogicalRB->GetSavedValue() ||
          bVisualChecked != m_pMovementVisualRB->GetSavedValue() )
     {

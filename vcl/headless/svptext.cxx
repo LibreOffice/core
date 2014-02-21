@@ -302,7 +302,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 }
 
 
-sal_Bool SvpSalGraphics::CreateFontSubset(
+bool SvpSalGraphics::CreateFontSubset(
     const OUString& rToFile,
     const PhysicalFontFace* pFont,
     sal_GlyphId* pGlyphIds,

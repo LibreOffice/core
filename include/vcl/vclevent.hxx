@@ -263,7 +263,7 @@ public:
     // stops notifying when any handler has processed the event
     // and returns sal_True in that case
     // a handler must return sal_True to signal that it has processed the event
-    sal_Bool Process( VclSimpleEvent* pEvent ) const;
+    bool Process( VclSimpleEvent* pEvent ) const;
     void addListener( const Link& rListener );
     void removeListener( const Link& rListener );
 private:

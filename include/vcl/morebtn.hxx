@@ -37,7 +37,7 @@ private:
     ImplMoreButtonData* mpMBData;
     sal_uLong               mnDelta;
     MapUnit             meUnit;
-    sal_Bool                mbState;
+    bool                mbState;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE      MoreButton( const MoreButton & );
@@ -65,8 +65,8 @@ public:
     MapUnit             GetMapUnit() const { return meUnit; }
 
     using PushButton::SetState;
-    void                SetState( sal_Bool bNewState = sal_True );
-    sal_Bool            GetState() const { return mbState; }
+    void                SetState( bool bNewState = true );
+    bool            GetState() const { return mbState; }
 
     void                SetText( const OUString& rNewText );
     OUString            GetText() const;
@@ -75,7 +75,7 @@ public:
     void                SetLessText( const OUString& rNewText );
 };
 
-inline void MoreButton::SetState( sal_Bool bNewState )
+inline void MoreButton::SetState( bool bNewState )
 {
     if ( mbState != bNewState )
         Click();

@@ -972,7 +972,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
 {
     if ( m_pPainter->GetParent() == &_rDev )
     {
-        m_pPainter->SetPaintTransparent( sal_True );
+        m_pPainter->SetPaintTransparent( true );
         m_pPainter->SetBackground( );
         m_pPainter->SetControlBackground( _rDev.GetFillColor() );
         m_pPainter->SetControlForeground( _rDev.GetTextColor() );
@@ -980,15 +980,15 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
         m_pPainter->SetTextFillColor( _rDev.GetTextColor() );
 
         Font aFont( _rDev.GetFont() );
-        aFont.SetTransparent( sal_True );
+        aFont.SetTransparent( true );
         m_pPainter->SetFont( aFont );
 
         m_pPainter->SetPosSizePixel( _rRect.TopLeft(), _rRect.GetSize() );
         m_pPainter->Show();
         m_pPainter->Update();
-        m_pPainter->SetParentUpdateMode( sal_False );
+        m_pPainter->SetParentUpdateMode( false );
         m_pPainter->Hide();
-        m_pPainter->SetParentUpdateMode( sal_True );
+        m_pPainter->SetParentUpdateMode( true );
     }
     else
         m_pPainter->Draw( &_rDev, _rRect.TopLeft(), _rRect.GetSize(), 0 );
@@ -1670,8 +1670,8 @@ void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
     m_pWindow  = new CheckBoxControl( &rParent );
     m_pPainter = new CheckBoxControl( &rParent );
 
-    m_pWindow->SetPaintTransparent( sal_True );
-    m_pPainter->SetPaintTransparent( sal_True );
+    m_pWindow->SetPaintTransparent( true );
+    m_pPainter->SetPaintTransparent( true );
 
     m_pPainter->SetBackground();
 
@@ -2267,13 +2267,13 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< DateField* >( m_pWindow )->SetMin( aMin );
         static_cast< DateField* >( m_pWindow )->SetMax( aMax );
         static_cast< DateField* >( m_pWindow )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
+        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( true );
 
         static_cast< DateField* >( m_pPainter )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
         static_cast< DateField* >( m_pPainter )->SetMin( aMin );
         static_cast< DateField* >( m_pPainter )->SetMax( aMax );
         static_cast< DateField* >( m_pPainter )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
+        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( true );
     }
 }
 
@@ -2379,13 +2379,13 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< TimeField* >( m_pWindow )->SetMin( aMin );
         static_cast< TimeField* >( m_pWindow )->SetMax( aMax );
         static_cast< TimeField* >( m_pWindow )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
+        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( true );
 
         static_cast< TimeField* >( m_pPainter )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
         static_cast< TimeField* >( m_pPainter )->SetMin( aMin );
         static_cast< TimeField* >( m_pPainter )->SetMax( aMax );
         static_cast< TimeField* >( m_pPainter )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
+        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( true );
     }
 }
 
@@ -2817,11 +2817,11 @@ void DbFilterField::CreateControl(Window* pParent, const Reference< ::com::sun::
     {
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
             m_pWindow = new CheckBoxControl(pParent);
-            m_pWindow->SetPaintTransparent( sal_True );
+            m_pWindow->SetPaintTransparent( true );
             ((CheckBoxControl*)m_pWindow)->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
 
             m_pPainter = new CheckBoxControl(pParent);
-            m_pPainter->SetPaintTransparent( sal_True );
+            m_pPainter->SetPaintTransparent( true );
             m_pPainter->SetBackground();
             break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
@@ -3041,7 +3041,7 @@ void DbFilterField::SetText(const OUString& rText)
         {
             Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, true);
             if (aPosSeq.getLength())
-                static_cast<ListBox*>(m_pWindow)->SelectEntryPos(aPosSeq.getConstArray()[0], sal_True);
+                static_cast<ListBox*>(m_pWindow)->SelectEntryPos(aPosSeq.getConstArray()[0], true);
             else
                 static_cast<ListBox*>(m_pWindow)->SetNoSelection();
         }   break;

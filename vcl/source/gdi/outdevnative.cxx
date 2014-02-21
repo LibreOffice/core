@@ -147,14 +147,14 @@ PushButtonValue* PushButtonValue::clone() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
+bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return false;
 
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return false;
 
     return( mpGraphics->IsNativeControlSupported(nType, nPart) );
 }
@@ -162,18 +162,18 @@ sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart 
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
+bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
                               const Rectangle& rControlRegion,
                               const Point& aPos,
                               bool& rIsInside ) const
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return false;
 
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return false;
 
     Point aWinOffs( mnOutOffX, mnOutOffY );
     Rectangle screenRegion( rControlRegion );
@@ -263,7 +263,7 @@ static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const Im
     }
     return aResult;
 }
-sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
+bool OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,
                             ControlState nState,
@@ -271,17 +271,17 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
                             OUString aCaption )
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return false;
 
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return false;
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
     if ( mbOutputClipped )
-        return sal_True;
+        return true;
 
     if ( mbInitLineColor )
         ImplInitLineColor();
@@ -298,14 +298,14 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
     if (aTestRegion == Region(rControlRegion))
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
 
-    sal_Bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
+    bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
+bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,
                                 ControlState nState,
@@ -315,18 +315,18 @@ sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 Rectangle &rNativeContentRegion ) const
 {
     if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
+        return false;
 
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
-            return sal_False;
+            return false;
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
     boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    sal_Bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
+    bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
                                 aCaption, rNativeBoundingRegion,
                                 rNativeContentRegion, this );
     if( bRet )

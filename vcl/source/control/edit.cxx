@@ -310,21 +310,21 @@ void Edit::ImplInitEditData()
     mnWidthInChars          = -1;
     mnMaxWidthChars         = -1;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
-    mbModified              = sal_False;
-    mbInternModified        = sal_False;
-    mbReadOnly              = sal_False;
-    mbInsertMode            = sal_True;
-    mbClickedInSelection    = sal_False;
-    mbActivePopup           = sal_False;
-    mbIsSubEdit             = sal_False;
-    mbInMBDown              = sal_False;
+    mbModified              = false;
+    mbInternModified        = false;
+    mbReadOnly              = false;
+    mbInsertMode            = true;
+    mbClickedInSelection    = false;
+    mbActivePopup           = false;
+    mbIsSubEdit             = false;
+    mbInMBDown              = false;
     mpDDInfo                = NULL;
     mpIMEInfos              = NULL;
     mcEchoChar              = 0;
 
     // --- RTL --- no default mirroring for Edit controls
     // note: controls that use a subedit will revert this (SpinField, ComboBox)
-    EnableRTL( sal_False );
+    EnableRTL( false );
 
     vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
     mxDnDListener = pDnDWrapper;
@@ -371,7 +371,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     SetCursor( new Cursor );
 
     SetPointer( Pointer( POINTER_TEXT ) );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
@@ -399,7 +399,7 @@ WinBits Edit::ImplInitStyle( WinBits nStyle )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
+bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
     sal_Unicode cCharCode = rKeyEvent.GetCharCode();
@@ -413,13 +413,13 @@ sal_Bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
 
 void Edit::ImplModified()
 {
-    mbModified = sal_True;
+    mbModified = true;
     Modify();
 }
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+void Edit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -573,7 +573,7 @@ void Edit::ImplRepaint(bool bLayout)
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( IsEnabled() )
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
     if ( !IsEnabled() || bPaintPlaceholderText )
         SetTextColor( rStyleSettings.GetDisableColor() );
 
@@ -810,7 +810,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
     maSelection.Min() = aSelection.Min();
     maSelection.Max() = aSelection.Min();
     ImplAlignAndPaint();
-    mbInternModified = sal_True;
+    mbInternModified = true;
 }
 
 // -----------------------------------------------------------------------
@@ -873,7 +873,7 @@ bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_Int32 nSelectionLen ) const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_Bool bIsUserInput )
+void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool bIsUserInput )
 {
     Selection aSelection( maSelection );
     aSelection.Justify();
@@ -971,7 +971,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_B
     }
 
     ImplAlignAndPaint();
-    mbInternModified = sal_True;
+    mbInternModified = true;
 }
 
 // -----------------------------------------------------------------------
@@ -995,7 +995,7 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
             ImplAlign();
 
             if ( pNewSelection )
-                ImplSetSelection( *pNewSelection, sal_False );
+                ImplSetSelection( *pNewSelection, false );
 
             if ( mnXOffset && !pNewSelection )
                 maSelection.Max() = 0;
@@ -1142,7 +1142,7 @@ void Edit::ImplPaintBorder( long nXStart, long nXEnd )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
+void Edit::ImplShowCursor( bool bOnlyIfVisible )
 {
     if ( !IsUpdateMode() || ( bOnlyIfVisible && !IsReallyVisible() ) )
         return;
@@ -1334,7 +1334,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplSetCursorPos( sal_Int32 nChar, sal_Bool bSelect )
+void Edit::ImplSetCursorPos( sal_Int32 nChar, bool bSelect )
 {
     Selection aSelection( maSelection );
     aSelection.Max() = nChar;
@@ -1426,7 +1426,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.GetClicks() < 4 )
     {
-        mbClickedInSelection = sal_False;
+        mbClickedInSelection = false;
         if ( rMEvt.GetClicks() == 3 )
         {
             ImplSetSelection( Selection( 0, EDIT_NOLIMIT) );
@@ -1442,7 +1442,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             ImplCopyToSelectionClipboard();
         }
         else if ( !rMEvt.IsShift() && HasFocus() && aSelection.IsInside( nCharPos ) )
-            mbClickedInSelection = sal_True;
+            mbClickedInSelection = true;
         else if ( rMEvt.IsLeft() )
             ImplSetCursorPos( nCharPos, rMEvt.IsShift() );
 
@@ -1450,9 +1450,9 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             StartTracking( STARTTRACK_SCROLLREPEAT );
     }
 
-    mbInMBDown = sal_True;  // then do not select all in GetFocus
+    mbInMBDown = true;  // then do not select all in GetFocus
     GrabFocus();
-    mbInMBDown = sal_False;
+    mbInMBDown = false;
 }
 
 // -----------------------------------------------------------------------
@@ -1462,8 +1462,8 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     if ( mbClickedInSelection && rMEvt.IsLeft() )
     {
         sal_Int32 nCharPos = ImplGetCharPos( rMEvt.GetPosPixel() );
-        ImplSetCursorPos( nCharPos, sal_False );
-        mbClickedInSelection = sal_False;
+        ImplSetCursorPos( nCharPos, false );
+        mbClickedInSelection = false;
     }
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
@@ -1483,8 +1483,8 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
         if ( mbClickedInSelection )
         {
             sal_Int32 nCharPos = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
-            ImplSetCursorPos( nCharPos, sal_False );
-            mbClickedInSelection = sal_False;
+            ImplSetCursorPos( nCharPos, false );
+            mbClickedInSelection = false;
         }
         else if ( rTEvt.GetMouseEvent().IsLeft() )
         {
@@ -1496,7 +1496,7 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
         if( !mbClickedInSelection )
         {
             sal_Int32 nCharPos = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
-            ImplSetCursorPos( nCharPos, sal_True );
+            ImplSetCursorPos( nCharPos, true );
         }
     }
 
@@ -1506,13 +1506,13 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
+bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 {
-    sal_Bool        bDone = sal_False;
+    bool        bDone = false;
     sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
 
-    mbInternModified = sal_False;
+    mbInternModified = false;
 
     if ( eFunc != KEYFUNC_DONTKNOW )
     {
@@ -1524,7 +1524,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 {
                     Cut();
                     ImplModified();
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1534,7 +1534,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !(GetStyle() & WB_PASSWORD) )
                 {
                     Copy();
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1544,7 +1544,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mbReadOnly )
                 {
                     Paste();
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1554,7 +1554,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mbReadOnly )
                 {
                     Undo();
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1569,7 +1569,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         if ( nCode == KEY_A )
         {
             ImplSetSelection( Selection( 0, maText.getLength() ) );
-            bDone = sal_True;
+            bDone = true;
         }
         else if ( rKEvt.GetKeyCode().IsShift() && (nCode == KEY_S) )
         {
@@ -1583,7 +1583,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     ImplInsertText( aChars );
                     ImplModified();
                 }
-                bDone = sal_True;
+                bDone = true;
             }
         }
     }
@@ -1595,7 +1595,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             case com::sun::star::awt::Key::SELECT_ALL:
             {
                 ImplSetSelection( Selection( 0, maText.getLength() ) );
-                bDone = sal_True;
+                bDone = true;
             }
             break;
 
@@ -1726,7 +1726,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         }
                     }
 
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1768,7 +1768,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     ImplDelete( maSelection, nDel, nMode );
                     if ( maText.getLength() != nOldLen )
                         ImplModified();
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1778,7 +1778,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mpIMEInfos && !mbReadOnly && !rKEvt.GetKeyCode().IsMod2() )
                 {
                     SetInsertMode( !mbInsertMode );
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             break;
@@ -1813,10 +1813,10 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             {
                 if ( IsCharInput( rKEvt ) )
                 {
-                    bDone = sal_True;   // read characters also when in ReadOnly
+                    bDone = true;   // read characters also when in ReadOnly
                     if ( !mbReadOnly )
                     {
-                        ImplInsertText(OUString(rKEvt.GetCharCode()), 0, sal_True);
+                        ImplInsertText(OUString(rKEvt.GetCharCode()), 0, true);
                         if ( maAutocompleteHdl.IsSet() )
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
@@ -1883,7 +1883,7 @@ void Edit::Resize()
 
 void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
@@ -2085,22 +2085,22 @@ void Edit::Command( const CommandEvent& rCEvt )
 
         if ( !maSelection.Len() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
-            pPopup->EnableItem( SV_MENU_EDIT_COPY, sal_False );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
+            pPopup->EnableItem( SV_MENU_EDIT_COPY, false );
+            pPopup->EnableItem( SV_MENU_EDIT_DELETE, false );
         }
 
         if ( IsReadOnly() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
-            pPopup->EnableItem( SV_MENU_EDIT_PASTE, sal_False );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, sal_False );
-            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
+            pPopup->EnableItem( SV_MENU_EDIT_PASTE, false );
+            pPopup->EnableItem( SV_MENU_EDIT_DELETE, false );
+            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, false );
         }
         else
         {
             // only paste if text available in clipboard
-            sal_Bool bData = sal_False;
+            bool bData = false;
             uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
             if ( xClipboard.is() )
             {
@@ -2118,9 +2118,9 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
 
         if ( maUndoText == maText.getStr() )
-            pPopup->EnableItem( SV_MENU_EDIT_UNDO, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_UNDO, false );
         if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.getLength() ) )
-            pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, false );
         if ( !pImplFncGetSpecialChars )
         {
             sal_uInt16 nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
@@ -2128,7 +2128,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             pPopup->RemoveItem( nPos-1 );
         }
 
-        mbActivePopup = sal_True;
+        mbActivePopup = true;
         Selection aSaveSel = GetSelection(); // if someone changes selection in Get/LoseFocus, e.g. URL bar
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
@@ -2176,7 +2176,7 @@ void Edit::Command( const CommandEvent& rCEvt )
                 }
                 break;
         }
-        mbActivePopup = sal_False;
+        mbActivePopup = false;
     }
     else if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
     {
@@ -2188,12 +2188,12 @@ void Edit::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
     {
-        sal_Bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
+        bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
         delete mpIMEInfos;
         mpIMEInfos = NULL;
 
         // set font without attributes, because it will not be re-initialised in Repaint anymore
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
 
         SetInsertMode( bInsertMode );
 
@@ -2325,10 +2325,10 @@ void Edit::StateChanged( StateChangedType nType )
             mnXOffset = 0;  // if GrabFocus before while size was still wrong
             ImplAlign();
             if ( !mpSubEdit )
-                ImplShowCursor( sal_False );
+                ImplShowCursor( false );
         }
         // update background (eventual SetPaintTransparent)
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
     }
     else if ( nType == STATE_CHANGE_ENABLE )
     {
@@ -2381,8 +2381,8 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
-            ImplShowCursor( sal_True );
+            ImplInitSettings( true, false, false );
+            ImplShowCursor( true );
             Invalidate();
         }
     }
@@ -2390,7 +2390,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitSettings( true, false, false );
             ImplShowCursor();
             Invalidate();
         }
@@ -2399,7 +2399,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( sal_False, sal_True, sal_False );
+            ImplInitSettings( false, true, false );
             Invalidate();
         }
     }
@@ -2407,7 +2407,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( sal_False, sal_False, sal_True );
+            ImplInitSettings( false, false, true );
             Invalidate();
         }
     }
@@ -2426,8 +2426,8 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( sal_True, sal_True, sal_True );
-            ImplShowCursor( sal_True );
+            ImplInitSettings( true, true, true );
+            ImplShowCursor( true );
             Invalidate();
         }
     }
@@ -2539,7 +2539,7 @@ void Edit::SetEchoChar( sal_Unicode c )
 
 void Edit::SetReadOnly( sal_Bool bReadOnly )
 {
-    if ( mbReadOnly != bReadOnly )
+    if ( mbReadOnly != bool(bReadOnly) )
     {
         mbReadOnly = bReadOnly;
         if ( mpSubEdit )
@@ -2560,7 +2560,7 @@ void Edit::SetAutocompleteHdl( const Link& rHdl )
 
 // -----------------------------------------------------------------------
 
-void Edit::SetInsertMode( sal_Bool bInsert )
+void Edit::SetInsertMode( bool bInsert )
 {
     if ( bInsert != mbInsertMode )
     {
@@ -2574,7 +2574,7 @@ void Edit::SetInsertMode( sal_Bool bInsert )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Edit::IsInsertMode() const
+bool Edit::IsInsertMode() const
 {
     if ( mpSubEdit )
         return mpSubEdit->IsInsertMode();
@@ -2613,7 +2613,7 @@ void Edit::SetSelection( const Selection& rSelection )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
+void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
 {
     if ( mpSubEdit )
         mpSubEdit->ImplSetSelection( rSelection );
@@ -2830,9 +2830,9 @@ OUString Edit::GetPlaceholderText() const
 void Edit::SetModifyFlag()
 {
     if ( mpSubEdit )
-        mpSubEdit->mbModified = sal_True;
+        mpSubEdit->mbModified = true;
     else
-        mbModified = sal_True;
+        mbModified = true;
 }
 
 // -----------------------------------------------------------------------
@@ -2840,9 +2840,9 @@ void Edit::SetModifyFlag()
 void Edit::ClearModifyFlag()
 {
     if ( mpSubEdit )
-        mpSubEdit->mbModified = sal_False;
+        mpSubEdit->mbModified = false;
     else
-        mbModified = sal_False;
+        mbModified = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2853,7 +2853,7 @@ void Edit::SetSubEdit( Edit* pEdit )
     if ( mpSubEdit )
     {
         SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
-        mpSubEdit->mbIsSubEdit = sal_True;
+        mpSubEdit->mbIsSubEdit = true;
 
         mpSubEdit->SetReadOnly( mbReadOnly );
     }
@@ -2999,8 +2999,8 @@ PopupMenu* Edit::CreatePopupMenu()
         pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
         pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, KeyCode( KEYFUNC_PASTE ) );
         pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, KeyCode( KEYFUNC_DELETE ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, sal_False, sal_True, sal_False, sal_False ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, sal_True, sal_True, sal_False, sal_False ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, false, true, false, false ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, true, true, false, false ) );
     }
     return pPopup;
 }
@@ -3081,7 +3081,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
 {
     SolarMutexGuard aVclGuard;
 
-    sal_Bool bChanges = sal_False;
+    bool bChanges = false;
     if ( !mbReadOnly && mpDDInfo )
     {
         ImplHideDDCursor();
@@ -3109,7 +3109,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
                 OUString aText;
                 aData >>= aText;
                 ImplInsertText( aText );
-                bChanges = sal_True;
+                bChanges = true;
                 ImplModified();
             }
         }

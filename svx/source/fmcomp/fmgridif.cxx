@@ -2090,7 +2090,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     Window* pGrid = GetWindow();
     if ( pGrid )
     {
-        Reference< XAccessible > xAcc( pGrid->GetAccessible( sal_True ) );
+        Reference< XAccessible > xAcc( pGrid->GetAccessible( true ) );
         if ( xAcc.is() )
             xContext = xAcc->getAccessibleContext();
         // TODO: this has a slight conceptual problem:

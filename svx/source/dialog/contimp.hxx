@@ -52,7 +52,7 @@ class SvxSuperContourDlg : public SvxContourDlg
     ImageList           maImageList;
 
     virtual void        Resize();
-    virtual sal_Bool        Close();
+    virtual bool        Close();
 
                         DECL_LINK( Tbx1ClickHdl, ToolBox* );
                         DECL_LINK( MousePosHdl, ContourWindow* );

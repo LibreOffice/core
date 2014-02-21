@@ -357,7 +357,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 
 // -----------------------------------------------------------------
 
-sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
+bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
 {
     ImplDelData aCheckDelete;
     ImplAddDel( &aCheckDelete );
@@ -370,10 +370,10 @@ sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Lin
         if ( !aCheckDelete.IsDead() )
         {
             ImplRemoveDel( &aCheckDelete );
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------
@@ -495,7 +495,7 @@ const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) cons
 }
 
 // -----------------------------------------------------------------
-void Control::ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForeground )
+void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 

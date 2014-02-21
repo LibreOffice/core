@@ -240,8 +240,8 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
     if( aRect.Bottom() > ( rMaxSize.Height() - 1L ) )
         aRect.Bottom() = rMaxSize.Height() - 1L;
 
-    rMtf.AddAction( new MetaLineColorAction( aColor, sal_True ) );
-    rMtf.AddAction( new MetaFillColorAction( aColor, sal_True ) );
+    rMtf.AddAction( new MetaLineColorAction( aColor, true ) );
+    rMtf.AddAction( new MetaFillColorAction( aColor, true ) );
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 

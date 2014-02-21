@@ -81,7 +81,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
 
-    m_pTypeLB->SetUpdateMode(sal_False);
+    m_pTypeLB->SetUpdateMode(false);
     sal_uInt16 nOldPos = m_pTypeLB->GetSelectEntryPos();
     m_sOldDBName = m_pDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
 
@@ -166,7 +166,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     }
     TypeHdl(0);
 
-    m_pTypeLB->SetUpdateMode(sal_True);
+    m_pTypeLB->SetUpdateMode(true);
     m_pTypeLB->SetSelectHdl(LINK(this, SwFldDBPage, TypeHdl));
     m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
 

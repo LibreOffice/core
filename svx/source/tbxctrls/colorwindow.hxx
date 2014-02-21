@@ -48,7 +48,7 @@ private:
 
 protected:
     virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
 public:
     SvxColorWindow_Impl( const OUString& rCommand,

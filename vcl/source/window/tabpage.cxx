@@ -46,7 +46,7 @@ void TabPage::ImplInit( Window* pParent, WinBits nStyle )
     // if the tabpage is drawn (ie filled) by a native widget, make sure all contols will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
 }
 
 // -----------------------------------------------------------------------
@@ -56,16 +56,16 @@ void TabPage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( true );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( false );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( false );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );

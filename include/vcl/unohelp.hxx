@@ -52,7 +52,7 @@ namespace unohelper
 {
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > CreateBreakIterator();
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
-VCL_DLLPUBLIC OUString CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
+VCL_DLLPUBLIC OUString CreateLibraryName( const sal_Char* pModName, bool bSUPD );
 VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
 }}  // namespace vcl::unohelper
 

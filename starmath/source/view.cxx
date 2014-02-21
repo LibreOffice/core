@@ -1198,9 +1198,9 @@ void SmViewShell::Impl_Print(
 {
     SAL_INFO( "starmath", "SmViewShell::Impl_Print" );
 
-    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, sal_True );
-    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, sal_True );
-    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, sal_True );
+    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, true );
+    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, true );
+    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, true );
     SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL ) ));
     const sal_uInt16 nZoomFactor = static_cast< sal_uInt16 >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
 
@@ -1291,7 +1291,7 @@ void SmViewShell::Impl_Print(
 
     MapMode    OutputMapMode;
     // PDF export should always use PRINT_SIZE_NORMAL ...
-    if (!rPrintUIOptions.getBoolValue( "IsPrinter", sal_False ) )
+    if (!rPrintUIOptions.getBoolValue( "IsPrinter", false ) )
         ePrintSize = PRINT_SIZE_NORMAL;
     switch (ePrintSize)
     {

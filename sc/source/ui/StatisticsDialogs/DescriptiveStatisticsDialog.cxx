@@ -71,7 +71,7 @@ ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
 ScDescriptiveStatisticsDialog::~ScDescriptiveStatisticsDialog()
 {}
 
-sal_Bool ScDescriptiveStatisticsDialog::Close()
+bool ScDescriptiveStatisticsDialog::Close()
 {
     return DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }

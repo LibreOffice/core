@@ -227,7 +227,7 @@ void PropBrw::ImplDestroyController()
 }
 
 
-sal_Bool PropBrw::Close()
+bool PropBrw::Close()
 {
     ImplDestroyController();
 

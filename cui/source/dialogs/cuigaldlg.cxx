@@ -379,7 +379,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();
-    mpBrowser->aLbxFound.SetUpdateMode( sal_False );
+    mpBrowser->aLbxFound.SetUpdateMode( false );
     mpBrowser->aLbxFound.SetNoSelection();
 
     // mark all taken positions in aRemoveEntries
@@ -411,7 +411,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 
     aRemainingVector.clear();
 
-    mpBrowser->aLbxFound.SetUpdateMode( sal_True );
+    mpBrowser->aLbxFound.SetUpdateMode( true );
     mpBrowser->SelectFoundHdl( NULL );
     GetParent()->LeaveWait();
 
@@ -768,7 +768,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     aBtnTakeAll.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeAllHdl));
     aCbxPreview.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickPreviewHdl));
     aCbbFileType.SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
-    aCbbFileType.EnableDDAutoWidth( sal_False );
+    aCbbFileType.EnableDDAutoWidth( false );
     aLbxFound.SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
     aLbxFound.SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
     aLbxFound.InsertEntry(OUString(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));

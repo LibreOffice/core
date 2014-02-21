@@ -137,7 +137,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 
     OUString aKey = xCharClass->toUpper( _rKey, 0, _rKey.getLength(), rLocale );
 
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
     sal_Int32 nLen = aKey.getLength();
 
     bool bCJK = MsLangId::isCJK(Application::GetSettings().GetUILanguageTag().getLanguageType());
@@ -202,7 +202,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
                     rKey = rKey.replaceAt( nIndex, 0, OUString(MNEMONIC_CHAR) );
-                    bChanged = sal_True;
+                    bChanged = true;
                     break;
                 }
             }
@@ -254,7 +254,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
             {
                 maMnemonics[nBestMnemonicIndex] = 0;
                 rKey = rKey.replaceAt( nBestIndex, 0, OUString(MNEMONIC_CHAR) );
-                bChanged = sal_True;
+                bChanged = true;
             }
         }
     }
@@ -299,7 +299,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                             nIndex--;
                     }
                     rKey = rKey.replaceAt( nIndex, 0, aStr );
-                    bChanged = sal_True;
+                    bChanged = true;
                     break;
                 }
             }

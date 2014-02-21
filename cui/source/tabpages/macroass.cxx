@@ -331,7 +331,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         }
     }
 
-    pImpl->pEventLB->SetUpdateMode( sal_False );
+    pImpl->pEventLB->SetUpdateMode( false );
     pE->ReplaceItem( new SvLBoxString( pE, 0, sScriptURI ), LB_MACROS_ITEMPOS );
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );

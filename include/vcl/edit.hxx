@@ -74,7 +74,7 @@ private:
     sal_Int32           mnMaxWidthChars;
     AutocompleteAction  meAutocompleteAction;
     sal_Unicode         mcEchoChar;
-    sal_Bool            mbModified:1,
+    bool            mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -98,18 +98,18 @@ private:
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint();
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection = 0 );
-    SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
+    SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = 0, bool bIsUserInput = false );
     SAL_DLLPRIVATE OUString    ImplGetValidString( const OUString& rString ) const;
     SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
     SAL_DLLPRIVATE void        ImplPaintBorder( long nXStart, long nXEnd );
-    SAL_DLLPRIVATE void        ImplShowCursor( sal_Bool bOnlyIfVisible = sal_True );
+    SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
     SAL_DLLPRIVATE sal_Int32   ImplGetCharPos( const Point& rWindowPos ) const;
-    SAL_DLLPRIVATE void        ImplSetCursorPos( sal_Int32 nChar, sal_Bool bSelect );
+    SAL_DLLPRIVATE void        ImplSetCursorPos( sal_Int32 nChar, bool bSelect );
     SAL_DLLPRIVATE void        ImplShowDDCursor();
     SAL_DLLPRIVATE void        ImplHideDDCursor();
-    SAL_DLLPRIVATE sal_Bool        ImplHandleKeyEvent( const KeyEvent& rKEvt );
+    SAL_DLLPRIVATE bool        ImplHandleKeyEvent( const KeyEvent& rKEvt );
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
     SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
@@ -122,9 +122,9 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void        ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void        ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void        ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, sal_Bool bPaint = sal_True );
+    SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE int         ImplGetNativeControlType() const;
     SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
@@ -171,7 +171,7 @@ public:
     virtual void        Modify();
     virtual void        UpdateData();
 
-    static sal_Bool         IsCharInput( const KeyEvent& rKEvt );
+    static bool         IsCharInput( const KeyEvent& rKEvt );
 
     virtual void        SetModifyFlag();
     virtual void        ClearModifyFlag();
@@ -184,10 +184,10 @@ public:
     sal_Unicode         GetEchoChar() const { return mcEchoChar; }
 
     virtual void        SetReadOnly( sal_Bool bReadOnly = sal_True );
-    virtual sal_Bool        IsReadOnly() const { return mbReadOnly; }
+    virtual bool        IsReadOnly() const { return mbReadOnly; }
 
-    void                SetInsertMode( sal_Bool bInsert );
-    sal_Bool                IsInsertMode() const;
+    void                SetInsertMode( bool bInsert );
+    bool                IsInsertMode() const;
 
     virtual void        SetMaxTextLen( sal_Int32 nMaxLen = EDIT_NOLIMIT );
     virtual sal_Int32   GetMaxTextLen() const { return mnMaxTextLen; }

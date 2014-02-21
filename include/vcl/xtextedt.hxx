@@ -43,25 +43,25 @@ public:
     void                SetGroupChars( const OUString& r ) { maGroupChars = r; }
     TextSelection       MatchGroup( const TextPaM& rCursor ) const;
 
-    sal_Bool            Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward = sal_True );
+    bool            Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bForward = true );
 };
 
 class VCL_DLLPUBLIC ExtTextView : public TextView
 {
 protected:
-    sal_Bool            ImpIndentBlock( sal_Bool bRight );
+    bool            ImpIndentBlock( bool bRight );
 
 public:
                         ExtTextView( ExtTextEngine* pEng, Window* pWindow );
                         ~ExtTextView();
 
-    sal_Bool            MatchGroup();
+    bool            MatchGroup();
 
-    sal_Bool            Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward );
-    sal_uInt16          Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward );
+    bool            Search( const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bForward );
+    sal_uInt16          Replace( const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bAll, bool bForward );
 
-    sal_Bool            IndentBlock();
-    sal_Bool            UnindentBlock();
+    bool            IndentBlock();
+    bool            UnindentBlock();
 };
 
 #endif // INCLUDED_VCL_XTEXTEDT_HXX

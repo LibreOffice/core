@@ -118,9 +118,9 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     // version 2
     if( aCompat.GetVersion() >= 2 )
     {
-        sal_Bool bRect, bGrad, bBmp, bDummy;
+        bool bRect, bGrad, bBmp, bDummy;
 
-        rIStm.ReadUChar( bRect ).ReadUChar( bGrad ).ReadUChar( bBmp ).ReadUChar( bDummy ).ReadUChar( bDummy ).ReadUChar( bDummy );
+        rIStm.ReadCharAsBool( bRect ).ReadCharAsBool( bGrad ).ReadCharAsBool( bBmp ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy ).ReadCharAsBool( bDummy );
 
         if( bRect )
         {
@@ -155,10 +155,10 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 3 );
-    sal_Bool            bRect = ( rImplWallpaper.mpRect != NULL );
-    sal_Bool            bGrad = ( rImplWallpaper.mpGradient != NULL );
-    sal_Bool            bBmp = ( rImplWallpaper.mpBitmap != NULL );
-    sal_Bool            bDummy = sal_False;
+    bool            bRect = ( rImplWallpaper.mpRect != NULL );
+    bool            bGrad = ( rImplWallpaper.mpGradient != NULL );
+    bool            bBmp = ( rImplWallpaper.mpBitmap != NULL );
+    bool            bDummy = false;
 
     // version 1
     WriteColor( rOStm, rImplWallpaper.maColor );
@@ -184,7 +184,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
 
 // -----------------------------------------------------------------------
 
-inline void Wallpaper::ImplMakeUnique( sal_Bool bReleaseCache )
+inline void Wallpaper::ImplMakeUnique( bool bReleaseCache )
 {
     // copy them if other references exist
     if ( mpImplWallpaper->mnRefCount != 1 )
@@ -292,7 +292,7 @@ const Color& Wallpaper::GetColor() const
 void Wallpaper::SetStyle( WallpaperStyle eStyle )
 {
 
-    ImplMakeUnique( sal_False );
+    ImplMakeUnique( false );
 
     if( eStyle == WALLPAPER_APPLICATIONGRADIENT )
         // set a dummy gradient, the correct gradient
@@ -353,7 +353,7 @@ BitmapEx Wallpaper::GetBitmap() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Wallpaper::IsBitmap() const
+bool Wallpaper::IsBitmap() const
 {
 
     return (mpImplWallpaper->mpBitmap != 0);
@@ -394,7 +394,7 @@ Gradient Wallpaper::GetGradient() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Wallpaper::IsGradient() const
+bool Wallpaper::IsGradient() const
 {
 
     return (mpImplWallpaper->mpGradient != 0);
@@ -422,7 +422,7 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
 void Wallpaper::SetRect( const Rectangle& rRect )
 {
 
-    ImplMakeUnique( sal_False );
+    ImplMakeUnique( false );
 
     if ( rRect.IsEmpty() )
     {
@@ -457,7 +457,7 @@ Rectangle Wallpaper::GetRect() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Wallpaper::IsRect() const
+bool Wallpaper::IsRect() const
 {
 
     return (mpImplWallpaper->mpRect != 0);
@@ -466,26 +466,26 @@ sal_Bool Wallpaper::IsRect() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Wallpaper::IsFixed() const
+bool Wallpaper::IsFixed() const
 {
     if ( mpImplWallpaper->meStyle == WALLPAPER_NULL )
-        return sal_False;
+        return false;
     else
         return (!mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient);
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Wallpaper::IsScrollable() const
+bool Wallpaper::IsScrollable() const
 {
     if ( mpImplWallpaper->meStyle == WALLPAPER_NULL )
-        return sal_False;
+        return false;
     else if ( !mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient )
-        return sal_True;
+        return true;
     else if ( mpImplWallpaper->mpBitmap )
         return (mpImplWallpaper->meStyle == WALLPAPER_TILE);
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
@@ -515,35 +515,35 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
+bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 {
 
     if ( mpImplWallpaper == rWallpaper.mpImplWallpaper )
-        return sal_True;
+        return true;
 
     if ( ( mpImplWallpaper->meStyle != rWallpaper.mpImplWallpaper->meStyle ) ||
          ( mpImplWallpaper->maColor != rWallpaper.mpImplWallpaper->maColor ) )
-        return sal_False;
+        return false;
 
     if ( mpImplWallpaper->mpRect != rWallpaper.mpImplWallpaper->mpRect
          && ( !mpImplWallpaper->mpRect
               || !rWallpaper.mpImplWallpaper->mpRect
               || *(mpImplWallpaper->mpRect) != *(rWallpaper.mpImplWallpaper->mpRect) ) )
-        return sal_False;
+        return false;
 
     if ( mpImplWallpaper->mpBitmap != rWallpaper.mpImplWallpaper->mpBitmap
          && ( !mpImplWallpaper->mpBitmap
               || !rWallpaper.mpImplWallpaper->mpBitmap
               || *(mpImplWallpaper->mpBitmap) != *(rWallpaper.mpImplWallpaper->mpBitmap) ) )
-        return sal_False;
+        return false;
 
     if ( mpImplWallpaper->mpGradient != rWallpaper.mpImplWallpaper->mpGradient
          && ( !mpImplWallpaper->mpGradient
               || !rWallpaper.mpImplWallpaper->mpGradient
               || *(mpImplWallpaper->mpGradient) != *(rWallpaper.mpImplWallpaper->mpGradient) ) )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

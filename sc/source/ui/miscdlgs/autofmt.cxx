@@ -146,7 +146,7 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
         SETONALLFONTS( SetShadow,       pShadowedItem->GetValue() )
         SETONALLFONTS( SetColor,        aColor )
         SETONALLFONTS( SetSize,         aFontSize )
-        SETONALLFONTS( SetTransparent,  sal_True )
+        SETONALLFONTS( SetTransparent,  true )
 
 #undef SETONALLFONTS
     }
@@ -520,7 +520,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, aWndSize );
 
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     aVD.SetFont( aFont );
     aVD.SetLineColor();
     aVD.SetFillColor( aBackCol );

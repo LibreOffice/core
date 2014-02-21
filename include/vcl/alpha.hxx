@@ -54,17 +54,17 @@ public:
         return (AlphaMask&) Bitmap::operator=( rAlphaMask );
     }
 
-    sal_Bool operator!() const
+    bool operator!() const
     {
         return Bitmap::operator!();
     }
 
-    sal_Bool operator==( const AlphaMask& rAlphaMask ) const
+    bool operator==( const AlphaMask& rAlphaMask ) const
     {
         return Bitmap::operator==( rAlphaMask );
     }
 
-    sal_Bool operator!=( const AlphaMask& rAlphaMask ) const
+    bool operator!=( const AlphaMask& rAlphaMask ) const
     {
         return Bitmap::operator!=( rAlphaMask );
     }
@@ -105,12 +105,12 @@ public:
 
     Bitmap  GetBitmap() const;
 
-    sal_Bool    CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+    bool    CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                            const AlphaMask* pAlphaSrc = NULL);
 
-    sal_Bool    Erase( sal_uInt8 cTransparency );
-    sal_Bool    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
-    sal_Bool    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency,
+    bool    Erase( sal_uInt8 cTransparency );
+    bool    Replace( const Bitmap& rMask, sal_uInt8 rReplaceTransparency );
+    bool    Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency,
                          sal_uLong nTol = 0UL );
 
     BitmapReadAccess*   AcquireReadAccess()

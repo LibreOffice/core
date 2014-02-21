@@ -52,7 +52,7 @@ const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameLi
     "epp", "ira", "era", "itg", "iti", "eti", "exp", NULL
 };
 
-sal_Bool FilterConfigCache::bInitialized = sal_False;
+bool FilterConfigCache::bInitialized = false;
 sal_Int32 FilterConfigCache::nIndType = -1;
 sal_Int32 FilterConfigCache::nIndUIName = -1;
 sal_Int32 FilterConfigCache::nIndDocumentService = -1;
@@ -62,30 +62,30 @@ sal_Int32 FilterConfigCache::nIndUserData = -1;
 sal_Int32 FilterConfigCache::nIndFileFormatVersion = -1;
 sal_Int32 FilterConfigCache::nIndTemplateName = -1;
 
-sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
+bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
-    bIsPixelFormat = bIsInternalFilter = sal_False;
+    bIsPixelFormat = bIsInternalFilter = false;
     sFilterName = rUserDataEntry;
     const char** pPtr;
-    for ( pPtr = InternalPixelFilterNameList; *pPtr && ( bIsInternalFilter == sal_False ); pPtr++ )
+    for ( pPtr = InternalPixelFilterNameList; *pPtr && !bIsInternalFilter; pPtr++ )
     {
         if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
         {
-            bIsInternalFilter = sal_True;
-            bIsPixelFormat = sal_True;
+            bIsInternalFilter = true;
+            bIsPixelFormat = true;
         }
     }
-    for ( pPtr = InternalVectorFilterNameList; *pPtr && ( bIsInternalFilter == sal_False ); pPtr++ )
+    for ( pPtr = InternalVectorFilterNameList; *pPtr && !bIsInternalFilter; pPtr++ )
     {
         if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
-            bIsInternalFilter = sal_True;
+            bIsInternalFilter = true;
     }
     if ( !bIsInternalFilter )
     {
-        for ( pPtr = ExternalPixelFilterNameList; *pPtr && ( bIsPixelFormat == sal_False ); pPtr++ )
+        for ( pPtr = ExternalPixelFilterNameList; *pPtr && !bIsPixelFormat; pPtr++ )
         {
             if ( sFilterName.equalsIgnoreAsciiCase( OUString(*pPtr, strlen(*pPtr), RTL_TEXTENCODING_ASCII_US) ) )
-                bIsPixelFormat = sal_True;
+                bIsPixelFormat = true;
         }
         OUString sTemp(SVLIBRARY("?"));
         sFilterName = sTemp.replaceFirst("?", sFilterName);
@@ -302,7 +302,7 @@ void FilterConfigCache::ImplInitSmart()
 
 // ------------------------------------------------------------------------
 
-FilterConfigCache::FilterConfigCache( sal_Bool bConfig ) :
+FilterConfigCache::FilterConfigCache( bool bConfig ) :
     bUseConfig ( bConfig )
 {
     if ( bUseConfig )
@@ -432,12 +432,12 @@ OUString FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEn
     return aWildcard;
 }
 
-sal_Bool FilterConfigCache::IsImportInternalFilter( sal_uInt16 nFormat )
+bool FilterConfigCache::IsImportInternalFilter( sal_uInt16 nFormat )
 {
     return (nFormat < aImport.size()) && aImport[ nFormat ].bIsInternalFilter;
 }
 
-sal_Bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
+bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
 {
     return (nFormat < aImport.size()) && aImport[ nFormat ].bIsPixelFormat;
 }
@@ -546,12 +546,12 @@ OUString FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEn
     return aWildcard;
 }
 
-sal_Bool FilterConfigCache::IsExportInternalFilter( sal_uInt16 nFormat )
+bool FilterConfigCache::IsExportInternalFilter( sal_uInt16 nFormat )
 {
     return (nFormat < aExport.size()) && aExport[ nFormat ].bIsInternalFilter;
 }
 
-sal_Bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
+bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
 {
     return (nFormat < aExport.size()) && aExport[ nFormat ].bIsPixelFormat;
 }

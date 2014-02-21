@@ -540,14 +540,14 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     if ( pColorList.is() )
     {
-        m_pLineColorDLB->SetUpdateMode( sal_False );
+        m_pLineColorDLB->SetUpdateMode( false );
 
         for (long i = 0; i < pColorList->Count(); ++i )
         {
             XColorEntry* pEntry = pColorList->GetColor(i);
             m_pLineColorDLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-        m_pLineColorDLB->SetUpdateMode( sal_True );
+        m_pLineColorDLB->SetUpdateMode( true );
     }
     m_pLineColorDLB->SelectEntryPos( 0 );
 }
@@ -614,7 +614,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
         if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE, false, &pItem ))
             m_pBalanceColsCB->Check(!((const SwFmtNoBalancedColumns*)pItem)->GetValue());
         else
-            m_pBalanceColsCB->Check( sal_True );
+            m_pBalanceColsCB->Check( true );
     }
 
     //text direction
@@ -1313,7 +1313,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
     {
         bLockUpdate = true;
         m_pCLNrEdt->SetValue( 2 );
-        m_pAutoWidthBox->Check(sal_False);
+        m_pAutoWidthBox->Check(false);
         aDistEd1.SetPrcntValue(0);
         ColModify(0);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively

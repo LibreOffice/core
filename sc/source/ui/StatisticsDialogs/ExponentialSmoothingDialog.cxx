@@ -40,7 +40,7 @@ ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
 ScExponentialSmoothingDialog::~ScExponentialSmoothingDialog()
 {}
 
-sal_Bool ScExponentialSmoothingDialog::Close()
+bool ScExponentialSmoothingDialog::Close()
 {
     return DoClose( ScExponentialSmoothingDialogWrapper::GetChildWindowId() );
 }

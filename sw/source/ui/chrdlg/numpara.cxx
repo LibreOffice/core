@@ -209,7 +209,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 
         m_pNewStartCB->SetState(rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
 
-        m_pNewStartCB->EnableTriState(sal_False);
+        m_pNewStartCB->EnableTriState(false);
     }
     else
         m_pNewStartCB->SetState(bHasNumberStyle ? STATE_NOCHECK : STATE_DONTKNOW);
@@ -225,7 +225,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
             nNewStart = 1;
 
         m_pNewStartNF->SetValue(nNewStart);
-        m_pNewStartNumberCB->EnableTriState(sal_False);
+        m_pNewStartNumberCB->EnableTriState(false);
     }
     else
         m_pNewStartCB->SetState(STATE_DONTKNOW);
@@ -242,8 +242,8 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         m_pRestartParaCountCB->SetState( 0 != nStartValue ? STATE_CHECK : STATE_NOCHECK );
         m_pRestartNF->SetValue(nStartValue == 0 ? 1 : nStartValue);
         LineCountHdl_Impl(m_pCountParaCB);
-        m_pCountParaCB->EnableTriState(sal_False);
-        m_pRestartParaCountCB->EnableTriState(sal_False);
+        m_pCountParaCB->EnableTriState(false);
+        m_pRestartParaCountCB->EnableTriState(false);
     }
     else
     {

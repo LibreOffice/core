@@ -133,7 +133,7 @@ namespace vclcanvas
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 
             const ::Point aEmptyPoint;
-            mpBackBuffer->getOutDev().EnableMapMode( sal_False );
+            mpBackBuffer->getOutDev().EnableMapMode( false );
             mpBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             WriteDIB(mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint, mpBackBuffer->getOutDev().GetOutputSizePixel()), aStream, false, true);
         }

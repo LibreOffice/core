@@ -60,7 +60,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
     initDefaultNodeImages();
     ImplInitSettings();
     m_aText.SetHelpId(HID_RPT_START_TITLE);
-    m_aText.SetPaintTransparent(sal_True);
+    m_aText.SetPaintTransparent(true);
     m_aImage.SetHelpId(HID_RPT_START_IMAGE);
     m_aText.Show();
     m_aImage.Show();
@@ -73,9 +73,9 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
     m_aVRuler.SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-    EnableChildTransparentMode( sal_True );
+    EnableChildTransparentMode( true );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-    SetPaintTransparent( sal_True );
+    SetPaintTransparent( true );
 }
 // -----------------------------------------------------------------------------
 OStartMarker::~OStartMarker()
@@ -194,10 +194,10 @@ void OStartMarker::initDefaultNodeImages()
 
     Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     m_aImage.SetImage(*pImage);
-    m_aImage.SetMouseTransparent(sal_True);
+    m_aImage.SetMouseTransparent(true);
     m_aImage.SetBackground();
     m_aText.SetBackground();
-    m_aText.SetMouseTransparent(sal_True);
+    m_aText.SetMouseTransparent(true);
 }
 // -----------------------------------------------------------------------
 void OStartMarker::ImplInitSettings()

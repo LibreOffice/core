@@ -712,7 +712,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DOUBLE_SIDED);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_Bool bValue = ((const Svx3DDoubleSidedItem&)rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue();
+        bool bValue = ((const Svx3DDoubleSidedItem&)rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue();
         if( bValue != aBtnDoubleSided.IsChecked() )
         {
             aBtnDoubleSided.Check( bValue );
@@ -825,9 +825,9 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             aBtnNormalsFlat.IsChecked() ||
             aBtnNormalsSphere.IsChecked() )
         {
-            aBtnNormalsObj.Check( sal_False );
-            aBtnNormalsFlat.Check( sal_False );
-            aBtnNormalsSphere.Check( sal_False );
+            aBtnNormalsObj.Check( false );
+            aBtnNormalsFlat.Check( false );
+            aBtnNormalsSphere.Check( false );
             bUpdate = sal_True;
         }
     }
@@ -836,7 +836,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_NORMALS_INVERT);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_Bool bValue = ((const Svx3DNormalsInvertItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue();
+        bool bValue = ((const Svx3DNormalsInvertItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue();
         if( bValue != aBtnNormalsInvert.IsChecked() )
         {
             aBtnNormalsInvert.Check( bValue );
@@ -858,7 +858,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_Bool bValue = ((const Svx3DTwoSidedLightingItem&)rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue();
+        bool bValue = ((const Svx3DTwoSidedLightingItem&)rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue();
         if( bValue != aBtnTwoSidedLighting.IsChecked() )
         {
             aBtnTwoSidedLighting.Check( bValue );
@@ -901,7 +901,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_SHADOW_3D);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_Bool bValue = ((const Svx3DShadow3DItem&)rAttrs.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue();
+        bool bValue = ((const Svx3DShadow3DItem&)rAttrs.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue();
         if( bValue != aBtnShadow3d.IsChecked() )
         {
             aBtnShadow3d.Check( bValue );
@@ -1428,8 +1428,8 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( aBtnTexLuminance.IsChecked() ||
                 aBtnTexColor.IsChecked() )
             {
-                aBtnTexLuminance.Check( sal_False );
-                aBtnTexColor.Check( sal_False );
+                aBtnTexLuminance.Check( false );
+                aBtnTexColor.Check( false );
                 bUpdate = sal_True;
             }
         }
@@ -1453,8 +1453,8 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             if( aBtnTexReplace.IsChecked() ||
                 aBtnTexModulate.IsChecked() )
             {
-                aBtnTexReplace.Check( sal_False );
-                aBtnTexModulate.Check( sal_False );
+                aBtnTexReplace.Check( false );
+                aBtnTexModulate.Check( false );
                 bUpdate = sal_True;
             }
         }
@@ -1481,9 +1481,9 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexParallelX.IsChecked() ||
                 aBtnTexCircleX.IsChecked() )
             {
-                aBtnTexObjectX.Check( sal_False );
-                aBtnTexParallelX.Check( sal_False );
-                aBtnTexCircleX.Check( sal_False );
+                aBtnTexObjectX.Check( false );
+                aBtnTexParallelX.Check( false );
+                aBtnTexCircleX.Check( false );
                 bUpdate = sal_True;
             }
         }
@@ -1510,9 +1510,9 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
                 aBtnTexParallelY.IsChecked() ||
                 aBtnTexCircleY.IsChecked() )
             {
-                aBtnTexObjectY.Check( sal_False );
-                aBtnTexParallelY.Check( sal_False );
-                aBtnTexCircleY.Check( sal_False );
+                aBtnTexObjectY.Check( false );
+                aBtnTexParallelY.Check( false );
+                aBtnTexCircleY.Check( false );
                 bUpdate = sal_True;
             }
         }
@@ -1521,7 +1521,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_FILTER);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            sal_Bool bValue = ((const Svx3DTextureFilterItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue();
+            bool bValue = ((const Svx3DTextureFilterItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue();
             if( bValue != aBtnTexFilter.IsChecked() )
             {
                 aBtnTexFilter.Check( bValue );
@@ -2662,42 +2662,42 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
 
                 if( pBtn != &aBtnLight1 && aBtnLight1.IsChecked() )
                 {
-                    aBtnLight1.Check( sal_False );
+                    aBtnLight1.Check( false );
                     aLbLight1.Hide();
                 }
                 if( pBtn != &aBtnLight2 && aBtnLight2.IsChecked() )
                 {
-                    aBtnLight2.Check( sal_False );
+                    aBtnLight2.Check( false );
                     aLbLight2.Hide();
                 }
                 if( pBtn != &aBtnLight3 && aBtnLight3.IsChecked() )
                 {
-                    aBtnLight3.Check( sal_False );
+                    aBtnLight3.Check( false );
                     aLbLight3.Hide();
                 }
                 if( pBtn != &aBtnLight4 && aBtnLight4.IsChecked() )
                 {
-                    aBtnLight4.Check( sal_False );
+                    aBtnLight4.Check( false );
                     aLbLight4.Hide();
                 }
                 if( pBtn != &aBtnLight5 && aBtnLight5.IsChecked() )
                 {
-                    aBtnLight5.Check( sal_False );
+                    aBtnLight5.Check( false );
                     aLbLight5.Hide();
                 }
                 if( pBtn != &aBtnLight6 && aBtnLight6.IsChecked() )
                 {
-                    aBtnLight6.Check( sal_False );
+                    aBtnLight6.Check( false );
                     aLbLight6.Hide();
                 }
                 if( pBtn != &aBtnLight7 && aBtnLight7.IsChecked() )
                 {
-                    aBtnLight7.Check( sal_False );
+                    aBtnLight7.Check( false );
                     aLbLight7.Hide();
                 }
                 if( pBtn != &aBtnLight8 && aBtnLight8.IsChecked() )
                 {
-                    aBtnLight8.Check( sal_False );
+                    aBtnLight8.Check( false );
                     aLbLight8.Hide();
                 }
             }
@@ -2997,42 +2997,42 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
         // Status: No lamp selected
         if( aBtnLight1.IsChecked() )
         {
-            aBtnLight1.Check( sal_False );
+            aBtnLight1.Check( false );
             aLbLight1.Enable( false );
         }
         else if( aBtnLight2.IsChecked() )
         {
-            aBtnLight2.Check( sal_False );
+            aBtnLight2.Check( false );
             aLbLight2.Enable( false );
         }
         else if( aBtnLight3.IsChecked() )
         {
-            aBtnLight3.Check( sal_False );
+            aBtnLight3.Check( false );
             aLbLight3.Enable( false );
         }
         else if( aBtnLight4.IsChecked() )
         {
-            aBtnLight4.Check( sal_False );
+            aBtnLight4.Check( false );
             aLbLight4.Enable( false );
         }
         else if( aBtnLight5.IsChecked() )
         {
-            aBtnLight5.Check( sal_False );
+            aBtnLight5.Check( false );
             aLbLight5.Enable( false );
         }
         else if( aBtnLight6.IsChecked() )
         {
-            aBtnLight6.Check( sal_False );
+            aBtnLight6.Check( false );
             aLbLight6.Enable( false );
         }
         else if( aBtnLight7.IsChecked() )
         {
-            aBtnLight7.Check( sal_False );
+            aBtnLight7.Check( false );
             aLbLight7.Enable( false );
         }
         else if( aBtnLight8.IsChecked() )
         {
-            aBtnLight8.Check( sal_False );
+            aBtnLight8.Check( false );
             aLbLight8.Enable( false );
         }
         aBtnLightColor.Enable( false );

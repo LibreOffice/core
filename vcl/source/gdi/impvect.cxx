@@ -639,10 +639,10 @@ ImplVectorizer::~ImplVectorizer()
 {
 }
 
-sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
+bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                                     sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     VECT_PROGRESS( pProgress, 0 );
 
@@ -709,8 +709,8 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rM
 
                     if( aPolyPoly.Count() )
                     {
-                        rMtf.AddAction( new MetaLineColorAction( aFindColor, sal_True ) );
-                        rMtf.AddAction( new MetaFillColorAction( aFindColor, sal_True ) );
+                        rMtf.AddAction( new MetaLineColorAction( aFindColor, true ) );
+                        rMtf.AddAction( new MetaFillColorAction( aFindColor, true ) );
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
                     }
                 }
@@ -731,7 +731,7 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rM
             rMtf.SetPrefSize( Size( nWidth + 2, nHeight + 2 ) );
             rMtf.Move( 1, 1 );
             rMtf.Scale( aLogSize1.Width(), aLogSize1.Height() );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -742,14 +742,14 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rM
     return bRet;
 }
 
-sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
+bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
                                     PolyPolygon& rPolyPoly,
                                     sal_uLong nFlags, const Link* pProgress )
 {
     Bitmap*             pBmp = new Bitmap( rMonoBmp );
     BitmapReadAccess*   pRAcc;
     ImplVectMap*        pMap;
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     VECT_PROGRESS( pProgress, 10 );
 
@@ -829,7 +829,7 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
             rPolyPoly.Insert( aFirst, 0 );
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     VECT_PROGRESS( pProgress, 100 );
@@ -1027,7 +1027,7 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, s
     }
 }
 
-sal_Bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
+bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
 {
     long                nActX = rStartPt.X();
     long                nActY = rStartPt.Y();
@@ -1076,19 +1076,19 @@ sal_Bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt
     }
     while( nFound );
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const
+bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const
 {
     if( pMap->IsDone( nY - 1L, nX ) )
-        return sal_True;
+        return true;
     else if( pMap->IsDone( nY + 1L, nX ) )
-        return sal_False;
+        return false;
     else if( pMap->IsDone( nY - 1L, nX - 1L ) || pMap->IsDone( nY - 1L, nX + 1L ) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

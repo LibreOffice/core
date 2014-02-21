@@ -982,7 +982,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
         return;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        xAccessible (pWindow->GetAccessible(sal_False));
+        xAccessible (pWindow->GetAccessible(false));
     if ( ! xAccessible.is())
         return;
 

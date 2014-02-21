@@ -72,7 +72,7 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
     aUpdateTimer.SetTimeout( 500 );
     aUpdateTimer.SetTimeoutHdl( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateTimer.Start();
-    EnableRTL( sal_False );
+    EnableRTL( false );
 }
 
 GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
@@ -92,7 +92,7 @@ GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
     aUpdateTimer.SetTimeout( 500 );
     aUpdateTimer.SetTimeoutHdl( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateTimer.Start();
-    EnableRTL( sal_False );
+    EnableRTL( false );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGraphCtrl(Window *pParent, VclBuilder::stringmap &rMap)

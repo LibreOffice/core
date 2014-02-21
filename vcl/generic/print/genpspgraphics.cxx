@@ -464,26 +464,26 @@ bool GenPspGraphics::drawPolyLine(
     return false;
 }
 
-sal_Bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolyLineBezier (nPoints, (Point*)pPtAry, pFlgAry);
-    return sal_True;
+    return true;
 }
 
-sal_Bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolygonBezier (nPoints, (Point*)pPtAry, pFlgAry);
-    return sal_True;
+    return true;
 }
 
-sal_Bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
+bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry,
                                              const sal_uInt8* const* pFlgAry )
 {
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
     m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, (Point**)pPtAry, (sal_uInt8**)pFlgAry);
-    return sal_True;
+    return true;
 }
 
 void GenPspGraphics::invert( sal_uInt32,
@@ -493,7 +493,7 @@ void GenPspGraphics::invert( sal_uInt32,
     DBG_ASSERT( false, "Error: PrinterGfx::Invert() not implemented" );
 }
 
-sal_Bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
+bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
     return m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
@@ -1008,7 +1008,7 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 //--------------------------------------------------------------------------
 
-sal_Bool GenPspGraphics::CreateFontSubset(
+bool GenPspGraphics::CreateFontSubset(
                                    const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
                                    sal_GlyphId* pGlyphIds,

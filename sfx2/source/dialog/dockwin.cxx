@@ -82,7 +82,7 @@ public:
     virtual bool        Notify( NotifyEvent& rNEvt );
     virtual void        Resize();
     virtual void        Resizing( Size& rSize );
-    virtual sal_Bool        Close();
+    virtual bool        Close();
 };
 
 namespace
@@ -303,7 +303,7 @@ void SfxTitleDockingWindow::Resizing( Size &rSize )
         m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
 }
 
-sal_Bool SfxTitleDockingWindow::Close()
+bool SfxTitleDockingWindow::Close()
 {
     return SfxDockingWindow::Close();
 }
@@ -485,7 +485,7 @@ void SfxDockingWindow::Resize()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxDockingWindow::PrepareToggleFloatingMode()
+bool SfxDockingWindow::PrepareToggleFloatingMode()
 
 /*  [Description]
 
@@ -498,19 +498,19 @@ sal_Bool SfxDockingWindow::PrepareToggleFloatingMode()
 
 {
     if (!pImp->bConstructed)
-        return sal_True;
+        return true;
 
     if ( (Application::IsInModalMode() && IsFloatingMode()) || !pMgr )
-        return sal_False;
+        return false;
 
     if ( pImp->bDockingPrevented )
-        return sal_False;
+        return false;
 
     if (!IsFloatingMode())
     {
         // Test, if FloatingMode is permitted.
         if ( CheckAlignment(GetAlignment(),SFX_ALIGN_NOALIGNMENT) != SFX_ALIGN_NOALIGNMENT )
-            return sal_False;
+            return false;
 
         if ( pImp->pSplitWin )
         {
@@ -525,15 +525,15 @@ sal_Bool SfxDockingWindow::PrepareToggleFloatingMode()
 
         // Test if it is allowed to dock,
         if (CheckAlignment(GetAlignment(),pImp->GetLastAlignment()) == SFX_ALIGN_NOALIGNMENT)
-            return sal_False;
+            return false;
 
         // Test, if the Workwindow allows for docking at the moment.
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
         if ( !pWorkWin->IsDockingAllowed() || !pWorkWin->IsInternalDockingAllowed() )
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------
@@ -656,7 +656,7 @@ void SfxDockingWindow::StartDocking()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 
 /*  [Description]
 
@@ -667,7 +667,7 @@ sal_Bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 */
 {
     if ( Application::IsInModalMode() )
-        return sal_True;
+        return true;
 
     if ( !pImp->bConstructed || !pMgr )
     {
@@ -677,7 +677,7 @@ sal_Bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     if ( pImp->bDockingPrevented || !pWorkWin->IsInternalDockingAllowed() )
-        return sal_False;
+        return false;
 
     sal_Bool bFloatMode = sal_False;
 
@@ -694,7 +694,7 @@ sal_Bool SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
         // Mouse is not within OuterRect: must be FloatingWindow
         // Is this allowed?
         if (CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_NOALIGNMENT) != SFX_ALIGN_NOALIGNMENT)
-            return sal_False;
+            return false;
         bFloatMode = sal_True;
         if ( SFX_ALIGN_NOALIGNMENT != pImp->GetDockAlignment() )
         {
@@ -1667,7 +1667,7 @@ SfxChildAlignment SfxDockingWindow::CheckAlignment(SfxChildAlignment,
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxDockingWindow::Close()
+bool SfxDockingWindow::Close()
 
 /*  [Description]
 
@@ -1679,12 +1679,12 @@ sal_Bool SfxDockingWindow::Close()
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     if ( !pMgr )
-        return sal_True;
+        return true;
 
     SfxBoolItem aValue( pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->Execute(
         pMgr->GetType(), SFX_CALLMODE_RECORD | SFX_CALLMODE_ASYNCHRON, &aValue, 0L );
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------

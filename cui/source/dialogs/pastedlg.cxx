@@ -107,7 +107,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
     sal_uLong nSelFormat = 0;
     SvGlobalName aEmptyNm;
 
-    ObjectLB().SetUpdateMode( sal_False );
+    ObjectLB().SetUpdateMode( false );
 
     DataFlavorExVector::iterator aIter( ((DataFlavorExVector&)*pFormats).begin() ),
                                  aEnd( ((DataFlavorExVector&)*pFormats).end() );
@@ -183,7 +183,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         }
     }
 
-    ObjectLB().SetUpdateMode( sal_True );
+    ObjectLB().SetUpdateMode( true );
     SelectObject();
 
     if( !aSourceName.isEmpty() )

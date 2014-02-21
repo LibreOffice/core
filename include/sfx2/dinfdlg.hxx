@@ -372,7 +372,7 @@ public:
 
     inline void     CheckYes() { m_aYesButton.Check(); }
     inline void     CheckNo() { m_aNoButton.Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != sal_False; }
+    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked(); }
 };
 
 // struct CustomPropertyLine ---------------------------------------------

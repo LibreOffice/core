@@ -65,7 +65,7 @@ public:
     SalMenu() {}
     virtual ~SalMenu();
 
-    virtual sal_Bool VisibleMenuBar() = 0;  // must return sal_True to actually DISPLAY native menu bars
+    virtual bool VisibleMenuBar() = 0;  // must return sal_True to actually DISPLAY native menu bars
                                             // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) = 0;

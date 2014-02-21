@@ -123,7 +123,7 @@ void ScSamplingDialog::SetActive()
     RefInputDone();
 }
 
-sal_Bool ScSamplingDialog::Close()
+bool ScSamplingDialog::Close()
 {
     return DoClose( ScSamplingDialogWrapper::GetChildWindowId() );
 }

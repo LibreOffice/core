@@ -62,7 +62,7 @@ namespace abp
         m_aName.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aLocation.SetModifyHdl( LINK(this, FinalPage, OnNameModified) );
         m_aRegisterName.SetClickHdl( LINK( this, FinalPage, OnRegister ) );
-        m_aRegisterName.Check(sal_True);
+        m_aRegisterName.Check(true);
     }
 
     //---------------------------------------------------------------------

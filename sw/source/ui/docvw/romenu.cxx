@@ -63,7 +63,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SFX_ITEM_AVAILABLE)
     {
-        EnableItem( nMID, sal_True );
+        EnableItem( nMID, true );
         if (_pItem)
         {
             CheckItem ( nMID, !_pItem->ISA(SfxVoidItem) &&
@@ -71,11 +71,11 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
                             ((SfxBoolItem*)_pItem)->GetValue());
             //remove full screen entry when not in full screen mode
             if( SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
-                EnableItem(nMID, sal_False);
+                EnableItem(nMID, false);
         }
     }
     else
-        EnableItem( nMID, sal_False );
+        EnableItem( nMID, false );
 
     delete _pItem;
 }
@@ -107,8 +107,8 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     const Graphic *pGrf;
     if ( 0 == (pGrf = rSh.GetGrfAtPos( rDocPos, sGrfName, bLink )) )
     {
-        EnableItem( MN_READONLY_SAVEGRAPHIC, sal_False );
-        EnableItem( MN_READONLY_COPYGRAPHIC, sal_False );
+        EnableItem( MN_READONLY_SAVEGRAPHIC, false );
+        EnableItem( MN_READONLY_COPYGRAPHIC, false );
     }
     else
     {
@@ -180,7 +180,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     if ( !rSh.GetViewOptions()->IsGraphic() )
         CheckItem( MN_READONLY_GRAPHICOFF );
     else
-        EnableItem( MN_READONLY_LOADGRAPHIC, sal_False );
+        EnableItem( MN_READONLY_LOADGRAPHIC, false );
 
     sal_Bool bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
     EnableItem( MN_READONLY_RELOAD_FRAME,
@@ -203,7 +203,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
     if(eState < SFX_ITEM_AVAILABLE)
-        EnableItem( MN_READONLY_COPY, sal_False );
+        EnableItem( MN_READONLY_COPY, false );
     delete pState;
     pState = NULL;
 
@@ -213,19 +213,19 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         (rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
        )
     {
-        EnableItem( MN_READONLY_EDITDOC, sal_False );
+        EnableItem( MN_READONLY_EDITDOC, false );
     }
     delete pState;
 
     if ( sURL.isEmpty() )
     {
-        EnableItem( MN_READONLY_OPENURL, sal_False );
-        EnableItem( MN_READONLY_OPENURLNEW, sal_False );
-        EnableItem( MN_READONLY_COPYLINK, sal_False );
+        EnableItem( MN_READONLY_OPENURL, false );
+        EnableItem( MN_READONLY_OPENURLNEW, false );
+        EnableItem( MN_READONLY_COPYLINK, false );
     }
     Check( SID_WIN_FULLSCREEN,         SID_WIN_FULLSCREEN,        rDis );
 
-    RemoveDisabledEntries( sal_True, sal_True );
+    RemoveDisabledEntries( true, true );
 }
 
 void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )

@@ -137,7 +137,7 @@ public:
     inline void SetActiveField(const OUString& strField);
 
 protected:
-    virtual sal_Bool Close();
+    virtual bool Close();
 
     void Init(const OUString& strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors

@@ -341,16 +341,16 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
         // Make sure that there is always exactly one checked toolbox item.
         if ( pItem->GetValue() == XFT_NONE )
         {
-            aTbxStyle.CheckItem(TBI_STYLE_ROTATE, sal_False);
-            aTbxStyle.CheckItem(TBI_STYLE_UPRIGHT, sal_False);
-            aTbxStyle.CheckItem(TBI_STYLE_SLANTX, sal_False);
-            aTbxStyle.CheckItem(TBI_STYLE_SLANTY, sal_False);
+            aTbxStyle.CheckItem(TBI_STYLE_ROTATE, false);
+            aTbxStyle.CheckItem(TBI_STYLE_UPRIGHT, false);
+            aTbxStyle.CheckItem(TBI_STYLE_SLANTX, false);
+            aTbxStyle.CheckItem(TBI_STYLE_SLANTY, false);
 
-            aTbxStyle.CheckItem(TBI_STYLE_OFF, sal_True);
+            aTbxStyle.CheckItem(TBI_STYLE_OFF, true);
         }
         else
         {
-            aTbxStyle.CheckItem(TBI_STYLE_OFF, sal_False);
+            aTbxStyle.CheckItem(TBI_STYLE_OFF, false);
             aTbxStyle.CheckItem(nId);
         }
 

@@ -655,7 +655,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     if ( aSortData.bUserDef )
     {
-        m_pBtnSortUser->Check( sal_True );
+        m_pBtnSortUser->Check( true );
         m_pLbSortUser->Enable();
         m_pLbSortUser->SelectEntryPos( aSortData.nUserIndex );
     }
@@ -781,7 +781,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
             m_pBtnHeader->Check( pDlg->GetHeaders() );
         }
 
-        if ( m_pBtnTopDown->IsChecked() != (pDlg->GetByRows() ? 1 : 0) )
+        if ( m_pBtnTopDown->IsChecked() != pDlg->GetByRows() )
         {
             m_pBtnTopDown->Check( pDlg->GetByRows() );
             m_pBtnLeftRight->Check( !pDlg->GetByRows() );
@@ -991,7 +991,7 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
         m_pLbAlgorithm->Enable( nCount > 1 );      // enable only if there is a choice
     }
 
-    m_pLbAlgorithm->SetUpdateMode( sal_True );
+    m_pLbAlgorithm->SetUpdateMode( true );
     return 0;
 }
 

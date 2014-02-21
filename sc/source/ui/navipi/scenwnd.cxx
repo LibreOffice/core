@@ -40,7 +40,7 @@ ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     mrParent( rParent )
 {
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     aFont.SetWeight( WEIGHT_LIGHT );
     SetFont( aFont );
 }
@@ -91,7 +91,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
                 maEntries.push_back( aEntry );
                 InsertEntry( aEntry.maName, LISTBOX_APPEND );
             }
-            SetUpdateMode( sal_True );
+            SetUpdateMode( true );
             SetNoSelection();
             mrParent.SetComment( EMPTY_OUSTRING );
         }
@@ -205,7 +205,7 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
         aEdComment  ( this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP )
 {
     Font aFont( GetFont() );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     aFont.SetWeight( WEIGHT_LIGHT );
     aEdComment.SetFont( aFont );
     aEdComment.SetMaxTextLen( 512 );

@@ -70,7 +70,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent )
     , maHorzDim( this, WB_HORZ | WB_CENTER  )
     , maVertDim( this, WB_VERT | WB_VCENTER )
 {
-    SetPaintTransparent( sal_True );
+    SetPaintTransparent( true );
     SetBackground();
     maPageVDev.SetBackground( Color( COL_WHITE ) );
     maHorzDim.Show();
@@ -140,7 +140,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
     aScaledSize.Width()  = PREVIEW_BITMAP_WIDTH;
     aScaledSize.Height() = PREVIEW_BITMAP_WIDTH * aAspectRatio;
 
-    maPageVDev.SetOutputSizePixel( aScaledSize, sal_False );
+    maPageVDev.SetOutputSizePixel( aScaledSize, false );
 
     // position dimension lines
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
@@ -219,7 +219,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev.EnableOutput( sal_True );
+    maPageVDev.EnableOutput( true );
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
@@ -436,7 +436,7 @@ void PrintDialog::NUpTabPage::showAdvancedControls( bool i_bShow )
 void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& i_rMPS )
 {
     mpNupOrderWin->Show();
-    mpPagesBtn->Check( sal_True );
+    mpPagesBtn->Check( true );
     mpBrochureBtn->Show( false );
 
     // setup field units for metric fields
@@ -509,7 +509,7 @@ void PrintDialog::JobTabPage::readFromSettings()
     if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
     {
         mnCollateUIMode = 1;
-        mpCollateBox->Check( sal_False );
+        mpCollateBox->Check( false );
         mpCollateBox->Enable( false );
     }
     else
@@ -548,11 +548,11 @@ void PrintDialog::OutputOptPage::readFromSettings()
                               OUString( "CollateSingleJobs"  ) );
     if ( aValue.equalsIgnoreAsciiCase("true") )
     {
-        mpCollateSingleJobsBox->Check( sal_True );
+        mpCollateSingleJobsBox->Check( true );
     }
     else
     {
-        mpCollateSingleJobsBox->Check( sal_False );
+        mpCollateSingleJobsBox->Check( false );
     }
 }
 
@@ -581,7 +581,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     , mnCachedPages( 0 )
     , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ).toString() )
     , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ).toString() )
-    , mbShowLayoutPage( sal_True )
+    , mbShowLayoutPage( true )
 {
     get(mpOKButton, "ok");
     get(mpCancelButton, "cancel");
@@ -710,7 +710,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // setup dependencies
     checkControlDependencies();
 
-    if ( maPController->getBoolProperty( OUString( "HideHelpButton" ), sal_False ) )
+    if ( maPController->getBoolProperty( OUString( "HideHelpButton" ), false ) )
         mpHelpButton->Hide();
     // set initial focus to "Number of copies"
     maJobPage.mpCopyCountField->GrabFocus();
@@ -846,7 +846,7 @@ void PrintDialog::setupOptionalUI()
         OUString aGroupingHint;
         OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
-        sal_Bool bUseDependencyRow = sal_False;
+        bool bUseDependencyRow = false;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -880,7 +880,7 @@ void PrintDialog::setupOptionalUI()
             }
             else if ( rEntry.Name == "Enabled" )
             {
-                sal_Bool bValue = sal_True;
+                bool bValue = true;
                 rEntry.Value >>= bValue;
             }
             else if ( rEntry.Name == "GroupingHint" )
@@ -933,7 +933,7 @@ void PrintDialog::setupOptionalUI()
             }
             else if ( rEntry.Name == "HintNoLayoutPage" )
             {
-                sal_Bool bNoLayoutPage = sal_False;
+                bool bNoLayoutPage = false;
                 rEntry.Value >>= bNoLayoutPage;
                 mbShowLayoutPage = ! bNoLayoutPage;
             }
@@ -979,7 +979,7 @@ void PrintDialog::setupOptionalUI()
             maNUpPage.mpBrochureBtn->SetText( aText );
             maNUpPage.mpBrochureBtn->Show();
 
-            sal_Bool bVal = sal_False;
+            bool bVal = false;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
             if( pVal )
                 pVal->Value >>= bVal;
@@ -1005,7 +1005,7 @@ void PrintDialog::setupOptionalUI()
             pNewBox->SetText( aText );
             pNewBox->Show();
 
-            sal_Bool bVal = sal_False;
+            bool bVal = false;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
             if( pVal )
                 pVal->Value >>= bVal;
@@ -1543,7 +1543,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     }
     else if( pButton == maOptionsPage.mpPapersizeFromSetup )
     {
-        sal_Bool bChecked = maOptionsPage.mpPapersizeFromSetup->IsChecked();
+        bool bChecked = maOptionsPage.mpPapersizeFromSetup->IsChecked();
         maPController->setPapersizeFromSetup( bChecked );
         maPController->setValue( OUString( "PapersizeFromSetup"  ),
                                  makeAny( bChecked ) );
@@ -1554,7 +1554,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         PropertyValue* pVal = getValueForWindow( pButton );
         if( pVal )
         {
-            sal_Bool bVal = maNUpPage.mpBrochureBtn->IsChecked();
+            bool bVal = maNUpPage.mpBrochureBtn->IsChecked();
             pVal->Value <<= bVal;
 
             checkOptionalControlDependencies();
@@ -1578,12 +1578,12 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     else if( pButton == maJobPage.mpCollateBox )
     {
         maPController->setValue( OUString( "Collate"  ),
-                                 makeAny( sal_Bool(isCollate()) ) );
+                                 makeAny( isCollate() ) );
         checkControlDependencies();
     }
     else if( pButton == maJobPage.mpReverseOrderBox )
     {
-        sal_Bool bChecked = maJobPage.mpReverseOrderBox->IsChecked();
+        bool bChecked = maJobPage.mpReverseOrderBox->IsChecked();
         maPController->setReversePrint( bChecked );
         maPController->setValue( OUString( "PrintReverse"  ),
                                  makeAny( bChecked ) );
@@ -1624,7 +1624,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
         maPController->setValue( OUString( "CopyCount"  ),
                                makeAny( sal_Int32(maJobPage.mpCopyCountField->GetValue()) ) );
         maPController->setValue( OUString( "Collate"  ),
-                               makeAny( sal_Bool(isCollate()) ) );
+                               makeAny( isCollate() ) );
     }
     return 0;
 }
@@ -1660,7 +1660,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
         const std::vector< Window* >& rWindows( it->second );
         if( ! rWindows.empty() )
         {
-            sal_Bool bVal = sal_False;
+            bool bVal = false;
             sal_Int32 nVal = -1;
             if( pValue->Value >>= bVal )
             {
@@ -1721,7 +1721,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
     {
         makeEnabled( i_pBox );
 
-        sal_Bool bVal = i_pBox->IsChecked();
+        bool bVal = i_pBox->IsChecked();
         pVal->Value <<= bVal;
 
         checkOptionalControlDependencies();

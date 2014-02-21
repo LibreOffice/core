@@ -47,7 +47,7 @@ public:
 
     virtual void        Resize();
     virtual void        Resizing( Size& rSize );
-    virtual sal_Bool        Close();
+    virtual bool        Close();
 };
 
 #endif

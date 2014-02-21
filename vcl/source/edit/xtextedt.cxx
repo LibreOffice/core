@@ -135,7 +135,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     return aSel;
 }
 
-sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSearchOptions, sal_Bool bForward )
+bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSearchOptions, bool bForward )
 {
     TextSelection aSel( rSel );
     aSel.Justify();
@@ -235,14 +235,14 @@ ExtTextView::~ExtTextView()
 {
 }
 
-sal_Bool ExtTextView::MatchGroup()
+bool ExtTextView::MatchGroup()
 {
     TextSelection aTmpSel( GetSelection() );
     aTmpSel.Justify();
     if ( ( aTmpSel.GetStart().GetPara() != aTmpSel.GetEnd().GetPara() ) ||
          ( ( aTmpSel.GetEnd().GetIndex() - aTmpSel.GetStart().GetIndex() ) > 1 ) )
     {
-        return sal_False;
+        return false;
     }
 
     TextSelection aMatchSel = ((ExtTextEngine*)GetTextEngine())->MatchGroup( aTmpSel.GetStart() );
@@ -252,17 +252,17 @@ sal_Bool ExtTextView::MatchGroup()
     return aMatchSel.HasRange() ? sal_True : sal_False;
 }
 
-sal_Bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, sal_Bool bForward )
+bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, bool bForward )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     TextSelection aSel( GetSelection() );
     if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
     {
-        bFound = sal_True;
+        bFound = true;
         // First add the beginning of the word to the selection,
         // so that the whole word is in the visible region.
         SetSelection( aSel.GetStart() );
-        ShowCursor( sal_True, sal_False );
+        ShowCursor( true, false );
     }
     else
     {
@@ -275,7 +275,7 @@ sal_Bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, sal_Boo
     return bFound;
 }
 
-sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward )
+sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, bool bAll, bool bForward )
 {
     sal_uInt16 nFound = 0;
 
@@ -311,7 +311,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
 
         TextSelection aSearchSel( aSel );
 
-        sal_Bool bFound = pTextEngine->Search( aSel, rSearchOptions, sal_True );
+        bool bFound = pTextEngine->Search( aSel, rSearchOptions, true );
         if ( bFound )
             pTextEngine->UndoActionStart();
         while ( bFound )
@@ -321,7 +321,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
             TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchOptions.replaceString );
             aSel = aSearchSel;
             aSel.GetStart() = aNewStart;
-            bFound = pTextEngine->Search( aSel, rSearchOptions, sal_True );
+            bFound = pTextEngine->Search( aSel, rSearchOptions, true );
         }
         if ( nFound )
         {
@@ -333,9 +333,9 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
     return nFound;
 }
 
-sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
+bool ExtTextView::ImpIndentBlock( bool bRight )
 {
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     TextSelection aSel = GetSelection();
     aSel.Justify();
@@ -356,7 +356,7 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
         {
             // add tabs
             GetTextEngine()->ImpInsertText( TextPaM( nPara, 0 ), '\t' );
-            bDone = sal_True;
+            bDone = true;
         }
         else
         {
@@ -367,14 +367,14 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
                     ( aText[ 0 ] == ' ' ) ) )
             {
                 GetTextEngine()->ImpDeleteText( TextSelection( TextPaM( nPara, 0 ), TextPaM( nPara, 1 ) ) );
-                bDone = sal_True;
+                bDone = true;
             }
         }
     }
 
     GetTextEngine()->UndoActionEnd();
 
-    sal_Bool bRange = aSel.HasRange();
+    bool bRange = aSel.HasRange();
     if ( bRight )
     {
         aSel.GetStart().GetIndex()++;
@@ -395,14 +395,14 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
     return bDone;
 }
 
-sal_Bool ExtTextView::IndentBlock()
+bool ExtTextView::IndentBlock()
 {
-    return ImpIndentBlock( sal_True );
+    return ImpIndentBlock( true );
 }
 
-sal_Bool ExtTextView::UnindentBlock()
+bool ExtTextView::UnindentBlock()
 {
-    return ImpIndentBlock( sal_False );
+    return ImpIndentBlock( false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

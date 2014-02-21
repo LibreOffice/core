@@ -169,9 +169,9 @@ public:
     inline void     Expand( sal_uInt16 nDiff );
     inline void     Collaps( sal_uInt16 nDiff );
 
-    inline sal_Bool     IsIn( sal_uInt16 nIndex );
-    inline sal_Bool     IsInside( sal_uInt16 nIndex );
-    inline sal_Bool     IsEmpty();
+    inline bool     IsIn( sal_uInt16 nIndex );
+    inline bool     IsInside( sal_uInt16 nIndex );
+    inline bool     IsEmpty();
 
 };
 
@@ -207,17 +207,17 @@ inline void TextCharAttrib::Collaps( sal_uInt16 nDiff )
     mnEnd = mnEnd - nDiff;
 }
 
-inline sal_Bool TextCharAttrib::IsIn( sal_uInt16 nIndex )
+inline bool TextCharAttrib::IsIn( sal_uInt16 nIndex )
 {
     return ( ( mnStart <= nIndex ) && ( mnEnd >= nIndex ) );
 }
 
-inline sal_Bool TextCharAttrib::IsInside( sal_uInt16 nIndex )
+inline bool TextCharAttrib::IsInside( sal_uInt16 nIndex )
 {
     return ( ( mnStart < nIndex ) && ( mnEnd > nIndex ) );
 }
 
-inline sal_Bool TextCharAttrib::IsEmpty()
+inline bool TextCharAttrib::IsEmpty()
 {
     return mnStart == mnEnd;
 }

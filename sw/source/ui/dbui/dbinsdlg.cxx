@@ -354,13 +354,13 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     if( pView->GetWrtShell().GetTableFmt() )
     {
         m_pRbAsTable->Enable( false );
-        m_pRbAsField->Check( sal_True );
-        m_pRbDbFmtFromDb->Check( sal_True );
+        m_pRbAsField->Check( true );
+        m_pRbDbFmtFromDb->Check( true );
     }
     else
     {
-        m_pRbAsTable->Check( sal_True );
-        m_pRbDbFmtFromDb->Check( sal_True );
+        m_pRbAsTable->Check( true );
+        m_pRbDbFmtFromDb->Check( true );
         m_pIbDbcolOneFrom->Enable( false );
         m_pIbDbcolAllFrom->Enable( false );
     }
@@ -475,8 +475,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
 IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 {
     sal_Bool bChgEnable = sal_True, bEnableTo = sal_True, bEnableFrom = sal_True;
-    m_pLbTblDbColumn->SetUpdateMode( sal_False );
-    m_pLbTableCol->SetUpdateMode( sal_False );
+    m_pLbTblDbColumn->SetUpdateMode( false );
+    m_pLbTableCol->SetUpdateMode( false );
 
     if( pButton == m_pIbDbcolAllTo )
     {
@@ -612,8 +612,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
         m_pPbTblFormat->Enable( bEnableFrom );
     }
-    m_pLbTblDbColumn->SetUpdateMode( sal_True );
-    m_pLbTableCol->SetUpdateMode( sal_True );
+    m_pLbTblDbColumn->SetUpdateMode( true );
+    m_pLbTableCol->SetUpdateMode( true );
 
     return 0;
 }
@@ -1820,7 +1820,7 @@ void SwInsertDBColAutoPilot::Load()
 
             // when the cursor is inside of a table, table must NEVER be selectable
             if( !m_pRbAsTable->IsEnabled() && m_pRbAsTable->IsChecked() )
-                m_pRbAsField->Check( sal_True );
+                m_pRbAsField->Check( true );
             delete pNewData;
             break;
         }

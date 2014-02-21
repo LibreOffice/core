@@ -213,9 +213,9 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             Window* pWindow = (Window*) rVclWindowEvent.GetData();
             DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
-            if ( pWindow->GetAccessible( sal_False ).is() )
+            if ( pWindow->GetAccessible( false ).is() )
             {
-                aOldValue <<= pWindow->GetAccessible( sal_False );
+                aOldValue <<= pWindow->GetAccessible( false );
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
         }

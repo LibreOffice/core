@@ -748,7 +748,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if ( nWidth )
                 aLineInfo.SetWidth( nWidth );
 
-            sal_Bool bTransparent = sal_False;
+            bool bTransparent = false;
             switch( nStyle & 0xFF )
             {
                 case PS_DASHDOTDOT :
@@ -782,7 +782,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     aLineInfo.SetDistance( 100 );
                 break;
                 case PS_NULL :
-                    bTransparent = sal_True;
+                    bTransparent = true;
                     aLineInfo.SetStyle( LINE_NONE );
                 break;
                 default :
@@ -891,7 +891,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt32( nROP );
             Size aSize = ReadYXExt();
             nOldROP = pOut->SetRasterOp( nROP );
-            pOut->DrawRect( Rectangle( ReadYX(), aSize ), sal_False );
+            pOut->DrawRect( Rectangle( ReadYX(), aSize ), false );
             pOut->SetRasterOp( nOldROP );
         }
         break;
@@ -903,7 +903,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if ( !nObjIndex )
             {
                 PolyPolygon aEmptyPolyPoly;
-                pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY, sal_True );
+                pOut->SetClipPath( aEmptyPolyPoly, RGN_COPY, true );
             }
         }
         break;
@@ -1091,7 +1091,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFReader::ReadHeader()
+bool WMFReader::ReadHeader()
 {
     sal_Size nStrmPos = pWMF->Tell();
 
@@ -1200,7 +1200,7 @@ void WMFReader::ReadWMF()
     nEMFRec         = 0;
     nEMFSize        = 0;
 
-    sal_Bool bEMFAvailable = sal_False;
+    bool bEMFAvailable = false;
 
     pOut->SetMapMode( MM_ANISOTROPIC );
     pOut->SetWinOrg( Point() );
@@ -1306,9 +1306,9 @@ void WMFReader::ReadWMF()
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
+bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     rPlaceableBound.Left()   = (sal_Int32)0x7fffffff;
     rPlaceableBound.Top()    = (sal_Int32)0x7fffffff;
@@ -1335,7 +1335,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 if( pStm->IsEof() )
                 {
                     pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                    bRet = sal_False;
+                    bRet = false;
                 }
                 break;
             }
@@ -1419,7 +1419,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     if (!bRecordOk)
                     {
                         pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                        bRet = sal_False;
+                        bRet = false;
                         break;
                     }
 
@@ -1431,7 +1431,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                     if (!bRecordOk)
                     {
                         pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                        bRet = sal_False;
+                        bRet = false;
                         break;
                     }
                 }
@@ -1531,7 +1531,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
              else
              {
                  pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                 bRet = sal_False;
+                 bRet = false;
              }
 
         }
@@ -1539,7 +1539,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
     else
     {
         pStm->SetError( SVSTREAM_GENERALERROR );
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }

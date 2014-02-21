@@ -41,7 +41,7 @@ ExtMultiLineEdit::~ExtMultiLineEdit()
 
 void ExtMultiLineEdit::InsertText( const OUString& rNew, sal_Bool )
 {
-    GetTextView()->InsertText( rNew, sal_False );
+    GetTextView()->InsertText( rNew, false );
 }
 
 void ExtMultiLineEdit::SetAutoScroll( sal_Bool bAutoScroll )

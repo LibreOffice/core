@@ -103,20 +103,20 @@ public:
     virtual             ~Graphic();
 
     Graphic&            operator=( const Graphic& rGraphic );
-    sal_Bool                operator==( const Graphic& rGraphic ) const;
-    sal_Bool                operator!=( const Graphic& rGraphic ) const;
-    sal_Bool                operator!() const;
+    bool                operator==( const Graphic& rGraphic ) const;
+    bool                operator!=( const Graphic& rGraphic ) const;
+    bool                operator!() const;
 
     void                Clear();
 
     GraphicType         GetType() const;
     void                SetDefaultType();
-    sal_Bool                IsSupportedGraphic() const;
+    bool                IsSupportedGraphic() const;
 
-    sal_Bool            IsTransparent() const;
-    sal_Bool            IsAlpha() const;
-    sal_Bool            IsAnimated() const;
-    sal_Bool            IsEPS() const;
+    bool            IsTransparent() const;
+    bool            IsAlpha() const;
+    bool            IsAnimated() const;
+    bool            IsEPS() const;
 
     // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
     // if it is a MetaFile. To be able to control this conversion it is necessary to
@@ -176,17 +176,17 @@ public:
     const OUString&       GetDocFileName() const;
     sal_uLong               GetDocFilePos() const;
 
-    sal_Bool                SwapOut();
-    sal_Bool                SwapOut( SvStream* pOStm );
-    sal_Bool                SwapIn();
-    sal_Bool                SwapIn( SvStream* pIStm );
-    sal_Bool                IsSwapOut() const;
+    bool                SwapOut();
+    bool                SwapOut( SvStream* pOStm );
+    bool                SwapIn();
+    bool                SwapIn( SvStream* pIStm );
+    bool                IsSwapOut() const;
 
     void                SetLink( const GfxLink& );
     GfxLink             GetLink() const;
-    sal_Bool                IsLink() const;
+    bool                IsLink() const;
 
-    sal_Bool                ExportNative( SvStream& rOStream ) const;
+    bool                ExportNative( SvStream& rOStream ) const;
 
     friend VCL_DLLPUBLIC SvStream&    WriteGraphic( SvStream& rOStream, const Graphic& rGraphic );
     friend VCL_DLLPUBLIC SvStream&    ReadGraphic( SvStream& rIStream, Graphic& rGraphic );

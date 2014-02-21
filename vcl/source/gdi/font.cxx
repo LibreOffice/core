@@ -303,7 +303,7 @@ void Font::SetFillColor( const Color& rColor )
         mpImplFont->mbTransparent = true;
 }
 
-void Font::SetTransparent( sal_Bool bTransparent )
+void Font::SetTransparent( bool bTransparent )
 {
 
     if( mpImplFont->mbTransparent != bTransparent )
@@ -427,7 +427,7 @@ void Font::SetOrientation( short nOrientation )
     }
 }
 
-void Font::SetVertical( sal_Bool bVertical )
+void Font::SetVertical( bool bVertical )
 {
 
     if( mpImplFont->mbVertical != bVertical )
@@ -447,7 +447,7 @@ void Font::SetKerning( FontKerning nKerning )
     }
 }
 
-sal_Bool Font::IsKerning() const
+bool Font::IsKerning() const
 {
     return (mpImplFont->mnKerning & KERNING_FONTSPECIFIC) != 0;
 }
@@ -482,7 +482,7 @@ void Font::SetItalic( FontItalic eItalic )
     }
 }
 
-void Font::SetOutline( sal_Bool bOutline )
+void Font::SetOutline( bool bOutline )
 {
 
     if( mpImplFont->mbOutline != bOutline )
@@ -492,7 +492,7 @@ void Font::SetOutline( sal_Bool bOutline )
     }
 }
 
-void Font::SetShadow( sal_Bool bShadow )
+void Font::SetShadow( bool bShadow )
 {
 
     if( mpImplFont->mbShadow != bShadow )
@@ -552,7 +552,7 @@ void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
     }
 }
 
-void Font::SetWordLineMode( sal_Bool bWordLine )
+void Font::SetWordLineMode( bool bWordLine )
 {
 
     if( mpImplFont->mbWordLine != bWordLine )
@@ -659,7 +659,7 @@ SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
-    sal_Bool            bTmp;
+    bool            bTmp;
     sal_uInt8           nTmp8;
 
     rImpl_Font.maFamilyName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
@@ -678,16 +678,16 @@ SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
 
     rIStm.ReadInt16( rImpl_Font.mnOrientation );
 
-    rIStm.ReadUChar( bTmp ); rImpl_Font.mbWordLine = bTmp;
-    rIStm.ReadUChar( bTmp ); rImpl_Font.mbOutline = bTmp;
-    rIStm.ReadUChar( bTmp ); rImpl_Font.mbShadow = bTmp;
+    rIStm.ReadCharAsBool( bTmp ); rImpl_Font.mbWordLine = bTmp;
+    rIStm.ReadCharAsBool( bTmp ); rImpl_Font.mbOutline = bTmp;
+    rIStm.ReadCharAsBool( bTmp ); rImpl_Font.mbShadow = bTmp;
     rIStm.ReadUChar( nTmp8 ); rImpl_Font.mnKerning = nTmp8;
 
     if( aCompat.GetVersion() >= 2 )
     {
         rIStm.ReadUChar( nTmp8 );     rImpl_Font.meRelief = (FontRelief)nTmp8;
         rIStm.ReadUInt16( nTmp16 );    rImpl_Font.maCJKLanguageTag.reset( (LanguageType)nTmp16);
-        rIStm.ReadUChar( bTmp );      rImpl_Font.mbVertical = bTmp;
+        rIStm.ReadCharAsBool( bTmp );      rImpl_Font.mbVertical = bTmp;
         rIStm.ReadUInt16( nTmp16 );    rImpl_Font.meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
     if( aCompat.GetVersion() >= 3 )
@@ -719,15 +719,15 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
 
     rOStm.WriteInt16( rImpl_Font.mnOrientation );
 
-    rOStm.WriteUChar( (sal_Bool) rImpl_Font.mbWordLine );
-    rOStm.WriteUChar( (sal_Bool) rImpl_Font.mbOutline );
-    rOStm.WriteUChar( (sal_Bool) rImpl_Font.mbShadow );
+    rOStm.WriteUChar( rImpl_Font.mbWordLine );
+    rOStm.WriteUChar( rImpl_Font.mbOutline );
+    rOStm.WriteUChar( rImpl_Font.mbShadow );
     rOStm.WriteUChar( (sal_uInt8) rImpl_Font.mnKerning );
 
     // new in version 2
     rOStm.WriteUChar( (sal_uInt8)        rImpl_Font.meRelief );
     rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
-    rOStm.WriteUChar( (sal_Bool)     rImpl_Font.mbVertical );
+    rOStm.WriteUChar( rImpl_Font.mbVertical );
     rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.meEmphasisMark );
 
     // new in version 3
@@ -960,7 +960,7 @@ const Color& Font::GetColor() const { return mpImplFont->maColor; }
 
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
 
-sal_Bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
+bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
 
 FontAlign Font::GetAlign() const { return mpImplFont->meAlign; }
 
@@ -1004,9 +1004,9 @@ FontItalic Font::GetItalic() const { return mpImplFont->GetItalic(); }
 
 FontFamily Font::GetFamily() const { return mpImplFont->GetFamily(); }
 
-sal_Bool Font::IsOutline() const { return mpImplFont->mbOutline; }
+bool Font::IsOutline() const { return mpImplFont->mbOutline; }
 
-sal_Bool Font::IsShadow() const { return mpImplFont->mbShadow; }
+bool Font::IsShadow() const { return mpImplFont->mbShadow; }
 
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
 
@@ -1018,8 +1018,8 @@ FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 
-sal_Bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
+bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 
-sal_Bool Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+bool Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

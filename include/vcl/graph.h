@@ -39,7 +39,7 @@ protected:
 
     OUString        maUpperName;
     ReaderData*     mpReaderData;
-    sal_Bool            mbIsReading;
+    bool            mbIsReading;
 
                     GraphicReader() :
                         mpReaderData( NULL ),
@@ -51,7 +51,7 @@ public:
 
     const OUString&   GetUpperFilterName() const { return maUpperName; }
     ReaderData*     GetReaderData() const { return mpReaderData; }
-    sal_Bool            IsReading() const { return mbIsReading; }
+    bool            IsReading() const { return mbIsReading; }
 
     // TODO: when incompatible changes are possible again
     // the preview size hint should be redone

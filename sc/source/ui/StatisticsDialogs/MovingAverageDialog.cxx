@@ -40,7 +40,7 @@ ScMovingAverageDialog::ScMovingAverageDialog(
 ScMovingAverageDialog::~ScMovingAverageDialog()
 {}
 
-sal_Bool ScMovingAverageDialog::Close()
+bool ScMovingAverageDialog::Close()
 {
     return DoClose( ScMovingAverageDialogWrapper::GetChildWindowId() );
 }

@@ -47,7 +47,7 @@ TextCharAttrib::~TextCharAttrib()
 
 TextCharAttribList::TextCharAttribList()
 {
-    mbHasEmptyAttribs = sal_False;
+    mbHasEmptyAttribs = false;
 }
 
 TextCharAttribList::~TextCharAttribList()
@@ -55,7 +55,7 @@ TextCharAttribList::~TextCharAttribList()
     // PTRARR_DEL
 }
 
-void TextCharAttribList::Clear( sal_Bool bDestroyAttribs )
+void TextCharAttribList::Clear( bool bDestroyAttribs )
 {
     if ( bDestroyAttribs )
         for(iterator it = begin(); it != end(); ++it)
@@ -67,7 +67,7 @@ void TextCharAttribList::Clear( sal_Bool bDestroyAttribs )
 void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
 {
     if ( pAttrib->IsEmpty() )
-        mbHasEmptyAttribs = sal_True;
+        mbHasEmptyAttribs = true;
 
     const sal_uInt16 nCount = size();
     const sal_uInt16 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
@@ -124,18 +124,18 @@ TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt1
     return NULL;
 }
 
-sal_Bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
+bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 {
     for ( sal_uInt16 nAttr = size(); nAttr; )
     {
         const TextCharAttrib* pAttr = GetAttrib( --nAttr );
         if ( pAttr->Which() == nWhich )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
+bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
 {
     // backwards; if one ends there and the next starts there
     // ==> the starting one counts
@@ -144,12 +144,12 @@ sal_Bool TextCharAttribList::HasBoundingAttrib( sal_uInt16 nBound )
         TextCharAttrib* pAttr = GetAttrib( --nAttr );
 
         if ( pAttr->GetEnd() < nBound )
-            return sal_False;
+            return false;
 
         if ( ( pAttr->GetStart() == nBound ) || ( pAttr->GetEnd() == nBound ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
@@ -182,7 +182,7 @@ void TextCharAttribList::DeleteEmptyAttribs()
             nAttr--;
         }
     }
-    mbHasEmptyAttribs = sal_False;
+    mbHasEmptyAttribs = false;
 }
 
 TextNode::TextNode( const OUString& rText ) :
@@ -310,7 +310,7 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
             nAttr--;
         }
         else if ( pAttrib->IsEmpty() )
-            maCharAttribs.HasEmptyAttribs() = sal_True;
+            maCharAttribs.HasEmptyAttribs() = true;
     }
 
     if ( bResort )
@@ -335,7 +335,7 @@ void TextNode::RemoveText( sal_uInt16 nPos, sal_uInt16 nChars )
     CollapsAttribs( nPos, nChars );
 }
 
-TextNode* TextNode::Split( sal_uInt16 nPos, sal_Bool bKeepEndingAttribs )
+TextNode* TextNode::Split( sal_uInt16 nPos, bool bKeepEndingAttribs )
 {
     OUString aNewText;
     if ( nPos < maText.getLength() )
@@ -545,7 +545,7 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
     return aPaM;
 }
 
-TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs )
+TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs )
 {
     TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
     TextNode* pNew = pNode->Split( rPaM.GetIndex(), bKeepEndingAttribs );
@@ -579,20 +579,20 @@ TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars )
     return rPaM;
 }
 
-sal_Bool TextDoc::IsValidPaM( const TextPaM& rPaM )
+bool TextDoc::IsValidPaM( const TextPaM& rPaM )
 {
     if ( rPaM.GetPara() >= maTextNodes.Count() )
     {
         OSL_FAIL( "PaM: Para out of range" );
-        return sal_False;
+        return false;
     }
     TextNode * pNode = maTextNodes.GetObject( rPaM.GetPara() );
     if ( rPaM.GetIndex() > pNode->GetText().getLength() )
     {
         OSL_FAIL( "PaM: Index out of range" );
-        return sal_False;
+        return false;
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

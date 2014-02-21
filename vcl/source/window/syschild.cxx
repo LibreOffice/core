@@ -67,33 +67,33 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             // Focus holen und zwar so, das alle Handler gerufen
             // werden, als ob dieses Fenster den Focus bekommt,
             // ohne das der Frame den Focus wieder klaut
-            pWindow->ImplGetFrameData()->mbSysObjFocus = sal_True;
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_True;
+            pWindow->ImplGetFrameData()->mbSysObjFocus = true;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             pWindow->ToTop( TOTOP_NOGRABFOCUS );
             if( aDogTag.IsDead() )
                 break;
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_False;
-            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = sal_True;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
+            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = true;
             pWindow->GrabFocus();
             if( aDogTag.IsDead() )
                 break;
-            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = sal_False;
+            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = false;
             break;
 
         case SALOBJ_EVENT_LOSEFOCUS:
             // Hintenrum einen LoseFocus ausloesen, das der Status
             // der Fenster dem entsprechenden Activate-Status
             // entspricht
-            pWindow->ImplGetFrameData()->mbSysObjFocus = sal_False;
+            pWindow->ImplGetFrameData()->mbSysObjFocus = false;
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
-                pWindow->ImplGetFrameData()->mbStartFocusState = sal_True;
+                pWindow->ImplGetFrameData()->mbStartFocusState = true;
                 Application::PostUserEvent( pWindow->ImplGetFrameData()->mnFocusId, LINK( pWindow->ImplGetFrameWindow(), Window, ImplAsyncFocusHdl ) );
             }
             break;
 
         case SALOBJ_EVENT_TOTOP:
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_True;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             if ( !Application::GetFocusWindow() || pWindow->HasChildPathFocus() )
                 pWindow->ToTop( TOTOP_NOGRABFOCUS );
             else
@@ -103,7 +103,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             pWindow->GrabFocus();
             if( aDogTag.IsDead() )
                 break;
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_False;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
             break;
     }
 
@@ -112,7 +112,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
 
 // =======================================================================
 
-void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow )
+void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
 {
     mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
 
@@ -137,7 +137,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow ) :
+SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, pData, bShow );
@@ -167,7 +167,7 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
-void SystemChildWindow::EnableEraseBackground( sal_Bool bEnable )
+void SystemChildWindow::EnableEraseBackground( bool bEnable )
 {
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
@@ -207,7 +207,7 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 #endif // HAVE_FEATURE_JAVA
 }
 
-void SystemChildWindow::SetForwardKey( sal_Bool bEnable )
+void SystemChildWindow::SetForwardKey( bool bEnable )
 {
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
@@ -215,7 +215,7 @@ void SystemChildWindow::SetForwardKey( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
+sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
 {
     sal_IntPtr nRet = 0;
 

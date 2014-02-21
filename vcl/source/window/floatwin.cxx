@@ -67,8 +67,8 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mpImplData = new ImplData;
 
     mpWindowImpl->mbFloatWin = true;
-    mbInCleanUp = sal_False;
-    mbGrabFocus = sal_False;
+    mbInCleanUp = false;
+    mbGrabFocus = false;
 
     DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL!" );
 
@@ -116,7 +116,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
-            pBorderWin->SetDisplayActive( sal_True );
+            pBorderWin->SetDisplayActive( true );
             mpWindowImpl->mpBorderWindow  = pBorderWin;
             mpWindowImpl->mpRealParent    = pParent;
         }
@@ -129,11 +129,11 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
     mnOldTitle              = mnTitle;
     mnPopupModeFlags        = 0;
-    mbInPopupMode           = sal_False;
-    mbPopupMode             = sal_False;
-    mbPopupModeCanceled     = sal_False;
-    mbPopupModeTearOff      = sal_False;
-    mbMouseDown             = sal_False;
+    mbInPopupMode           = false;
+    mbPopupMode             = false;
+    mbPopupModeCanceled     = false;
+    mbPopupModeTearOff      = false;
+    mbMouseDown             = false;
 
     ImplInitSettings();
 }
@@ -253,7 +253,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     Rectangle normRect( rRect );  // rRect is already relative to top-level window
     normRect.SetPos( pW->ScreenToOutputPixel( normRect.TopLeft() ) );
 
-    sal_Bool bRTL = Application::GetSettings().GetLayoutRTL();
+    bool bRTL = Application::GetSettings().GetLayoutRTL();
 
     Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
                         pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );
@@ -526,20 +526,20 @@ FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
 
 // -----------------------------------------------------------------------
 
-sal_Bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
+bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
 {
     FloatingWindow* pWin = this;
 
     do
     {
         if ( pWin->mpFirstPopupModeWin == pWindow )
-            return sal_True;
+            return true;
 
         pWin = pWin->mpNextFloat;
     }
     while ( pWin );
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -548,7 +548,7 @@ IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
 {
     mnPostId            = 0;
     mnPopupModeFlags    = 0;
-    mbPopupMode         = sal_False;
+    mbPopupMode         = false;
     PopupModeEnd();
     return 0;
 }
@@ -610,7 +610,7 @@ void FloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void FloatingWindow::ImplCallPopupModeEnd()
 {
     // PopupMode wurde beendet
-    mbInPopupMode = sal_False;
+    mbInPopupMode = false;
 
     // Handler asyncron rufen
     if ( !mnPostId )
@@ -708,11 +708,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     maFloatRect.Right()    += 2;
     maFloatRect.Bottom()   += 2;
     mnPopupModeFlags        = nFlags;
-    mbInPopupMode           = sal_True;
-    mbPopupMode             = sal_True;
-    mbPopupModeCanceled     = sal_False;
-    mbPopupModeTearOff      = sal_False;
-    mbMouseDown             = sal_False;
+    mbInPopupMode           = true;
+    mbPopupMode             = true;
+    mbPopupModeCanceled     = false;
+    mbPopupModeTearOff      = false;
+    mbMouseDown             = false;
 
     mbOldSaveBackMode       = IsSaveBackgroundEnabled();
     EnableSaveBackground();
@@ -724,7 +724,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
     if( nFlags & FLOATWIN_POPUPMODE_GRABFOCUS )
     {
         // force key input even without focus (useful for menus)
-        mbGrabFocus = sal_True;
+        mbGrabFocus = true;
     }
     Show( true, SHOW_NOACTIVATE );
 }
@@ -739,7 +739,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
         return;
 
     mpImplData->mpBox = pBox;
-    pBox->ImplFloatControl( sal_True, this );
+    pBox->ImplFloatControl( true, this );
 
     // retrieve some data from the ToolBox
     Rectangle aRect = pBox->GetItemRect( nItemId );
@@ -785,7 +785,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    mbInCleanUp = sal_True; // prevent killing this window due to focus change while working with it
+    mbInCleanUp = true; // prevent killing this window due to focus change while working with it
 
     // Bei allen nachfolgenden PopupMode-Fenster den Modus auch beenden
     while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
@@ -810,13 +810,13 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
         else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
                   ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
             pSVData->maWinData.mpFirstFloat->GrabFocus();
-        mbPopupModeTearOff = sal_False;
+        mbPopupModeTearOff = false;
     }
     else
     {
-        mbPopupModeTearOff = sal_True;
+        mbPopupModeTearOff = true;
         if ( nFocusId )
-            Window::EndSaveFocus( nFocusId, sal_False );
+            Window::EndSaveFocus( nFocusId, false );
     }
     EnableSaveBackground( mbOldSaveBackMode );
 
@@ -828,7 +828,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     // ToolBox wieder auf normal schalten
     if ( mpImplData->mpBox )
     {
-        mpImplData->mpBox->ImplFloatControl( sal_False, this );
+        mpImplData->mpBox->ImplFloatControl( false, this );
         mpImplData->mpBox = NULL;
     }
 
@@ -849,7 +849,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
         }
     }
 
-    mbInCleanUp = sal_False;
+    mbInCleanUp = false;
 }
 
 // -----------------------------------------------------------------------

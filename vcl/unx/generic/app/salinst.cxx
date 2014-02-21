@@ -84,7 +84,7 @@ X11SalInstance::~X11SalInstance()
 struct PredicateReturn
 {
     sal_uInt16  nType;
-    sal_Bool    bRet;
+    bool    bRet;
 };
 
 extern "C" {
@@ -121,7 +121,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
     }
 
     if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & VCL_INPUT_OTHER) ) )
-        pPre->bRet = sal_True;
+        pPre->bRet = true;
 
     return False;
 }
@@ -131,16 +131,16 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
 {
     SalGenericData *pData = GetGenericData();
     Display *pDisplay  = pData->GetSalDisplay()->GetDisplay();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( (nType & VCL_INPUT_TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
-        bRet = sal_True;
+        bRet = true;
     else if (XPending(pDisplay) )
     {
         PredicateReturn aInput;
         XEvent          aEvent;
 
-        aInput.bRet     = sal_False;
+        aInput.bRet     = false;
         aInput.nType    = nType;
 
         XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,

@@ -59,8 +59,8 @@ public:
     sal_uLong           GetOptions() const { return mnOptions; }
 
     InputContext&   operator=( const InputContext& rInputContext );
-    sal_Bool            operator==( const InputContext& rInputContext ) const;
-    sal_Bool            operator!=( const InputContext& rInputContext ) const
+    bool            operator==( const InputContext& rInputContext ) const;
+    bool            operator!=( const InputContext& rInputContext ) const
                         { return !(InputContext::operator==( rInputContext )); }
 };
 
@@ -71,7 +71,7 @@ inline InputContext& InputContext::operator=( const InputContext& rInputContext 
     return *this;
 }
 
-inline sal_Bool InputContext::operator==( const InputContext& rInputContext ) const
+inline bool InputContext::operator==( const InputContext& rInputContext ) const
 {
     return ((mnOptions  == rInputContext.mnOptions) &&
             (maFont     == rInputContext.maFont));

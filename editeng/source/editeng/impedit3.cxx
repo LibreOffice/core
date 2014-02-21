@@ -2763,7 +2763,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
             rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
-            rFont.SetTransparent( sal_False );
+            rFont.SetTransparent( false );
         }
         else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
         {
@@ -3004,7 +3004,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                      ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
                                      ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OUTDEV_PRINTER ) ) )
                                 {
-                                    aTmpFont.SetTransparent( sal_True );
+                                    aTmpFont.SetTransparent( true );
                                     pOutDev->SetFillColor();
                                     pOutDev->SetLineColor( GetAutoColor() );
                                     bDrawFrame = true;
@@ -3514,7 +3514,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 if ( pTextPortion->GetExtraValue() && ( pTextPortion->GetExtraValue() != ' ' ) )
                                 {
                                     SeekCursor( pPortion->GetNode(), nIndex+1, aTmpFont, pOutDev );
-                                    aTmpFont.SetTransparent( sal_False );
+                                    aTmpFont.SetTransparent( false );
                                     aTmpFont.SetEscapement( 0 );
                                     aTmpFont.SetPhysFont( pOutDev );
                                     long nCharWidth = aTmpFont.QuickGetTextSize( pOutDev,

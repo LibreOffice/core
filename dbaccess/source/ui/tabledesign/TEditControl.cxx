@@ -1412,8 +1412,8 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                                 SelectColumnId( nColId );
 
                             PopupMenu aContextMenu( ModuleRes( RID_QUERYCOLPOPUPMENU ) );
-                            aContextMenu.EnableItem( SID_DELETE, sal_False );
-                            aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+                            aContextMenu.EnableItem( SID_DELETE, false );
+                            aContextMenu.RemoveDisabledEntries(true, true);
                             switch ( aContextMenu.Execute( this, aMenuPos ) )
                             {
                                 case ID_BROWSER_COLWIDTH:
@@ -1436,7 +1436,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     aContextMenu.CheckItem( SID_TABLEDESIGN_TABED_PRIMARYKEY, IsRowSelected(GetCurRow()) && IsPrimaryKey() );
 
                     // remove all the disable entries
-                    aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+                    aContextMenu.RemoveDisabledEntries(true, true);
 
                     if( SetDataPtr(m_nDataPos) )
                         pDescrWin->SaveData( pActRow->GetActFieldDescr() );

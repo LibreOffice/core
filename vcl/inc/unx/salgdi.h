@@ -108,9 +108,9 @@ protected:
 
     SalColor        nTextColor_;
     Pixel           nTextPixel_;
-    sal_Bool            bFontVertical_;
+    bool            bFontVertical_;
 
-    sal_Bool            bDisableGraphite_;
+    bool            bDisableGraphite_;
 
     GC              pBrushGC_;      // Brush attributes
     SalColor        nBrushColor_;
@@ -125,20 +125,20 @@ protected:
     GC              pStippleGC_;
     GC              pTrackingGC_;
 
-    sal_Bool            bWindow_ : 1;       // is Window
-    sal_Bool            bPrinter_ : 1;      // is Printer
-    sal_Bool            bVirDev_ : 1;       // is VirDev
-    sal_Bool            bPenGC_ : 1;        // is Pen GC valid
-    sal_Bool            bFontGC_ : 1;       // is Font GC valid
-    sal_Bool            bBrushGC_ : 1;      // is Brush GC valid
-    sal_Bool            bMonoGC_ : 1;       // is Mono GC valid
-    sal_Bool            bCopyGC_ : 1;       // is Copy GC valid
-    sal_Bool            bInvertGC_ : 1;     // is Invert GC valid
-    sal_Bool            bInvert50GC_ : 1;   // is Invert50 GC valid
-    sal_Bool            bStippleGC_ : 1;    // is Stipple GC valid
-    sal_Bool            bTrackingGC_ : 1;   // is Tracking GC valid
+    bool            bWindow_ : 1;       // is Window
+    bool            bPrinter_ : 1;      // is Printer
+    bool            bVirDev_ : 1;       // is VirDev
+    bool            bPenGC_ : 1;        // is Pen GC valid
+    bool            bFontGC_ : 1;       // is Font GC valid
+    bool            bBrushGC_ : 1;      // is Brush GC valid
+    bool            bMonoGC_ : 1;       // is Mono GC valid
+    bool            bCopyGC_ : 1;       // is Copy GC valid
+    bool            bInvertGC_ : 1;     // is Invert GC valid
+    bool            bInvert50GC_ : 1;   // is Invert50 GC valid
+    bool            bStippleGC_ : 1;    // is Stipple GC valid
+    bool            bTrackingGC_ : 1;   // is Tracking GC valid
     bool            bXORMode_ : 1;      // is ROP XOR Mode set
-    sal_Bool            bDitherBrush_ : 1;  // is solid or tile
+    bool            bDitherBrush_ : 1;  // is solid or tile
 
     using SalGraphics::SetClipRegion;
     void            SetClipRegion( GC          pGC,
@@ -156,7 +156,7 @@ protected:
                                GC                 pGC,
                                bool bClose
                                );
-    sal_Bool            GetDitherPixmap ( SalColor nSalColor );
+    bool            GetDitherPixmap ( SalColor nSalColor );
 
     inline  GC              GetMonoGC( Pixmap hPixmap );
     inline  GC              GetCopyGC();
@@ -233,7 +233,7 @@ public:
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void ClearDevFontCache();
     virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
-    virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
+    virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_GlyphId* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -277,13 +277,13 @@ public:
     virtual bool            drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
 
 #if 1 // TODO: remove these obselete methods
-    virtual sal_Bool        drawPolyLineBezier( sal_uInt32 nPoints,
+    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry );
-    virtual sal_Bool        drawPolygonBezier( sal_uInt32 nPoints,
+    virtual bool        drawPolygonBezier( sal_uInt32 nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry );
-    virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
+    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const sal_uInt8* const* pFlgAry );
@@ -314,7 +314,7 @@ public:
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags );
     virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
+    virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
 
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,

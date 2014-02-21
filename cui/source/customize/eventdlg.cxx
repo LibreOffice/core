@@ -91,7 +91,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     nPos = aSaveInListBox.InsertEntry(
         utl::ConfigManager::getProductName() );
     aSaveInListBox.SetEntryData( nPos, new bool(true) );
-    aSaveInListBox.SelectEntryPos( nPos, sal_True );
+    aSaveInListBox.SelectEntryPos( nPos, true );
 }
 
 // -----------------------------------------------------------------------
@@ -163,7 +163,7 @@ void SvxEventConfigPage::ImplInitDocument()
             sal_uInt16 nPos = aSaveInListBox.InsertEntry( aTitle );
 
             aSaveInListBox.SetEntryData( nPos, new bool(false) );
-            aSaveInListBox.SelectEntryPos( nPos, sal_True );
+            aSaveInListBox.SelectEntryPos( nPos, true );
 
             bAppConfig = false;
         }
@@ -183,7 +183,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     bool* bApp = (bool*) aSaveInListBox.GetEntryData(
             aSaveInListBox.GetSelectEntryPos());
 
-    mpImpl->pEventLB->SetUpdateMode( sal_False );
+    mpImpl->pEventLB->SetUpdateMode( false );
     bAppConfig = *bApp;
     if ( *bApp )
     {
@@ -217,7 +217,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
         _SvxMacroTabPage::DisplayAppEvents( false );
     }
 
-    mpImpl->pEventLB->SetUpdateMode( sal_True );
+    mpImpl->pEventLB->SetUpdateMode( true );
     return sal_True;
 }
 

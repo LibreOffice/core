@@ -235,14 +235,14 @@ UpdateInstallDialog::UpdateInstallDialog(
     m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
     m_cancel.SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
-    m_mle_info.EnableCursor(sal_False);
+    m_mle_info.EnableCursor(false);
     if ( ! dp_misc::office_is_running())
         m_help.Disable();
 }
 
 UpdateInstallDialog::~UpdateInstallDialog() {}
 
-sal_Bool UpdateInstallDialog::Close()
+bool UpdateInstallDialog::Close()
 {
     m_thread->stop();
     return ModalDialog::Close();

@@ -79,7 +79,7 @@ protected:
         @return
             if the Control instance has been destroyed in any of the call
     */
-    sal_Bool        ImplCallEventListenersAndHandler(
+    bool        ImplCallEventListenersAndHandler(
                     sal_uLong nEvent, const Link& rHandler, void* pCaller
                 );
 
@@ -100,7 +100,7 @@ protected:
     virtual const Color&
                 GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-    void ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForeground );
+    void ImplInitSettings( const bool _bFont, const bool _bForeground );
 
 public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;

@@ -179,7 +179,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-sal_Bool ScNameDlg::Close()
+bool ScNameDlg::Close()
 {
     if (mbDataChanged && !mbCloseWithoutUndo)
         mpViewData->GetDocFunc().ModifyAllRangeNames(maRangeMap);

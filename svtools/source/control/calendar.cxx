@@ -2485,7 +2485,7 @@ void CalendarField::Select()
 
 // -----------------------------------------------------------------------
 
-sal_Bool CalendarField::ShowDropDown( sal_Bool bShow )
+bool CalendarField::ShowDropDown( sal_Bool bShow )
 {
     if ( bShow )
     {
@@ -2530,7 +2530,7 @@ sal_Bool CalendarField::ShowDropDown( sal_Bool bShow )
         mpCalendar->EndSelection();
         EndDropDown();
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

@@ -33,7 +33,7 @@ class JPEGWriter
     BitmapReadAccess*   mpReadAccess;
     sal_uInt8*          mpBuffer;
     bool                mbNative;
-    sal_Bool            mbGreys;
+    bool            mbGreys;
     sal_Int32           mnQuality;
     sal_Int32           maChromaSubsampling;
 
@@ -49,7 +49,7 @@ public:
     virtual ~JPEGWriter() {};
 
     void*       GetScanline( long nY );
-    sal_Bool    Write( const Graphic& rGraphic );
+    bool    Write( const Graphic& rGraphic );
 
 };
 

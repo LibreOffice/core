@@ -131,8 +131,8 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
     get(m_pDeleteBtn, "delete");
 
     m_pBookmarkBox->SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
-    m_pBookmarkBox->EnableMultiSelection(sal_True);
-    m_pBookmarkBox->EnableAutocomplete( sal_True, sal_True );
+    m_pBookmarkBox->EnableMultiSelection(true);
+    m_pBookmarkBox->EnableAutocomplete( true, true );
 
     m_pDeleteBtn->SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
 

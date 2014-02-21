@@ -39,7 +39,7 @@ protected:
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     sal_uInt16      nActiveCategoryRID;
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    GetFocus();
 
     void            ApplyImageLists( sal_uInt16 nCategoryRID );

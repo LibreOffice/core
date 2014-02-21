@@ -32,7 +32,7 @@ void TabDialog::ImplInitTabDialogData()
     mpFixedLine     = NULL;
     mpViewWindow    = NULL;
     meViewAlign     = WINDOWALIGN_LEFT;
-    mbPosControls   = sal_True;
+    mbPosControls   = true;
 }
 
 // -----------------------------------------------------------------------
@@ -149,7 +149,7 @@ void TabDialog::ImplPosControls()
         pTabControl->SetPosPixel( aTabOffset );
 
         // Alle anderen Children positionieren
-        sal_Bool bTabCtrl   = sal_False;
+        bool bTabCtrl   = false;
         int  nLines     = 0;
         long nX;
         long nY         = aDlgSize.Height();
@@ -167,7 +167,7 @@ void TabDialog::ImplPosControls()
             if ( pChild2->IsVisible() && (pChild2 != mpViewWindow) )
             {
                 if ( pChild2 == pTabControl )
-                    bTabCtrl = sal_True;
+                    bTabCtrl = true;
                 else if ( bTabCtrl )
                 {
                     if ( !nLines )
@@ -209,7 +209,7 @@ void TabDialog::ImplPosControls()
         mpFixedLine->Show();
     }
 
-    mbPosControls = sal_False;
+    mbPosControls = false;
 }
 
 // -----------------------------------------------------------------------

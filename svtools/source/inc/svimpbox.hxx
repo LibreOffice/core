@@ -56,9 +56,9 @@ public:
     void        BeginDrag();
     void        CreateAnchor();
     void        DestroyAnchor();
-    sal_Bool        SetCursorAtPoint( const Point& rPoint,
+    bool        SetCursorAtPoint( const Point& rPoint,
                     sal_Bool bDontSelectAtCursor=sal_False );
-    sal_Bool        IsSelectionAtPoint( const Point& rPoint );
+    bool        IsSelectionAtPoint( const Point& rPoint );
     void        DeselectAtPoint( const Point& rPoint );
     void        DeselectAll();
 };

@@ -106,13 +106,13 @@ void FontNameMenu::SetCurName(const OUString& rName)
         OUString aText = GetItemText( nItemId );
         if ( aText == maCurName )
         {
-            CheckItem( nItemId, sal_True );
+            CheckItem( nItemId, true );
             return;
         }
     }
 
     if ( nChecked )
-        CheckItem( nChecked, sal_False );
+        CheckItem( nChecked, false );
 }
 
 // ========================================================================
@@ -219,7 +219,7 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     {
         mpHeightAry[nPos] = *pTempAry;
         nPos++; // Id is nPos+1
-        InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, sal_True, sal_False ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+        InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MIB_RADIOCHECK | MIB_AUTOCHECK );
         pTempAry++;
     }
 
@@ -241,7 +241,7 @@ void FontSizeMenu::SetCurHeight( long nHeight )
 
         if ( mpHeightAry[i] == nHeight )
         {
-            CheckItem( nItemId, sal_True );
+            CheckItem( nItemId, true );
             return;
         }
 
@@ -250,7 +250,7 @@ void FontSizeMenu::SetCurHeight( long nHeight )
     }
 
     if ( nChecked )
-        CheckItem( nChecked, sal_False );
+        CheckItem( nChecked, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

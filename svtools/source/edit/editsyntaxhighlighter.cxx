@@ -97,10 +97,10 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 nKey)
                 {
                     if (!nCount)
                     {
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos, sal_True );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nPara, i, i+1, true );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nPara, i, i+1, true );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, nStartPos, nStartPos, true );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, nStartPos, nStartPos, true );
                         return;
                     }
                     else
@@ -170,13 +170,13 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         OUString aLine( GetTextEngine()->GetText( nLine ) );
-        GetTextEngine()->RemoveAttribs( nLine, sal_True );
+        GetTextEngine()->RemoveAttribs( nLine, true );
         std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( aLine, aPortions );
         for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
              i != aPortions.end(); ++i)
         {
-            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(i->tokenType) ), nLine, i->nBegin, i->nEnd, sal_True );
+            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(i->tokenType) ), nLine, i->nBegin, i->nEnd, true );
         }
     }
     GetTextView()->ShowCursor( false, true );

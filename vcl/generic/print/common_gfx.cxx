@@ -48,7 +48,7 @@ GraphicsStatus::GraphicsStatus() :
  * non graphics graphics routines
  */
 
-sal_Bool
+bool
 PrinterGfx::Init (PrinterJob &rPrinterJob)
 {
     mpPageHeader = rPrinterJob.GetCurrentPageHeader ();
@@ -62,10 +62,10 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool
+bool
 PrinterGfx::Init (const JobData& rData)
 {
     mpPageHeader    = NULL;
@@ -80,7 +80,7 @@ PrinterGfx::Init (const JobData& rData)
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
 
-    return sal_True;
+    return true;
 }
 
 sal_uInt16
@@ -97,7 +97,7 @@ PrinterGfx::PrinterGfx() :
         mnTextAngle (0),
         mbTextVertical (false),
         mrFontMgr (PrintFontManager::get()),
-        mbCompressBmp (sal_True),
+        mbCompressBmp (true),
         maFillColor (0xff,0,0),
         maTextColor (0,0,0),
         maLineColor (0, 0xff, 0)
@@ -127,11 +127,11 @@ PrinterGfx::Clear()
     maLineColor                     = PrinterColor();
     maFillColor                     = PrinterColor();
     maTextColor                     = PrinterColor();
-    mbCompressBmp                   = sal_True;
+    mbCompressBmp                   = true;
     mnDpi                           = 300;
     mnDepth                         = 24;
     mnPSLevel                       = 2;
-    mbColor                         = sal_True;
+    mbColor                         = true;
     mnTextAngle                     = 0;
 
     maClipRegion.clear();
@@ -157,19 +157,19 @@ PrinterGfx::BeginSetClipRegion( sal_uInt32 )
     maClipRegion.clear();
 }
 
-sal_Bool
+bool
 PrinterGfx::UnionClipRegion (sal_Int32 nX,sal_Int32 nY,sal_Int32 nDX,sal_Int32 nDY)
 {
     if( nDX && nDY )
         maClipRegion.push_back (Rectangle(Point(nX,nY ), Size(nDX,nDY)));
-    return sal_True;
+    return true;
 }
 
-sal_Bool
+bool
 PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
                                         Point& rOldPoint, sal_Int32& rColumn )
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     std::list< Rectangle >::iterator tempit, nextit;
     nextit = it;
@@ -267,7 +267,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         ++tempit;
         maClipRegion.erase( it );
         it = tempit;
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     return bSuccess;
 }
@@ -1127,15 +1127,15 @@ PrinterGfx::PSComment( const sal_Char* pComment )
     }
 }
 
-sal_Bool
+bool
 PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize )
 {
     if( nSize == 0 )
-        return sal_True;
+        return true;
     if( ! mpPageBody )
-        return sal_False;
+        return false;
 
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     // first search the BoundingBox of the EPS data
     SvMemoryStream aStream( pPtr, nSize, STREAM_READ );

@@ -172,19 +172,19 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     }
 
     nValue = 0;
-    if( sal_True == m_pEveryDayButton->IsChecked() )
+    if( m_pEveryDayButton->IsChecked() )
     {
-        if( sal_False == m_pEveryDayButton->GetSavedValue() )
+        if( !m_pEveryDayButton->GetSavedValue() )
             nValue = 86400;
     }
-    else if( sal_True == m_pEveryWeekButton->IsChecked() )
+    else if( m_pEveryWeekButton->IsChecked() )
     {
-        if( sal_False == m_pEveryWeekButton->GetSavedValue() )
+        if( !m_pEveryWeekButton->GetSavedValue() )
             nValue = 604800;
     }
-    else if( sal_True == m_pEveryMonthButton->IsChecked() )
+    else if( m_pEveryMonthButton->IsChecked() )
     {
-        if( sal_False == m_pEveryMonthButton->GetSavedValue() )
+        if( !m_pEveryMonthButton->GetSavedValue() )
             nValue = 2592000;
     }
 

@@ -40,7 +40,7 @@ class GtkSalMenu : public SalMenu
 private:
     std::vector< GtkSalMenuItem* >  maItems;
 
-    sal_Bool                        mbMenuBar;
+    bool                        mbMenuBar;
     Menu*                           mpVCLMenu;
     GtkSalMenu*                     mpOldSalMenu;
     GtkSalMenu*                     mpParentSalMenu;
@@ -55,10 +55,10 @@ private:
     void                        ActivateAllSubmenus(MenuBar* pMenuBar);
 
 public:
-    GtkSalMenu( sal_Bool bMenuBar );
+    GtkSalMenu( bool bMenuBar );
     virtual ~GtkSalMenu();
 
-    virtual sal_Bool            VisibleMenuBar();   // must return TRUE to actually DISPLAY native menu bars
+    virtual bool            VisibleMenuBar();   // must return TRUE to actually DISPLAY native menu bars
                                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void                InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
@@ -83,7 +83,7 @@ public:
     virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
     virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
-    virtual sal_Bool            IsItemVisible( unsigned nPos );
+    virtual bool            IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection,
@@ -100,7 +100,7 @@ public:
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate();
     void                        Deactivate( const gchar* aMenuCommand );
-    void                        Display( sal_Bool bVisible );
+    void                        Display( bool bVisible );
     bool                        PrepUpdate();
     void                        Update();           // Update this menu only.
     void                        UpdateFull();       // Update full menu hierarchy from this menu.
@@ -114,7 +114,7 @@ public:
 
     sal_uInt16          mnId;               // Item ID
     MenuItemType        mnType;             // Item type
-    sal_Bool            mbVisible;          // Item visibility.
+    bool            mbVisible;          // Item visibility.
     Menu*               mpVCLMenu;          // VCL Menu into which this menu item is inserted
     GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)

@@ -150,12 +150,12 @@ SvxHpLinkDlg::~SvxHpLinkDlg ()
 |*
 |************************************************************************/
 
-sal_Bool SvxHpLinkDlg::Close()
+bool SvxHpLinkDlg::Close()
 {
     GetDispatcher()->Execute( SID_HYPERLINK_DIALOG,
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************

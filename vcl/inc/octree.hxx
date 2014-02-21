@@ -36,7 +36,7 @@ typedef struct OctreeNode
     OctreeNode* pNext;
     OctreeNode* pNextInCache;
     sal_uInt16      nPalIndex;
-    sal_Bool        bLeaf;
+    bool        bLeaf;
 } NODE;
 
 typedef NODE*       PNODE;

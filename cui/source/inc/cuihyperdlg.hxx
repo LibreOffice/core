@@ -72,7 +72,7 @@ private:
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 protected:
-    virtual sal_Bool            Close();
+    virtual bool            Close();
     virtual void            Move();
 
 public:

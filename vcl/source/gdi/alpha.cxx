@@ -75,14 +75,14 @@ Bitmap AlphaMask::GetBitmap() const
     return ImplGetBitmap();
 }
 
-sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                            const AlphaMask* pAlphaSrc )
 {
     // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
     // This optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
     const Size  aSizePix( GetSizePixel() );
     Rectangle   aRectDst( rRectDst );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     aRectDst.Intersection( Rectangle( Point(), aSizePix ) );
 
@@ -173,7 +173,7 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
                     }
 
                     ReleaseAccess( pWriteAcc );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
         }
@@ -183,16 +183,16 @@ sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRect
 
 }
 
-sal_Bool AlphaMask::Erase( sal_uInt8 cTransparency )
+bool AlphaMask::Erase( sal_uInt8 cTransparency )
 {
     return Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
-sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
+bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 {
     BitmapReadAccess*   pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pMaskAcc && pAcc )
     {
@@ -213,14 +213,14 @@ sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency
     return bRet;
 }
 
-sal_Bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
+bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
 #ifdef DBG_UTIL
 nTol
 #endif
 )
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     DBG_ASSERT( !nTol, "AlphaMask::Replace: nTol not used yet" );
 
@@ -255,7 +255,7 @@ nTol
             }
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( pAcc )

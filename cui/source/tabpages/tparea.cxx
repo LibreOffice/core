@@ -671,7 +671,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     // Controls for Hatch-Background
     m_pFlHatchBckgrd->Hide();
 
-    m_pTsbOriginal->EnableTriState( sal_False );
+    m_pTsbOriginal->EnableTriState( false );
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -728,7 +728,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     m_pTypeLB->SetSelectHdl( LINK( this, SvxAreaTabPage, SelectDialogTypeHdl_Impl ) );
 
     // #i76307# always paint the preview in LTR, because this is what the document does
-    m_pCtlXRectPreview->EnableRTL(sal_False);
+    m_pCtlXRectPreview->EnableRTL(false);
 
     // Calcualte size of dropdown listboxes
     Size aSize = LogicToPixel(Size(108, 103), MAP_APPFONT);
@@ -1515,7 +1515,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     if( ( rAttrs.GetItemState( XATTR_GRADIENTSTEPCOUNT ) != SFX_ITEM_DONTCARE ) ||
         ( rAttrs.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DONTCARE ) )
     {
-        m_pTsbStepCount->EnableTriState( sal_False );
+        m_pTsbStepCount->EnableTriState( false );
         sal_uInt16 nValue = ( ( const XGradientStepCountItem& ) rAttrs.Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
         if( nValue == 0 )
         {
@@ -1539,7 +1539,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
     if( rAttrs.GetItemState( XATTR_FILLBMP_TILE ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbTile->EnableTriState( sal_False );
+        m_pTsbTile->EnableTriState( false );
 
         if( ( ( const XFillBmpTileItem& ) rAttrs.Get( XATTR_FILLBMP_TILE ) ).GetValue() )
             m_pTsbTile->SetState( STATE_CHECK );
@@ -1551,7 +1551,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
     if( rAttrs.GetItemState( XATTR_FILLBMP_STRETCH ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbStretch->EnableTriState( sal_False );
+        m_pTsbStretch->EnableTriState( false );
 
         if( ( ( const XFillBmpStretchItem& ) rAttrs.Get( XATTR_FILLBMP_STRETCH ) ).GetValue() )
             m_pTsbStretch->SetState( STATE_CHECK );
@@ -1565,7 +1565,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
     //aTsbScale
     if( rAttrs.GetItemState( XATTR_FILLBMP_SIZELOG ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbScale->EnableTriState( sal_False );
+        m_pTsbScale->EnableTriState( false );
 
         if( ( ( const XFillBmpSizeLogItem& ) rAttrs.Get( XATTR_FILLBMP_SIZELOG ) ).GetValue() )
             m_pTsbScale->SetState( STATE_NOCHECK );

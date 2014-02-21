@@ -137,7 +137,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                     );
 
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
-    vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
+    vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, true );
     m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", OUString(),
                                                      ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
                                                      PRTUIOPT_PRINT_SCALE,
@@ -1106,7 +1106,7 @@ void SAL_CALL SmModel::render(
 
                 // release SmPrintUIOptions when everything is done.
                 // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
-                if (m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False ))
+                if (m_pPrintUIOptions->getBoolValue( "IsLastPage", false ))
                 {
                     delete m_pPrintUIOptions;   m_pPrintUIOptions = 0;
                 }

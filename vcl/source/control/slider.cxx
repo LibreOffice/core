@@ -69,8 +69,8 @@ void Slider::ImplInit( Window* pParent, WinBits nStyle )
     mnDragDraw          = 0;
     mnStateFlags        = 0;
     meScrollType        = SCROLL_DONTKNOW;
-    mbCalcSize          = sal_True;
-    mbFullDrag          = sal_True;
+    mbCalcSize          = true;
+    mbFullDrag          = true;
 
     Control::ImplInit( pParent, nStyle, NULL );
 
@@ -93,16 +93,16 @@ void Slider::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( true );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( false );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( false );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -113,7 +113,7 @@ void Slider::ImplInitSettings()
 
 // -----------------------------------------------------------------------
 
-void Slider::ImplUpdateRects( sal_Bool bUpdate )
+void Slider::ImplUpdateRects( bool bUpdate )
 {
     Rectangle aOldThumbRect = maThumbRect;
     bool bInvalidateAll = false;
@@ -250,7 +250,7 @@ long Slider::ImplCalcThumbPosPix( long nPos )
 
 // -----------------------------------------------------------------------
 
-void Slider::ImplCalc( sal_Bool bUpdate )
+void Slider::ImplCalc( bool bUpdate )
 {
     bool bInvalidateAll = false;
 
@@ -305,7 +305,7 @@ void Slider::ImplCalc( sal_Bool bUpdate )
              (nOldChannelPixBottom != mnChannelPixBottom) )
             bInvalidateAll = true;
 
-        mbCalcSize = sal_False;
+        mbCalcSize = false;
     }
 
     if ( mnThumbPixRange )
@@ -314,7 +314,7 @@ void Slider::ImplCalc( sal_Bool bUpdate )
     if ( bUpdate && bInvalidateAll )
     {
         Invalidate();
-        bUpdate = sal_False;
+        bUpdate = false;
     }
     ImplUpdateRects( bUpdate );
 }
@@ -326,11 +326,11 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
     DecorationView          aDecoView( this );
     sal_uInt16                  nStyle;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-    sal_Bool                    bEnabled = IsEnabled();
+    bool                    bEnabled = IsEnabled();
 
     // do missing calculations
     if ( mbCalcSize )
-        ImplCalc( sal_False );
+        ImplCalc( false );
 
     ControlPart nPart = (GetStyle() & WB_HORZ) ? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA;
     ControlState   nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
@@ -461,7 +461,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Slider::ImplIsPageUp( const Point& rPos )
+bool Slider::ImplIsPageUp( const Point& rPos )
 {
     Size aSize = GetOutputSizePixel();
     Rectangle aRect = maChannel1Rect;
@@ -480,7 +480,7 @@ sal_Bool Slider::ImplIsPageUp( const Point& rPos )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Slider::ImplIsPageDown( const Point& rPos )
+bool Slider::ImplIsPageDown( const Point& rPos )
 {
     Size aSize = GetOutputSizePixel();
     Rectangle aRect = maChannel2Rect;
@@ -499,7 +499,7 @@ sal_Bool Slider::ImplIsPageDown( const Point& rPos )
 
 // -----------------------------------------------------------------------
 
-long Slider::ImplSlide( long nNewPos, sal_Bool bCallEndSlide )
+long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
 {
     long nOldPos = mnThumbPos;
     SetThumbPos( nNewPos );
@@ -517,7 +517,7 @@ long Slider::ImplSlide( long nNewPos, sal_Bool bCallEndSlide )
 
 // -----------------------------------------------------------------------
 
-long Slider::ImplDoAction( sal_Bool bCallEndSlide )
+long Slider::ImplDoAction( bool bCallEndSlide )
 {
     long nDelta = 0;
 
@@ -551,10 +551,10 @@ long Slider::ImplDoAction( sal_Bool bCallEndSlide )
 
 // -----------------------------------------------------------------------
 
-void Slider::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction )
+void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 {
     sal_uInt16  nOldStateFlags = mnStateFlags;
-    sal_Bool    bAction = sal_False;
+    bool    bAction = false;
 
     switch ( meScrollType )
     {
@@ -597,7 +597,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction )
 
     if ( bAction )
     {
-        if ( ImplDoAction( sal_False ) )
+        if ( ImplDoAction( false ) )
         {
             // Update the channel complete
             if ( mnDragDraw & SLIDER_DRAW_CHANNEL )
@@ -619,7 +619,7 @@ long Slider::ImplDoSlide( long nNewPos )
         return 0;
 
     meScrollType = SCROLL_DRAG;
-    long nDelta = ImplSlide( nNewPos, sal_True );
+    long nDelta = ImplSlide( nNewPos, true );
     meScrollType = SCROLL_DONTKNOW;
     return nDelta;
 }
@@ -634,7 +634,7 @@ long Slider::ImplDoSlideAction( ScrollType eScrollType )
         return 0;
 
     meScrollType = eScrollType;
-    long nDelta = ImplDoAction( sal_True );
+    long nDelta = ImplDoAction( true );
     meScrollType = SCROLL_DONTKNOW;
     return nDelta;
 }
@@ -715,7 +715,7 @@ void Slider::MouseButtonUp( const MouseEvent& )
             ImplDraw( mnDragDraw );
 
         mnDragDraw = 0;
-        ImplDoAction( sal_True );
+        ImplDoAction( true );
         meScrollType = SCROLL_DONTKNOW;
     }
 }
@@ -861,9 +861,9 @@ void Slider::Paint( const Rectangle& )
 void Slider::Resize()
 {
     Control::Resize();
-    mbCalcSize = sal_True;
+    mbCalcSize = true;
     if ( IsReallyVisible() )
-        ImplCalc( sal_False );
+        ImplCalc( false );
     Invalidate();
 }
 
@@ -881,17 +881,17 @@ void Slider::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 
     if ( nType == STATE_CHANGE_INITSHOW )
-        ImplCalc( sal_False );
+        ImplCalc( false );
     else if ( nType == STATE_CHANGE_DATA )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
-            ImplCalc( sal_True );
+            ImplCalc( true );
     }
     else if ( nType == STATE_CHANGE_UPDATEMODE )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
         {
-            ImplCalc( sal_False );
+            ImplCalc( false );
             Invalidate();
         }
     }
@@ -907,8 +907,8 @@ void Slider::StateChanged( StateChangedType nType )
             if ( (GetPrevStyle() & SLIDER_VIEW_STYLE) !=
                  (GetStyle() & SLIDER_VIEW_STYLE) )
             {
-                mbCalcSize = sal_True;
-                ImplCalc( sal_False );
+                mbCalcSize = true;
+                ImplCalc( false );
                 Invalidate();
             }
         }

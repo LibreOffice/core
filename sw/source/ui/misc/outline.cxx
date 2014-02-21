@@ -853,7 +853,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
 
     Font aFont(*rFmt.GetBulletFont());
     aFont.SetSize(rSize);
-    aFont.SetTransparent(sal_True);
+    aFont.SetTransparent(true);
     pVDev->SetFont( aFont );
     OUString aText(rFmt.GetBulletChar());
     pVDev->DrawText( Point(nXStart, nYStart), aText );

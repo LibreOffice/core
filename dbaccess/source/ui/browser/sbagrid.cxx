@@ -635,16 +635,16 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
 
     if (bDBIsReadOnly)
     {
-        rMenu.EnableItem(SID_FM_HIDECOL, sal_False);
+        rMenu.EnableItem(SID_FM_HIDECOL, false);
         PopupMenu* pShowColsMenu = rMenu.GetPopupMenu(SID_FM_SHOWCOLS);
         if (pShowColsMenu)
         {
             // at most 16 items which mean "show column <name>"
             for (sal_uInt16 i=1; i<16; ++i)
-                pShowColsMenu->EnableItem(i, sal_False);
+                pShowColsMenu->EnableItem(i, false);
             // "show cols/more..." and "show cols/all"
-            pShowColsMenu->EnableItem(SID_FM_SHOWCOLS_MORE, sal_False);
-            pShowColsMenu->EnableItem(SID_FM_SHOWALLCOLS, sal_False);
+            pShowColsMenu->EnableItem(SID_FM_SHOWCOLS_MORE, false);
+            pShowColsMenu->EnableItem(SID_FM_SHOWALLCOLS, false);
         }
     }
 

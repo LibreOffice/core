@@ -430,8 +430,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage1OpenPB->SetModeImage(
             GetUiIconForCommand(".uno:Open")
         );
-        mpPage1OpenPB->EnableImageDisplay(sal_True);
-        mpPage1OpenPB->EnableTextDisplay(sal_True);
+        mpPage1OpenPB->EnableImageDisplay(true);
+        mpPage1OpenPB->EnableTextDisplay(true);
         mpPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
         mpPage1OpenPB->SetStyle(mpPage1OpenPB->GetStyle() | WB_CENTER);
     }

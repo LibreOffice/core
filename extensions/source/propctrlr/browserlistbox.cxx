@@ -371,7 +371,7 @@ namespace pcr
         m_aLinesPlayground.SetBackground( GetBackground() );
 
         m_aLinesPlayground.SetPosPixel(Point(0,0));
-        m_aLinesPlayground.SetPaintTransparent(sal_True);
+        m_aLinesPlayground.SetPaintTransparent(true);
         m_aLinesPlayground.Show();
         m_aVScroll.Hide();
         m_aVScroll.SetScrollHdl(LINK(this, OBrowserListBox, ScrollHdl));
@@ -490,9 +490,9 @@ namespace pcr
             m_aOutOfDateLines.insert( i );
 
         // repaint
-        EnablePaint(sal_False);
+        EnablePaint(false);
         UpdatePlayGround();
-        EnablePaint(sal_True);
+        EnablePaint(true);
 
         // show the scrollbar
         if ( bNeedScrollbar )
@@ -819,7 +819,7 @@ namespace pcr
     void OBrowserListBox::MoveThumbTo(sal_Int32 _nNewThumbPos)
     {
         // disable painting to prevent flicker
-        m_aLinesPlayground.EnablePaint(sal_False);
+        m_aLinesPlayground.EnablePaint(false);
 
         sal_Int32 nDelta = _nNewThumbPos - m_aVScroll.GetThumbPos();
         // adjust the scrollbar
@@ -848,7 +848,7 @@ namespace pcr
             UpdatePlayGround();
         }
 
-        m_aLinesPlayground.EnablePaint(sal_True);
+        m_aLinesPlayground.EnablePaint(true);
         m_aLinesPlayground.Invalidate(INVALIDATE_CHILDREN);
     }
 
@@ -859,7 +859,7 @@ namespace pcr
         (void)_pScrollBar;
 
         // disable painting to prevent flicker
-        m_aLinesPlayground.EnablePaint(sal_False);
+        m_aLinesPlayground.EnablePaint(false);
 
         sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
 
@@ -884,7 +884,7 @@ namespace pcr
             UpdatePlayGround();
         }
 
-        m_aLinesPlayground.EnablePaint(sal_True);
+        m_aLinesPlayground.EnablePaint(true);
         return 0;
     }
 

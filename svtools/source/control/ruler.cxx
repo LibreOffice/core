@@ -216,7 +216,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
         // --- RTL --- no UI mirroring for horizontal rulers, because
         // the document is also not mirrored
-        EnableRTL( sal_False );
+        EnableRTL( false );
     }
 
     // Variablen initialisieren
@@ -1133,7 +1133,7 @@ void Ruler::ImplFormat()
         aVirDevSize.Width() = mnVirHeight;
     }
     if ( aVirDevSize != maVirDev.GetOutputSizePixel() )
-        maVirDev.SetOutputSizePixel( aVirDevSize, sal_True );
+        maVirDev.SetOutputSizePixel( aVirDevSize, true );
     else
         maVirDev.Erase();
 

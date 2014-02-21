@@ -504,7 +504,7 @@ Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
 {
     Bitmap aRet;
     Graphic aGraphic;
-    GraphicFilter aFilter( sal_False );
+    GraphicFilter aFilter( false );
     if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*>(NULL), NULL ) == GRFILTER_OK )
     {
         aRet = aGraphic.GetBitmap();
@@ -767,7 +767,7 @@ void ExportDialog::createFilterOptions()
             mpNfCompression->SetMin( 1 );
             mpNfCompression->SetMax( 100 );
             mpNfCompression->SetValue( nQuality );
-            mpNfCompression->SetStrictFormat( sal_True );
+            mpNfCompression->SetStrictFormat( true );
         }
         break;
         case FORMAT_PNG :
@@ -785,7 +785,7 @@ void ExportDialog::createFilterOptions()
             mpNfCompression->SetMin( 1 );
             mpNfCompression->SetMax( 9 );
             mpNfCompression->SetValue( 9 );
-            mpNfCompression->SetStrictFormat( sal_True );
+            mpNfCompression->SetStrictFormat( true );
 
             // Interlaced
             mpMode->Show();
@@ -815,7 +815,7 @@ void ExportDialog::createFilterOptions()
 
             // RLE coding
             mpBMPCompression->Show();
-            mpCbRLEEncoding->Check(mpFilterOptionsItem->ReadBool(OUString("RLE_Coding"), sal_True));
+            mpCbRLEEncoding->Check(mpFilterOptionsItem->ReadBool(OUString("RLE_Coding"), true));
         }
         break;
         case FORMAT_GIF :
@@ -974,7 +974,7 @@ void ExportDialog::updateControls()
     // EPS
     if ( mpRbEPSLevel1->IsVisible() )
     {
-        sal_Bool bEnabled = mpRbEPSLevel1->IsChecked() == sal_False;
+        sal_Bool bEnabled = !mpRbEPSLevel1->IsChecked();
         mpRbEPSColorFormat1->Enable( bEnabled );
         mpRbEPSColorFormat2->Enable( bEnabled );
         mpRbEPSCompressionLZW->Enable( bEnabled );

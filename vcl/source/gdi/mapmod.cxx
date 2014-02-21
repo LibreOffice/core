@@ -30,7 +30,7 @@ ImplMapMode::ImplMapMode() :
 {
     mnRefCount  = 1;
     meUnit      = MAP_PIXEL;
-    mbSimple    = sal_False;
+    mbSimple    = false;
 }
 
 ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
@@ -40,7 +40,7 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 {
     mnRefCount      = 1;
     meUnit          = rImplMapMode.meUnit;
-    mbSimple        = sal_False;
+    mbSimple        = false;
 }
 
 SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rImplMapMode )
@@ -52,7 +52,7 @@ SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rImplMapMode )
     ReadPair( rIStm, rImplMapMode.maOrigin );
     ReadFraction( rIStm, rImplMapMode.maScaleX );
     ReadFraction( rIStm, rImplMapMode.maScaleY );
-    rIStm.ReadUChar( rImplMapMode.mbSimple );
+    rIStm.ReadCharAsBool( rImplMapMode.mbSimple );
 
     return rIStm;
 }
@@ -85,7 +85,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
         pImplMapMode->maScaleX  = aDefFraction;
         pImplMapMode->maScaleY  = aDefFraction;
         pImplMapMode->meUnit    = eUnit;
-        pImplMapMode->mbSimple  = sal_True;
+        pImplMapMode->mbSimple  = true;
     }
 
     return pImplMapMode;
@@ -202,35 +202,35 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
     return *this;
 }
 
-sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
+bool MapMode::operator==( const MapMode& rMapMode ) const
 {
 
     if ( mpImplMapMode == rMapMode.mpImplMapMode )
-        return sal_True;
+        return true;
 
     if ( (mpImplMapMode->meUnit   == rMapMode.mpImplMapMode->meUnit)   &&
          (mpImplMapMode->maOrigin == rMapMode.mpImplMapMode->maOrigin) &&
          (mpImplMapMode->maScaleX == rMapMode.mpImplMapMode->maScaleX) &&
          (mpImplMapMode->maScaleY == rMapMode.mpImplMapMode->maScaleY) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
-sal_Bool MapMode::IsDefault() const
+bool MapMode::IsDefault() const
 {
 
     ImplMapMode* pDefMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
     if ( mpImplMapMode == pDefMapMode )
-        return sal_True;
+        return true;
 
     if ( (mpImplMapMode->meUnit   == pDefMapMode->meUnit)   &&
          (mpImplMapMode->maOrigin == pDefMapMode->maOrigin) &&
          (mpImplMapMode->maScaleX == pDefMapMode->maScaleX) &&
          (mpImplMapMode->maScaleY == pDefMapMode->maScaleY) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )

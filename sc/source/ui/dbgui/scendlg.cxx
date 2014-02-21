@@ -79,7 +79,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, bool
                     XColorEntry* pEntry = pColorList->GetColor(n);
                     m_pLbColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
-                m_pLbColor->SetUpdateMode( sal_True );
+                m_pLbColor->SetUpdateMode( true );
             }
         }
     }
@@ -99,10 +99,10 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, bool
     m_pCbShowFrame->SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
     m_pLbColor->SelectEntry( Color( COL_LIGHTGRAY ) );
-    m_pCbShowFrame->Check(sal_True);
-    m_pCbTwoWay->Check(sal_True);
+    m_pCbShowFrame->Check(true);
+    m_pCbTwoWay->Check(true);
     m_pCbCopyAll->Check(false);
-    m_pCbProtect->Check(sal_True);
+    m_pCbProtect->Check(true);
 
     if (bIsEdit)
         m_pCbCopyAll->Enable(false);

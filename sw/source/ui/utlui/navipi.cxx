@@ -380,11 +380,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             }
             pMenu->CheckItem( nRegionMode + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
-            pBox->SetItemDown( nCurrItemId, sal_True );
+            pBox->SetItemDown( nCurrItemId, true );
             pMenu->Execute( pBox,
                     pBox->GetItemRect(FN_DROP_REGION),
                     POPUPMENU_EXECUTE_DOWN );
-            pBox->SetItemDown( nCurrItemId, sal_False );
+            pBox->SetItemDown( nCurrItemId, false );
             pBox->EndSelection();
             delete pMenu;
             pBox->Invalidate();
@@ -400,11 +400,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             }
             pMenu->CheckItem( aContentTree.GetOutlineLevel() + 100 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
-            pBox->SetItemDown( nCurrItemId, sal_True );
+            pBox->SetItemDown( nCurrItemId, true );
             pMenu->Execute( pBox,
                     pBox->GetItemRect(FN_OUTLINE_LEVEL),
                     POPUPMENU_EXECUTE_DOWN );
-            pBox->SetItemDown( nCurrItemId, sal_False );
+            pBox->SetItemDown( nCurrItemId, false );
             delete pMenu;
             pBox->EndSelection();
             pBox->Invalidate();
@@ -595,7 +595,7 @@ void SwNavigationPI::_ZoomIn()
             if(pFirst)
                 aContentTree.Select(pFirst, sal_True); // Enable toolbox
             pConfig->SetSmall( sal_True );
-            aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_False);
+            aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, false);
         }
     }
 }
@@ -780,7 +780,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                                     SV_DRAGDROP_ENABLE_TOP );
     aContentTree.EnableAsyncDrag(sal_True);
     aContentTree.ShowTree();
-    aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, sal_True);
+    aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, true);
 
 //  TreeListBox for global document
     aGlobalTree.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
@@ -801,7 +801,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox.SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
     aGlobalToolBox.SetClickHdl( LINK(this, SwNavigationPI, ToolBoxClickHdl) );
     aGlobalToolBox.SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
-    aGlobalToolBox.CheckItem(FN_GLOBAL_SWITCH, sal_True);
+    aGlobalToolBox.CheckItem(FN_GLOBAL_SWITCH, true);
 
     Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
@@ -1052,7 +1052,7 @@ IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu )
 
 void SwNavigationPI::UpdateListBox()
 {
-    aDocListBox.SetUpdateMode(sal_False);
+    aDocListBox.SetUpdateMode(false);
     aDocListBox.Clear();
     SwView *pActView = GetCreateView();
     bool bDisable = pActView == 0;
@@ -1117,7 +1117,7 @@ void SwNavigationPI::UpdateListBox()
         aDocListBox.SelectEntryPos(nConstPos);
 
     aDocListBox.Enable( !bDisable );
-    aDocListBox.SetUpdateMode(sal_True);
+    aDocListBox.SetUpdateMode(true);
 }
 
 IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
@@ -1248,7 +1248,7 @@ sal_Bool    SwNavigationPI::ToggleTree()
     sal_Bool bGlobalDoc = IsGlobalDoc();
     if(!IsGlobalMode() && bGlobalDoc)
     {
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         if(_IsZoomedIn())
             _ZoomOut();
         aGlobalTree.ShowTree();
@@ -1257,7 +1257,7 @@ sal_Bool    SwNavigationPI::ToggleTree()
         aContentToolBox.Hide();
         aDocListBox.Hide();
         SetGlobalMode(sal_True);
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
     }
     else
     {
@@ -1337,7 +1337,7 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
     if( nRootType < CONTENT_TYPE_MAX )
     {
         pNavi->aContentTree.SetRootType(nRootType);
-        pNavi->aContentToolBox.CheckItem(FN_SHOW_ROOT, sal_True);
+        pNavi->aContentToolBox.CheckItem(FN_SHOW_ROOT, true);
     }
     pNavi->aContentTree.SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
     pNavi->SetRegionDropMode( static_cast< sal_uInt16 >( pNaviConfig->GetRegionMode() ) );

@@ -62,43 +62,43 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     if ( !aFilterData.getLength() )
     {
         FilterConfigItem aCfgItem( "Office.Common/Filter/PDF/Export/" );
-        aCfgItem.ReadBool(  "UseLosslessCompression", sal_False );
+        aCfgItem.ReadBool(  "UseLosslessCompression", false );
         aCfgItem.ReadInt32( "Quality", 90 );
-        aCfgItem.ReadBool(  "ReduceImageResolution", sal_False );
+        aCfgItem.ReadBool(  "ReduceImageResolution", false );
         aCfgItem.ReadInt32( "MaxImageResolution", 300 );
-        aCfgItem.ReadBool(  "UseTaggedPDF", sal_False );
+        aCfgItem.ReadBool(  "UseTaggedPDF", false );
         aCfgItem.ReadInt32( "SelectPdfVersion", 0 );
-        aCfgItem.ReadBool(  "ExportNotes", sal_False );
-        aCfgItem.ReadBool(  "ExportNotesPages", sal_False );
-        aCfgItem.ReadBool(  "UseTransitionEffects", sal_True );
-        aCfgItem.ReadBool(  "IsSkipEmptyPages", sal_False );
-        aCfgItem.ReadBool(  "ExportFormFields", sal_True );
+        aCfgItem.ReadBool(  "ExportNotes", false );
+        aCfgItem.ReadBool(  "ExportNotesPages", false );
+        aCfgItem.ReadBool(  "UseTransitionEffects", true );
+        aCfgItem.ReadBool(  "IsSkipEmptyPages", false );
+        aCfgItem.ReadBool(  "ExportFormFields", true );
         aCfgItem.ReadInt32( "FormsType", 0 );
-        aCfgItem.ReadBool(  "HideViewerToolbar", sal_False );
-        aCfgItem.ReadBool(  "HideViewerMenubar", sal_False );
-        aCfgItem.ReadBool(  "HideViewerWindowControls", sal_False );
-        aCfgItem.ReadBool(  "ResizeWindowToInitialPage", sal_False );
-        aCfgItem.ReadBool(  "CenterWindow", sal_False );
-        aCfgItem.ReadBool(  "OpenInFullScreenMode", sal_False );
-        aCfgItem.ReadBool(  "DisplayPDFDocumentTitle", sal_True );
+        aCfgItem.ReadBool(  "HideViewerToolbar", false );
+        aCfgItem.ReadBool(  "HideViewerMenubar", false );
+        aCfgItem.ReadBool(  "HideViewerWindowControls", false );
+        aCfgItem.ReadBool(  "ResizeWindowToInitialPage", false );
+        aCfgItem.ReadBool(  "CenterWindow", false );
+        aCfgItem.ReadBool(  "OpenInFullScreenMode", false );
+        aCfgItem.ReadBool(  "DisplayPDFDocumentTitle", true );
         aCfgItem.ReadInt32( "InitialView", 0 );
         aCfgItem.ReadInt32( "Magnification", 0 );
         aCfgItem.ReadInt32( "PageLayout", 0 );
-        aCfgItem.ReadBool(  "FirstPageOnLeft", sal_False );
-        aCfgItem.ReadBool(  "IsAddStream", sal_False );
+        aCfgItem.ReadBool(  "FirstPageOnLeft", false );
+        aCfgItem.ReadBool(  "IsAddStream", false );
 //
 // the encryption is not available when exporting directly, since the encryption is off by default and the selection
 // (encrypt or not) is not persistent; it's available through macro though,
 // provided the correct property values are set, see help
 //
 // now, the relative link stuff
-        aCfgItem.ReadBool( "ExportLinksRelativeFsys", sal_False );
+        aCfgItem.ReadBool( "ExportLinksRelativeFsys", false );
         aCfgItem.ReadInt32("PDFViewSelection", 0 );
-        aCfgItem.ReadBool( "ConvertOOoTargetToPDFTarget", sal_False );
-        aCfgItem.ReadBool( "ExportBookmarksToPDFDestination", sal_False );
+        aCfgItem.ReadBool( "ConvertOOoTargetToPDFTarget", false );
+        aCfgItem.ReadBool( "ExportBookmarksToPDFDestination", false );
 
-        aCfgItem.ReadBool(  "ExportBookmarks", sal_True );
-        aCfgItem.ReadBool(  "ExportHiddenSlides", sal_False );
+        aCfgItem.ReadBool(  "ExportBookmarks", true );
+        aCfgItem.ReadBool(  "ExportHiddenSlides", false );
         aCfgItem.ReadInt32( "OpenBookmarkLevels", -1 );
         aFilterData = aCfgItem.GetFilterData();
     }

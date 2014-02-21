@@ -378,17 +378,17 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
         *pActNum = *pSaveNum;
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
-        m_pLevelLB->SetUpdateMode(sal_False);
+        m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
         m_pLevelLB->SelectEntryPos( MAXLEVEL, nActNumLvl == USHRT_MAX);
         if(nActNumLvl != USHRT_MAX)
             for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i, sal_True);
+                    m_pLevelLB->SelectEntryPos( i, true);
                 nMask <<= 1 ;
             }
-        m_pLevelLB->SetUpdateMode(sal_True);
+        m_pLevelLB->SetUpdateMode(true);
 
         InitPosAndSpaceMode();
         ShowControlsDependingOnPosAndSpaceMode();
@@ -427,27 +427,27 @@ void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
     if(pOutlineDlg)
     {
         pSaveNum = pOutlineDlg->GetNumRule();
-        m_pLevelLB->EnableMultiSelection(sal_False);
+        m_pLevelLB->EnableMultiSelection(false);
     }
     else if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
         pSaveNum = ((SwUINumRuleItem*)pItem)->GetNumRule();
 
     nActNumLvl = SwOutlineTabDialog::GetActNumLevel();
     sal_uInt16 nMask = 1;
-    m_pLevelLB->SetUpdateMode(sal_False);
+    m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
     if(nActNumLvl == USHRT_MAX)
     {
-        m_pLevelLB->SelectEntryPos( MAXLEVEL, sal_True);
+        m_pLevelLB->SelectEntryPos( MAXLEVEL, true);
     }
     else
         for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i, sal_True);
+                m_pLevelLB->SelectEntryPos( i, true);
             nMask <<= 1;
         }
-    m_pLevelLB->SetUpdateMode(sal_True);
+    m_pLevelLB->SetUpdateMode(true);
 
     if(!pActNum)
         pActNum = new  SwNumRule(*pSaveNum);
@@ -593,10 +593,10 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
             (pBox->GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
-        pBox->SetUpdateMode(sal_False);
+        pBox->SetUpdateMode(false);
         for( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
-            pBox->SelectEntryPos( i, sal_False );
-        pBox->SetUpdateMode(sal_True);
+            pBox->SelectEntryPos( i, false );
+        pBox->SetUpdateMode(true);
     }
     else if(pBox->GetSelectEntryCount())
     {
@@ -607,7 +607,7 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        pBox->SelectEntryPos( MAXLEVEL, sal_False );
+        pBox->SelectEntryPos( MAXLEVEL, false );
     }
     else
     {

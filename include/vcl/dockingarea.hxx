@@ -41,7 +41,7 @@ public:
 
     void            SetAlign( WindowAlign eNewAlign );
     WindowAlign     GetAlign() const;
-    sal_Bool            IsHorizontal() const;
+    bool            IsHorizontal() const;
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Resize();

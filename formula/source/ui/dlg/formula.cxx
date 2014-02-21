@@ -337,7 +337,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aMEFormula.SetSelChangedHdl( LINK( this, FormulaDlg_Impl, FormulaCursorHdl ) );
 
     aFntLight = aFtFormula.GetFont();
-    aFntLight.SetTransparent( sal_True );
+    aFntLight.SetTransparent( true );
     aFntBold = aFntLight;
     aFntBold.SetWeight( WEIGHT_BOLD );
 

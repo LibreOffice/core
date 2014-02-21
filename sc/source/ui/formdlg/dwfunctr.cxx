@@ -113,7 +113,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     else
         eSfxNewAlignment=SFX_ALIGN_RIGHT;
     eSfxOldAlignment=eSfxNewAlignment;
-    aFiFuncDesc.SetUpdateMode(sal_True);
+    aFiFuncDesc.SetUpdateMode(true);
     pAllFuncList=&aFuncList;
     aDDFuncList.Disable();
     aDDFuncList.Hide();
@@ -630,7 +630,7 @@ void ScFunctionDockWin::Resizing( Size& rNewSize )
 #*
 #************************************************************************/
 
-sal_Bool ScFunctionDockWin::Close()
+bool ScFunctionDockWin::Close()
 {
     SfxBoolItem aItem( FID_FUNCTION_BOX, false );
 
@@ -640,7 +640,7 @@ sal_Bool ScFunctionDockWin::Close()
 
     SfxDockingWindow::Close();
 
-    return( sal_True );
+    return true;
 }
 
 
@@ -802,7 +802,7 @@ void ScFunctionDockWin::UpdateFunctionList()
 
 
     //------------------------------------------------------
-    pAllFuncList->SetUpdateMode( sal_True );
+    pAllFuncList->SetUpdateMode( true );
 
     if ( pAllFuncList->GetEntryCount() > 0 )
     {

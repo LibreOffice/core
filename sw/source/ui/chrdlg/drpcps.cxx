@@ -317,9 +317,9 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     maCJKFont.SetSize(Size(0, mnTextH));
     maCTLFont.SetSize(Size(0, mnTextH));
 
-    aFont.SetTransparent(sal_True);
-    maCJKFont.SetTransparent(sal_True);
-    maCTLFont.SetTransparent(sal_True);
+    aFont.SetTransparent(true);
+    maCJKFont.SetTransparent(true);
+    maCTLFont.SetTransparent(true);
 
     aFont.SetColor( SwViewOption::GetFontColor() );
     maCJKFont.SetColor( SwViewOption::GetFontColor() );

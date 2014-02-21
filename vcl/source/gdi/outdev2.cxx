@@ -1747,7 +1747,7 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
                "ImplBlendWithAlpha(): call me only with valid alpha VDev!" );
 
     bool bOldMapMode( mpAlphaVDev->IsMapModeEnabled() );
-    mpAlphaVDev->EnableMapMode(sal_False);
+    mpAlphaVDev->EnableMapMode(false);
 
     Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
     BitmapWriteAccess*  pAlphaW = aAlphaBitmap.AcquireWriteAccess();

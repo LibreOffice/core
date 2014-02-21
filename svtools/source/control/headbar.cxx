@@ -385,9 +385,9 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         // draw ButtonStyle
         // avoid 3D borders
         if( bHigh )
-            DrawSelectionBackground( aRect, 1, sal_True, sal_False, sal_False, &aSelectionTextColor );
+            DrawSelectionBackground( aRect, 1, true, false, false, &aSelectionTextColor );
         else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
-            DrawSelectionBackground( aRect, 0, sal_True, sal_False, sal_False, &aSelectionTextColor );
+            DrawSelectionBackground( aRect, 0, true, false, false, &aSelectionTextColor );
     }
 
     // do not draw if there is no space

@@ -113,11 +113,11 @@ throw (uno::RuntimeException)
                 pStatusBar->StartProgressMode( Text );
             else
             {
-                pStatusBar->SetUpdateMode( sal_False );
+                pStatusBar->SetUpdateMode( false );
                 pStatusBar->EndProgressMode();
                 pStatusBar->StartProgressMode( Text );
                 pStatusBar->SetProgressValue( sal_uInt16( nValue ));
-                pStatusBar->SetUpdateMode( sal_True );
+                pStatusBar->SetUpdateMode( true );
             }
             pStatusBar->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
@@ -179,11 +179,11 @@ throw (uno::RuntimeException)
             StatusBar* pStatusBar = (StatusBar *)pWindow;
             if( pStatusBar->IsProgressMode() )
             {
-                pStatusBar->SetUpdateMode( sal_False );
+                pStatusBar->SetUpdateMode( false );
                 pStatusBar->EndProgressMode();
                 pStatusBar->StartProgressMode( Text );
                 pStatusBar->SetProgressValue( sal_uInt16( nValue ));
-                pStatusBar->SetUpdateMode( sal_True );
+                pStatusBar->SetUpdateMode( true );
             }
             else
                 pStatusBar->SetText( Text );

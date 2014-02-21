@@ -464,8 +464,8 @@ void PictWriter::WriteOpcode_TxFace(const Font & rFont)
         eWeight==WEIGHT_BLACK)                nFace|=0x01;
     if (rFont.GetItalic()!=ITALIC_NONE)       nFace|=0x02;
     if (rFont.GetUnderline()!=UNDERLINE_NONE) nFace|=0x04;
-    if (rFont.IsOutline()==sal_True)              nFace|=0x08;
-    if (rFont.IsShadow()==sal_True)               nFace|=0x10;
+    if (rFont.IsOutline())              nFace|=0x08;
+    if (rFont.IsShadow())               nFace|=0x10;
 
     if (bDstTxFaceValid==sal_False || nDstTxFace!=nFace) {
         pPict->WriteUInt16( (sal_uInt16)0x0004 ).WriteUChar( nFace ).WriteUChar( (sal_uInt8)0 );

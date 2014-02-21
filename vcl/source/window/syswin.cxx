@@ -71,12 +71,12 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mpWindowImpl->mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
 
     mpMenuBar           = NULL;
-    mbPined             = sal_False;
-    mbRollUp            = sal_False;
-    mbRollFunc          = sal_False;
-    mbDockBtn           = sal_False;
-    mbHideBtn           = sal_False;
-    mbSysChild          = sal_False;
+    mbPined             = false;
+    mbRollUp            = false;
+    mbRollFunc          = false;
+    mbDockBtn           = false;
+    mbHideBtn           = false;
+    mbSysChild          = false;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
     mnIcon              = 0;
 }
@@ -101,7 +101,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
             if( pWin && pWin->IsSystemWindow() )
                 pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
-        if ( pMBar && pMBar->ImplHandleKeyEvent( *rNEvt.GetKeyEvent(), sal_False ) )
+        if ( pMBar && pMBar->ImplHandleKeyEvent( *rNEvt.GetKeyEvent(), false ) )
             return true;
     }
 
@@ -176,17 +176,17 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SystemWindow::Close()
+bool SystemWindow::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
     ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
     if ( aDelData.IsDead() )
-        return sal_False;
+        return false;
     ImplRemoveDel( &aDelData );
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
-        return sal_False;
+        return false;
 
     // Is Window not closeable, ignore close
     Window*     pBorderWin = ImplGetBorderWindow();
@@ -196,11 +196,11 @@ sal_Bool SystemWindow::Close()
     else
         nStyle = GetStyle();
     if ( !(nStyle & WB_CLOSEABLE) )
-        return sal_False;
+        return false;
 
     Hide();
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -266,7 +266,7 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::EnableSaveBackground( sal_Bool bSave )
+void SystemWindow::EnableSaveBackground( bool bSave )
 {
     if( ImplGetSVData()->maWinData.mbNoSaveBackground )
         bSave = false;
@@ -284,7 +284,7 @@ void SystemWindow::EnableSaveBackground( sal_Bool bSave )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SystemWindow::IsSaveBackgroundEnabled() const
+bool SystemWindow::IsSaveBackgroundEnabled() const
 {
     const Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
@@ -292,12 +292,12 @@ sal_Bool SystemWindow::IsSaveBackgroundEnabled() const
     if ( pWindow->mpWindowImpl->mpOverlapData )
         return pWindow->mpWindowImpl->mpOverlapData->mbSaveBack;
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible )
+void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
 {
     if ( nButton == TITLE_BUTTON_DOCKING )
     {
@@ -328,7 +328,7 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
+bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
 {
     if ( nButton == TITLE_BUTTON_DOCKING )
         return mbDockBtn;
@@ -338,7 +338,7 @@ sal_Bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetPin( sal_Bool bPin )
+void SystemWindow::SetPin( bool bPin )
 {
     if ( bPin != mbPined )
     {
@@ -355,16 +355,16 @@ void SystemWindow::RollUp()
     if ( !mbRollUp )
     {
         maOrgSize = GetOutputSizePixel();
-        mbRollFunc = sal_True;
+        mbRollFunc = true;
         Size aSize = maRollUpOutSize;
         if ( !aSize.Width() )
             aSize.Width() = GetOutputSizePixel().Width();
-        mbRollUp = sal_True;
+        mbRollUp = true;
         if ( mpWindowImpl->mpBorderWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( sal_True, aSize );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( true, aSize );
         else
             SetOutputSizePixel( aSize );
-        mbRollFunc = sal_False;
+        mbRollFunc = false;
     }
 }
 
@@ -374,9 +374,9 @@ void SystemWindow::RollDown()
 {
     if ( mbRollUp )
     {
-        mbRollUp = sal_False;
+        mbRollUp = false;
         if ( mpWindowImpl->mpBorderWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( sal_False, maOrgSize );
+            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( false, maOrgSize );
         else
             SetOutputSizePixel( maOrgSize );
     }
@@ -707,7 +707,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                 Rectangle aDesktop = GetDesktopRectPixel();
                 ImplSVData *pSVData = ImplGetSVData();
                 Window *pWin = pSVData->maWinData.mpFirstFrame;
-                sal_Bool bWrapped = sal_False;
+                bool bWrapped = false;
                 while( pWin )
                 {
                     if( !pWin->ImplIsRealParentPath( this ) && ( pWin != this ) &&
@@ -728,7 +728,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                                     (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
                                     break;  // further displacement not possible -> break
                                 // avoid endless testing
-                                bWrapped = sal_True;
+                                bWrapped = true;
                             }
                             else
                             {
@@ -949,7 +949,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             ImplToBottomChild();
             if ( pOldMenuBar )
             {
-                sal_Bool bDelete = (pMenuBar == 0) ? sal_True : sal_False;
+                bool bDelete = (pMenuBar == 0) ? sal_True : sal_False;
                 if( bDelete && pOldWindow )
                 {
                     if( mpImplData->mpTaskPaneList )
@@ -990,20 +990,20 @@ void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
         if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
         {
             if ( nMode == MENUBAR_MODE_HIDE )
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( sal_True );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( true );
             else
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( sal_False );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( false );
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SystemWindow::ImplIsInTaskPaneList( Window* pWin )
+bool SystemWindow::ImplIsInTaskPaneList( Window* pWin )
 {
     if( mpImplData && mpImplData->mpTaskPaneList )
         return mpImplData->mpTaskPaneList->IsInList( pWin );
-    return sal_False;
+    return false;
 }
 
 unsigned int SystemWindow::GetScreenNumber() const

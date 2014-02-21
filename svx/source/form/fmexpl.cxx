@@ -634,7 +634,7 @@ namespace svxform
     }
 
     //-----------------------------------------------------------------------
-    sal_Bool NavigatorFrame::Close()
+    bool NavigatorFrame::Close()
     {
         UpdateContent( NULL );
         return SfxDockingWindow::Close();

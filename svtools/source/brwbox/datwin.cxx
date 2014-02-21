@@ -47,7 +47,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     {
         Window *pWin = (Window*) &rDev;
         if( bPressed )
-            pWin->DrawSelectionBackground( aRect, 0, sal_True, sal_False, sal_False );
+            pWin->DrawSelectionBackground( aRect, 0, true, false, false );
     }
     else
     {
@@ -67,7 +67,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
         sal_Bool bOldTransp = aFont.IsTransparent();
         if ( !bOldTransp )
         {
-            aFont.SetTransparent( sal_True );
+            aFont.SetTransparent( true );
             rDev.SetFont( aFont );
         }
 
@@ -82,7 +82,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
         // restore settings
         if ( !bOldTransp )
         {
-            aFont.SetTransparent(sal_False);
+            aFont.SetTransparent(false);
             rDev.SetFont( aFont );
         }
         if (m_bDrawDisabled)

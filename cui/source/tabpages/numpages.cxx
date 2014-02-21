@@ -166,7 +166,7 @@ static Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetFamily( FAMILY_DONTKNOW );
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
-        aDefBulletFont.SetTransparent( sal_True );
+        aDefBulletFont.SetTransparent( true );
         bInit = sal_True;
     }
     return aDefBulletFont;
@@ -723,7 +723,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
                         aCreateFont.SetFamily( FAMILY_DONTKNOW );
                         aCreateFont.SetPitch( PITCH_DONTKNOW );
                         aCreateFont.SetWeight( WEIGHT_DONTKNOW );
-                        aCreateFont.SetTransparent( sal_True );
+                        aCreateFont.SetTransparent( true );
                         aFmt.SetBulletFont( &aCreateFont );
                     }
                 }
@@ -1170,17 +1170,17 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     {
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
-        m_pLevelLB->SetUpdateMode(sal_False);
+        m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
         m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == USHRT_MAX);
         if(nActNumLvl != USHRT_MAX)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i, sal_True);
+                    m_pLevelLB->SelectEntryPos( i, true);
                 nMask <<= 1 ;
             }
-        m_pLevelLB->SetUpdateMode(sal_True);
+        m_pLevelLB->SetUpdateMode(true);
         *pActNum = *pSaveNum;
         InitControls();
     }
@@ -1246,20 +1246,20 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         m_pLevelLB->SelectEntryPos(m_pLevelLB->GetEntryCount() - 1);
 
     sal_uInt16 nMask = 1;
-    m_pLevelLB->SetUpdateMode(sal_False);
+    m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
     if(nActNumLvl == USHRT_MAX)
     {
-        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), sal_True);
+        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), true);
     }
     else
         for(sal_uInt16 i = 0; i < pSaveNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i, sal_True);
+                m_pLevelLB->SelectEntryPos( i, true);
             nMask <<= 1 ;
         }
-    m_pLevelLB->SetUpdateMode(sal_True);
+    m_pLevelLB->SetUpdateMode(true);
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -1631,10 +1631,10 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox *, pBox )
         (pBox->GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
-        pBox->SetUpdateMode(sal_False);
+        pBox->SetUpdateMode(false);
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
-            pBox->SelectEntryPos( i, sal_False );
-        pBox->SetUpdateMode(sal_True);
+            pBox->SelectEntryPos( i, false );
+        pBox->SetUpdateMode(true);
     }
     else if(pBox->GetSelectEntryCount())
     {
@@ -1645,7 +1645,7 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox *, pBox )
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        pBox->SelectEntryPos( pActNum->GetLevelCount(), sal_False );
+        pBox->SelectEntryPos( pActNum->GetLevelCount(), false );
     }
     else
     {
@@ -2247,7 +2247,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     if(!aTmpSize.Height())
         aTmpSize.Height() = 1;
     aFont.SetSize(aTmpSize);
-    aFont.SetTransparent(sal_True);
+    aFont.SetTransparent(true);
     Color aBulletColor = rFmt.GetBulletColor();
     if(aBulletColor.GetColor() == COL_AUTO)
         aBulletColor = Color(pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK);
@@ -2934,11 +2934,11 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i, sal_True);
+                    m_pLevelLB->SelectEntryPos( i, true);
                 nMask <<= 1 ;
             }
         m_pRelativeCB->Enable(nActNumLvl != 1);
-        m_pLevelLB->SetUpdateMode(sal_True);
+        m_pLevelLB->SetUpdateMode(true);
 
         InitPosAndSpaceMode();
         ShowControlsDependingOnPosAndSpaceMode();
@@ -3013,22 +3013,22 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
     else
         m_pLevelLB->SelectEntryPos(m_pLevelLB->GetEntryCount() - 1);
     sal_uInt16 nMask = 1;
-    m_pLevelLB->SetUpdateMode(sal_False);
+    m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
     if(nActNumLvl == USHRT_MAX)
     {
-        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), sal_True);
+        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), true);
     }
     else
     {
         for(sal_uInt16 i = 0; i < pSaveNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i, sal_True);
+                m_pLevelLB->SelectEntryPos( i, true);
             nMask <<= 1;
         }
     }
-    m_pLevelLB->SetUpdateMode(sal_True);
+    m_pLevelLB->SetUpdateMode(true);
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -3158,10 +3158,10 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox *, pBox )
             (pBox->GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
-        pBox->SetUpdateMode(sal_False);
+        pBox->SetUpdateMode(false);
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
-            pBox->SelectEntryPos( i, sal_False );
-        pBox->SetUpdateMode(sal_True);
+            pBox->SelectEntryPos( i, false );
+        pBox->SetUpdateMode(true);
     }
     else if(pBox->GetSelectEntryCount())
     {
@@ -3172,7 +3172,7 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox *, pBox )
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        pBox->SelectEntryPos( pActNum->GetLevelCount(), sal_False );
+        pBox->SelectEntryPos( pActNum->GetLevelCount(), false );
     }
     else
     {

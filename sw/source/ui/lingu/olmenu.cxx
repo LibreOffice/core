@@ -213,7 +213,7 @@ void SwSpellPopup::fillLangPopupMenu(
             if (aEntryTxt == aCurLang)
             {
                 //make a check mark for the current language
-                pPopupMenu->CheckItem( nItemId, sal_True );
+                pPopupMenu->CheckItem( nItemId, true );
             }
             rLangTable[ nItemId ] = aEntryTxt;
             ++nItemId;
@@ -222,7 +222,7 @@ void SwSpellPopup::fillLangPopupMenu(
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
     if ( aLanguageTable.GetString( LANGUAGE_NONE ) == aCurLang )
-        pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, sal_True );
+        pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, true );
 
     pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), 0 );
     pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), 0 );
@@ -456,7 +456,7 @@ SwSpellPopup::SwSpellPopup(
     //////////////////////////////////////////////////////////////////////////////////
 
     checkRedline();
-    RemoveDisabledEntries( sal_True, sal_True );
+    RemoveDisabledEntries( true, true );
 }
 
 
@@ -610,7 +610,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     //////////////////////////////////////////////////////////////////////////////////
 
     checkRedline();
-    RemoveDisabledEntries( sal_True, sal_True );
+    RemoveDisabledEntries( true, true );
 }
 
 void SwSpellPopup::checkRedline()

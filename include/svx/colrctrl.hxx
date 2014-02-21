@@ -95,7 +95,7 @@ private:
     virtual void GetFocus (void);
 
 protected:
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    Resize();
     virtual void    Resizing( Size& rSize );
 

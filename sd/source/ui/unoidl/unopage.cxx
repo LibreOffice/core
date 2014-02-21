@@ -1083,7 +1083,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     {
                         Point   aPoint;
                         Size    aSize( GetPage()->GetSize() );
-                        pMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, sal_True ), 0 );
+                        pMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, true ), 0 );
                         pMetaFile->AddAction( (MetaAction*) new MetaRectAction( Rectangle( aPoint, aSize ) ), 1 );
                         pMetaFile->SetPrefMapMode( MAP_100TH_MM );
                         pMetaFile->SetPrefSize( aSize );

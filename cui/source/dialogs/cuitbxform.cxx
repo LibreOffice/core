@@ -38,7 +38,7 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
 
     m_pRecordNo->SetMin(1);
     m_pRecordNo->SetMax(0x7FFFFFFF);
-    m_pRecordNo->SetStrictFormat(sal_True);
+    m_pRecordNo->SetStrictFormat(true);
     m_pRecordNo->SetDecimalDigits(0);
 }
 

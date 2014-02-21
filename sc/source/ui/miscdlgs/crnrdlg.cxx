@@ -179,7 +179,7 @@ void ScColRowNameRangesDlg::Init()
     }
     else
     {
-        pBtnColHead->Check( sal_True );
+        pBtnColHead->Check( true );
         pBtnRowHead->Check( false );
         pEdAssign->SetText( EMPTY_OUSTRING );
         pEdAssign2->SetText( EMPTY_OUSTRING );
@@ -222,7 +222,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     SCROW nRow2 = theCurArea.aEnd.Row();
     if ( (static_cast<SCCOLROW>(nCol2 - nCol1) >= nRow2 - nRow1) || (nCol1 == 0 && nCol2 == MAXCOL) )
     {   // Spaltenkoepfe und Grenzfall gesamte Tabelle
-        pBtnColHead->Check( sal_True );
+        pBtnColHead->Check( true );
         pBtnRowHead->Check( false );
         if ( nRow2 == MAXROW  )
         {
@@ -242,7 +242,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange, bool bRef
     }
     else
     {   // Zeilenkoepfe
-        pBtnRowHead->Check( sal_True );
+        pBtnRowHead->Check( true );
         pBtnColHead->Check( false );
         if ( nCol2 == MAXCOL )
         {   // Head rechts, Data links
@@ -421,7 +421,7 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
 #*
 #************************************************************************/
 
-sal_Bool ScColRowNameRangesDlg::Close()
+bool ScColRowNameRangesDlg::Close()
 {
     return DoClose( ScColRowNameRangesDlgWrapper::GetChildWindowId() );
 }
@@ -591,7 +591,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         delete [] ppSortArray;
     }
     //-----------------------------------------------------------
-    pLbRange->SetUpdateMode( sal_True );
+    pLbRange->SetUpdateMode( true );
     pLbRange->Invalidate();
 }
 
@@ -779,7 +779,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
             pBtnAdd->Disable();
             pBtnRemove->Disable();
             pEdAssign->SetText( EMPTY_OUSTRING );
-            pBtnColHead->Check( sal_True );
+            pBtnColHead->Check( true );
             pBtnRowHead->Check( false );
             pEdAssign2->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
@@ -866,7 +866,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
             pBtnRemove->Disable();
             pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = theCurData = ScRange();
-            pBtnColHead->Check( sal_True );
+            pBtnColHead->Check( true );
             pBtnRowHead->Check( false );
             pEdAssign2->SetText( EMPTY_OUSTRING );
             Range1SelectHdl( 0 );
@@ -1068,7 +1068,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
 {
     if ( !pBtnColHead->GetSavedValue() )
     {
-        pBtnColHead->Check( sal_True );
+        pBtnColHead->Check( true );
         pBtnRowHead->Check( false );
         if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == MAXROW )
         {
@@ -1105,7 +1105,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
 {
     if ( !pBtnRowHead->GetSavedValue() )
     {
-        pBtnRowHead->Check( sal_True );
+        pBtnRowHead->Check( true );
         pBtnColHead->Check( false );
         if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == MAXCOL )
         {

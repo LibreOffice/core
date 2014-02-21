@@ -99,7 +99,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     SavePos(m_pTypeLB);
     Init(); // general initialisation
 
-    m_pTypeLB->SetUpdateMode(sal_False);
+    m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
 
     sal_uInt16 nPos, nTypeId;
@@ -169,7 +169,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     }
     TypeHdl(0);
 
-    m_pTypeLB->SetUpdateMode(sal_True);
+    m_pTypeLB->SetUpdateMode(true);
 
     if (IsFldEdit())
     {
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, InsertMacroHdl)
 
 IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 {
-    m_pListItemsLB->SetUpdateMode(sal_False);
+    m_pListItemsLB->SetUpdateMode(false);
     if(pControl == m_pListAddPB ||
             (pControl == m_pListItemED && m_pListAddPB->IsEnabled()))
     {
@@ -436,7 +436,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
         }
     }
     bDropDownLBChanged = true;
-    m_pListItemsLB->SetUpdateMode(sal_True);
+    m_pListItemsLB->SetUpdateMode(true);
     ListEnableHdl(0);
     return 0;
 }
@@ -463,7 +463,7 @@ void SwFldFuncPage::UpdateSubType()
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     // fill Selction-Listbox
-    m_pSelectionLB->SetUpdateMode(sal_False);
+    m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 
     std::vector<OUString> aLst;
@@ -497,7 +497,7 @@ void SwFldFuncPage::UpdateSubType()
         EnableInsert(bHasMacro);
     }
 
-    m_pSelectionLB->SetUpdateMode(sal_True);
+    m_pSelectionLB->SetUpdateMode(true);
 }
 
 /*--------------------------------------------------------------------

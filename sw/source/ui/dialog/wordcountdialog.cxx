@@ -67,7 +67,7 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     setValue(m_pDocCjkcharsFT, rDoc.nAsianWord);
 
     bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
-    bool bToggleCJK = m_pCurrentCjkcharsFT->IsVisible() != static_cast<sal_Bool>(bShowCJK);
+    bool bToggleCJK = m_pCurrentCjkcharsFT->IsVisible() != bShowCJK;
     if (bToggleCJK)
     {
         showCJK(bShowCJK);

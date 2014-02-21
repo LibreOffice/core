@@ -73,7 +73,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
-    mbScreenComp    = sal_True;
+    mbScreenComp    = true;
     mnAlphaDepth    = -1;
 
     // #i59315# init vdev size from system object, when passed a
@@ -86,7 +86,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
-        mbScreenComp = sal_False;
+        mbScreenComp = false;
     else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
         mbScreenComp = ((VirtualDevice*)pOutDev)->mbScreenComp;
 
@@ -203,24 +203,24 @@ VirtualDevice::~VirtualDevice()
 
 // -----------------------------------------------------------------------
 
-sal_Bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
+bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
     SAL_INFO( "vcl.gdi",
               "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
               << rNewSize.Height() << ", " << int(bErase) << " )" );
 
     if ( !mpVirDev )
-        return sal_False;
+        return false;
     else if ( rNewSize == GetOutputSizePixel() )
     {
         if ( bErase )
             Erase();
         // Yeah, so trying to re-use a VirtualDevice but this time using a
         // pre-allocated buffer won't work. Big deal.
-        return sal_True;
+        return true;
     }
 
-    sal_Bool bRet;
+    bool bRet;
     long nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
 
     if ( nNewWidth < 1 )
@@ -252,7 +252,7 @@ sal_Bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, sal_B
         if ( !mpGraphics )
         {
             if ( !ImplGetGraphics() )
-                return sal_False;
+                return false;
         }
 
         pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice( mpGraphics, nNewWidth, nNewHeight, mnBitCount );
@@ -288,16 +288,16 @@ sal_Bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, sal_B
                 mpVirDev = pNewVirDev;
                 mnOutWidth  = rNewSize.Width();
                 mnOutHeight = rNewSize.Height();
-                bRet = sal_True;
+                bRet = true;
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
                 pSVData->mpDefInst->DestroyVirtualDevice( pNewVirDev );
             }
         }
         else
-            bRet = sal_False;
+            bRet = false;
     }
 
     return bRet;
@@ -321,7 +321,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
+bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
     if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
     {
@@ -350,18 +350,18 @@ sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool b
             mpAlphaVDev->SetMapMode( GetMapMode() );
         }
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
+bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
 {
     return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray() );
 }
 
-sal_Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer )
+bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer )
 {
     if (pBuffer) {
         MapMode mm = GetMapMode();
@@ -370,7 +370,7 @@ sal_Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNew
         mm.SetScaleY( rScale );
         SetMapMode( mm );
     }
-    return ImplSetOutputSizePixel( rNewSize, sal_True, pBuffer);
+    return ImplSetOutputSizePixel( rNewSize, true, pBuffer);
 }
 
 // -----------------------------------------------------------------------
@@ -408,8 +408,8 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mnDPIY = i_nDPIY;
     mnDPIScaleFactor = 1;
 
-    EnableOutput( sal_False );  // prevent output on reference device
-    mbScreenComp = sal_False;
+    EnableOutput( false );  // prevent output on reference device
+    mbScreenComp = false;
 
     // invalidate currently selected fonts
     mbInitFont = true;

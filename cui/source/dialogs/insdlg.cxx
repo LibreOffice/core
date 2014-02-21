@@ -187,7 +187,7 @@ SvInsertOleDlg::SvInsertOleDlg
     Link aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     m_pRbNewObject->SetClickHdl( aLink );
     m_pRbObjectFromfile->SetClickHdl( aLink );
-    m_pRbNewObject->Check( sal_True );
+    m_pRbNewObject->Check( true );
     RadioHdl( NULL );
 }
 
@@ -204,10 +204,10 @@ short SvInsertOleDlg::Execute()
 
     // fill listbox and select default
     ListBox& rBox = GetObjectTypes();
-    rBox.SetUpdateMode( sal_False );
+    rBox.SetUpdateMode( false );
     for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
         rBox.InsertEntry( (*m_pServers)[i].GetHumanName() );
-    rBox.SetUpdateMode( sal_True );
+    rBox.SetUpdateMode( true );
     SelectDefault();
     OUString aName;
 
@@ -546,7 +546,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                m_pCBMarginWidthDefault->Check( sal_True );
+                m_pCBMarginWidthDefault->Check( true );
                 m_pNMMarginWidth->SetText( OUString::number(DEFAULT_MARGIN_WIDTH) );
                 m_pFTMarginWidth->Enable( false );
                 m_pNMMarginWidth->Enable( false );
@@ -559,7 +559,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                m_pCBMarginHeightDefault->Check( sal_True );
+                m_pCBMarginHeightDefault->Check( true );
                 m_pNMMarginHeight->SetText( OUString::number(DEFAULT_MARGIN_HEIGHT) );
                 m_pFTMarginHeight->Enable( false );
                 m_pNMMarginHeight->Enable( false );
@@ -599,7 +599,7 @@ short SfxInsertFloatingFrameDialog::Execute()
                 m_pRBFrameBorderOff->Check( !bSet );
             }
 
-            SetUpdateMode( sal_True );
+            SetUpdateMode( true );
             bOK = sal_True;
         }
         catch ( uno::Exception& )

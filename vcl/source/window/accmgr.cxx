@@ -37,20 +37,20 @@ ImplAccelManager::~ImplAccelManager()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
+bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
     if ( !mpAccelList ) {
         mpAccelList = new ImplAccelList;
     } else {
         for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i ) {
             if ( (*mpAccelList)[ i ] == pAccel ) {
-                return sal_False;
+                return false;
             }
         }
     }
 
     mpAccelList->insert( mpAccelList->begin(), pAccel );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -92,7 +92,7 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
 
 // -----------------------------------------------------------------------
 
-void ImplAccelManager::EndSequence( sal_Bool bCancel )
+void ImplAccelManager::EndSequence( bool bCancel )
 {
     // are we in a list ?
     if ( !mpSequenceList )
@@ -108,7 +108,7 @@ void ImplAccelManager::EndSequence( sal_Bool bCancel )
         pTempAccel->Deactivate();
         if ( !bDel )
         {
-            pTempAccel->mbIsCancel = sal_False;
+            pTempAccel->mbIsCancel = false;
             pTempAccel->mpDel = NULL;
         }
     }
@@ -120,15 +120,15 @@ void ImplAccelManager::EndSequence( sal_Bool bCancel )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
+bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {
     Accelerator* pAccel;
 
     // do we have accelerators ??
     if ( !mpAccelList )
-        return sal_False;
+        return false;
     if ( mpAccelList->empty() )
-        return sal_False;
+        return false;
 
     // are we in a sequence ?
     if ( mpSequenceList )
@@ -140,7 +140,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
         {
             // abort sequence
             FlushAccel();
-            return sal_False;
+            return false;
         }
 
         // can the entry be found ?
@@ -157,7 +157,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
 
                 // call Activate-Handler of the new one
                 pNextAccel->Activate();
-                return sal_True;
+                return true;
             }
             else
             {
@@ -185,14 +185,14 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                         pAccel->mpDel           = NULL;
                     }
 
-                    return sal_True;
+                    return true;
                 }
                 else
                 {
                     // stop sequence as the accelerator was disbled
                     // transfer the key (to the system)
                     FlushAccel();
-                    return sal_False;
+                    return false;
                 }
             }
         }
@@ -200,7 +200,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
         {
             // wrong key => stop sequence
             FlushAccel();
-            return sal_False;
+            return false;
         }
     }
 
@@ -227,7 +227,7 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                 // call activate-Handler of the new one
                 pNextAccel->Activate();
 
-                return sal_True;
+                return true;
             }
             else
             {
@@ -256,15 +256,15 @@ sal_Bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepe
                         pAccel->mpDel           = NULL;
                     }
 
-                    return sal_True;
+                    return true;
                 }
                 else
-                    return sal_False;
+                    return false;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

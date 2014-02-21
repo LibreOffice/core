@@ -594,7 +594,7 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     {
     case SVX_SEARCHCMD_FIND:
     case SVX_SEARCHCMD_FIND_ALL:
-        nFound = pTextView->Search( aSearchOpt, bForward );
+        nFound = pTextView->Search( aSearchOpt, bForward ) ? 1 : 0;
         break;
 
     case SVX_SEARCHCMD_REPLACE_ALL: bAll = sal_True;
@@ -821,9 +821,9 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             pStream->SetStreamCharSet( eDestEnc );
             pStream->Seek(0);
             TextEngine* pTextEngine = aEditWin.GetTextEngine();
-            pTextEngine->EnableUndo(sal_False);
+            pTextEngine->EnableUndo(false);
             aEditWin.Read(*pStream);
-            pTextEngine->EnableUndo(sal_True);
+            pTextEngine->EnableUndo(true);
         }
         else
         {

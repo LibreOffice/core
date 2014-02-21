@@ -69,18 +69,18 @@ class VCL_DLLPUBLIC PrinterPage
 {
     GDIMetaFile*    mpMtf;
     JobSetup        maJobSetup;
-    sal_uInt16          mbNewJobSetup;
+    bool          mbNewJobSetup;
 
 public:
 
     PrinterPage() : mpMtf( new GDIMetaFile() ) {}
-    PrinterPage( GDIMetaFile* pMtf, sal_Bool bNewJobSetup, const JobSetup& rSetup ) :
+    PrinterPage( GDIMetaFile* pMtf, bool bNewJobSetup, const JobSetup& rSetup ) :
            mpMtf( pMtf ), maJobSetup( rSetup ), mbNewJobSetup( bNewJobSetup ) {}
     ~PrinterPage() { delete mpMtf; }
 
     GDIMetaFile*    GetGDIMetaFile() const { return mpMtf; }
     const JobSetup& GetJobSetup() const { return maJobSetup; }
-    sal_Bool            IsNewJobSetup() const { return (mbNewJobSetup != 0); }
+    bool            IsNewJobSetup() const { return mbNewJobSetup; }
 };
 
 
@@ -151,31 +151,31 @@ class VCL_DLLPUBLIC PrinterOptions
 {
 private:
 
-    sal_Bool                        mbReduceTransparency;
+    bool                        mbReduceTransparency;
     PrinterTransparencyMode     meReducedTransparencyMode;
-    sal_Bool                        mbReduceGradients;
+    bool                        mbReduceGradients;
     PrinterGradientMode         meReducedGradientsMode;
     sal_uInt16                      mnReducedGradientStepCount;
-    sal_Bool                        mbReduceBitmaps;
+    bool                        mbReduceBitmaps;
     PrinterBitmapMode           meReducedBitmapMode;
     sal_uInt16                      mnReducedBitmapResolution;
-    sal_Bool                        mbReducedBitmapsIncludeTransparency;
-    sal_Bool                        mbConvertToGreyscales;
-    sal_Bool                        mbPDFAsStandardPrintJobFormat;
+    bool                        mbReducedBitmapsIncludeTransparency;
+    bool                        mbConvertToGreyscales;
+    bool                        mbPDFAsStandardPrintJobFormat;
 
 public:
 
                                 PrinterOptions();
                                 ~PrinterOptions();
 
-    sal_Bool                        IsReduceTransparency() const { return mbReduceTransparency; }
-    void                        SetReduceTransparency( sal_Bool bSet ) { mbReduceTransparency = bSet; }
+    bool                        IsReduceTransparency() const { return mbReduceTransparency; }
+    void                        SetReduceTransparency( bool bSet ) { mbReduceTransparency = bSet; }
 
     PrinterTransparencyMode     GetReducedTransparencyMode() const { return meReducedTransparencyMode; }
     void                        SetReducedTransparencyMode( PrinterTransparencyMode eMode ) { meReducedTransparencyMode = eMode; }
 
-    sal_Bool                        IsReduceGradients() const { return mbReduceGradients; }
-    void                        SetReduceGradients( sal_Bool bSet ) { mbReduceGradients = bSet; }
+    bool                        IsReduceGradients() const { return mbReduceGradients; }
+    void                        SetReduceGradients( bool bSet ) { mbReduceGradients = bSet; }
 
     PrinterGradientMode         GetReducedGradientMode() const { return meReducedGradientsMode; }
     void                        SetReducedGradientMode( PrinterGradientMode eMode ) { meReducedGradientsMode = eMode; }
@@ -183,8 +183,8 @@ public:
     sal_uInt16                      GetReducedGradientStepCount() const { return mnReducedGradientStepCount; }
     void                        SetReducedGradientStepCount( sal_uInt16 nStepCount ) { mnReducedGradientStepCount = nStepCount; }
 
-    sal_Bool                        IsReduceBitmaps() const { return mbReduceBitmaps; }
-    void                        SetReduceBitmaps( sal_Bool bSet ) { mbReduceBitmaps = bSet; }
+    bool                        IsReduceBitmaps() const { return mbReduceBitmaps; }
+    void                        SetReduceBitmaps( bool bSet ) { mbReduceBitmaps = bSet; }
 
     PrinterBitmapMode           GetReducedBitmapMode() const { return meReducedBitmapMode; }
     void                        SetReducedBitmapMode( PrinterBitmapMode eMode ) { meReducedBitmapMode = eMode; }
@@ -192,14 +192,14 @@ public:
     sal_uInt16                      GetReducedBitmapResolution() const { return mnReducedBitmapResolution; }
     void                        SetReducedBitmapResolution( sal_uInt16 nResolution ) { mnReducedBitmapResolution = nResolution; }
 
-    sal_Bool                        IsReducedBitmapIncludesTransparency() const { return mbReducedBitmapsIncludeTransparency; }
-    void                        SetReducedBitmapIncludesTransparency( sal_Bool bSet ) { mbReducedBitmapsIncludeTransparency = bSet; }
+    bool                        IsReducedBitmapIncludesTransparency() const { return mbReducedBitmapsIncludeTransparency; }
+    void                        SetReducedBitmapIncludesTransparency( bool bSet ) { mbReducedBitmapsIncludeTransparency = bSet; }
 
-    sal_Bool                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
-    void                        SetConvertToGreyscales( sal_Bool bSet ) { mbConvertToGreyscales = bSet; }
+    bool                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
+    void                        SetConvertToGreyscales( bool bSet ) { mbConvertToGreyscales = bSet; }
 
-    sal_Bool                        IsPDFAsStandardPrintJobFormat() const { return mbPDFAsStandardPrintJobFormat; }
-    void                        SetPDFAsStandardPrintJobFormat( sal_Bool bSet ) { mbPDFAsStandardPrintJobFormat = bSet; }
+    bool                        IsPDFAsStandardPrintJobFormat() const { return mbPDFAsStandardPrintJobFormat; }
+    void                        SetPDFAsStandardPrintJobFormat( bool bSet ) { mbPDFAsStandardPrintJobFormat = bSet; }
 
     // read printer options from configuration, parameter decides whether the set for
     // print "to printer" or "to file" should be read.
@@ -235,16 +235,16 @@ private:
     sal_uInt16                      mnCurPrintPage;
     sal_uInt16                      mnPageQueueSize;
     sal_uInt16                      mnCopyCount;
-    sal_Bool                        mbDefPrinter;
-    sal_Bool                        mbPrinting;
-    sal_Bool                        mbJobActive;
-    sal_Bool                        mbCollateCopy;
-    sal_Bool                        mbPrintFile;
-    sal_Bool                        mbInPrintPage;
-    sal_Bool                        mbNewJobSetup;
-    sal_Bool                        mbIsQueuePrinter;
-    sal_Bool                        mbUserSetupCompleted;
-    sal_Bool                        mbUserSetupResult;
+    bool                        mbDefPrinter;
+    bool                        mbPrinting;
+    bool                        mbJobActive;
+    bool                        mbCollateCopy;
+    bool                        mbPrintFile;
+    bool                        mbInPrintPage;
+    bool                        mbNewJobSetup;
+    bool                        mbIsQueuePrinter;
+    bool                        mbUserSetupCompleted;
+    bool                        mbUserSetupResult;
     Link                        maErrorHdl;
 
     SAL_DLLPRIVATE void         ImplInitData();
@@ -261,7 +261,7 @@ private:
     static SAL_DLLPRIVATE sal_uLong ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
 private:
-    SAL_DLLPRIVATE sal_Bool         EndJob();
+    SAL_DLLPRIVATE bool         EndJob();
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
 public:
@@ -272,8 +272,8 @@ public:
 
 protected:
 
-    void                        SetSelfAsQueuePrinter( sal_Bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
-    sal_Bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
+    void                        SetSelfAsQueuePrinter( bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
+    bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
 
 public:
                                 Printer();
@@ -290,19 +290,19 @@ public:
 
     const OUString&            GetName() const             { return maPrinterName; }
     const OUString&            GetDriverName() const       { return maDriver; }
-    sal_Bool                        IsDefPrinter() const        { return mbDefPrinter; }
-    sal_Bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
-    sal_Bool                        IsValid() const             { return !IsDisplayPrinter(); }
+    bool                        IsDefPrinter() const        { return mbDefPrinter; }
+    bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
+    bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
     sal_uLong                       GetCapabilities( sal_uInt16 nType ) const;
-    sal_Bool                        HasSupport( PrinterSupport eFeature ) const;
+    bool                        HasSupport( PrinterSupport eFeature ) const;
 
-    sal_Bool                        SetJobSetup( const JobSetup& rSetup );
+    bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
     void                        SetJobValue( const OUString& rKey, const OUString& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
-    sal_Bool                        Setup( Window* pWindow = NULL );
-    sal_Bool                        SetPrinterProps( const Printer* pPrinter );
+    bool                        Setup( Window* pWindow = NULL );
+    bool                        SetPrinterProps( const Printer* pPrinter );
 
     // SetPrinterOptions is used internally only now
     // in earlier times it was used only to set the options loaded directly from the configuration
@@ -312,18 +312,18 @@ public:
     SAL_DLLPRIVATE void         SetPrinterOptions( const PrinterOptions& rOptions );
     const PrinterOptions&       GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
-    sal_Bool                        SetOrientation( Orientation eOrient );
+    bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
-    sal_Bool                        SetDuplexMode( DuplexMode );
+    bool                        SetDuplexMode( DuplexMode );
     // returns the angle that a landscape page will be turned counterclockwise
     // wrt to portrait. The return value may be only valid for
     // the current paper
     int                         GetLandscapeAngle() const;
-    sal_Bool                        SetPaperBin( sal_uInt16 nPaperBin );
+    bool                        SetPaperBin( sal_uInt16 nPaperBin );
     sal_uInt16                      GetPaperBin() const;
-    sal_Bool                        SetPaper( Paper ePaper );
-    sal_Bool                        SetPaperSizeUser( const Size& rSize );
-    sal_Bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
+    bool                        SetPaper( Paper ePaper );
+    bool                        SetPaperSizeUser( const Size& rSize );
+    bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                   GetPaper() const;
     static OUString        GetPaperName( Paper ePaper );
     // return a UI string for the current paper; i_bPaperUser == false means an empty string for PAPER_USER
@@ -341,15 +341,15 @@ public:
     const Point&                GetPageOffsetPixel() const { return maPageOffset; }
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
-    sal_Bool                        SetCopyCount( sal_uInt16 nCopy, sal_Bool bCollate = sal_False );
+    bool                        SetCopyCount( sal_uInt16 nCopy, bool bCollate = false );
     sal_uInt16                      GetCopyCount() const { return mnCopyCount; }
-    sal_Bool                        IsCollateCopy() const { return mbCollateCopy; }
+    bool                        IsCollateCopy() const { return mbCollateCopy; }
 
-    sal_Bool                        IsPrinting() const { return mbPrinting; }
+    bool                        IsPrinting() const { return mbPrinting; }
 
     const OUString&            GetCurJobName() const { return maJobName; }
     sal_uInt16                      GetCurPage() const { return mnCurPage; }
-    sal_Bool                        IsJobActive() const { return mbJobActive; }
+    bool                        IsJobActive() const { return mbJobActive; }
 
     sal_uLong                       GetError() const { return ERRCODE_TOERROR(mnError); }
     sal_uLong                       GetErrorCode() const { return mnError; }
@@ -450,7 +450,7 @@ public:
     /* get a bool property
        in case the property is unknown or not convertible to bool, i_bFallback is returned
     */
-    sal_Bool getBoolProperty( const OUString& i_rPropertyName, sal_Bool i_bFallback ) const;
+    bool getBoolProperty( const OUString& i_rPropertyName, bool i_bFallback ) const;
     /* get an int property
        in case the property is unknown or not convertible to bool, i_nFallback is returned
     */
@@ -520,10 +520,10 @@ public:
     VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;
     SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
     SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
-    VCL_PLUGIN_PUBLIC void setLastPage( sal_Bool i_bLastPage );
-    SAL_DLLPRIVATE void setReversePrint( sal_Bool i_bReverse );
+    VCL_PLUGIN_PUBLIC void setLastPage( bool i_bLastPage );
+    SAL_DLLPRIVATE void setReversePrint( bool i_bReverse );
     SAL_DLLPRIVATE bool getReversePrint() const;
-    SAL_DLLPRIVATE void setPapersizeFromSetup( sal_Bool i_bPapersizeFromSetup );
+    SAL_DLLPRIVATE void setPapersizeFromSetup( bool i_bPapersizeFromSetup );
     SAL_DLLPRIVATE bool getPapersizeFromSetup() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void resetPaperToLastConfigured();
@@ -566,9 +566,9 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // returns an empty Any for not existing properties
     css::uno::Any getValue( const OUString& i_rPropertyName ) const;
 
-    sal_Bool getBoolValue( const OUString& i_rPropertyName, sal_Bool i_bDefault = sal_False ) const;
+    bool getBoolValue( const OUString& i_rPropertyName, bool i_bDefault = false ) const;
     // convenience for fixed strings
-    sal_Bool getBoolValue( const char* i_pPropName, sal_Bool i_bDefault = sal_False ) const
+    bool getBoolValue( const char* i_pPropName, bool i_bDefault = false ) const
     { return getBoolValue( OUString::createFromAscii( i_pPropName ), i_bDefault ); }
 
     sal_Int64 getIntValue( const OUString& i_rPropertyName, sal_Int64 i_nDefault = 0 ) const;
@@ -586,18 +586,18 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     {
         OUString   maDependsOnName;
         sal_Int32       mnDependsOnEntry;
-        sal_Bool        mbAttachToDependency;
+        bool        mbAttachToDependency;
         OUString   maGroupHint;
-        sal_Bool        mbInternalOnly;
-        sal_Bool        mbEnabled;
+        bool        mbInternalOnly;
+        bool        mbEnabled;
         css::uno::Sequence< css::beans::PropertyValue > maAddProps;
 
         UIControlOptions( const OUString& i_rDependsOnName = OUString(),
                           sal_Int32 i_nDependsOnEntry = -1,
-                          sal_Bool i_bAttachToDependency = sal_False,
+                          bool i_bAttachToDependency = false,
                           const OUString& i_rGroupHint = OUString(),
-                          sal_Bool i_bInternalOnly = sal_False,
-                          sal_Bool i_bEnabled = sal_True
+                          bool i_bInternalOnly = false,
+                          bool i_bEnabled = true
                          )
         : maDependsOnName( i_rDependsOnName )
         , mnDependsOnEntry( i_nDependsOnEntry )
@@ -638,7 +638,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                       const OUString& i_rTitle,
                                                       const OUString& i_rHelpId,
                                                       const OUString& i_rProperty,
-                                                      sal_Bool i_bValue,
+                                                      bool i_bValue,
                                                       const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     // Show a set of choices in a list box

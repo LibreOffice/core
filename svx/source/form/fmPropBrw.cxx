@@ -337,7 +337,7 @@ void FmPropBrw::implDetachController()
 }
 
 //-----------------------------------------------------------------------
-sal_Bool FmPropBrw::Close()
+bool FmPropBrw::Close()
 {
     // suspend the controller (it is allowed to veto)
     if ( m_xMeAsFrame.is() )
@@ -346,7 +346,7 @@ sal_Bool FmPropBrw::Close()
         {
             Reference< XController > xController( m_xMeAsFrame->getController() );
             if ( xController.is() && !xController->suspend( sal_True ) )
-                return sal_False;
+                return false;
         }
         catch( const Exception& )
         {

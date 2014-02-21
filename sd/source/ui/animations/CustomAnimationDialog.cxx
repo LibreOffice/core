@@ -1195,7 +1195,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();
 
-    mpCLBDimColor->SetUpdateMode( sal_False );
+    mpCLBDimColor->SetUpdateMode( false );
 
     for ( long i = 0; i < pColorList->Count(); i++ )
     {
@@ -1203,7 +1203,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
-    mpCLBDimColor->SetUpdateMode( sal_True );
+    mpCLBDimColor->SetUpdateMode( true );
 
     // only show settings if all selected effects have the same preset-id
     if( pSet->getPropertyState( nHandlePresetId ) != STLPropertyState_AMBIGUOUS )
@@ -1658,7 +1658,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
                 OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (sal_True);
+                aWarningBox.SetModalInputMode (true);
                 bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
 
                 bValidSoundFile=false;
@@ -1900,8 +1900,8 @@ IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
 {
     if( pControl == mpLBTrigger )
     {
-        mpRBClickSequence->Check( sal_False );
-        mpRBInteractive->Check( sal_True );
+        mpRBClickSequence->Check( false );
+        mpRBInteractive->Check( true );
     }
 
     return 0;
@@ -2234,7 +2234,7 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
 
     if( !mbHasVisibleShapes && nPos > 0 )
     {
-        maCBXAnimateForm->Check(sal_False);
+        maCBXAnimateForm->Check(false);
         maCBXAnimateForm->Enable(false);
     }
     else

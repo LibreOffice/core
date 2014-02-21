@@ -298,7 +298,7 @@ void SvxSuperContourDlg::Resize()
 
 // Close methods
 
-sal_Bool SvxSuperContourDlg::Close()
+bool SvxSuperContourDlg::Close()
 {
     sal_Bool bRet = sal_True;
 
@@ -444,7 +444,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
                 if ( !aContourWnd.IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
                     aContourWnd.SetWorkplaceMode( sal_True );
                 else
-                    aTbx1.CheckItem( TBI_WORKPLACE, sal_False );
+                    aTbx1.CheckItem( TBI_WORKPLACE, false );
             }
             else
                 aContourWnd.SetWorkplaceMode( sal_False );
@@ -453,21 +453,21 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
         case( TBI_SELECT ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             aContourWnd.SetEditMode( sal_True );
         }
         break;
 
         case( TBI_RECT ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             aContourWnd.SetObjKind( OBJ_RECT );
         }
         break;
 
         case( TBI_CIRCLE ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             aContourWnd.SetObjKind( OBJ_CIRC );
 
         }
@@ -475,14 +475,14 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
         case( TBI_POLY ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             aContourWnd.SetObjKind( OBJ_POLY );
         }
         break;
 
         case( TBI_FREEPOLY ):
         {
-            pTbx->CheckItem( nNewItemId, sal_True );
+            pTbx->CheckItem( nNewItemId, true );
             aContourWnd.SetObjKind( OBJ_FREEFILL );
         }
         break;
@@ -675,13 +675,13 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
             break;
         }
 
-        aTbx1.CheckItem( nId, sal_True );
+        aTbx1.CheckItem( nId, true );
     }
     else
     {
-        aTbx1.CheckItem( TBI_POLYEDIT, sal_False );
-        aTbx1.CheckItem( TBI_POLYMOVE, sal_True );
-        aTbx1.CheckItem( TBI_POLYINSERT, sal_False );
+        aTbx1.CheckItem( TBI_POLYEDIT, false );
+        aTbx1.CheckItem( TBI_POLYMOVE, true );
+        aTbx1.CheckItem( TBI_POLYINSERT, false );
         pWnd->SetPolyEditMode( 0 );
     }
 
@@ -752,7 +752,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
         LeaveWait();
     }
 
-    aTbx1.CheckItem( TBI_PIPETTE, sal_False );
+    aTbx1.CheckItem( TBI_PIPETTE, false );
     pWnd->SetPipetteMode( sal_False );
     aStbStatus.Invalidate();
 
@@ -761,8 +761,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
 IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
 {
-    aTbx1.CheckItem( TBI_WORKPLACE, sal_False );
-    aTbx1.CheckItem( TBI_SELECT, sal_True );
+    aTbx1.CheckItem( TBI_WORKPLACE, false );
+    aTbx1.CheckItem( TBI_SELECT, true );
     pWnd->SetWorkplaceMode( sal_False );
 
     return 0L;

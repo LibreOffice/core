@@ -47,12 +47,12 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
+bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
     return SetSizeUsingBuffer( nNewDX, nNewDY, basebmp::RawMemorySharedArray() );
 }
 
-sal_Bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer )
+bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY, const basebmp::RawMemorySharedArray &pBuffer )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )

@@ -1049,7 +1049,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     pFilterFloat->SetOutputSizePixel( aSize );
     pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS );
 
-    pFilterBox->SetUpdateMode(sal_True);
+    pFilterBox->SetUpdateMode(true);
     pFilterBox->GrabFocus();
 
     sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;

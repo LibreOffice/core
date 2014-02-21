@@ -41,14 +41,14 @@ class X11SalVirtualDevice : public SalVirtualDevice
     int             nDX_;
     int             nDY_;
     sal_uInt16      nDepth_;
-    sal_Bool        bGraphics_;         // is Graphics used
-    sal_Bool        bExternPixmap_;
+    bool        bGraphics_;         // is Graphics used
+    bool        bExternPixmap_;
 
 public:
     X11SalVirtualDevice();
     virtual ~X11SalVirtualDevice();
 
-    sal_Bool            Init( SalDisplay *pDisplay,
+    bool            Init( SalDisplay *pDisplay,
                               long nDX, long nDY,
                               sal_uInt16 nBitCount,
                               SalX11Screen nXScreen,
@@ -66,7 +66,7 @@ public:
     {
         return pDisplay_;
     }
-    sal_Bool IsDisplay() const
+    bool IsDisplay() const
     {
         return pDisplay_->IsDisplay();
     }
@@ -80,7 +80,7 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
                             // Set new size, without saving the old contents
-    virtual sal_Bool        SetSize( long nNewDX, long nNewDY );
+    virtual bool        SetSize( long nNewDX, long nNewDY );
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
 

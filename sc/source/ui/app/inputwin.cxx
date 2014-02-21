@@ -1485,7 +1485,7 @@ ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
     Color aBgColor= rStyleSettings.GetWindowColor();
     Color aTxtColor= rStyleSettings.GetWindowTextColor();
 
-    aTextFont.SetTransparent ( sal_True );
+    aTextFont.SetTransparent ( true );
     aTextFont.SetFillColor   ( aBgColor );
     //aTextFont.SetColor         ( COL_FIELDTEXT );
     aTextFont.SetColor       (aTxtColor);

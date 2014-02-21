@@ -37,9 +37,9 @@ public:
 
     PointerStyle    GetStyle() const { return meStyle; }
 
-    sal_Bool            operator==( const Pointer& rPointer ) const
+    bool            operator==( const Pointer& rPointer ) const
                         { return (meStyle == rPointer.meStyle); }
-    sal_Bool            operator!=( const Pointer& rPointer ) const
+    bool            operator!=( const Pointer& rPointer ) const
                         { return !(Pointer::operator==( rPointer )); }
 };
 

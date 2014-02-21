@@ -275,10 +275,10 @@ OUString AboutDialog::GetCopyrightString()
     return aCopyrightString;
 }
 
-sal_Bool AboutDialog::Close()
+bool AboutDialog::Close()
 {
     EndDialog( RET_OK );
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

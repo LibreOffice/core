@@ -44,14 +44,14 @@ private:
     KeyCode         maCurKeyCode;
     sal_uInt16      mnCurId;
     sal_uInt16      mnCurRepeat;
-    sal_Bool        mbIsCancel;
+    bool        mbIsCancel;
     sal_Bool*       mpDel;
 
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );
     SAL_DLLPRIVATE  void        ImplDeleteData();
     SAL_DLLPRIVATE  void        ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
-                                     sal_Bool bEnable, Accelerator* pAutoAccel );
+                                     bool bEnable, Accelerator* pAutoAccel );
 
     SAL_DLLPRIVATE  ImplAccelEntry* ImplGetAccelData( const KeyCode& rKeyCode ) const;
 
@@ -74,7 +74,7 @@ public:
     sal_uInt16          GetCurItemId() const { return mnCurId; }
     const KeyCode&  GetCurKeyCode() const { return maCurKeyCode; }
     sal_uInt16          GetCurRepeat() const { return mnCurRepeat; }
-    sal_Bool            IsCancel() const { return mbIsCancel; }
+    bool            IsCancel() const { return mbIsCancel; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;

@@ -1285,13 +1285,13 @@ void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxPopupWindow::Close()
+bool SfxPopupWindow::Close()
 {
     m_bFloating = sal_False;
     FloatingWindow::Close();
 
     Delete();
-    return sal_True;
+    return true;
 }
 
 //--------------------------------------------------------------------
@@ -1448,13 +1448,13 @@ SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
     {
         xPopupController->setPopupMenu( xPopupMenu );
 
-        rBox.SetItemDown( nItemId, sal_True );
+        rBox.SetItemDown( nItemId, true );
         Reference< awt::XWindowPeer > xPeer( getParent(), uno::UNO_QUERY );
 
         if ( xPeer.is() )
             xPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
 
-        rBox.SetItemDown( nItemId, sal_False );
+        rBox.SetItemDown( nItemId, false );
     }
 
     return 0;

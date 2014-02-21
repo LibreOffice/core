@@ -1005,7 +1005,7 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpS
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // Should be changed outside, if needed
-    pControl->SetStrictFormat(sal_True);
+    pControl->SetStrictFormat(true);
 
     InitializeControl(pControl,_sHelpId,false);
 

@@ -226,7 +226,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     get(m_pPrintRangeQueryText,"labelMsg");
 
     bBorderModified = false;
-    m_pBspWin->EnableRTL( sal_False );
+    m_pBspWin->EnableRTL( false );
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -743,7 +743,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     nPos = m_pPaperSizeBox->GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)m_pPaperSizeBox->GetEntryData( nPos );
     const sal_uInt16 nOld = m_pPaperSizeBox->GetSavedValue();
-    sal_Bool bChecked = m_pLandscapeBtn->IsChecked();
+    bool bChecked = m_pLandscapeBtn->IsChecked();
 
     if ( PAPER_USER == ePaper )
     {
@@ -918,7 +918,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
         return 0;
 
     OUString aOldName = m_pPaperTrayBox->GetSelectEntry();
-    m_pPaperTrayBox->SetUpdateMode( sal_False );
+    m_pPaperTrayBox->SetUpdateMode( false );
     m_pPaperTrayBox->Clear();
     sal_uInt16 nEntryPos = m_pPaperTrayBox->InsertEntry(
         EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
@@ -941,7 +941,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
         m_pPaperTrayBox->SetEntryData( nEntryPos, (void*)(sal_uLong)i );
     }
     m_pPaperTrayBox->SelectEntry( aOldName );
-    m_pPaperTrayBox->SetUpdateMode( sal_True );
+    m_pPaperTrayBox->SetUpdateMode( true );
 
     return 0;
 }

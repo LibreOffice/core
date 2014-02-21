@@ -684,9 +684,9 @@ Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::EnableMapMode( sal_Bool bEnable )
+void OutputDevice::EnableMapMode( bool bEnable )
 {
-    mbMap = (bEnable != 0);
+    mbMap = bEnable;
 
     if( mpAlphaVDev )
         mpAlphaVDev->EnableMapMode( bEnable );

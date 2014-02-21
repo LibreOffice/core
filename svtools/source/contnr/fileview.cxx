@@ -866,7 +866,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
             = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
         pRet->EnableItem( MID_FILEVIEW_DELETE, bEnableDelete );
         pRet->EnableItem( MID_FILEVIEW_RENAME, bEnableRename );
-        pRet->RemoveDisabledEntries( sal_True, sal_True );
+        pRet->RemoveDisabledEntries( true, true );
         return pRet;
     }
 

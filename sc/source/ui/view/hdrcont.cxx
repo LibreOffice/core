@@ -68,7 +68,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     EnableRTL( false );
 
     aNormFont = GetFont();
-    aNormFont.SetTransparent( sal_True );       //! WEIGHT_NORMAL hart setzen ???
+    aNormFont.SetTransparent( true );       //! WEIGHT_NORMAL hart setzen ???
     aBoldFont = aNormFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
 
@@ -454,7 +454,7 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                     else
                         aTransRect = Rectangle( nTransStart, 0, nTransEnd, nBarSize-1 );
                     SetBackground( Color( rStyleSettings.GetFaceColor() ) );
-                    DrawSelectionBackground( aTransRect, 0, sal_True, false, false );
+                    DrawSelectionBackground( aTransRect, 0, true, false, false );
                     SetBackground();
                 }
                 break;

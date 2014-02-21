@@ -182,12 +182,12 @@ PopupMenuToolbarController::createPopupWindow()
     if ( !pToolBox )
         return xRet;
 
-    pToolBox->SetItemDown( m_nToolBoxId, sal_True );
+    pToolBox->SetItemDown( m_nToolBoxId, true );
     sal_uInt16 nId = m_xPopupMenu->execute(
         css::uno::Reference< css::awt::XWindowPeer >( getParent(), css::uno::UNO_QUERY ),
         VCLUnoHelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
         css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
-    pToolBox->SetItemDown( m_nToolBoxId, sal_False );
+    pToolBox->SetItemDown( m_nToolBoxId, false );
 
     if ( nId )
         functionExecuted( m_xPopupMenu->getCommand( nId ) );

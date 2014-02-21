@@ -120,15 +120,15 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    m_pRbtAxis1->Check(sal_True);
-    m_pRbtAxis2->Check(sal_False);
+    m_pRbtAxis1->Check(true);
+    m_pRbtAxis2->Check(false);
     if (rInAttrs.GetItemState(SCHATTR_AXIS,true, &pPoolItem) == SFX_ITEM_SET)
     {
         long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
         {
-            m_pRbtAxis2->Check(sal_True);
-            m_pRbtAxis1->Check(sal_False);
+            m_pRbtAxis2->Check(true);
+            m_pRbtAxis1->Check(false);
         }
     }
 
@@ -193,11 +193,11 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 
             long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
             if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                m_pRB_DontPaint->Check(sal_True);
+                m_pRB_DontPaint->Check(true);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                m_pRB_AssumeZero->Check(sal_True);
+                m_pRB_AssumeZero->Check(true);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                m_pRB_ContinueLine->Check(sal_True);
+                m_pRB_ContinueLine->Check(true);
         }
         else
         {

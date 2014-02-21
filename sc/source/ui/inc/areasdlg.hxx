@@ -45,7 +45,7 @@ public:
 
     virtual void    SetActive();
     virtual void    Deactivate();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
 private:
     ListBox*                 pLbPrintArea;

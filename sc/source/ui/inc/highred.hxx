@@ -88,7 +88,7 @@ public:
 
     virtual void    SetActive();
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual bool    IsRefInputMode() const;
 
 };

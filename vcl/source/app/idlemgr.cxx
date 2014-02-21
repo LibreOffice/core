@@ -56,14 +56,14 @@ ImplIdleMgr::~ImplIdleMgr()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
+bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 {
     size_t nPos = (size_t)-1;
     size_t n = mpIdleList->size();
     for ( size_t i = 0; i < n; ++i ) {
         // we need to check each element to verify that rLink isn't in the array
         if ( (*mpIdleList)[ i ]->maIdleHdl == rLink ) {
-            return sal_False;
+            return false;
         }
         if ( nPriority <= (*mpIdleList)[ i ]->mnPriority ) {
             nPos = i;
@@ -87,7 +87,7 @@ sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
     if ( !maTimer.IsActive() )
         maTimer.Start();
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

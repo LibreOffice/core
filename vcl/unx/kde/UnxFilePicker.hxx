@@ -162,8 +162,8 @@ protected:
     void                        appendEscaped( OUStringBuffer &rBuffer, const OUString &rString );
 
 private:
-    sal_Bool                    controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId );
-    sal_Bool                    controlActionInfo( sal_Int16 nControlId, OUString &rType );
+    bool                    controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId );
+    bool                    controlActionInfo( sal_Int16 nControlId, OUString &rType );
     void                        sendAppendControlCommand( sal_Int16 nControlId );
 };
 

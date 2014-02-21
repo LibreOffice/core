@@ -72,7 +72,7 @@ public:
 
     sal_uInt8       GetRightToLeft() const      { return nRightToLeft; }
     sal_uInt8&      GetRightToLeft()            { return nRightToLeft; }
-    sal_Bool        IsRightToLeft() const       { return (nRightToLeft&1); }
+    bool        IsRightToLeft() const       { return (nRightToLeft&1); }
 
     bool        HasValidSize() const        { return nWidth != (-1); }
 };
@@ -88,7 +88,7 @@ public:
     ~TETextPortionList();
 
     void    Reset();
-    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False );
+    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, bool bPreferStartingPortion = false );
     sal_uInt16  GetPortionStartIndex( sal_uInt16 nPortion );
     void    DeleteFromPortion( sal_uInt16 nDelFrom );
 };
@@ -126,10 +126,10 @@ public:
                                     mbInvalid = true;
                                 }
 
-    sal_Bool            IsIn( sal_uInt16 nIndex ) const
+    bool            IsIn( sal_uInt16 nIndex ) const
                         { return ( (nIndex >= mnStart ) && ( nIndex < mnEnd ) ); }
 
-    sal_Bool            IsIn( sal_uInt16 nIndex, sal_Bool bInclEnd ) const
+    bool            IsIn( sal_uInt16 nIndex, bool bInclEnd ) const
                         { return ( ( nIndex >= mnStart ) && ( bInclEnd ? ( nIndex <= mnEnd ) : ( nIndex < mnEnd ) ) ); }
 
     void            SetStart( sal_uInt16 n )            { mnStart = n; }
@@ -229,7 +229,7 @@ public:
     std::vector<TEWritingDirectionInfo>& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
 
-    sal_uInt16              GetLineNumber( sal_uInt16 nIndex, sal_Bool bInclEnd );
+    sal_uInt16              GetLineNumber( sal_uInt16 nIndex, bool bInclEnd );
     void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 };
 
@@ -255,9 +255,9 @@ public:
 
     virtual void    CreateAnchor();
 
-    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
+    virtual bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
 
-    virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
+    virtual bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
 
     virtual void    DeselectAtPoint( const Point& );
@@ -285,14 +285,14 @@ struct TextDDInfo
     Cursor          maCursor;
     TextPaM         maDropPos;
 
-    sal_Bool            mbStarterOfDD;
-    sal_Bool            mbVisCursor;
+    bool            mbStarterOfDD;
+    bool            mbVisCursor;
 
     TextDDInfo()
     {
         maCursor.SetStyle( CURSOR_SHADOW );
-        mbStarterOfDD = sal_False;
-        mbVisCursor = sal_False;
+        mbStarterOfDD = false;
+        mbVisCursor = false;
     }
 };
 

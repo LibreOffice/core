@@ -122,11 +122,11 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
         if ( _rEvent.PropertyName.equals(PROPERTY_HEIGHT) )
         {
-            m_pParent->getView()->SetUpdateMode(sal_False);
+            m_pParent->getView()->SetUpdateMode(false);
             //Resize();
             m_pParent->getView()->notifySizeChanged();
             m_pParent->resize(*this);
-            m_pParent->getView()->SetUpdateMode(sal_True);
+            m_pParent->getView()->SetUpdateMode(true);
             // getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
         }
         else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
@@ -196,9 +196,9 @@ void OSectionWindow::ImplInitSettings()
     static bool t = false;
     if ( t )
     {
-    EnableChildTransparentMode( sal_True );
+    EnableChildTransparentMode( true );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-    SetPaintTransparent( sal_True );
+    SetPaintTransparent( true );
     }
     SetBackground( );
 }

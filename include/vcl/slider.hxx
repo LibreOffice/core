@@ -49,8 +49,8 @@ private:
     sal_uInt16          mnDragDraw;
     sal_uInt16          mnStateFlags;
     ScrollType      meScrollType;
-    sal_Bool            mbCalcSize;
-    sal_Bool            mbFullDrag;
+    bool            mbCalcSize;
+    bool            mbFullDrag;
     Link            maSlideHdl;
     Link            maEndSlideHdl;
 
@@ -58,16 +58,16 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
-    SAL_DLLPRIVATE void ImplUpdateRects( sal_Bool bUpdate = sal_True );
+    SAL_DLLPRIVATE void ImplUpdateRects( bool bUpdate = true );
     SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long ImplCalcThumbPosPix( long nPos );
-    SAL_DLLPRIVATE void ImplCalc( sal_Bool bUpdate = sal_True );
+    SAL_DLLPRIVATE void ImplCalc( bool bUpdate = true );
     SAL_DLLPRIVATE void ImplDraw( sal_uInt16 nDrawFlags );
-    SAL_DLLPRIVATE sal_Bool ImplIsPageUp( const Point& rPos );
-    SAL_DLLPRIVATE sal_Bool ImplIsPageDown( const Point& rPos );
-    SAL_DLLPRIVATE long ImplSlide( long nNewPos, sal_Bool bCallEndSlide );
-    SAL_DLLPRIVATE long ImplDoAction( sal_Bool bCallEndSlide );
-    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, sal_Bool bCallAction = sal_True );
+    SAL_DLLPRIVATE bool ImplIsPageUp( const Point& rPos );
+    SAL_DLLPRIVATE bool ImplIsPageDown( const Point& rPos );
+    SAL_DLLPRIVATE long ImplSlide( long nNewPos, bool bCallEndSlide );
+    SAL_DLLPRIVATE long ImplDoAction( bool bCallEndSlide );
+    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE long ImplDoSlide( long nNewPos );
     SAL_DLLPRIVATE long ImplDoSlideAction( ScrollType eScrollType );
 
@@ -87,9 +87,9 @@ public:
     virtual void    Slide();
     virtual void    EndSlide();
 
-    void            EnableDrag( sal_Bool bEnable = sal_True )
+    void            EnableDrag( bool bEnable = true )
                         { mbFullDrag = bEnable; }
-    sal_Bool            IsDragEnabled() const { return mbFullDrag; }
+    bool            IsDragEnabled() const { return mbFullDrag; }
 
     long            GetRangeMin() const { return mnMinRange; }
     long            GetRangeMax() const { return mnMaxRange; }

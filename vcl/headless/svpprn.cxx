@@ -271,9 +271,9 @@ GenPspGraphics *SvpSalInstance::CreatePrintGraphics()
     return new GenPspGraphics();
 }
 
-sal_Bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
+bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
-    return sal_False;
+    return false;
 }
 
 SvpSalPrinter::SvpSalPrinter( SalInfoPrinter* pInfoPrinter )

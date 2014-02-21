@@ -491,11 +491,11 @@ void SlideSorter::ArrangeGUIElements (
         // Prevent untimely redraws while the view is not yet correctly
         // resized.
         view::SlideSorterView::DrawLock aLock (*this);
-        GetContentWindow()->EnablePaint (sal_False);
+        GetContentWindow()->EnablePaint (false);
 
         mpSlideSorterController->Resize (Rectangle(aOrigin, rSize));
 
-        GetContentWindow()->EnablePaint (sal_True);
+        GetContentWindow()->EnablePaint (true);
 
         mbLayoutPending = false;
     }

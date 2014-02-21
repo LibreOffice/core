@@ -192,14 +192,14 @@ JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
     return *this;
 }
 
-sal_Bool JobSetup::operator==( const JobSetup& rJobSetup ) const
+bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {
 
     if ( mpData == rJobSetup.mpData )
-        return sal_True;
+        return true;
 
     if ( !mpData || !rJobSetup.mpData )
-        return sal_False;
+        return false;
 
     ImplJobSetup* pData1 = mpData;
     ImplJobSetup* pData2 = rJobSetup.mpData;
@@ -216,9 +216,9 @@ sal_Bool JobSetup::operator==( const JobSetup& rJobSetup ) const
          (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)                                                           &&
          (pData1->maValueMap        == pData2->maValueMap)
          )
-        return sal_True;
+        return true;
 
-    return sal_False;
+    return false;
 }
 
 SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )

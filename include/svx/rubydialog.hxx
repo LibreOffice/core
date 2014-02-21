@@ -143,7 +143,7 @@ class SvxRubyDialog : public SfxModelessDialog
     void                AssertOneEntry();
 
     void                Update();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}

@@ -285,7 +285,7 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
         else
         {
             pParam->nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
-            pParam->bTopDown = sal_True;
+            pParam->bTopDown = true;
             pBmpBuf = mpBuffer = new unsigned char[pParam->nAlignedWidth * aSize.Height()];
         }
     }

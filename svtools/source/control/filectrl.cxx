@@ -48,7 +48,7 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     maButton.Show();
     maEdit.Show();
 
-    SetCompoundControl( sal_True );
+    SetCompoundControl( true );
 
     SetStyle( ImplInitStyle( GetStyle() ) );
 }

@@ -561,7 +561,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
             delete mpOutputDevice;
         mpOutputDevice = new VirtualDevice(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
-        mpOutputDevice->SetOutputSizePixel(maSize, sal_True);
+        mpOutputDevice->SetOutputSizePixel(maSize, true);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();
         mpOutputDevice->SetBackground(Wallpaper());

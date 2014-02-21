@@ -1298,7 +1298,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
         if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)   // Update view type list (Hierarchical, All, etc.
         {
             CheckItem(nActFamily, sal_True);    // check Button in Toolbox
-            aFilterLb.SetUpdateMode(sal_False);
+            aFilterLb.SetUpdateMode(false);
             aFilterLb.Clear();
             //insert hierarchical at the beginning
             sal_uInt16 nPos = aFilterLb.InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
@@ -1330,7 +1330,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
             // show maximum 14 entries
             aFilterLb.SetDropDownLineCount( MAX_FILTER_ENTRIES );
-            aFilterLb.SetUpdateMode(sal_True);
+            aFilterLb.SetUpdateMode(true);
         }
         else
         {

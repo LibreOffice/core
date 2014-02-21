@@ -139,8 +139,8 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    const sal_Bool bOldMap = mbMap;
-    EnableMapMode( sal_False );
+    const bool bOldMap = mbMap;
+    EnableMapMode( false );
 
     if( nFlags & GRID_DOTS )
     {
@@ -384,8 +384,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
         IntersectClipRegion(Region(rPolyPoly));
         SetLineColor( GetFillColor() );
-        const sal_Bool bOldMap = mbMap;
-        EnableMapMode( sal_False );
+        const bool bOldMap = mbMap;
+        EnableMapMode( false );
 
         if(nMove)
         {
@@ -480,9 +480,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
                 if( aVDev.SetOutputSizePixel( aDstSz ) )
                 {
-                    const sal_Bool bOldMap = mbMap;
+                    const bool bOldMap = mbMap;
 
-                    EnableMapMode( sal_False );
+                    EnableMapMode( false );
 
                     aVDev.SetLineColor( COL_BLACK );
                     aVDev.SetFillColor( COL_BLACK );
@@ -745,17 +745,17 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     AlphaMask   aAlpha;
                     MapMode     aMap( GetMapMode() );
                     Point       aOutPos( PixelToLogic( aDstRect.TopLeft() ) );
-                    const sal_Bool  bOldMap = mbMap;
+                    const bool  bOldMap = mbMap;
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
                     pVDev->SetMapMode( aMap );
-                    const sal_Bool  bVDevOldMap = pVDev->IsMapModeEnabled();
+                    const bool  bVDevOldMap = pVDev->IsMapModeEnabled();
 
                     // create paint bitmap
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    pVDev->EnableMapMode( sal_False );
+                    pVDev->EnableMapMode( false );
                     aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
                     pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
@@ -768,7 +768,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    pVDev->EnableMapMode( sal_False );
+                    pVDev->EnableMapMode( false );
                     aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
                     pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
@@ -776,14 +776,14 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
                     pVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
                     pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                    pVDev->EnableMapMode( sal_False );
+                    pVDev->EnableMapMode( false );
                     pVDev->DrawMask( Point(), pVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
 
                     aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
 
                     delete pVDev;
 
-                    EnableMapMode( sal_False );
+                    EnableMapMode( false );
                     DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
                     EnableMapMode( bOldMap );
                 }
@@ -807,8 +807,8 @@ void OutputDevice::ImplDrawColorWallpaper( long nX, long nY,
     Color aOldFillColor = GetFillColor();
     SetLineColor();
     SetFillColor( rWallpaper.GetColor() );
-    sal_Bool bMap = mbMap;
-    EnableMapMode( sal_False );
+    bool bMap = mbMap;
+    EnableMapMode( false );
     DrawRect( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
     SetLineColor( aOldLineColor );
     SetFillColor( aOldFillColor );
@@ -827,7 +827,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     Size                    aSize;
     GDIMetaFile*            pOldMetaFile = mpMetaFile;
     const WallpaperStyle    eStyle = rWallpaper.GetStyle();
-    const sal_Bool              bOldMap = mbMap;
+    const bool              bOldMap = mbMap;
     bool                    bDrawn = false;
     bool                    bDrawGradientBackground = false;
     bool                    bDrawColorBackground = false;
@@ -839,7 +839,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
 
     const long nBmpWidth = aBmpEx.GetSizePixel().Width();
     const long nBmpHeight = aBmpEx.GetSizePixel().Height();
-    const sal_Bool bTransparent = aBmpEx.IsTransparent();
+    const bool bTransparent = aBmpEx.IsTransparent();
 
     // draw background
     if( bTransparent )
@@ -891,7 +891,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     }
 
     mpMetaFile = NULL;
-    EnableMapMode( sal_False );
+    EnableMapMode( false );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
@@ -1066,13 +1066,13 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
 {
     Rectangle       aBound;
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
-    const sal_Bool      bOldMap = mbMap;
+    const bool      bOldMap = mbMap;
     bool            bNeedGradient = true;
 
         aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     mpMetaFile = NULL;
-    EnableMapMode( sal_False );
+    EnableMapMode( false );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
@@ -1151,7 +1151,7 @@ void OutputDevice::Erase()
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    sal_Bool bNativeOK = sal_False;
+    bool bNativeOK = false;
 
     if( meOutDevType == OUTDEV_WINDOW )
     {

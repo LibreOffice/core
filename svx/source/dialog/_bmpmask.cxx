@@ -239,7 +239,7 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
         pSet->SelectItem( 1 );
         pSet->Select();
 
-        pMask->aTbxPipette.CheckItem( TBI_PIPETTE, sal_True );
+        pMask->aTbxPipette.CheckItem( TBI_PIPETTE, true );
         PipetteHdl( &( pMask->aTbxPipette ) );
     }
 
@@ -567,7 +567,7 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
 
 //-------------------------------------------------------------------------
 
-sal_Bool SvxBmpMask::Close()
+bool SvxBmpMask::Close()
 {
     SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, false );
     GetBindings().GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aItem2, 0L );
@@ -627,30 +627,30 @@ void SvxBmpMask::PipetteClicked()
 {
     if( pQSet1->GetSelectItemId() == 1 )
     {
-        aCbx1.Check( sal_True );
+        aCbx1.Check( true );
         pData->CbxHdl( &aCbx1 );
         pQSet1->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet2->GetSelectItemId() == 1 )
     {
-        aCbx2.Check( sal_True );
+        aCbx2.Check( true );
         pData->CbxHdl( &aCbx2 );
         pQSet2->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet3->GetSelectItemId() == 1 )
     {
-        aCbx3.Check( sal_True );
+        aCbx3.Check( true );
         pData->CbxHdl( &aCbx3 );
         pQSet3->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet4->GetSelectItemId() == 1 )
     {
-        aCbx4.Check( sal_True );
+        aCbx4.Check( true );
         pData->CbxHdl( &aCbx4 );
         pQSet4->SetItemColor( 1, aPipetteColor );
     }
 
-    aTbxPipette.CheckItem( TBI_PIPETTE, sal_False );
+    aTbxPipette.CheckItem( TBI_PIPETTE, false );
     pData->PipetteHdl( &aTbxPipette );
 }
 
@@ -1067,7 +1067,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     const Size&     rPrefSize = rMtf.GetPrefSize();
     const size_t    nActionCount = rMtf.GetActionSize();
 
-    aVDev.EnableOutput( sal_False );
+    aVDev.EnableOutput( false );
     aMtf.Record( &aVDev );
     aMtf.SetPrefSize( rPrefSize );
     aMtf.SetPrefMapMode( rPrefMap );

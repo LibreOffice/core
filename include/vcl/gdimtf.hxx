@@ -81,9 +81,9 @@ private:
     GDIMetaFile*    pPrev;
     GDIMetaFile*    pNext;
     OutputDevice*   pOutDev;
-    sal_Bool            bPause;
-    sal_Bool            bRecord;
-    sal_Bool            bUseCanvas;
+    bool            bPause;
+    bool            bRecord;
+    bool            bUseCanvas;
 
 
     SAL_DLLPRIVATE static Color    ImplColAdjustFnc( const Color& rColor, const void* pColParam );
@@ -126,11 +126,11 @@ public:
     virtual         ~GDIMetaFile();
 
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
-    sal_Bool        operator==( const GDIMetaFile& rMtf ) const;
-    sal_Bool        operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    bool        operator==( const GDIMetaFile& rMtf ) const;
+    bool        operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    sal_Bool        Mirror( sal_uLong nMirrorFlags );
+    bool        Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -150,7 +150,7 @@ public:
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0,  short nChannelGPercent = 0,
                             short nChannelBPercent = 0,  double fGamma = 1.0,
-                            sal_Bool bInvert = sal_False
+                            bool bInvert = false
                     );
 
     void            Convert( MtfConversion eConversion );
@@ -160,15 +160,15 @@ public:
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
-    sal_Bool        IsRecord() const { return bRecord; }
+    bool        IsRecord() const { return bRecord; }
 
     void            Play( GDIMetaFile& rMtf, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
                           const Size& rSize, size_t nPos = GDI_METAFILE_END );
 
-    void            Pause( sal_Bool bPause );
-    sal_Bool        IsPause() const { return bPause; }
+    void            Pause( bool bPause );
+    bool        IsPause() const { return bPause; }
 
     void            Stop();
 
@@ -214,10 +214,10 @@ public:
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
     /// Creates an antialiased thumbnail, with maximum width or height of nMaximumExtent.
-    sal_Bool        CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumSize = 256) const;
+    bool        CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumSize = 256) const;
 
-    void            UseCanvas( sal_Bool _bUseCanvas );
-    sal_Bool        GetUseCanvas() const { return bUseCanvas; }
+    void            UseCanvas( bool _bUseCanvas );
+    bool        GetUseCanvas() const { return bUseCanvas; }
 };
 
 /** Create a special metaaction that delegates rendering to specified

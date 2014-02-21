@@ -62,7 +62,7 @@ public:
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc);
     virtual void Deactivate();
     virtual void SetActive();
-    virtual sal_Bool Close();
+    virtual bool Close();
 
 private:
 

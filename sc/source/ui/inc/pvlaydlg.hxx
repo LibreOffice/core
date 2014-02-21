@@ -142,7 +142,7 @@ protected:
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual bool        IsRefInputMode() const;
     virtual void        SetActive();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
 private:
     /** Returns the localized function name for the specified resource index. */

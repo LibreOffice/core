@@ -92,7 +92,7 @@ private:
 CategoryListBox::CategoryListBox( Window* pParent )
 : ListBox( pParent, WB_TABSTOP | WB_BORDER )
 {
-    EnableUserDraw( sal_True );
+    EnableUserDraw( true );
     SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
@@ -142,7 +142,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        DrawEntry( rUDEvt, sal_True, sal_True );
+        DrawEntry( rUDEvt, true, true );
     }
 }
 

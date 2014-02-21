@@ -206,7 +206,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScSpecialFilterDlg::Close()
+bool ScSpecialFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();

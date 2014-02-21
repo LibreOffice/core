@@ -60,7 +60,7 @@ namespace {
         {
             if ( mbUpdateMode )
             {
-                mrSplitWindow.SetUpdateMode( sal_False );
+                mrSplitWindow.SetUpdateMode( false );
             }
         }
 
@@ -68,7 +68,7 @@ namespace {
         {
             if ( mbUpdateMode )
             {
-                mrSplitWindow.SetUpdateMode( sal_True );
+                mrSplitWindow.SetUpdateMode( true );
             }
         }
 
@@ -132,7 +132,7 @@ friend class SfxSplitWindow;
                             SetAlign( pOwner->GetAlign() );
                             Actualize();
                             ShowAutoHideButton( pOwner->IsAutoHideButtonVisible() );
-                            ShowFadeInHideButton( sal_True );
+                            ShowFadeInHideButton( true );
                         }
 
                         ~SfxEmptySplitWin_Impl()
@@ -227,8 +227,8 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
 {
     if ( bWithButtons )
     {
-        ShowAutoHideButton( sal_False );    // no autohide button (pin) anymore
-        ShowFadeOutButton( sal_True );
+        ShowAutoHideButton( false );    // no autohide button (pin) anymore
+        ShowFadeOutButton( true );
     }
 
     // Set SV-Alignment
@@ -1014,7 +1014,7 @@ IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer)
             pEmptyWin->bEndAutoHide = sal_False;
             if ( !Application::IsInModalMode() &&
                   !PopupMenu::IsInExecute() &&
-                  !pEmptyWin->bSplit && !HasChildPathFocus( sal_True ) )
+                  !pEmptyWin->bSplit && !HasChildPathFocus( true ) )
             {
                 // While a modal dialog or a popup menu is open or while the
                 // Splitting is done, in any case, do not close. Even as long
@@ -1139,7 +1139,7 @@ void SfxSplitWindow::SetPinned_Impl( sal_Bool bOn )
         Point aPos( GetPosPixel() );
         aPos = GetParent()->OutputToScreenPixel( aPos );
         SetFloatingPos( aPos );
-        SetFloatingMode( sal_True );
+        SetFloatingMode( true );
         GetFloatingWindow()->SetOutputSizePixel( GetOutputSizePixel() );
 
         if ( pEmptyWin->bFadeIn )
@@ -1149,7 +1149,7 @@ void SfxSplitWindow::SetPinned_Impl( sal_Bool bOn )
     {
         pEmptyWin->nState &= ~1;
         SetOutputSizePixel( GetFloatingWindow()->GetOutputSizePixel() );
-        SetFloatingMode( sal_False );
+        SetFloatingMode( false );
 
         if ( pEmptyWin->bFadeIn )
         {

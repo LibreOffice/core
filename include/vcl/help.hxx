@@ -62,40 +62,40 @@ public:
                         Help();
     virtual             ~Help();
 
-    virtual sal_Bool    Start( const OUString& rHelpId, const Window* pWindow );
-    virtual sal_Bool    SearchKeyword( const OUString& rKeyWord );
+    virtual bool    Start( const OUString& rHelpId, const Window* pWindow );
+    virtual bool    SearchKeyword( const OUString& rKeyWord );
     virtual OUString    GetHelpText( const OUString& aHelpURL, const Window* pWindow );
 
     static void         EnableContextHelp();
     static void         DisableContextHelp();
-    static sal_Bool     IsContextHelpEnabled();
+    static bool     IsContextHelpEnabled();
 
     static void         EnableExtHelp();
     static void         DisableExtHelp();
-    static sal_Bool     IsExtHelpEnabled();
-    static sal_Bool     StartExtHelp();
-    static sal_Bool     EndExtHelp();
+    static bool     IsExtHelpEnabled();
+    static bool     StartExtHelp();
+    static bool     EndExtHelp();
 
     static void         EnableBalloonHelp();
     static void         DisableBalloonHelp();
-    static sal_Bool     IsBalloonHelpEnabled();
-    static sal_Bool     ShowBalloon( Window* pParent,
+    static bool     IsBalloonHelpEnabled();
+    static bool     ShowBalloon( Window* pParent,
                                      const Point& rScreenPos,
                                      const OUString& rHelpText );
-    static sal_Bool     ShowBalloon( Window* pParent,
+    static bool     ShowBalloon( Window* pParent,
                                      const Point& rScreenPos,
                                      const Rectangle&,
                                      const OUString& rHelpText );
 
     static void         EnableQuickHelp();
     static void         DisableQuickHelp();
-    static sal_Bool     IsQuickHelpEnabled();
-    static sal_Bool     ShowQuickHelp( Window* pParent,
+    static bool     IsQuickHelpEnabled();
+    static bool     ShowQuickHelp( Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        const OUString& rLongHelpText,
                                        sal_uInt16 nStyle = 0 );
-    static sal_Bool     ShowQuickHelp( Window* pParent,
+    static bool     ShowQuickHelp( Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const OUString& rHelpText,
                                        sal_uInt16 nStyle = 0 )

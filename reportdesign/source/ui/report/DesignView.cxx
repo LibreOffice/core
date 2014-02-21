@@ -455,7 +455,7 @@ void ODesignView::unmarkAllObjects(OSectionView* _pSectionView)
     m_aScrollWindow.unmarkAllObjects(_pSectionView);
 }
 //-----------------------------------------------------------------------------
-void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
+void ODesignView::togglePropertyBrowser(bool _bToogleOn)
 {
     if ( !m_pPropWin && _bToogleOn )
     {

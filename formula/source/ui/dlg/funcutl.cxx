@@ -36,7 +36,7 @@ namespace formula
 ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
 {
     Font aFnt( GetFont() );
-    aFnt.SetTransparent( sal_True );
+    aFnt.SetTransparent( true );
     aFnt.SetWeight( WEIGHT_LIGHT );
     if ( pParent->IsBackground() )
     {

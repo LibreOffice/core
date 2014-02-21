@@ -63,8 +63,8 @@ private:
     sal_uInt16          mnStateFlags;
     ScrollType      meScrollType;
     ScrollType      meDDScrollType;
-    sal_Bool            mbCalcSize;
-    sal_Bool            mbFullDrag;
+    bool            mbCalcSize;
+    bool            mbFullDrag;
     Link            maScrollHdl;
     Link            maEndScrollHdl;
 
@@ -73,17 +73,17 @@ private:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void         ImplUpdateRects( sal_Bool bUpdate = sal_True );
+    SAL_DLLPRIVATE void         ImplUpdateRects( bool bUpdate = true );
     SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
-    SAL_DLLPRIVATE void         ImplCalc( sal_Bool bUpdate = sal_True );
+    SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
     SAL_DLLPRIVATE void         ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev  );
     using Window::ImplScroll;
-    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, sal_Bool bCallEndScroll );
-    SAL_DLLPRIVATE long         ImplDoAction( sal_Bool bCallEndScroll );
-    SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, sal_Bool bCallAction = sal_True );
+    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, bool bCallEndScroll );
+    SAL_DLLPRIVATE long         ImplDoAction( bool bCallEndScroll );
+    SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE void         ImplInvert();
-    SAL_DLLPRIVATE sal_Bool     ImplDrawNative( sal_uInt16 nDrawFlags );
+    SAL_DLLPRIVATE bool     ImplDrawNative( sal_uInt16 nDrawFlags );
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );
@@ -113,9 +113,9 @@ public:
     long            DoScroll( long nNewPos );
     long            DoScrollAction( ScrollType eScrollType );
 
-    void            EnableDrag( sal_Bool bEnable = sal_True )
+    void            EnableDrag( bool bEnable = true )
                         { mbFullDrag = bEnable; }
-    sal_Bool            IsDragEnabled() const { return mbFullDrag; }
+    bool            IsDragEnabled() const { return mbFullDrag; }
 
     void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }

@@ -92,16 +92,16 @@ private:
     long                    mnOrgMenuHeight;
     sal_uInt16                  mnTitleType;
     sal_uInt16                  mnBorderStyle;
-    sal_Bool                    mbFloatWindow;
-    sal_Bool                    mbSmallOutBorder;
-    sal_Bool                    mbFrameBorder;
-    sal_Bool                    mbPined;
-    sal_Bool                    mbRollUp;
-    sal_Bool                    mbMenuHide;
-    sal_Bool                    mbDockBtn;
-    sal_Bool                    mbHideBtn;
-    sal_Bool                    mbMenuBtn;
-    sal_Bool                    mbDisplayActive;
+    bool                    mbFloatWindow;
+    bool                    mbSmallOutBorder;
+    bool                    mbFrameBorder;
+    bool                    mbPined;
+    bool                    mbRollUp;
+    bool                    mbMenuHide;
+    bool                    mbDockBtn;
+    bool                    mbHideBtn;
+    bool                    mbMenuBtn;
+    bool                    mbDisplayActive;
 
     using Window::ImplInit;
     void                    ImplInit( Window* pParent,
@@ -136,27 +136,27 @@ public:
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     void                    InitView();
-    void                    UpdateView( sal_Bool bNewView, const Size& rNewOutSize );
+    void                    UpdateView( bool bNewView, const Size& rNewOutSize );
     void                    InvalidateBorder();
 
     using Window::Draw;
     void                    Draw( const Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
 
-    void                    SetDisplayActive( sal_Bool bActive );
-    sal_Bool                    IsDisplayActive() const { return mbDisplayActive; }
+    void                    SetDisplayActive( bool bActive );
+    bool                    IsDisplayActive() const { return mbDisplayActive; }
     void                    SetTitleType( sal_uInt16 nTitleType, const Size& rSize );
     void                    SetBorderStyle( sal_uInt16 nStyle );
     sal_uInt16                  GetBorderStyle() const { return mnBorderStyle; }
-    void                    SetPin( sal_Bool bPin );
-    void                    SetRollUp( sal_Bool bRollUp, const Size& rSize );
+    void                    SetPin( bool bPin );
+    void                    SetRollUp( bool bRollUp, const Size& rSize );
     void                    SetCloser();
-    void                    SetDockButton( sal_Bool bDockButton );
-    void                    SetHideButton( sal_Bool bHideButton );
-    void                    SetMenuButton( sal_Bool bMenuButton );
+    void                    SetDockButton( bool bDockButton );
+    void                    SetHideButton( bool bHideButton );
+    void                    SetMenuButton( bool bMenuButton );
 
     void                    UpdateMenuHeight();
     void                    SetMenuBarWindow( Window* pWindow );
-    void                    SetMenuBarMode( sal_Bool bHide );
+    void                    SetMenuBarMode( bool bHide );
 
     void                    SetMinOutputSize( long nWidth, long nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }
@@ -208,9 +208,9 @@ struct ImplBorderFrameData
     sal_uInt16                  mnHideState;
     sal_uInt16                  mnHelpState;
     sal_uInt16                  mnTitleType;
-    sal_Bool                    mbFloatWindow;
-    sal_Bool                    mbDragFull;
-    sal_Bool                    mbTitleClipped;
+    bool                    mbFloatWindow;
+    bool                    mbDragFull;
+    bool                    mbTitleClipped;
 };
 
 class ImplBorderWindowView
@@ -218,9 +218,9 @@ class ImplBorderWindowView
 public:
     virtual                 ~ImplBorderWindowView();
 
-    virtual sal_Bool        MouseMove( const MouseEvent& rMEvt );
-    virtual sal_Bool        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool        Tracking( const TrackingEvent& rTEvt );
+    virtual bool        MouseMove( const MouseEvent& rMEvt );
+    virtual bool        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool        Tracking( const TrackingEvent& rTEvt );
     virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
@@ -232,9 +232,9 @@ public:
 
     void                    ImplInitTitle( ImplBorderFrameData* pData );
     sal_uInt16              ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
-    sal_Bool                ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    sal_Bool                ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    sal_Bool                ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
+    bool                ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    bool                ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    bool                ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
     OUString                ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
     long                    ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const;
 };
@@ -283,9 +283,9 @@ public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
                             ~ImplStdBorderWindowView();
 
-    virtual sal_Bool        MouseMove( const MouseEvent& rMEvt );
-    virtual sal_Bool        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool        Tracking( const TrackingEvent& rTEvt );
+    virtual bool        MouseMove( const MouseEvent& rMEvt );
+    virtual bool        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool        Tracking( const TrackingEvent& rTEvt );
     virtual OUString        RequestHelp( const Point& rPos, Rectangle& rHelpRect );
     virtual Rectangle       GetMenuRect() const;
 

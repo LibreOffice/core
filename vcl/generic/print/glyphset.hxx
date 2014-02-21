@@ -41,7 +41,7 @@ class GlyphSet
 private:
 
     sal_Int32           mnFontID;
-    sal_Bool            mbVertical;
+    bool            mbVertical;
     OString        maBaseName;
     fonttype::type      meBaseType;
     rtl_TextEncoding    mnBaseEncoding;
@@ -64,18 +64,18 @@ private:
     void            PSDefineReencodedFont (osl::File* pOutFile,
                                            sal_Int32 nGlyphSetID);
 
-    sal_Bool        GetCharID (sal_Unicode nChar,
+    bool        GetCharID (sal_Unicode nChar,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    sal_Bool        LookupCharID (sal_Unicode nChar,
+    bool        LookupCharID (sal_Unicode nChar,
                                    unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    sal_Bool        AddCharID (sal_Unicode nChar,
+    bool        AddCharID (sal_Unicode nChar,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
-    sal_Bool        GetGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
+    bool        GetGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    sal_Bool        LookupGlyphID (sal_GlyphId nGlyphId,
+    bool        LookupGlyphID (sal_GlyphId nGlyphId,
                                    unsigned char* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-    sal_Bool        AddGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
+    bool        AddGlyphID (sal_GlyphId nGlyphId, sal_Unicode nUnicode,
                                 unsigned char* nOutGlyphID,
                                 sal_Int32* nOutGlyphSetID);
     void            AddNotdef (char_map_t &rCharMap);
@@ -91,7 +91,7 @@ private:
 
 public:
 
-    GlyphSet (sal_Int32 nFontID, sal_Bool bVertical);
+    GlyphSet (sal_Int32 nFontID, bool bVertical);
     ~GlyphSet ();
 
     sal_Int32       GetFontID ();
@@ -113,9 +113,9 @@ public:
                                 const sal_Unicode* pUnicodes,
                                 sal_Int16 nLen,
                                 const sal_Int32* pDeltaArray,
-                                sal_Bool bUseGlyphs=sal_True);
-    sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
-    sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
+                                bool bUseGlyphs=true);
+    bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
+    bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 
 

@@ -295,7 +295,7 @@ void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-sal_Bool ScNameDefDlg::Close()
+bool ScNameDefDlg::Close()
 {
     return DoClose( ScNameDefDlgWrapper::GetChildWindowId() );
 }

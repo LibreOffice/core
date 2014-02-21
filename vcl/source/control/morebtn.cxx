@@ -36,7 +36,7 @@ void MoreButton::ImplInit( Window* pParent, WinBits nStyle )
     mpMBData     = new ImplMoreButtonData;
     mnDelta      = 0;
     meUnit       = MAP_PIXEL;
-    mbState      = sal_False;
+    mbState      = false;
 
     mpMBData->mpItemList = NULL;
 
@@ -99,7 +99,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & RSC_MOREBUTTON_STATE )
     {
         // Don't call method as Dialog should not be switched over
-        mbState = (sal_Bool)ReadShortRes();
+        mbState = ReadShortRes() != 0;
         // SetText( GetText() );
         ShowState();
     }

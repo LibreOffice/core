@@ -88,7 +88,7 @@ void ColorListBox::ImplInit()
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-    EnableUserDraw( sal_True );
+    EnableUserDraw( true );
     SetUserItemSize( aImageSize );
 }
 
@@ -308,13 +308,13 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
                 }
             }
 
-            ListBox::DrawEntry( rUDEvt, sal_False, sal_True, sal_False );
+            ListBox::DrawEntry( rUDEvt, false, true, false );
         }
         else
-            ListBox::DrawEntry( rUDEvt, sal_False, sal_True, sal_True );
+            ListBox::DrawEntry( rUDEvt, false, true, true );
     }
     else
-        ListBox::DrawEntry( rUDEvt, sal_True, sal_True, sal_False );
+        ListBox::DrawEntry( rUDEvt, true, true, false );
 }
 
 // =======================================================================
@@ -921,7 +921,7 @@ sal_Bool LineListBox::UpdatePaintLineColor( void )
 
 void LineListBox::UpdateEntries( long nOldWidth )
 {
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     UpdatePaintLineColor( );
 
@@ -960,7 +960,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
         n++;
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
     Invalidate();
 }
 
@@ -1391,11 +1391,11 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         }
 
         rUDEvt.GetDevice()->SetFont( aOldFont );
-        DrawEntry( rUDEvt, sal_False, sal_False);   // draw separator
+        DrawEntry( rUDEvt, false, false);   // draw separator
     }
     else
     {
-        DrawEntry( rUDEvt, sal_True, sal_True );
+        DrawEntry( rUDEvt, true, true );
     }
 }
 
@@ -1669,7 +1669,7 @@ FontSizeBox::~FontSizeBox()
 
 void FontSizeBox::ImplInit()
 {
-    EnableAutocomplete( sal_False );
+    EnableAutocomplete( false );
 
     bRelativeMode   = sal_False;
     bPtRelative     = sal_False;
@@ -1677,7 +1677,7 @@ void FontSizeBox::ImplInit()
     bStdSize        = sal_False;
     pFontList       = NULL;
 
-    SetShowTrailingZeros( sal_False );
+    SetShowTrailingZeros( false );
     SetDecimalDigits( 1 );
     SetMin( 20 );
     SetMax( 9999 );
@@ -1957,7 +1957,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
             mnLastValue = nTempValue;
             SetText( aName );
             mnFieldValue = mnLastValue;
-            SetEmptyFieldValueData( sal_False );
+            SetEmptyFieldValueData( false );
             return;
         }
     }

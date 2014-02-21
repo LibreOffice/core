@@ -47,7 +47,7 @@ SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pW
     return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 }
 
-X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
+X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
 {
     int error_base, event_base;
     X11SalObject*       pObject  = new X11SalObject();
@@ -500,10 +500,10 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                 switch( pEvent->type )
                 {
                     case UnmapNotify:
-                    pObject->mbVisible = sal_False;
+                    pObject->mbVisible = false;
                     return true;
                     case MapNotify:
-                    pObject->mbVisible = sal_True;
+                    pObject->mbVisible = true;
                     return true;
                     case ButtonPress:
                     pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );

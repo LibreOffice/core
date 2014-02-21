@@ -186,9 +186,9 @@ void* JPEGWriter::GetScanline( long nY )
     return pScanline;
 }
 
-sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
+bool JPEGWriter::Write( const Graphic& rGraphic )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( mxStatusIndicator.is() )
     {
@@ -223,7 +223,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
             }
         }
         if ( bIsGrey )
-            mbGreys = sal_True;
+            mbGreys = true;
     }
 
     if( mpExpWasGrey )
@@ -236,7 +236,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
         if( !mbNative )
             mpBuffer = new sal_uInt8[ AlignedWidth4Bytes( mbGreys ? mpReadAccess->Width() * 8L : mpReadAccess->Width() * 24L ) ];
 
-        bRet = (sal_Bool) WriteJPEG( this, &mrStream, mpReadAccess->Width(), mpReadAccess->Height(), mbGreys, mnQuality, maChromaSubsampling, mxStatusIndicator );
+        bRet = WriteJPEG( this, &mrStream, mpReadAccess->Width(), mpReadAccess->Height(), mbGreys, mnQuality, maChromaSubsampling, mxStatusIndicator );
 
         delete[] mpBuffer;
         mpBuffer = NULL;

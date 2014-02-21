@@ -234,12 +234,12 @@ void WrapPropertyPanel::NotifyItemUpdate(
         mpRBWrapThrough->Enable(false);
         mpRBIdealWrap->Enable(false);
 
-        mpRBNoWrap->Check( sal_False );
-        mpRBWrapLeft->Check( sal_False );
-        mpRBWrapRight->Check( sal_False );
-        mpRBWrapParallel->Check( sal_False );
-        mpRBWrapThrough->Check( sal_False );
-        mpRBIdealWrap->Check( sal_False );
+        mpRBNoWrap->Check( false );
+        mpRBWrapLeft->Check( false );
+        mpRBWrapRight->Check( false );
+        mpRBWrapParallel->Check( false );
+        mpRBWrapThrough->Check( false );
+        mpRBIdealWrap->Check( false );
     }
 }
 

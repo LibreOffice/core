@@ -61,14 +61,14 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::Start( const OUString&, const Window* )
+bool Help::Start( const OUString&, const Window* )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool Help::SearchKeyword( const OUString& )
+bool Help::SearchKeyword( const OUString& )
 {
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -82,19 +82,19 @@ OUString Help::GetHelpText( const OUString&, const Window* )
 
 void Help::EnableContextHelp()
 {
-    ImplGetSVData()->maHelpData.mbContextHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbContextHelp = true;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableContextHelp()
 {
-    ImplGetSVData()->maHelpData.mbContextHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbContextHelp = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsContextHelpEnabled()
+bool Help::IsContextHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbContextHelp;
 }
@@ -103,129 +103,129 @@ sal_Bool Help::IsContextHelpEnabled()
 
 void Help::EnableExtHelp()
 {
-    ImplGetSVData()->maHelpData.mbExtHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbExtHelp = true;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableExtHelp()
 {
-    ImplGetSVData()->maHelpData.mbExtHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbExtHelp = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsExtHelpEnabled()
+bool Help::IsExtHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbExtHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::StartExtHelp()
+bool Help::StartExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maHelpData.mbExtHelp && !pSVData->maHelpData.mbExtHelpMode )
     {
-        pSVData->maHelpData.mbExtHelpMode = sal_True;
+        pSVData->maHelpData.mbExtHelpMode = true;
         pSVData->maHelpData.mbOldBalloonMode = pSVData->maHelpData.mbBalloonHelp;
-        pSVData->maHelpData.mbBalloonHelp = sal_True;
+        pSVData->maHelpData.mbBalloonHelp = true;
         if ( pSVData->maWinData.mpAppWin )
             pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::EndExtHelp()
+bool Help::EndExtHelp()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maHelpData.mbExtHelp && pSVData->maHelpData.mbExtHelpMode )
     {
-        pSVData->maHelpData.mbExtHelpMode = sal_False;
+        pSVData->maHelpData.mbExtHelpMode = false;
         pSVData->maHelpData.mbBalloonHelp = pSVData->maHelpData.mbOldBalloonMode;
         if ( pSVData->maWinData.mpAppWin )
             pSVData->maWinData.mpAppWin->ImplGenerateMouseMove();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::EnableBalloonHelp()
 {
-    ImplGetSVData()->maHelpData.mbBalloonHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbBalloonHelp = true;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableBalloonHelp()
 {
-    ImplGetSVData()->maHelpData.mbBalloonHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbBalloonHelp = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsBalloonHelpEnabled()
+bool Help::IsBalloonHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbBalloonHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::ShowBalloon( Window* pParent,
+bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
                         rHelpText, OUString(), rScreenPos );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::ShowBalloon( Window* pParent,
+bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
                         rHelpText, OUString(), rScreenPos, &rRect );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::EnableQuickHelp()
 {
-    ImplGetSVData()->maHelpData.mbQuickHelp = sal_True;
+    ImplGetSVData()->maHelpData.mbQuickHelp = true;
 }
 
 // -----------------------------------------------------------------------
 
 void Help::DisableQuickHelp()
 {
-    ImplGetSVData()->maHelpData.mbQuickHelp = sal_False;
+    ImplGetSVData()->maHelpData.mbQuickHelp = false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::IsQuickHelpEnabled()
+bool Help::IsQuickHelpEnabled()
 {
     return ImplGetSVData()->maHelpData.mbQuickHelp;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::ShowQuickHelp( Window* pParent,
+bool Help::ShowQuickHelp( Window* pParent,
                           const Rectangle& rScreenRect,
                           const OUString& rHelpText,
                           const OUString& rLongHelpText,
@@ -234,7 +234,7 @@ sal_Bool Help::ShowQuickHelp( Window* pParent,
     ImplShowHelpWindow( pParent, HELPWINSTYLE_QUICK, nStyle,
                         rHelpText, rLongHelpText,
                         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -297,7 +297,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt
     maHelpText( rText )
 {
     SetType( WINDOW_HELPTEXTWINDOW );
-    ImplSetMouseTransparent( sal_True );
+    ImplSetMouseTransparent( true );
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;
 //  on windows this will raise the application window, because help windows are system windows now
@@ -310,9 +310,9 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt
     SetTextAlign( ALIGN_TOP );
     if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( true );
         SetBackground();
     }
     else
@@ -334,7 +334,7 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maHelpData.mbSetKeyboardHelp )
-        pSVData->maHelpData.mbKeyboardHelp = sal_True;
+        pSVData->maHelpData.mbKeyboardHelp = true;
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
@@ -632,7 +632,7 @@ void ImplDestroyHelpWindow( bool bUpdateHideTime )
         if( pHelpWin->IsVisible() )
             pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
-        pSVData->maHelpData.mbKeyboardHelp = sal_False;
+        pSVData->maHelpData.mbKeyboardHelp = false;
         pHelpWin->Hide();
         delete pHelpWin;
         if( bUpdateHideTime )

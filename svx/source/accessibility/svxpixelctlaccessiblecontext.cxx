@@ -115,7 +115,7 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
     IsValid();
     uno::Reference< XAccessible > xRet;
     if(pPixelCtl)
-        xRet = pPixelCtl->GetParent()->GetAccessible( sal_True );
+        xRet = pPixelCtl->GetParent()->GetAccessible( true );
     return xRet;
 }
 

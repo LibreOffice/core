@@ -58,8 +58,8 @@ void Splitter::ImplInitSplitterData()
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;
     mnStartSplitPos   = 0;
-    mbDragFull        = sal_False;
-    mbKbdSplitting    = sal_False;
+    mbDragFull        = false;
+    mbKbdSplitting    = false;
     mbInKeyEvent      = 0;
     mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
 }
@@ -226,11 +226,11 @@ Splitter* Splitter::ImplFindSibling()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Splitter::ImplSplitterActive()
+bool Splitter::ImplSplitterActive()
 {
     // is splitter in document or at scrollbar handle ?
 
-    sal_Bool bActive = sal_True;
+    bool bActive = true;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     long nA = rSettings.GetScrollBarSize();
     long nB = rSettings.GetSplitSize();
@@ -239,12 +239,12 @@ sal_Bool Splitter::ImplSplitterActive()
     if ( mbHorzSplit )
     {
         if( aSize.Width() == nB && aSize.Height() == nA )
-            bActive = sal_False;
+            bActive = false;
     }
     else
     {
         if( aSize.Width() == nA && aSize.Height() == nB )
-            bActive = sal_False;
+            bActive = false;
     }
     return bActive;
 }
@@ -366,7 +366,7 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
         if( !mbKbdSplitting )
             return;
         else
-            mbKbdSplitting = sal_False;
+            mbKbdSplitting = false;
 
         if ( nCode != KEY_ESCAPE )
         {
@@ -554,7 +554,7 @@ void Splitter::ImplStartKbdSplitting()
     if( mbKbdSplitting )
         return;
 
-    mbKbdSplitting = sal_True;
+    mbKbdSplitting = true;
 
     StartSplit();
 
@@ -626,7 +626,7 @@ void Splitter::LoseFocus()
     {
         KeyCode aReturnKey( KEY_RETURN );
         ImplKbdTracking( aReturnKey );
-        mbKbdSplitting = sal_False;
+        mbKbdSplitting = false;
     }
     Invalidate();
 }

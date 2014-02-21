@@ -238,7 +238,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     m_lbField.SetSelectHdl(LINK(this, FmSearchDialog, OnFieldSelected));
 
     m_cmbSearchText.SetModifyHdl(LINK(this, FmSearchDialog, OnSearchTextModified));
-    m_cmbSearchText.EnableAutocomplete(sal_False);
+    m_cmbSearchText.EnableAutocomplete(false);
     m_cmbSearchText.SetGetFocusHdl(LINK(this, FmSearchDialog, OnFocusGrabbed));
 
     m_cbUseFormat.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
@@ -291,14 +291,14 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     FreeResource();
 }
 
-sal_Bool FmSearchDialog::Close()
+bool FmSearchDialog::Close()
 {
     // If the close button is disabled and ESC is pressed in a dialog,
     // then Frame will call Close anyway, which I don't want to happen
     // while I'm in the middle of a search (maybe one that's running
     // in its own thread)
     if (!m_pbClose.IsEnabled())
-        return sal_False;
+        return false;
     return ModalDialog::Close();
 }
 
@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
 
         if (m_cbStartOver.IsChecked())
         {
-            m_cbStartOver.Check(sal_False);
+            m_cbStartOver.Check(false);
             EnableSearchUI(sal_False);
             if (m_rbSearchForText.IsChecked())
                 m_pSearchEngine->StartOver(strThisRoundText);
@@ -815,15 +815,15 @@ void FmSearchDialog::LoadParams()
     // all fields/single field (AFTER selcting the field because OnClickedFieldRadios expects a valid value there)
     if (aParams.bAllFields)
     {
-        m_rbSingleField.Check(sal_False);
-        m_rbAllFields.Check(sal_True);
+        m_rbSingleField.Check(false);
+        m_rbAllFields.Check(true);
         LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(&m_rbAllFields);
         // OnClickedFieldRadios also calls to RebuildUsedFields
     }
     else
     {
-        m_rbAllFields.Check(sal_False);
-        m_rbSingleField.Check(sal_True);
+        m_rbAllFields.Check(false);
+        m_rbSingleField.Check(true);
         LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(&m_rbSingleField);
     }
 
@@ -843,9 +843,9 @@ void FmSearchDialog::LoadParams()
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_aHalfFullFormsCJK);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_aSoundsLikeCJK);
 
-    m_cbWildCard.Check(sal_False);
-    m_cbRegular.Check(sal_False);
-    m_cbApprox.Check(sal_False);
+    m_cbWildCard.Check(false);
+    m_cbRegular.Check(false);
+    m_cbApprox.Check(false);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbWildCard);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbRegular);
     LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(&m_cbApprox);
@@ -861,7 +861,7 @@ void FmSearchDialog::LoadParams()
         pToCheck = &m_aSoundsLikeCJK;
     if (pToCheck)
     {
-        pToCheck->Check(sal_True);
+        pToCheck->Check(true);
         LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(pToCheck);
     }
 
@@ -873,14 +873,14 @@ void FmSearchDialog::LoadParams()
 
     m_pSearchEngine->SetTransliterationFlags( aParams.getTransliterationFlags( ) );
 
-    m_rbSearchForText.Check(sal_False);
-    m_rbSearchForNull.Check(sal_False);
-    m_rbSearchForNotNull.Check(sal_False);
+    m_rbSearchForText.Check(false);
+    m_rbSearchForNull.Check(false);
+    m_rbSearchForNotNull.Check(false);
     switch (aParams.nSearchForType)
     {
-        case 1: m_rbSearchForNull.Check(sal_True); break;
-        case 2: m_rbSearchForNotNull.Check(sal_True); break;
-        default: m_rbSearchForText.Check(sal_True); break;
+        case 1: m_rbSearchForNull.Check(true); break;
+        case 2: m_rbSearchForNotNull.Check(true); break;
+        default: m_rbSearchForText.Check(true); break;
     }
     LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(&m_rbSearchForText);
 }

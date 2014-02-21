@@ -67,7 +67,7 @@ private:
 protected:
 
     virtual void Resize();
-    virtual sal_Bool Close();
+    virtual bool Close();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >
         CreateCompPropSet(const SdrMarkList& rMarkList);

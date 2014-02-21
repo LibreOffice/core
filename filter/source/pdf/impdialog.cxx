@@ -183,48 +183,48 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
     }
 
 //get the CTL (Complex Text Layout) from general options, returns sal_True if we have a CTL font on our hands.
-    mbUseCTLFont = maConfigI18N.ReadBool( "CTLFont", sal_False );
+    mbUseCTLFont = maConfigI18N.ReadBool( "CTLFont", false );
 
-    mbUseLosslessCompression = maConfigItem.ReadBool( "UseLosslessCompression", sal_False );
+    mbUseLosslessCompression = maConfigItem.ReadBool( "UseLosslessCompression", false );
     mnQuality = maConfigItem.ReadInt32( "Quality", 90 );
-    mbReduceImageResolution = maConfigItem.ReadBool( "ReduceImageResolution", sal_False );
+    mbReduceImageResolution = maConfigItem.ReadBool( "ReduceImageResolution", false );
     mnMaxImageResolution = maConfigItem.ReadInt32( "MaxImageResolution", 300 );
 
-    mbUseTaggedPDF = maConfigItem.ReadBool( "UseTaggedPDF", sal_False );
+    mbUseTaggedPDF = maConfigItem.ReadBool( "UseTaggedPDF", false );
     mnPDFTypeSelection =  maConfigItem.ReadInt32( "SelectPdfVersion", 0 );
     if ( mbIsPresentation )
-        mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", sal_False );
-    mbExportNotes = maConfigItem.ReadBool( "ExportNotes", sal_False );
-    mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", sal_False );
+        mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", false );
+    mbExportNotes = maConfigItem.ReadBool( "ExportNotes", false );
+    mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", false );
 
-    mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", sal_True );
+    mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", true );
     if ( mbIsPresentation )
-        mbExportHiddenSlides = maConfigItem.ReadBool( "ExportHiddenSlides", sal_False );
+        mbExportHiddenSlides = maConfigItem.ReadBool( "ExportHiddenSlides", false );
     mnOpenBookmarkLevels = maConfigItem.ReadInt32( "OpenBookmarkLevels", -1 );
-    mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", sal_True );
-    mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", sal_False );
-    mbAddStream = maConfigItem.ReadBool( "IsAddStream", sal_False );
+    mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", true );
+    mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", false );
+    mbAddStream = maConfigItem.ReadBool( "IsAddStream", false );
 
     mnFormsType = maConfigItem.ReadInt32( "FormsType", 0 );
-    mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", sal_True );
+    mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", true );
     if ( ( mnFormsType < 0 ) || ( mnFormsType > 3 ) )
         mnFormsType = 0;
-    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( "AllowDuplicateFieldNames", sal_False );
+    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( "AllowDuplicateFieldNames", false );
 
 //prepare values for the Viewer tab page
-    mbHideViewerToolbar = maConfigItem.ReadBool( "HideViewerToolbar", sal_False );
-    mbHideViewerMenubar = maConfigItem.ReadBool( "HideViewerMenubar", sal_False );
-    mbHideViewerWindowControls = maConfigItem.ReadBool( "HideViewerWindowControls", sal_False );
-    mbResizeWinToInit = maConfigItem.ReadBool( "ResizeWindowToInitialPage", sal_False );
-    mbCenterWindow = maConfigItem.ReadBool( "CenterWindow", sal_False );
-    mbOpenInFullScreenMode = maConfigItem.ReadBool( "OpenInFullScreenMode", sal_False );
-    mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( "DisplayPDFDocumentTitle", sal_True );
+    mbHideViewerToolbar = maConfigItem.ReadBool( "HideViewerToolbar", false );
+    mbHideViewerMenubar = maConfigItem.ReadBool( "HideViewerMenubar", false );
+    mbHideViewerWindowControls = maConfigItem.ReadBool( "HideViewerWindowControls", false );
+    mbResizeWinToInit = maConfigItem.ReadBool( "ResizeWindowToInitialPage", false );
+    mbCenterWindow = maConfigItem.ReadBool( "CenterWindow", false );
+    mbOpenInFullScreenMode = maConfigItem.ReadBool( "OpenInFullScreenMode", false );
+    mbDisplayPDFDocumentTitle = maConfigItem.ReadBool( "DisplayPDFDocumentTitle", true );
 
     mnInitialView = maConfigItem.ReadInt32( "InitialView", 0 );
     mnMagnification = maConfigItem.ReadInt32( "Magnification", 0 );
     mnZoom = maConfigItem.ReadInt32( "Zoom", 100 );
     mnPageLayout = maConfigItem.ReadInt32( "PageLayout", 0 );
-    mbFirstPageLeft = maConfigItem.ReadBool( "FirstPageOnLeft", sal_False );
+    mbFirstPageLeft = maConfigItem.ReadBool( "FirstPageOnLeft", false );
     mnInitialPage = maConfigItem.ReadInt32( "InitialPage", 1 );
     if( mnInitialPage < 1 )
         mnInitialPage = 1;
@@ -232,19 +232,19 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
 //prepare values for the security tab page
     mnPrint = maConfigItem.ReadInt32( "Printing", 2 );
     mnChangesAllowed = maConfigItem.ReadInt32( "Changes", 4 );
-    mbCanCopyOrExtract = maConfigItem.ReadBool( "EnableCopyingOfContent", sal_True );
-    mbCanExtractForAccessibility = maConfigItem.ReadBool( "EnableTextAccessForAccessibilityTools", sal_True );
+    mbCanCopyOrExtract = maConfigItem.ReadBool( "EnableCopyingOfContent", true );
+    mbCanExtractForAccessibility = maConfigItem.ReadBool( "EnableTextAccessForAccessibilityTools", true );
 
 //prepare values for relative links
-    mbExportRelativeFsysLinks = maConfigItem.ReadBool( "ExportLinksRelativeFsys", sal_False );
+    mbExportRelativeFsysLinks = maConfigItem.ReadBool( "ExportLinksRelativeFsys", false );
 
     mnViewPDFMode = maConfigItem.ReadInt32( "PDFViewSelection", 0 );
 
-    mbConvertOOoTargets = maConfigItem.ReadBool( "ConvertOOoTargetToPDFTarget", sal_False );
-    mbExportBmkToPDFDestination = maConfigItem.ReadBool( "ExportBookmarksToPDFDestination", sal_False );
+    mbConvertOOoTargets = maConfigItem.ReadBool( "ConvertOOoTargetToPDFTarget", false );
+    mbExportBmkToPDFDestination = maConfigItem.ReadBool( "ExportBookmarksToPDFDestination", false );
 
 //prepare values for digital signatures
-    mbSignPDF = maConfigItem.ReadBool( "SignPDF", sal_False );
+    mbSignPDF = maConfigItem.ReadBool( "SignPDF", false );
 
 //queue the tab pages for later creation (created when first shown)
     mnSigningPageId = AddTabPage("digitalsignatures", ImpPDFTabSigningPage::Create, 0);
@@ -598,7 +598,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     switch( paParent->mnPDFTypeSelection )
     {
     default:
-    case 0: mpCbPDFA1b->Check( sal_False ); // PDF 1.4
+    case 0: mpCbPDFA1b->Check( false ); // PDF 1.4
         break;
     case 1: mpCbPDFA1b->Check(); // PDF/A-1a
         break;
@@ -1056,12 +1056,12 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     m_pCbTransitionEffects->Enable( mbIsPresentation );
     if( paParent->mnOpenBookmarkLevels < 0 )
     {
-        m_pRbAllBookmarkLevels->Check( sal_True );
+        m_pRbAllBookmarkLevels->Check( true );
         m_pNumBookmarkLevels->Enable( false );
     }
     else
     {
-        m_pRbVisibleBookmarkLevels->Check( sal_True );
+        m_pRbVisibleBookmarkLevels->Check( true );
         m_pNumBookmarkLevels->Enable( true );
         m_pNumBookmarkLevels->SetValue( paParent->mnOpenBookmarkLevels );
     }

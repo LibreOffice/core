@@ -4409,7 +4409,7 @@ we check in the following sequence:
             INetURLObject aDocumentURL( m_aContext.BaseURL );
             INetURLObject aTargetURL( rLink.m_aURL );
             sal_Int32   nSetGoToRMode = 0;
-            sal_Bool    bTargetHasPDFExtension = sal_False;
+            bool    bTargetHasPDFExtension = false;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
             bool    bIsUNCPath = false;
 
@@ -7165,7 +7165,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
 
     Font aSetFont = m_aCurrentPDFState.m_aFont;
     aSetFont.SetRelief( RELIEF_NONE );
-    aSetFont.SetShadow( sal_False );
+    aSetFont.SetShadow( false );
 
     aSetFont.SetColor( aReliefColor );
     setTextLineColor( aReliefColor );
@@ -7202,8 +7202,8 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
         rFont.SetColor( Color( COL_LIGHTGRAY ) );
     else
         rFont.SetColor( Color( COL_BLACK ) );
-    rFont.SetShadow( sal_False );
-    rFont.SetOutline( sal_False );
+    rFont.SetShadow( false );
+    rFont.SetOutline( false );
     setFont( rFont );
     setTextLineColor( rFont.GetColor() );
     setOverlineColor( rFont.GetColor() );
@@ -7661,7 +7661,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
          )
         )
     {
-        sal_Bool bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
+        bool bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             Point aPos, aStartPt;
@@ -7714,7 +7714,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         long                    nEmphYOff;
         long                    nEmphWidth;
         long                    nEmphHeight;
-        sal_Bool                    bEmphPolyLine;
+        bool                    bEmphPolyLine;
         FontEmphasisMark        nEmphMark;
 
         push( PUSH_ALL );
@@ -7795,7 +7795,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 }
 
 void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
-                                      const PolyPolygon& rPolyPoly, sal_Bool bPolyLine,
+                                      const PolyPolygon& rPolyPoly, bool bPolyLine,
                                       const Rectangle& rRect1, const Rectangle& rRect2 )
 {
     // TODO: pass nWidth as width of this mark
@@ -8387,11 +8387,11 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) >= nWidth )
         aStrikeout = aStrikeout.replaceAt( 0, 1, "" );
     aStrikeout += aStrikeoutChar;
-    sal_Bool bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
+    bool bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
     if ( bShadow )
     {
         Font aFont = m_aCurrentPDFState.m_aFont;
-        aFont.SetShadow( sal_False );
+        aFont.SetShadow( false );
         setFont( aFont );
         updateGraphicsState();
     }
@@ -8425,7 +8425,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     if ( bShadow )
     {
         Font aFont = m_aCurrentPDFState.m_aFont;
-        aFont.SetShadow( sal_True );
+        aFont.SetShadow( true );
         setFont( aFont );
         updateGraphicsState();
     }
@@ -10326,7 +10326,7 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
         push( PUSH_LINECOLOR );
         setLineColor( rHatch.GetColor() );
-        getReferenceDevice()->ImplDrawHatch( aPolyPoly, rHatch, sal_False );
+        getReferenceDevice()->ImplDrawHatch( aPolyPoly, rHatch, false );
         pop();
     }
 }

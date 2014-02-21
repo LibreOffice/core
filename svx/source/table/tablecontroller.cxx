@@ -1237,7 +1237,7 @@ bool SvxTableController::checkTableObject()
 sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, Window* /*pWindow*/ )
 {
     const bool bMod1 = rKEvt.GetKeyCode().IsMod1(); // ctrl
-    const bool bMod2 = rKEvt.GetKeyCode().IsMod2() != 0; // Alt
+    const bool bMod2 = rKEvt.GetKeyCode().IsMod2(); // Alt
 
     const bool bTextEdit = mpView->IsTextEdit();
 

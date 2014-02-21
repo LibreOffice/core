@@ -50,7 +50,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
     Size        aSizePix;
     long        nWait;
     Disposal    eDisposal;
-    sal_Bool    bUserInput;
+    bool    bUserInput;
 
                 AnimationBitmap() {}
                 AnimationBitmap(
@@ -65,7 +65,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                     aSizePix    ( rSizePix ),
                     nWait       ( _nWait ),
                     eDisposal   ( _eDisposal ),
-                    bUserInput  ( sal_False )
+                    bUserInput  ( false )
                 {}
 
     bool    operator==( const AnimationBitmap& rAnimBmp ) const
@@ -81,7 +81,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
     bool    operator!=( const AnimationBitmap& rAnimBmp ) const
                 { return !( *this == rAnimBmp ); }
 
-    sal_Bool    IsEqual( const AnimationBitmap& rAnimBmp ) const
+    bool    IsEqual( const AnimationBitmap& rAnimBmp ) const
                 {
                     return( rAnimBmp.aPosPix == aPosPix &&
                             rAnimBmp.aSizePix == aSizePix &&
@@ -106,14 +106,14 @@ struct AInfo
     OutputDevice*   pOutDev;
     void*           pViewData;
     long            nExtraData;
-    sal_Bool        bWithSize;
-    sal_Bool        bPause;
+    bool        bWithSize;
+    bool        bPause;
 
                     AInfo() : pOutDev( NULL ),
                               pViewData( NULL ),
                               nExtraData( 0L ),
-                              bWithSize( sal_False ),
-                              bPause( sal_False ) {}
+                              bWithSize( false ),
+                              bPause( false ) {}
 };
 
 class ImplAnimView;
@@ -136,11 +136,11 @@ class VCL_DLLPUBLIC Animation
     size_t                  mnPos;
     Disposal                meLastDisposal;
     CycleMode               meCycleMode;
-    sal_Bool                mbFirst;
-    sal_Bool                mbIsInAnimation;
-    sal_Bool                mbWithSize;
-    sal_Bool                mbLoopTerminated;
-    sal_Bool                mbIsWaiting;
+    bool                mbFirst;
+    bool                mbIsInAnimation;
+    bool                mbWithSize;
+    bool                mbLoopTerminated;
+    bool                mbIsWaiting;
 
 
     SAL_DLLPRIVATE void     ImplRestartTimer( sal_uLong nTimeout );
@@ -165,7 +165,7 @@ public:
 
     void                    Clear();
 
-    sal_Bool                Start(
+    bool                Start(
                                 OutputDevice* pOutDev,
                                 const Point& rDestPt,
                                 const Size& rDestSz,
@@ -177,9 +177,9 @@ public:
     void                    Draw( OutputDevice* pOutDev, const Point& rDestPt ) const;
     void                    Draw( OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz ) const;
 
-    sal_Bool                IsInAnimation() const { return mbIsInAnimation; }
-    sal_Bool                IsTransparent() const;
-    sal_Bool                IsTerminated() const { return mbLoopTerminated; }
+    bool                IsInAnimation() const { return mbIsInAnimation; }
+    bool                IsTransparent() const;
+    bool                IsTerminated() const { return mbLoopTerminated; }
 
     const Size&             GetDisplaySizePixel() const { return maGlobalSize; }
     void                    SetDisplaySizePixel( const Size& rSize ) { maGlobalSize = rSize; }
@@ -198,7 +198,7 @@ public:
     const Link&             GetNotifyHdl() const { return maNotifyLink; }
 
     size_t                  Count() const { return maList.size(); }
-    sal_Bool                Insert( const AnimationBitmap& rAnimationBitmap );
+    bool                Insert( const AnimationBitmap& rAnimationBitmap );
     const AnimationBitmap&  Get( sal_uInt16 nAnimation ) const;
     void                    Replace( const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation );
 
@@ -207,23 +207,23 @@ public:
 
 public:
 
-    sal_Bool                Convert( BmpConversion eConversion );
-    sal_Bool                ReduceColors(
+    bool                Convert( BmpConversion eConversion );
+    bool                ReduceColors(
                                 sal_uInt16 nNewColorCount,
                                 BmpReduce eReduce = BMP_REDUCE_SIMPLE
                             );
-    sal_Bool                Invert();
-    sal_Bool                Mirror( sal_uLong nMirrorFlags );
-    sal_Bool                Adjust(
+    bool                Invert();
+    bool                Mirror( sal_uLong nMirrorFlags );
+    bool                Adjust(
                                 short nLuminancePercent = 0,
                                 short nContrastPercent = 0,
                                 short nChannelRPercent = 0,
                                 short nChannelGPercent = 0,
                                 short nChannelBPercent = 0,
                                 double fGamma = 1.0,
-                                sal_Bool bInvert = sal_False
+                                bool bInvert = false
                             );
-    sal_Bool                Filter(
+    bool                Filter(
                                 BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = NULL,
                                 const Link* pProgress = NULL

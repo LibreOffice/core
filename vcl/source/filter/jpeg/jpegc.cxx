@@ -217,8 +217,8 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     jpeg_destroy_decompress( &cinfo );
 }
 
-long WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                long nWidth, long nHeight, long bGreys,
+bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
+                long nWidth, long nHeight, bool bGreys,
                 long nQualityPercent, long aChromaSubsampling,
                 css::uno::Reference<css::task::XStatusIndicator> const & status )
 {
@@ -230,7 +230,7 @@ long WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     if ( setjmp( jerr.setjmp_buffer ) )
     {
         jpeg_destroy_compress( &cinfo );
-        return 0;
+        return false;
     }
 
     cinfo.err = jpeg_std_error( &jerr.pub );
@@ -295,7 +295,7 @@ long WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress( &cinfo );
 
-    return 1;
+    return true;
 }
 
 long Transform(void* pInputStream, void* pOutputStream, long nAngle)

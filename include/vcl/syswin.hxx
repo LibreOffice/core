@@ -143,19 +143,19 @@ private:
     Size            maOrgSize;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
-    sal_Bool            mbPined;
-    sal_Bool            mbRollUp;
-    sal_Bool            mbRollFunc;
-    sal_Bool            mbDockBtn;
-    sal_Bool            mbHideBtn;
-    sal_Bool            mbSysChild;
+    bool            mbPined;
+    bool            mbRollUp;
+    bool            mbRollFunc;
+    bool            mbDockBtn;
+    bool            mbHideBtn;
+    bool            mbSysChild;
     sal_uInt16          mnMenuBarMode;
     sal_uInt16          mnIcon;
     ImplData*       mpImplData;
 
 public:
     using Window::ImplIsInTaskPaneList;
-    SAL_DLLPRIVATE sal_Bool ImplIsInTaskPaneList( Window* pWin );
+    SAL_DLLPRIVATE bool ImplIsInTaskPaneList( Window* pWin );
 
 private:
     // Default construction is forbidden and not implemented.
@@ -178,7 +178,7 @@ public:
     virtual bool    Notify( NotifyEvent& rNEvt );
     virtual bool    PreNotify( NotifyEvent& rNEvt );
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    TitleButtonClick( sal_uInt16 nButton );
     virtual void    Pin();
     virtual void    Roll();
@@ -190,18 +190,18 @@ public:
     // separately from the window title
     void            SetRepresentedURL( const OUString& );
 
-    void            EnableSaveBackground( sal_Bool bSave = sal_True );
-    sal_Bool            IsSaveBackgroundEnabled() const;
+    void            EnableSaveBackground( bool bSave = true );
+    bool            IsSaveBackgroundEnabled() const;
 
-    void            ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible = sal_True );
-    sal_Bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
+    void            ShowTitleButton( sal_uInt16 nButton, bool bVisible = true );
+    bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
 
-    void            SetPin( sal_Bool bPin );
-    sal_Bool            IsPined() const { return mbPined; }
+    void            SetPin( bool bPin );
+    bool            IsPined() const { return mbPined; }
 
     void            RollUp();
     void            RollDown();
-    sal_Bool            IsRollUp() const { return mbRollUp; }
+    bool            IsRollUp() const { return mbRollUp; }
 
     void            SetRollUpOutputSizePixel( const Size& rSize ) { maRollUpOutSize = rSize; }
     Size            GetRollUpOutputSizePixel() const { return maRollUpOutSize; }

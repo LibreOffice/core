@@ -134,11 +134,11 @@ struct ImplSVAppData
     sal_uInt16              mnSysWinMode;                   // Mode, when SystemWindows should be created
     sal_uInt16              mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
-    sal_Bool                mbInAppMain;                    // is Application::Main() on stack
-    sal_Bool                mbInAppExecute;                 // is Application::Execute() on stack
-    sal_Bool                mbAppQuit;                      // is Application::Quit() called
-    sal_Bool                mbSettingsInit;                 // sal_True: Settings are initialized
-    sal_Bool                mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
+    bool                mbInAppMain;                    // is Application::Main() on stack
+    bool                mbInAppExecute;                 // is Application::Execute() on stack
+    bool                mbAppQuit;                      // is Application::Quit() called
+    bool                mbSettingsInit;                 // sal_True: Settings are initialized
+    bool                mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
     Application::DialogCancelMode meDialogCancel;           // sal_True: All Dialog::Execute() calls will be terminated immediately with return sal_False
     long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
@@ -175,7 +175,7 @@ struct ImplSVGDIData
     long                    mnRealAppFontX;     // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
-    sal_Bool                    mbFontSubChanged;   // sal_True: FontSubstitution was changed between Begin/End
+    bool                    mbFontSubChanged;   // sal_True: FontSubstitution was changed between Begin/End
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
@@ -200,9 +200,9 @@ struct ImplSVWinData
     Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     sal_uInt16              mnTrackFlags;       // tracking flags
     sal_uInt16              mnAutoScrollFlags;  // auto scroll flags
-    sal_Bool                mbNoDeactivate;     // sal_True: do not execute Deactivate
-    sal_Bool                mbNoSaveFocus;      // sal_True: menus must not save/restore focus
-    sal_Bool                mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
+    bool                mbNoDeactivate;     // sal_True: do not execute Deactivate
+    bool                mbNoSaveFocus;      // sal_True: menus must not save/restore focus
+    bool                mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
 };
 
 
@@ -236,16 +236,16 @@ struct ImplSVCtrlData
 
 struct ImplSVHelpData
 {
-    sal_Bool                    mbContextHelp       : 1;    // is ContextHelp enabled
-    sal_Bool                    mbExtHelp           : 1;    // is ExtendedHelp enabled
-    sal_Bool                    mbExtHelpMode       : 1;    // is in ExtendedHelp Mode
-    sal_Bool                    mbOldBalloonMode    : 1;    // BallonMode, befor ExtHelpMode started
-    sal_Bool                    mbBalloonHelp       : 1;    // is BalloonHelp enabled
-    sal_Bool                    mbQuickHelp         : 1;    // is QuickHelp enabled
-    sal_Bool                    mbSetKeyboardHelp   : 1;    // tiphelp was activated by keyboard
-    sal_Bool                    mbKeyboardHelp      : 1;    // tiphelp was activated by keyboard
-    sal_Bool                    mbAutoHelpId        : 1;    // generate HelpIds
-    sal_Bool                    mbRequestingHelp    : 1;    // In Window::RequestHelp
+    bool                    mbContextHelp       : 1;    // is ContextHelp enabled
+    bool                    mbExtHelp           : 1;    // is ExtendedHelp enabled
+    bool                    mbExtHelpMode       : 1;    // is in ExtendedHelp Mode
+    bool                    mbOldBalloonMode    : 1;    // BallonMode, befor ExtHelpMode started
+    bool                    mbBalloonHelp       : 1;    // is BalloonHelp enabled
+    bool                    mbQuickHelp         : 1;    // is QuickHelp enabled
+    bool                    mbSetKeyboardHelp   : 1;    // tiphelp was activated by keyboard
+    bool                    mbKeyboardHelp      : 1;    // tiphelp was activated by keyboard
+    bool                    mbAutoHelpId        : 1;    // generate HelpIds
+    bool                    mbRequestingHelp    : 1;    // In Window::RequestHelp
     HelpTextWindow*         mpHelpWin;                  // HelpWindow
     sal_uLong                   mnLastHelpHideTime;         // ticks of last show
 };
@@ -308,7 +308,7 @@ struct ImplSVData
     SalInstance*            mpDefInst;          // Default SalInstance
     Application*            mpApp;              // pApp
     WorkWindow*             mpDefaultWin;       // Default-Window
-    sal_Bool                    mbDeInit;             // Is VCL deinitializing
+    bool                    mbDeInit;             // Is VCL deinitializing
     sal_uLong                   mnThreadCount;      // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;  // Zeiger auf ersten Config-Block
     ImplTimerData*          mpFirstTimerData;   // list of all running timers
@@ -318,8 +318,8 @@ struct ImplSVData
     ResMgr*                 mpResMgr;           // SV-Resource-Manager
     sal_uLong                   mnTimerPeriod;      // current timer period
     sal_uLong                   mnTimerUpdate;      // TimerCallbackProcs on stack
-    sal_Bool                    mbNotAllTimerCalled;// sal_True: Es muessen noch Timer abgearbeitet werden
-    sal_Bool                    mbNoCallTimer;      // sal_True: No Timeout calls
+    bool                    mbNotAllTimerCalled;// sal_True: Es muessen noch Timer abgearbeitet werden
+    bool                    mbNoCallTimer;      // sal_True: No Timeout calls
     ImplSVAppData           maAppData;          // indepen data for class Application
     ImplSVGDIData           maGDIData;          // indepen data for Output classes
     ImplSVWinData           maWinData;          // indepen data for Windows classes
@@ -330,7 +330,7 @@ struct ImplSVData
     Window*                 mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
-    sal_Bool                mbIsTestTool;
+    bool                mbIsTestTool;
 
     oslThreadIdentifier                     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
@@ -377,18 +377,18 @@ struct ImplDelData
 {
     ImplDelData*    mpNext;
     const Window*   mpWindow;
-    sal_Bool            mbDel;
+    bool            mbDel;
 
                     ImplDelData( const Window* pWindow = NULL )
-                    : mpNext( NULL ), mpWindow( NULL ), mbDel( sal_False )
+                    : mpNext( NULL ), mpWindow( NULL ), mbDel( false )
                     { if( pWindow ) AttachToWindow( pWindow ); }
 
     virtual         ~ImplDelData();
 
     bool            IsDead() const
     {
-        DBG_ASSERT( mbDel == sal_False, "object deleted while in use !" );
-        return (mbDel!=sal_False);
+        DBG_ASSERT( mbDel == false, "object deleted while in use !" );
+        return mbDel;
     }
 
 private:
@@ -402,7 +402,7 @@ struct ImplSVEvent
     Link*               mpLink;
     Window*             mpWindow;
     ImplDelData         maDelData;
-    sal_Bool                mbCall;
+    bool                mbCall;
 };
 
 #endif // INCLUDED_VCL_INC_SVDATA_HXX

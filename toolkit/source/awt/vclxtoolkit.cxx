@@ -831,7 +831,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_CURRENCYFIELD:
                 pNewWindow = new CurrencyField( pParent, nWinBits );
-                static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
+                static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(CurrencyField*)pNewWindow );
             break;
@@ -840,7 +840,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_DATEFIELD:
                 pNewWindow = new DateField( pParent, nWinBits );
-                static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
+                static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXDateField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pNewWindow );
             break;
@@ -889,7 +889,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     *ppNewComp = new VCLXFrame;
                                     // Frame control needs to receive
                                     // Mouse events
-                                    pGroupBox->SetMouseTransparent( sal_False );
+                                    pGroupBox->SetMouseTransparent( false );
                                 }
                         }
             break;
@@ -965,7 +965,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_NUMERICFIELD:
                 pNewWindow = new NumericField( pParent, nWinBits );
-                static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
+                static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(NumericField*)pNewWindow );
             break;
@@ -1002,7 +1002,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // is not really valid: the controls are grouped after they have been created, but we're still in
                 // the creation process, so the RadioButton::Check relies on invalid grouping information.
                 // 07.08.2001 - #87254# - frank.schoenheit@sun.com
-                static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( sal_False );
+                static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( false );
             break;
             case WINDOW_SCROLLBAR:
                 pNewWindow = new ScrollBar( pParent, nWinBits );
@@ -1050,7 +1050,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TIMEFIELD:
                 pNewWindow = new TimeField( pParent, nWinBits );
-                static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
+                static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXTimeField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(TimeField*)pNewWindow );
             break;
@@ -1236,7 +1236,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 #else
                                                                        "svt",
 #endif
-                                                                       sal_True );
+                                                                       true );
         hSvToolsLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )
@@ -1261,7 +1261,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
     if ( pNewWindow )
     {
-        pNewWindow->SetCreatedWithToolkit( sal_True );
+        pNewWindow->SetCreatedWithToolkit( true );
         //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )

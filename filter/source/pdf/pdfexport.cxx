@@ -211,7 +211,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
 
                     pOut->Push();
-                    pOut->EnableOutput( sal_False );
+                    pOut->EnableOutput( false );
                     pOut->SetMapMode( aMapMode );
 
                     aMtf.SetPrefSize( aMtfSize );

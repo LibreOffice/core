@@ -64,8 +64,8 @@ private:
     sal_uLong           mnDocFilePos;
     mutable sal_uLong   mnSizeBytes;
     sal_uLong           mnRefCount;
-    sal_Bool            mbSwapOut;
-    sal_Bool            mbSwapUnderway;
+    bool            mbSwapOut;
+    bool            mbSwapUnderway;
 
     // SvgData support
     SvgDataPtr          maSvgData;
@@ -82,20 +82,20 @@ private:
     virtual             ~ImpGraphic();
 
     ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );
-    sal_Bool                operator==( const ImpGraphic& rImpGraphic ) const;
-    sal_Bool                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
+    bool                operator==( const ImpGraphic& rImpGraphic ) const;
+    bool                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
 
-    void                ImplClearGraphics( sal_Bool bCreateSwapInfo );
+    void                ImplClearGraphics( bool bCreateSwapInfo );
     void                ImplClear();
 
     GraphicType         ImplGetType() const;
     void                ImplSetDefaultType();
-    sal_Bool                ImplIsSupportedGraphic() const;
+    bool                ImplIsSupportedGraphic() const;
 
-    sal_Bool            ImplIsTransparent() const;
-    sal_Bool            ImplIsAlpha() const;
-    sal_Bool            ImplIsAnimated() const;
-    sal_Bool            ImplIsEPS() const;
+    bool            ImplIsTransparent() const;
+    bool            ImplIsAlpha() const;
+    bool            ImplIsAnimated() const;
+    bool            ImplIsEPS() const;
 
     Bitmap                  ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
     BitmapEx                ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
@@ -141,24 +141,24 @@ private:
     const OUString&     ImplGetDocFileName() const;
     sal_uLong               ImplGetDocFilePos() const;
 
-    sal_Bool                ImplReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
-    sal_Bool                ImplWriteEmbedded( SvStream& rOStream );
+    bool                ImplReadEmbedded( SvStream& rIStream, bool bSwap = false );
+    bool                ImplWriteEmbedded( SvStream& rOStream );
 
-    sal_Bool                ImplSwapIn();
-    sal_Bool                ImplSwapIn( SvStream* pIStm );
+    bool                ImplSwapIn();
+    bool                ImplSwapIn( SvStream* pIStm );
 
-    sal_Bool                ImplSwapOut();
-    sal_Bool                ImplSwapOut( SvStream* pOStm );
+    bool                ImplSwapOut();
+    bool                ImplSwapOut( SvStream* pOStm );
 
-    sal_Bool                ImplIsSwapOut() const;
+    bool                ImplIsSwapOut() const;
 
     void                ImplSetLink( const GfxLink& );
     GfxLink             ImplGetLink();
-    sal_Bool                ImplIsLink() const;
+    bool                ImplIsLink() const;
 
     sal_uLong               ImplGetChecksum() const;
 
-    sal_Bool                ImplExportNative( SvStream& rOStm ) const;
+    bool                ImplExportNative( SvStream& rOStm ) const;
 
     friend SvStream&    WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic );
     friend SvStream&    ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic );

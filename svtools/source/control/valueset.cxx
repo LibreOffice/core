@@ -130,7 +130,7 @@ ValueSet::ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransient
 ValueSet::~ValueSet()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
-          xComponent (GetAccessible(sal_False), ::com::sun::star::uno::UNO_QUERY);
+          xComponent (GetAccessible(false), ::com::sun::star::uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose ();
 
@@ -505,7 +505,7 @@ void ValueSet::Format()
     // Init VirDev
     maVirDev.SetSettings( GetSettings() );
     maVirDev.SetBackground( GetBackground() );
-    maVirDev.SetOutputSizePixel( aWinSize, sal_True );
+    maVirDev.SetOutputSizePixel( aWinSize, true );
 
     // nothing is changed in case of too small items
     if ( (mnItemWidth <= 0) ||
@@ -1126,7 +1126,7 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
 
 void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
 {
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( sal_False ) );
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( false ) );
 
     if( pAcc )
         pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
@@ -1136,7 +1136,7 @@ void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::
 
 bool ValueSet::ImplHasAccessibleListeners()
 {
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( sal_False ) );
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( false ) );
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
@@ -1498,7 +1498,7 @@ void ValueSet::GetFocus()
     Control::GetFocus();
 
     // Tell the accessible object that we got the focus.
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( sal_False ) );
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( false ) );
     if( pAcc )
         pAcc->GetFocus();
 }
@@ -1515,7 +1515,7 @@ void ValueSet::LoseFocus()
     Control::LoseFocus();
 
     // Tell the accessible object that we lost the focus.
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( sal_False ) );
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( false ) );
     if( pAcc )
         pAcc->LoseFocus();
 }

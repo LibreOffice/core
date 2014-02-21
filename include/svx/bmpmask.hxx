@@ -120,7 +120,7 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 
     Image               maImgPipette;
 
-    virtual sal_Bool        Close();
+    virtual bool        Close();
 
 #ifdef BMPMASK_PRIVATE
 

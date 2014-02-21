@@ -526,10 +526,10 @@ RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
 {
     FreeResource();
 
-    m_aTopLB.EnableEmptyFieldValue( sal_True );
-    m_aBottomLB.EnableEmptyFieldValue( sal_True );
-    m_aLeftLB.EnableEmptyFieldValue( sal_True );
-    m_aRightLB.EnableEmptyFieldValue( sal_True );
+    m_aTopLB.EnableEmptyFieldValue( true );
+    m_aBottomLB.EnableEmptyFieldValue( true );
+    m_aLeftLB.EnableEmptyFieldValue( true );
+    m_aRightLB.EnableEmptyFieldValue( true );
 
     m_aDefaultBtn.SetClickHdl( LINK( this, RTSOtherPage, ClickBtnHdl ) );
 

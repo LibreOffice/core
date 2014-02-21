@@ -25,7 +25,7 @@ namespace vcl
 
 int HasVerticalGSUB( struct vcl::_TrueTypeFont* pTTFile );
 
-int UseGSUB( struct vcl::_TrueTypeFont* pTTFile, int nGlyph, int wmode );
+int UseGSUB( struct vcl::_TrueTypeFont* pTTFile, int nGlyph, bool wmode );
 
 bool ReadGSUB( struct vcl::_TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
 

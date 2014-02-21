@@ -138,7 +138,7 @@ SvInplaceEdit2::SvInplaceEdit2
         pEdit = new MyEdit_Impl( pParent, this );
 
     Font aFont( pParent->GetFont() );
-    aFont.SetTransparent( sal_False );
+    aFont.SetTransparent( false );
     Color aColor( pParent->GetBackground().GetColor() );
     aFont.SetFillColor(aColor );
     pEdit->SetFont( aFont );
@@ -1392,7 +1392,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     pDDTarget = 0;
 
     sal_Bool bOldUpdateMode = Control::IsUpdateMode();
-    Control::SetUpdateMode( sal_True );
+    Control::SetUpdateMode( true );
     Update();
     Control::SetUpdateMode( bOldUpdateMode );
 
@@ -2693,7 +2693,7 @@ void SvTreeListBox::SetFont( const Font& rFont )
 
     Font aTempFont( rFont );
     Font aOrigFont( GetFont() );
-    aTempFont.SetTransparent( sal_True );
+    aTempFont.SetTransparent( true );
     if (aTempFont == aOrigFont)
         return;
     Control::SetFont( aTempFont );

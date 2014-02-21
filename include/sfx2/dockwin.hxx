@@ -58,14 +58,14 @@ protected:
                         CheckAlignment(SfxChildAlignment,SfxChildAlignment);
 
     virtual void        Resize();
-    virtual sal_Bool        PrepareToggleFloatingMode();
+    virtual bool        PrepareToggleFloatingMode();
     virtual void        ToggleFloatingMode();
     virtual void        StartDocking();
-    virtual sal_Bool        Docking( const Point& rPos, Rectangle& rRect );
+    virtual bool        Docking( const Point& rPos, Rectangle& rRect );
     virtual void        EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
     virtual void        Resizing( Size& rSize );
     virtual void        Paint( const Rectangle& rRect );
-    virtual sal_Bool        Close();
+    virtual bool        Close();
     virtual void        Move();
 
     SAL_DLLPRIVATE SfxChildWindow* GetChildWindow_Impl()    { return pMgr; }

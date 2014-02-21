@@ -32,7 +32,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
     : WeakComponentImplHelper4< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(GetMutex())
 {
-    m_bActive = sal_True;
+    m_bActive = true;
     m_nDefaultActions = nDefaultActions;
 }
 

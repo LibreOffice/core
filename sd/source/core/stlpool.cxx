@@ -1154,10 +1154,10 @@ Font SdStyleSheetPool::GetBulletFont() const
     aBulletFont.SetOverline(UNDERLINE_NONE);
     aBulletFont.SetStrikeout(STRIKEOUT_NONE);
     aBulletFont.SetItalic(ITALIC_NONE);
-    aBulletFont.SetOutline(sal_False);
-    aBulletFont.SetShadow(sal_False);
+    aBulletFont.SetOutline(false);
+    aBulletFont.SetShadow(false);
     aBulletFont.SetColor(Color(COL_AUTO));
-    aBulletFont.SetTransparent(sal_True);
+    aBulletFont.SetTransparent(true);
 
     return aBulletFont;
 }

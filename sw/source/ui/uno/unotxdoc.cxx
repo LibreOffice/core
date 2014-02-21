@@ -2946,7 +2946,7 @@ void SAL_CALL SwXTextDocument::render(
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
-    const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
+    const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", false );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
@@ -2994,7 +2994,7 @@ void SAL_CALL SwXTextDocument::render(
                 if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
                 {
                     const OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
-                    const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
+                    const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", false );
                     bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
                     OSL_ENSURE(( pView->IsA(aSwViewTypeId) &&  m_pRenderData->IsViewOptionAdjust())

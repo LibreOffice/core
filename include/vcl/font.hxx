@@ -59,8 +59,8 @@ public:
     const Color&        GetColor() const;
     void                SetFillColor( const Color& );
     const Color&        GetFillColor() const;
-    void                SetTransparent( sal_Bool bTransparent );
-    sal_Bool            IsTransparent() const;
+    void                SetTransparent( bool bTransparent );
+    bool            IsTransparent() const;
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
@@ -93,11 +93,11 @@ public:
 
     void                SetOrientation( short nLineOrientation );
     short               GetOrientation() const;
-    void                SetVertical( sal_Bool bVertical );
+    void                SetVertical( bool bVertical );
     bool                IsVertical() const;
     void                SetKerning( FontKerning nKerning );
     FontKerning         GetKerning() const;
-    sal_Bool            IsKerning() const;
+    bool            IsKerning() const;
 
     void                SetWeight( FontWeight );
     FontWeight          GetWeight() const;
@@ -105,10 +105,10 @@ public:
     FontWidth           GetWidthType() const;
     void                SetItalic( FontItalic );
     FontItalic          GetItalic() const;
-    void                SetOutline( sal_Bool bOutline );
-    sal_Bool                IsOutline() const;
-    void                SetShadow( sal_Bool bShadow );
-    sal_Bool                IsShadow() const;
+    void                SetOutline( bool bOutline );
+    bool                IsOutline() const;
+    void                SetShadow( bool bShadow );
+    bool                IsShadow() const;
     void                SetRelief( FontRelief );
     FontRelief          GetRelief() const;
     void                SetUnderline( FontUnderline );
@@ -119,8 +119,8 @@ public:
     FontStrikeout       GetStrikeout() const;
     void                SetEmphasisMark( FontEmphasisMark );
     FontEmphasisMark    GetEmphasisMark() const;
-    void                SetWordLineMode( sal_Bool bWordLine );
-    sal_Bool                IsWordLineMode() const;
+    void                SetWordLineMode( bool bWordLine );
+    bool                IsWordLineMode() const;
 
     void                Merge( const Font& rFont );
     void                GetFontAttributes( ImplFontAttributes& rAttrs ) const;
@@ -129,7 +129,7 @@ public:
     bool                operator==( const Font& ) const;
     bool                operator!=( const Font& rFont ) const
                             { return !(Font::operator==( rFont )); }
-    sal_Bool                IsSameInstance( const Font& ) const;
+    bool                IsSameInstance( const Font& ) const;
 
     friend VCL_DLLPUBLIC SvStream&  ReadFont( SvStream& rIStm, Font& );
     friend VCL_DLLPUBLIC SvStream&  WriteFont( SvStream& rOStm, const Font& );

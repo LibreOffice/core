@@ -181,7 +181,7 @@ namespace rptui
         */
         void            toggleGrid(sal_Bool _bGridVisible);
 
-        void            togglePropertyBrowser(sal_Bool _bToogleOn);
+        void            togglePropertyBrowser(bool _bToogleOn);
 
         sal_Bool            isAddFieldVisible() const;
         void            toggleAddField();

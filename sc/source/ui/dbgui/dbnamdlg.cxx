@@ -176,9 +176,9 @@ ScDbNameDlg::~ScDbNameDlg()
 
 void ScDbNameDlg::Init()
 {
-    m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
-    m_pBtnDoSize->Check( sal_True );
-    m_pBtnKeepFmt->Check( sal_True );
+    m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
+    m_pBtnDoSize->Check( true );
+    m_pBtnKeepFmt->Check( true );
 
     m_pBtnOk->SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
     m_pBtnCancel->SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
@@ -297,7 +297,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScDbNameDlg::Close()
+bool ScDbNameDlg::Close()
 {
     return DoClose( ScDbNameDlgWrapper::GetChildWindowId() );
 }
@@ -341,7 +341,7 @@ void ScDbNameDlg::UpdateNames()
         m_pBtnRemove->Disable();
     }
     //-----------------------------------------------------------
-    m_pEdName->SetUpdateMode( sal_True );
+    m_pEdName->SetUpdateMode( true );
     m_pEdName->Invalidate();
 }
 
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                 m_pBtnAdd->Disable();
                 m_pBtnRemove->Disable();
                 m_pEdAssign->SetText( EMPTY_OUSTRING );
-                m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
+                m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
                 m_pBtnStripData->Check( false );
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
             m_pBtnRemove->Disable();
             m_pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
-            m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
+            m_pBtnHeader->Check( true );       // Default: mit Spaltenkoepfen
             m_pBtnDoSize->Check( false );
             m_pBtnKeepFmt->Check( false );
             m_pBtnStripData->Check( false );

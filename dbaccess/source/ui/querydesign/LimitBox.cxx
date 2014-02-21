@@ -35,7 +35,7 @@ namespace dbaui
 LimitBox::LimitBox( Window* pParent, WinBits nStyle )
     : NumericBox( pParent, nStyle )
 {
-    SetShowTrailingZeros( sal_False );
+    SetShowTrailingZeros( false );
     SetDecimalDigits( 0 );
     SetMin( -1 );
     SetMax( SAL_MAX_INT64 );

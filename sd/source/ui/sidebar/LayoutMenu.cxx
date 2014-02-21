@@ -679,7 +679,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 const SfxItemState aState (
                     mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
                 if (aState == SFX_ITEM_DISABLED)
-                    pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, sal_False);
+                    pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, false);
 
                 // Show the menu.
                 pMenu->Execute(this, Rectangle(aMenuPosition,Size(1,1)), POPUPMENU_EXECUTE_DOWN);

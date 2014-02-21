@@ -813,7 +813,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                                 xMenuItemDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
                             }
                             else
-                                pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
+                                pMenu->EnableItem( pMenuItemHandler->nItemId, false );
                         }
                     }
                 }

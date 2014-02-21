@@ -1159,7 +1159,7 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
 
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1168,7 +1168,7 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
     }
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 /************************************************************************/
@@ -1193,7 +1193,7 @@ void FillAttrLB::Fill( const XColorListRef &pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1202,7 +1202,7 @@ void FillAttrLB::Fill( const XColorListRef &pColorTab )
     }
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 // Fills the listbox (provisional) with strings
@@ -1234,7 +1234,7 @@ void HatchingLB::Fill( const XHatchListRef &pList )
     XHatchEntry* pEntry;
     long nCount = pList->Count();
 
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1247,7 +1247,7 @@ void HatchingLB::Fill( const XHatchListRef &pList )
     }
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 /************************************************************************/
@@ -1288,7 +1288,7 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
 {
     long nCount = pList->Count();
     XHatchEntry* pEntry;
-    ListBox::SetUpdateMode( sal_False );
+    ListBox::SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1301,7 +1301,7 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
     }
 
     AdaptDropDownLineCountToMaximum();
-    ListBox::SetUpdateMode( sal_True );
+    ListBox::SetUpdateMode( true );
 }
 
 // Fills the listbox (provisional) with strings
@@ -1333,7 +1333,7 @@ void GradientLB::Fill( const XGradientListRef &pList )
     XGradientEntry* pEntry;
     long nCount = pList->Count();
 
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1346,7 +1346,7 @@ void GradientLB::Fill( const XGradientListRef &pList )
     }
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 /************************************************************************/
@@ -1411,7 +1411,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
 {
     long nCount = pList->Count();
     XGradientEntry* pEntry;
-    ListBox::SetUpdateMode( sal_False );
+    ListBox::SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1424,7 +1424,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
     }
 
     AdaptDropDownLineCountToMaximum();
-    ListBox::SetUpdateMode( sal_True );
+    ListBox::SetUpdateMode( true );
 }
 
 // BitmapLB Constructor
@@ -1598,7 +1598,7 @@ void FillAttrLB::Fill( const XBitmapListRef &pList )
 
 void FillTypeLB::Fill()
 {
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
     InsertEntry( SVX_RESSTR(RID_SVXSTR_COLOR) );
@@ -1607,7 +1607,7 @@ void FillTypeLB::Fill()
     InsertEntry( SVX_RESSTR(RID_SVXSTR_BITMAP) );
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 LineLB::LineLB(Window* pParent, WinBits aWB)
@@ -1666,7 +1666,7 @@ void LineLB::Fill( const XDashListRef &pList )
 
     long nCount = pList->Count();
     XDashEntry* pEntry;
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1681,7 +1681,7 @@ void LineLB::Fill( const XDashListRef &pList )
     }
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 /************************************************************************/
@@ -1750,7 +1750,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     long nCount = pList->Count();
     XLineEndEntry* pEntry;
     VirtualDevice aVD;
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
@@ -1759,7 +1759,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         if( !aBitmap.IsEmpty() )
         {
             Size aBmpSize( aBitmap.GetSizePixel() );
-            aVD.SetOutputSizePixel( aBmpSize, sal_False );
+            aVD.SetOutputSizePixel( aBmpSize, false );
             aVD.DrawBitmap( Point(), aBitmap );
             InsertEntry( pEntry->GetName(),
                 Image(aVD.GetBitmap(
@@ -1772,7 +1772,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     }
 
     AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 /************************************************************************/

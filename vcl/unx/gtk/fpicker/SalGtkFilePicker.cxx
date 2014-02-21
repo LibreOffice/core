@@ -99,7 +99,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     mnHID_FolderChange( 0 ),
     mnHID_SelectionChange( 0 ),
     bVersionWidthUnset( false ),
-    mbPreviewState( sal_False ),
+    mbPreviewState( false ),
     mHID_Preview( 0 ),
     m_pPreview( NULL ),
     m_pPseudoFilter( NULL ),
@@ -393,7 +393,7 @@ public:
     OUString     getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
-    sal_Bool        hasSubFilters( ) const;
+    bool        hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
     @return
@@ -416,7 +416,7 @@ FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFil
 }
 
 //---------------------------------------------------------------------
-sal_Bool FilterEntry::hasSubFilters() const
+bool FilterEntry::hasSubFilters() const
 {
     return( 0 < m_aSubFilters.getLength() );
 }
@@ -518,7 +518,7 @@ namespace {
         //............................................................................
         bool operator () ( const FilterEntry& _rEntry )
         {
-            sal_Bool bMatch;
+            bool bMatch;
             if( !_rEntry.hasSubFilters() )
                 // a real filter
                 bMatch = (_rEntry.getTitle() == rTitle)
@@ -544,9 +544,9 @@ namespace {
 
 
 //------------------------------------------------------------------------------------
-sal_Bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
+bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( m_pFilterList )
         bRet =
@@ -560,9 +560,9 @@ sal_Bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
 }
 
 //------------------------------------------------------------------------------------
-sal_Bool SalGtkFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
+bool SalGtkFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( m_pFilterList )
     {
@@ -867,7 +867,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
 
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
-                        sal_Bool bChangeFilter = sal_True;
+                        bool bChangeFilter = true;
                         for ( FilterList::iterator aListIter = m_pFilterList->begin();
                               aListIter != m_pFilterList->end();
                               ++aListIter
@@ -879,7 +879,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
                                     aNewFilter = aListIter->getTitle();
 
                                 if( aOldFilter == aListIter->getTitle() )
-                                    bChangeFilter = sal_False;
+                                    bChangeFilter = false;
 
                                 bExtensionTypedIn = true;
                             }
@@ -1345,7 +1345,7 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
         OSL_TRACE("enable unknown control %d", nControlId);
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
     {
-        sal_Bool bChecked = false;
+        bool bChecked = false;
         rValue >>= bChecked;
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON( pWidget ), bChecked );
     }
@@ -1373,7 +1373,7 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         OSL_TRACE("enable unknown control %d", nControlId);
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
-        aRetval <<= (sal_Bool) gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( pWidget ) );
+        aRetval <<= bool( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( pWidget ) ) );
     else if( tType == GTK_TYPE_COMBO_BOX )
         aRetval = HandleGetListValue(GTK_COMBO_BOX(pWidget), nControlAction);
     else
@@ -1619,7 +1619,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( u
     OSL_ASSERT( m_pDialog != NULL );
 
     // TODO return m_pImpl->setShowState( bShowState );
-    if( bShowState != mbPreviewState )
+    if( bool(bShowState) != mbPreviewState )
     {
         if( bShowState )
         {

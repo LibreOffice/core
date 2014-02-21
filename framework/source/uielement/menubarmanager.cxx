@@ -486,7 +486,7 @@ throw ( RuntimeException )
                 if ( Event.State >>= bCheckmark )
                 {
                     // Checkmark or RadioButton
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, sal_True );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, true );
                     m_pVCLMenu->CheckItem( pMenuItemHandler->nItemId, bCheckmark );
 
                     MenuItemBits nBits = m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId );
@@ -517,7 +517,7 @@ throw ( RuntimeException )
                         aItemText = aTmp;
                     }
 
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, sal_True );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, true );
                     m_pVCLMenu->SetItemText( pMenuItemHandler->nItemId, aItemText );
                 }
                 else if ( Event.State >>= aVisibilityStatus )
@@ -526,7 +526,7 @@ throw ( RuntimeException )
                     m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, aVisibilityStatus.bVisible );
                 }
                 else
-                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, sal_True );
+                    m_pVCLMenu->ShowItem( pMenuItemHandler->nItemId, true );
             }
 
             if ( Event.Requery )
@@ -949,7 +949,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                 }
                             }
                             else if ( !bPopupMenu )
-                                pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
+                                pMenu->EnableItem( pMenuItemHandler->nItemId, false );
                         }
                     }
                     else if ( pMenuItemHandler->xPopupMenuController.is() )
@@ -1727,7 +1727,7 @@ void MenuBarManager::FillMenu(
                         pMenu->HideItem( nId );
 
                     if ( !bEnabled)
-                        pMenu->EnableItem( nId, sal_False );
+                        pMenu->EnableItem( nId, false );
 
                     if ( xIndexContainer.is() )
                     {

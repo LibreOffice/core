@@ -26,7 +26,7 @@
 
 #include <string.h>
 
-BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify ) :
+BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, bool bModify ) :
             mpBuffer        ( NULL ),
             mpScanBuf       ( NULL ),
             mFncGetPixel    ( NULL ),
@@ -41,7 +41,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
             mpScanBuf       ( NULL ),
             mFncGetPixel    ( NULL ),
             mFncSetPixel    ( NULL ),
-            mbModify        ( sal_False )
+            mbModify        ( false )
 {
     ImplCreate( rBitmap );
 }
@@ -133,9 +133,9 @@ void BitmapReadAccess::ImplDestroy()
     }
 }
 
-sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
+bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     switch( nFormat )
     {
@@ -157,7 +157,7 @@ sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
         CASE_FORMAT( _32BIT_TC_MASK )
 
         default:
-            bRet = sal_False;
+            bRet = false;
         break;
     }
 
@@ -385,7 +385,7 @@ BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const 
 }
 
 BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
-            BitmapReadAccess( rBitmap, sal_True ),
+            BitmapReadAccess( rBitmap, true ),
             mpLineColor     ( NULL ),
             mpFillColor     ( NULL )
 {

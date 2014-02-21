@@ -531,26 +531,26 @@ bool SvpSalGraphics::drawPolyLine(
         return false;
 }
 
-sal_Bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
+bool SvpSalGraphics::drawPolyLineBezier( sal_uInt32,
                                              const SalPoint*,
                                              const sal_uInt8* )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
+bool SvpSalGraphics::drawPolygonBezier( sal_uInt32,
                                             const SalPoint*,
                                             const sal_uInt8* )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
+bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
                                                 const sal_uInt32*,
                                                 const SalPoint* const*,
                                                 const sal_uInt8* const* )
 {
-    return sal_False;
+    return false;
 }
 
 bool SvpSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
@@ -728,9 +728,9 @@ void SvpSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInve
     dbgOut( m_aDevice );
 }
 
-sal_Bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
+bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 {
-    return sal_False;
+    return false;
 }
 
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const

@@ -614,7 +614,7 @@ void PADialog::RemDevice()
     {
         if (m_aDevicesLB.GetEntry(i).equals(aDefPrinter))
         {
-            m_aDevicesLB.SelectEntryPos( i, sal_True );
+            m_aDevicesLB.SelectEntryPos( i, true );
             UpdateText();
             break;
         }

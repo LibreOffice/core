@@ -37,8 +37,8 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         mpBackground    ( new VirtualDevice ),
         mpRestore       ( new VirtualDevice ),
         meLastDisposal  ( DISPOSE_BACK ),
-        mbPause         ( sal_False ),
-        mbMarked        ( sal_False ),
+        mbPause         ( false ),
+        mbMarked        ( false ),
         mbHMirr         ( maSz.Width() < 0L ),
         mbVMirr         ( maSz.Height() < 0L )
 {
@@ -100,17 +100,17 @@ ImplAnimView::~ImplAnimView()
     mpParent->ImplDecAnimCount();
 }
 
-sal_Bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
+bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( nExtraData )
     {
         if( ( mnExtraData == nExtraData ) && ( !pOut || ( pOut == mpOut ) ) )
-            bRet = sal_True;
+            bRet = true;
     }
     else if( !pOut || ( pOut == mpOut ) )
-        bRet = sal_True;
+        bRet = true;
 
     return bRet;
 }
@@ -157,7 +157,7 @@ void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
     VirtualDevice   aVDev;
     Region*         pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
 
-    aVDev.SetOutputSizePixel( maSzPix, sal_False );
+    aVDev.SetOutputSizePixel( maSzPix, false );
     nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
 
     for( sal_uLong i = 0UL; i <= nPos; i++ )
@@ -186,7 +186,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
     // check, if output lies out of display
     if( aOutRect.Intersection( Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
-        ImplSetMarked( sal_True );
+        ImplSetMarked( true );
     else if( !mbPause )
     {
         VirtualDevice*          pDev;
@@ -227,7 +227,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         if( !pVDev )
         {
             pDev = new VirtualDevice;
-            pDev->SetOutputSizePixel( maSzPix, sal_False );
+            pDev->SetOutputSizePixel( maSzPix, false );
             pDev->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
         }
         else
@@ -258,10 +258,10 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         // Put it into a bitmap if needed, else delete
         // SaveBitmap to conserve memory
         if( ( meLastDisposal == DISPOSE_BACK ) || ( meLastDisposal == DISPOSE_NOT ) )
-            mpRestore->SetOutputSizePixel( Size( 1, 1 ), sal_False );
+            mpRestore->SetOutputSizePixel( Size( 1, 1 ), false );
         else
         {
-            mpRestore->SetOutputSizePixel( maRestSz, sal_False );
+            mpRestore->SetOutputSizePixel( maRestSz, false );
             mpRestore->DrawOutDev( Point(), maRestSz, aPosPix, aSizePix, *pDev );
         }
 
@@ -292,7 +292,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
 void ImplAnimView::ImplRepaint()
 {
-    const sal_Bool bOldPause = mbPause;
+    const bool bOldPause = mbPause;
 
     if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
     {
@@ -305,7 +305,7 @@ void ImplAnimView::ImplRepaint()
     else
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
-    mbPause = sal_False;
+    mbPause = false;
     ImplDrawToPos( mnActPos );
     mbPause = bOldPause;
 }

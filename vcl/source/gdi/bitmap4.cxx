@@ -38,9 +38,9 @@ static inline sal_uInt8 lcl_getDuotoneColorComponent( sal_uInt8 base, sal_uInt16
     return (sal_uInt8) (color1+color2);
 }
 
-sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
+bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     switch( eFilter )
     {
@@ -58,7 +58,7 @@ sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, 
             }
             else
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
         break;
@@ -110,11 +110,11 @@ sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, 
     return bRet;
 }
 
-sal_Bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
+bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                              const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -236,7 +236,7 @@ sal_Bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
 
             aNewBmp.ReleaseAccess( pWriteAcc );
 
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -256,10 +256,10 @@ sal_Bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
     return bRet;
 }
 
-sal_Bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
+bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -365,7 +365,7 @@ sal_Bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const
 
             aNewBmp.ReleaseAccess( pWriteAcc );
 
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -385,13 +385,13 @@ sal_Bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const
     return bRet;
 }
 
-sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
+bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
-    sal_Bool bRet = ImplMakeGreyscales( 256 );
+    bool bRet = ImplMakeGreyscales( 256 );
 
     if( bRet )
     {
-        bRet = sal_False;
+        bRet = false;
 
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
 
@@ -490,7 +490,7 @@ sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Li
                 delete[] pHMap;
                 delete[] pVMap;
                 aNewBmp.ReleaseAccess( pWriteAcc );
-                bRet = sal_True;
+                bRet = true;
             }
 
             ReleaseAccess( pReadAcc );
@@ -511,13 +511,13 @@ sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Li
     return bRet;
 }
 
-sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
-    sal_Bool bRet = ImplMakeGreyscales( 256 );
+    bool bRet = ImplMakeGreyscales( 256 );
 
     if( bRet )
     {
-        bRet = sal_False;
+        bRet = false;
 
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
 
@@ -602,7 +602,7 @@ sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link*
                 delete[] pHMap;
                 delete[] pVMap;
                 aNewBmp.ReleaseAccess( pWriteAcc );
-                bRet = sal_True;
+                bRet = true;
             }
 
             ReleaseAccess( pReadAcc );
@@ -623,9 +623,9 @@ sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link*
     return bRet;
 }
 
-sal_Bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
     BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
 
     if( pWriteAcc )
@@ -665,16 +665,16 @@ sal_Bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /
         }
 
         ReleaseAccess( pWriteAcc );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -736,7 +736,7 @@ sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pP
             }
 
             aNewBmp.ReleaseAccess( pWriteAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -756,13 +756,13 @@ sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pP
     return bRet;
 }
 
-sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
+bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                      pFilterParam->maMosaicTileSize.mnTileWidth : 4;
     sal_uLong               nTileHeight = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                       pFilterParam->maMosaicTileSize.mnTileHeight : 4;
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( !nTileWidth )
         nTileWidth = 1;
@@ -884,7 +884,7 @@ sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*p
             }
             while( nY1 < nHeight );
 
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -908,7 +908,7 @@ sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*p
         }
     }
     else
-        bRet = sal_True;
+        bRet = true;
 
     return bRet;
 }
@@ -933,13 +933,13 @@ extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
     return nRet;
 }
 
-sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
+bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
-    sal_Bool bRet = ( GetBitCount() > 8 ) ? Convert( BMP_CONVERSION_8BIT_COLORS ) : sal_True;
+    bool bRet = ( GetBitCount() > 8 ) ? Convert( BMP_CONVERSION_8BIT_COLORS ) : sal_True;
 
     if( bRet )
     {
-        bRet = sal_False;
+        bRet = false;
 
         BitmapWriteAccess* pWriteAcc = AcquireWriteAccess();
 
@@ -986,7 +986,7 @@ sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link*
             // cleanup
             delete[] pPopArtTable;
             ReleaseAccess( pWriteAcc );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 

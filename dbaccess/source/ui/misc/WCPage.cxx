@@ -76,7 +76,7 @@ OCopyTable::OCopyTable( Window * pParent )
         if ( !m_pParent->supportsViews() )
             m_aRB_View.Disable();
 
-        m_aCB_UseHeaderLine.Check(sal_True);
+        m_aCB_UseHeaderLine.Check(true);
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
@@ -326,26 +326,26 @@ void OCopyTable::setCreateStyleAction()
     switch(m_pParent->getOperation())
     {
         case CopyTableOperation::CopyDefinitionAndData:
-            m_aRB_DefData.Check(sal_True);
+            m_aRB_DefData.Check(true);
             RadioChangeHdl(&m_aRB_DefData);
             break;
         case CopyTableOperation::CopyDefinitionOnly:
-            m_aRB_Def.Check(sal_True);
+            m_aRB_Def.Check(true);
             RadioChangeHdl(&m_aRB_Def);
             break;
         case CopyTableOperation::AppendData:
-            m_aRB_AppendData.Check(sal_True);
+            m_aRB_AppendData.Check(true);
             SetAppendDataRadio();
             break;
         case CopyTableOperation::CreateAsView:
             if ( m_aRB_View.IsEnabled() )
             {
-                m_aRB_View.Check(sal_True);
+                m_aRB_View.Check(true);
                 RadioChangeHdl(&m_aRB_View);
             }
             else
             {
-                m_aRB_DefData.Check(sal_True);
+                m_aRB_DefData.Check(true);
                 RadioChangeHdl(&m_aRB_DefData);
             }
     }

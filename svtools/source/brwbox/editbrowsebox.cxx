@@ -123,13 +123,13 @@ namespace svt
     {
         m_aImpl.reset(new EditBrowseBoxImpl());
 
-        SetCompoundControl(sal_True);
+        SetCompoundControl(true);
         SetGridLineColor( Color( COL_LIGHTGRAY ) );
 
         ImplInitSettings(sal_True, sal_True, sal_True);
 
         pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
-        pCheckBoxPaint->SetPaintTransparent( sal_True );
+        pCheckBoxPaint->SetPaintTransparent( true );
         pCheckBoxPaint->SetBackground();
     }
 
@@ -210,7 +210,7 @@ namespace svt
     {
         pHeader = imp_CreateHeaderBar(pParent);
         if (!IsUpdateMode())
-            pHeader->SetUpdateMode(sal_False);
+            pHeader->SetUpdateMode(false);
         return pHeader;
     }
 
@@ -932,18 +932,18 @@ namespace svt
             }
 
             // don't paint during row change
-            rWindow.EnablePaint(sal_False);
+            rWindow.EnablePaint(false);
 
             // the last veto chance for derived classes
             if (!pTHIS->CursorMoving(nNewRow, nNewColId))
             {
                 pTHIS->InvalidateStatusCell(nEditRow);
-                rWindow.EnablePaint(sal_True);
+                rWindow.EnablePaint(true);
                 return sal_False;
             }
             else
             {
-                rWindow.EnablePaint(sal_True);
+                rWindow.EnablePaint(true);
                 return sal_True;
             }
         }
@@ -988,7 +988,7 @@ namespace svt
             nEditRow = nNewRow;
         }
         ActivateCell();
-        GetDataWindow().EnablePaint(sal_True);
+        GetDataWindow().EnablePaint(true);
         // should not be called here because the descant event is not needed here
         //BrowseBox::CursorMoved();
     }
@@ -1295,10 +1295,10 @@ namespace svt
 */
         pCheckBoxPaint->GetBox().Enable(_bEnabled);
         pCheckBoxPaint->Show();
-        pCheckBoxPaint->SetParentUpdateMode( sal_False );
+        pCheckBoxPaint->SetParentUpdateMode( false );
         pCheckBoxPaint->Update();
         pCheckBoxPaint->Hide();
-        pCheckBoxPaint->SetParentUpdateMode( sal_True );
+        pCheckBoxPaint->SetParentUpdateMode( true );
     }
 
     //------------------------------------------------------------------------------

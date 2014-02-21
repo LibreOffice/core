@@ -132,7 +132,7 @@ void TaskPaneList::AddWindow( Window *pWindow )
         }
 
         mTaskPanes.insert( insertionPos, pWindow );
-        pWindow->ImplIsInTaskPaneList( sal_True );
+        pWindow->ImplIsInTaskPaneList( true );
     }
 }
 
@@ -145,25 +145,25 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
     if( p != mTaskPanes.end() )
     {
         mTaskPanes.erase( p );
-        pWindow->ImplIsInTaskPaneList( sal_False );
+        pWindow->ImplIsInTaskPaneList( false );
     }
 }
 
 // --------------------------------------------------
 
-sal_Bool TaskPaneList::IsInList( Window *pWindow )
+bool TaskPaneList::IsInList( Window *pWindow )
 {
     ::std::vector< Window* >::iterator p;
     p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
     if( p != mTaskPanes.end() )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 // --------------------------------------------------
 
-sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
+bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
 
     // F6 cycles through everything and works always
@@ -175,10 +175,10 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     //
     // Since the design of Ctrl-Tab looks to be inconsistent ( non-modal dialogs are not reachable
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
-    sal_Bool bSplitterOnly = sal_False;
-    sal_Bool bFocusInList = sal_False;
+    bool bSplitterOnly = false;
+    bool bFocusInList = false;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
-    sal_Bool bForward = !aKeyCode.IsShift();
+    bool bForward = !aKeyCode.IsShift();
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
@@ -188,43 +188,43 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         while( p != mTaskPanes.end() )
         {
             Window *pWin = *p;
-            if( pWin->HasChildPathFocus( sal_True ) )
+            if( pWin->HasChildPathFocus( true ) )
             {
-                bFocusInList = sal_True;
+                bFocusInList = true;
 
                 // Ctrl-F6 goes directly to the document
                 if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
                 {
                     pWin->ImplGrabFocusToDocument( GETFOCUS_F6 );
-                    return sal_True;
+                    return true;
                 }
 
                 // activate next task pane
                 Window *pNextWin = NULL;
 
                 if( bSplitterOnly )
-                    pNextWin = FindNextSplitter( *p, sal_True );
+                    pNextWin = FindNextSplitter( *p, true );
                 else
                     pNextWin = FindNextFloat( *p, bForward );
 
                 if( pNextWin != pWin )
                 {
-                    ImplGetSVData()->maWinData.mbNoSaveFocus = sal_True;
+                    ImplGetSVData()->maWinData.mbNoSaveFocus = true;
                     ImplTaskPaneListGrabFocus( pNextWin, bForward );
-                    ImplGetSVData()->maWinData.mbNoSaveFocus = sal_False;
+                    ImplGetSVData()->maWinData.mbNoSaveFocus = false;
                 }
                 else
                 {
                     // forward key if no splitter found
                     if( bSplitterOnly )
-                        return sal_False;
+                        return false;
 
                     // we did not find another taskpane, so
                     // put focus back into document
                     pWin->ImplGrabFocusToDocument( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
                 }
 
-                return sal_True;
+                return true;
             }
             else
                 ++p;
@@ -235,24 +235,24 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         {
             Window *pWin;
             if( bSplitterOnly )
-                pWin = FindNextSplitter( NULL, sal_True );
+                pWin = FindNextSplitter( NULL, true );
             else
                 pWin = FindNextFloat( NULL, bForward );
             if( pWin )
             {
                 ImplTaskPaneListGrabFocus( pWin, bForward );
-                return sal_True;
+                return true;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 // --------------------------------------------------
 
 // returns next splitter
-Window* TaskPaneList::FindNextSplitter( Window *pWindow, sal_Bool bForward )
+Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
 {
     if( bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
@@ -291,7 +291,7 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, sal_Bool bForward )
 // --------------------------------------------------
 
 // returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float
-Window* TaskPaneList::FindNextFloat( Window *pWindow, sal_Bool bForward )
+Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
 {
     if( bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );

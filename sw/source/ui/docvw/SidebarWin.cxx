@@ -332,7 +332,7 @@ void SwSidebarWin::InitControls()
     mpOutliner->SetUpdateMode( sal_True );
     Rescale();
 
-    mpSidebarTxtControl->EnableRTL( sal_False );
+    mpSidebarTxtControl->EnableRTL( false );
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );

@@ -77,14 +77,14 @@ bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueW
 
 void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId, CheckBox& rCheckbox )
 {
-    rCheckbox.EnableTriState( sal_False );
+    rCheckbox.EnableTriState( false );
 
     const SfxPoolItem *pPoolItem = NULL;
     if( rInAttrs.GetItemState(nWhichId, true, &pPoolItem) == SFX_ITEM_SET )
         rCheckbox.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
     else
     {
-        rCheckbox.EnableTriState( sal_True );
+        rCheckbox.EnableTriState( true );
         rCheckbox.SetState( STATE_DONTKNOW );
     }
 }
@@ -237,7 +237,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 IMPL_LINK( DataLabelResources, CheckHdl, CheckBox*, pBox )
 {
     if( pBox )
-        pBox->EnableTriState( sal_False );
+        pBox->EnableTriState( false );
     EnableControls();
     return 0;
 }

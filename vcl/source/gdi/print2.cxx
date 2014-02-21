@@ -144,13 +144,13 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             aLineColor.SetRed( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetRed()) / 100L ) );
             aLineColor.SetGreen( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetGreen()) / 100L ) );
             aLineColor.SetBlue( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aLineColor.GetBlue()) / 100L ) );
-            o_rMtf.AddAction( new MetaLineColorAction(aLineColor, sal_True) );
+            o_rMtf.AddAction( new MetaLineColorAction(aLineColor, true) );
 
             Color aFillColor( rStateOutDev.GetFillColor() );
             aFillColor.SetRed( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetRed()) / 100L ) );
             aFillColor.SetGreen( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetGreen()) / 100L ) );
             aFillColor.SetBlue( static_cast<sal_uInt8>( (255L*nTransparency + (100L - nTransparency)*aFillColor.GetBlue()) / 100L ) );
-            o_rMtf.AddAction( new MetaFillColorAction(aFillColor, sal_True) );
+            o_rMtf.AddAction( new MetaFillColorAction(aFillColor, true) );
         }
 
         o_rMtf.AddAction( new MetaPolyPolygonAction(pTransAct->GetPolyPolygon()) );
@@ -727,7 +727,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         VirtualDevice aMapModeVDev;
         aMapModeVDev.mnDPIX = mnDPIX;
         aMapModeVDev.mnDPIY = mnDPIY;
-        aMapModeVDev.EnableOutput(sal_False);
+        aMapModeVDev.EnableOutput(false);
 
         int nLastBgAction, nActionNum;
 
@@ -1172,7 +1172,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         Size            aDstSzPix;
 
                         VirtualDevice   aMapVDev;   // here, we record only mapmode information
-                        aMapVDev.EnableOutput(sal_False);
+                        aMapVDev.EnableOutput(false);
 
                         VirtualDevice   aPaintVDev; // into this one, we render.
                         aPaintVDev.SetBackground( aBackgroundComponent.aBgColor );
@@ -1204,7 +1204,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                     aMapVDev.mnDPIX = aPaintVDev.mnDPIX = mnDPIX;
                                     aMapVDev.mnDPIY = aPaintVDev.mnDPIY = mnDPIY;
 
-                                    aPaintVDev.EnableOutput(sal_False);
+                                    aPaintVDev.EnableOutput(false);
 
                                     // iterate over all actions
                                     for( pCurrAct=const_cast<GDIMetaFile&>(rInMtf).FirstAction(), nActionNum=0;
@@ -1216,7 +1216,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                         // the current aCCList element
                                         // (aCurr)
                                         if( aCCList_MemberMap[nActionNum] == &(*aCurr) )
-                                            aPaintVDev.EnableOutput(sal_True);
+                                            aPaintVDev.EnableOutput(true);
 
                                         // but process every action
                                         const sal_uInt16 nType( pCurrAct->GetType() );
@@ -1254,7 +1254,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             Application::Reschedule();
                                     }
 
-                                    const sal_Bool bOldMap = mbMap;
+                                    const bool bOldMap = mbMap;
                                     mbMap = aPaintVDev.mbMap = false;
 
                                     Bitmap aBandBmp( aPaintVDev.GetBitmap( Point(), aDstSzPix ) );

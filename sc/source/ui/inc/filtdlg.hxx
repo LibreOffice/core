@@ -64,7 +64,7 @@ public:
     virtual bool    IsRefInputMode() const;
     virtual void    SetActive();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     void            SliderMoved();
     size_t          GetSliderPos();
     void            RefreshEditRow( size_t nOffset );
@@ -172,7 +172,7 @@ public:
     virtual bool    IsRefInputMode() const;
     virtual void    SetActive();
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
 private:
     ListBox*         pLbFilterArea;

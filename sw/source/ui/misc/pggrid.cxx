@@ -116,7 +116,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
         OUString sName = pEntry->GetName();
         m_pColorLB->InsertEntry( aColor, sName );
     }
-    m_pColorLB->SetUpdateMode( sal_True );
+    m_pColorLB->SetUpdateMode( true );
     //Get the default paper mode
     SwView *pView   = ::GetActiveView();
     if( pView )

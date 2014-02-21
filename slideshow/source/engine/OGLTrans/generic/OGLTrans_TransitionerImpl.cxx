@@ -428,7 +428,7 @@ lcl_createSystemWindow(
     winData.nSize = sizeof(winData);
     SAL_INFO("slideshow.opengl", "using VisualID " << pXVisual->visualid);
     winData.pVisual = (void*)(pXVisual->visual);
-    SystemChildWindow* pWindow = new SystemChildWindow(pParentWindow, 0, &winData, sal_False);
+    SystemChildWindow* pWindow = new SystemChildWindow(pParentWindow, 0, &winData, false);
     SystemEnvData const* const pChildSysData = pWindow->GetSystemData();
     if( !pChildSysData ) {
         delete pWindow, pWindow=NULL;
@@ -615,12 +615,12 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 
     if( pWindow )
     {
-        pWindow->SetMouseTransparent( sal_True );
+        pWindow->SetMouseTransparent( true );
         pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( sal_False );
+        pWindow->EnableEraseBackground( false );
         pWindow->SetControlForeground();
         pWindow->SetControlBackground();
-        pWindow->EnablePaint(sal_False);
+        pWindow->EnablePaint(false);
 #if defined( _WIN32 )
         GLWin.hWnd = sysData->hWnd;
 #elif defined( UNX )

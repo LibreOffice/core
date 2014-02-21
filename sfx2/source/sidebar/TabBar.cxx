@@ -242,9 +242,9 @@ void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
          ++iItem)
     {
         if (iItem->msDeckId.equals(rsDeckId))
-            iItem->mpButton->Check(sal_True);
+            iItem->mpButton->Check(true);
         else
-            iItem->mpButton->Check(sal_False);
+            iItem->mpButton->Check(false);
     }
 }
 
@@ -404,7 +404,7 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
             mpMenuButton->GetPosPixel(),
             mpMenuButton->GetSizePixel()),
         aMenuData);
-    mpMenuButton->Check(sal_False);
+    mpMenuButton->Check(false);
 
     return 0;
 }

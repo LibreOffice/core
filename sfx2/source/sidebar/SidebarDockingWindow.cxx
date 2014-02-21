@@ -87,16 +87,16 @@ SfxChildWindow* SidebarDockingWindow::GetChildWindow (void)
 
 
 
-sal_Bool SidebarDockingWindow::Close (void)
+bool SidebarDockingWindow::Close (void)
 {
     if (mpSidebarController.is())
     {
         // Do not close the floating window.
         // Dock it and close just the deck instead.
-        SetFloatingMode(sal_False);
+        SetFloatingMode(false);
         mpSidebarController->RequestCloseDeck();
         mpSidebarController->NotifyResize();
-        return sal_False;
+        return false;
     }
     else
         return SfxDockingWindow::Close();

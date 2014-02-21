@@ -451,7 +451,7 @@ void ScOptSolverDlg::EnableButtons()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScOptSolverDlg::Close()
+bool ScOptSolverDlg::Close()
 {
     return DoClose( ScOptSolverDlgWrapper::GetChildWindowId() );
 }

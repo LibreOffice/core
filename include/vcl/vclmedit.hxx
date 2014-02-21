@@ -50,7 +50,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
     using Control::ImplInitSettings;
-    void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     WinBits         ImplInitStyle( WinBits nStyle );
 
     ExtTextEngine*  GetTextEngine() const;
@@ -76,9 +76,9 @@ public:
     virtual void    DisableUpdateData() { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
 
     virtual void    SetReadOnly( sal_Bool bReadOnly = sal_True );
-    virtual sal_Bool    IsReadOnly() const;
+    virtual bool    IsReadOnly() const;
 
-    void            EnableFocusSelectionHide( sal_Bool bHide );
+    void            EnableFocusSelectionHide( bool bHide );
 
     virtual void    SetMaxTextLen(sal_Int32 nMaxLen = 0);
     virtual sal_Int32 GetMaxTextLen() const;
@@ -104,8 +104,8 @@ public:
     OUString        GetText( LineEnd aSeparator ) const;
     OUString        GetTextLines( LineEnd aSeparator ) const;
 
-    void            SetRightToLeft( sal_Bool bRightToLeft );
-    sal_Bool            IsRightToLeft() const;
+    void            SetRightToLeft( bool bRightToLeft );
+    bool            IsRightToLeft() const;
 
     void            SaveValue()                         { aSaveValue = GetText(); }
     const OUString&    GetSavedValue() const            { return aSaveValue; }
@@ -130,7 +130,7 @@ public:
     void            DisableSelectionOnFocus();
 
     void            SetTextSelectable( bool bTextSelectable );
-    void            EnableCursor( sal_Bool bEnable );
+    void            EnableCursor( bool bEnable );
 
     virtual bool set_property(const OString &rKey, const OString &rValue);
 };

@@ -52,7 +52,7 @@ public:
     SAL_DLLPRIVATE sal_uInt16&          ImplGetButtonState();
     SAL_DLLPRIVATE sal_uInt16           ImplGetTextStyle( OUString& rText, WinBits nWinStyle, sal_uLong nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos, Size& rSize,
-                                              sal_Bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
+                                              bool bLayout, sal_uLong nImageSep, sal_uLong nDrawFlags,
                                               sal_uInt16 nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
@@ -74,14 +74,14 @@ public:
 
     static OUString     GetStandardText( StandardButtonType eButton );
 
-    sal_Bool            SetModeImage( const Image& rImage );
+    bool            SetModeImage( const Image& rImage );
     const Image         GetModeImage( ) const;
-    sal_Bool            HasImage() const;
+    bool            HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
 
-    void                EnableImageDisplay( sal_Bool bEnable );
-    void                EnableTextDisplay( sal_Bool bEnable );
+    void                EnableImageDisplay( bool bEnable );
+    void                EnableTextDisplay( bool bEnable );
 
     void                SetFocusRect( const Rectangle& rFocusRect );
     bool                IsSmallSymbol() const;
@@ -107,20 +107,20 @@ protected:
     TriState        meState;
     TriState        meSaveValue;
     sal_uInt16          mnDDStyle;
-    sal_Bool            mbPressed;
-    sal_Bool            mbInUserDraw;
+    bool            mbPressed;
+    bool            mbInUserDraw;
     Link            maToggleHdl;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
-    SAL_DLLPRIVATE void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawFlags,
                                                const Rectangle& rRect, bool bLayout, bool bMenuBtnSep );
     SAL_DLLPRIVATE void            ImplDrawPushButton( bool bLayout = false );
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE sal_uInt16          ImplGetTextStyle( sal_uLong nDrawFlags ) const;
-    SAL_DLLPRIVATE sal_Bool            IsSymbol() const { return ( (meSymbol != SYMBOL_NOSYMBOL) && (meSymbol != SYMBOL_IMAGE) ); }
-    SAL_DLLPRIVATE sal_Bool            IsImage() const { return Button::HasImage(); }
+    SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SYMBOL_NOSYMBOL) && (meSymbol != SYMBOL_IMAGE) ); }
+    SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE                 PushButton( const PushButton & );
@@ -131,10 +131,10 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 public:
-    SAL_DLLPRIVATE void            ImplSetDefButton( sal_Bool bSet );
+    SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
     SAL_DLLPRIVATE static void     ImplDrawPushButtonFrame( Window* pDev, Rectangle& rRect, sal_uInt16 nStyle );
-    SAL_DLLPRIVATE static sal_Bool     ImplHitTestPushButton( Window* pDev, const Point& rPos );
-    SAL_DLLPRIVATE sal_Bool            ImplIsDefButton() const;
+    SAL_DLLPRIVATE static bool     ImplHitTestPushButton( Window* pDev, const Point& rPos );
+    SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
 protected:
     explicit        PushButton( WindowType nType );
@@ -175,11 +175,11 @@ public:
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
 
-    void            Check( sal_Bool bCheck = sal_True );
-    sal_Bool            IsChecked() const;
+    void            Check( bool bCheck = true );
+    bool            IsChecked() const;
 
-    void            SetPressed( sal_Bool bPressed );
-    sal_Bool            IsPressed() const { return mbPressed; }
+    void            SetPressed( bool bPressed );
+    bool            IsPressed() const { return mbPressed; }
 
     void            EndSelection();
 
@@ -194,12 +194,12 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
-inline void PushButton::Check( sal_Bool bCheck )
+inline void PushButton::Check( bool bCheck )
 {
     SetState( (bCheck) ? STATE_CHECK : STATE_NOCHECK );
 }
 
-inline sal_Bool PushButton::IsChecked() const
+inline bool PushButton::IsChecked() const
 {
     return (GetState() == STATE_CHECK);
 }
@@ -288,10 +288,10 @@ private:
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
-    sal_Bool        mbChecked;
-    sal_Bool        mbSaveValue;
-    sal_Bool        mbRadioCheck;
-    sal_Bool        mbStateChanged;
+    bool        mbChecked;
+    bool        mbSaveValue;
+    bool        mbRadioCheck;
+    bool        mbStateChanged;
     Link            maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
@@ -300,7 +300,7 @@ private:
     bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void     ImplInitRadioButtonData();
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
-    SAL_DLLPRIVATE void     ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void     ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void     ImplDrawRadioButtonState();
     SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize,
@@ -323,7 +323,7 @@ protected:
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
-    SAL_DLLPRIVATE void     ImplCallClick( sal_Bool bGrabFocus = sal_False, sal_uInt16 nFocusFlags = 0 );
+    SAL_DLLPRIVATE void     ImplCallClick( bool bGrabFocus = false, sal_uInt16 nFocusFlags = 0 );
     SAL_DLLPRIVATE void     ImplSetMinimumNWFSize();
 
 protected:
@@ -362,20 +362,20 @@ public:
 
     virtual void    Toggle();
 
-    sal_Bool            IsStateChanged() const { return mbStateChanged; }
+    bool            IsStateChanged() const { return mbStateChanged; }
 
-    void            EnableRadioCheck( sal_Bool bRadioCheck = sal_True ) { mbRadioCheck = bRadioCheck; }
-    sal_Bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
+    void            EnableRadioCheck( bool bRadioCheck = true ) { mbRadioCheck = bRadioCheck; }
+    bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
-    sal_Bool        SetModeRadioImage( const Image& rImage );
+    bool        SetModeRadioImage( const Image& rImage );
     const Image&    GetModeRadioImage( ) const;
 
-    void            SetState( sal_Bool bCheck );
-    void            Check( sal_Bool bCheck = sal_True );
-    sal_Bool            IsChecked() const { return mbChecked; }
+    void            SetState( bool bCheck );
+    void            Check( bool bCheck = true );
+    bool            IsChecked() const { return mbChecked; }
 
     void            SaveValue() { mbSaveValue = IsChecked(); }
-    sal_Bool            GetSavedValue() const { return mbSaveValue; }
+    bool            GetSavedValue() const { return mbSaveValue; }
 
     static Image    GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlags );
 
@@ -419,7 +419,7 @@ private:
     Rectangle       maMouseRect;
     TriState        meState;
     TriState        meSaveValue;
-    sal_Bool            mbTriState;
+    bool            mbTriState;
     Link            maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
@@ -428,7 +428,7 @@ private:
     bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE WinBits      ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
-    SAL_DLLPRIVATE void         ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void         ImplInvalidateOrDrawCheckBoxState();
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                                     const Point& rPos, const Size& rSize,
@@ -480,11 +480,11 @@ public:
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
 
-    void            Check( sal_Bool bCheck = sal_True );
+    void            Check( bool bCheck = true );
     bool            IsChecked() const;
 
-    void            EnableTriState( sal_Bool bTriState = sal_True );
-    sal_Bool            IsTriStateEnabled() const { return mbTriState; }
+    void            EnableTriState( bool bTriState = true );
+    bool            IsTriStateEnabled() const { return mbTriState; }
 
     void            SaveValue() { meSaveValue = GetState(); }
     TriState        GetSavedValue() const { return meSaveValue; }
@@ -502,7 +502,7 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
-inline void CheckBox::Check( sal_Bool bCheck )
+inline void CheckBox::Check( bool bCheck )
 {
     SetState( (bCheck) ? STATE_CHECK : STATE_NOCHECK );
 }

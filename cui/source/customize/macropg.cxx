@@ -511,7 +511,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     bAppEvents = appEvents;
 
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
-    mpImpl->pEventLB->SetUpdateMode( sal_False );
+    mpImpl->pEventLB->SetUpdateMode( false );
     rListBox.Clear();
     EventsHash* eventsHash;
     Reference< container::XNameReplace> nameReplace;
@@ -711,7 +711,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     }
 
     // update the listbox entry
-    pImpl->pEventLB->SetUpdateMode( sal_False );
+    pImpl->pEventLB->SetUpdateMode( false );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
             &pImpl->aMacroImg, &pImpl->aComponentImg ), LB_MACROS_ITEMPOS );
 

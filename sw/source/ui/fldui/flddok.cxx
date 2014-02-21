@@ -88,7 +88,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     // initialise TypeListBox
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
-    m_pTypeLB->SetUpdateMode(sal_False);
+    m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
 
     sal_uInt16 nPos, nTypeId;
@@ -146,7 +146,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     // select old Pos
     RestorePos(m_pTypeLB);
 
-    m_pTypeLB->SetUpdateMode(sal_True);
+    m_pTypeLB->SetUpdateMode(true);
     m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFldDokPage, InsertHdl));
     m_pTypeLB->SetSelectHdl(LINK(this, SwFldDokPage, TypeHdl));
     m_pFormatLB->SetSelectHdl(LINK(this, SwFldDokPage, FormatHdl));

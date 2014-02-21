@@ -424,7 +424,7 @@ void ScExtIButton::StartPopup()
 
     if(pPopupMenu!=NULL)
     {
-        SetPressed( sal_True );
+        SetPressed( true );
         EndSelection();
         Point aPoint(0,0);
         aPoint.Y()=GetOutputSizePixel().Height();

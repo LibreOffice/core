@@ -24,11 +24,11 @@ public:
     GtkSalPrinter(SalInfoPrinter* i_pInfoPrinter);
 
     using PspSalPrinter::StartJob;
-    virtual sal_Bool StartJob(
+    virtual bool StartJob(
             const OUString* i_pFileName, const OUString& i_rJobName,
             const OUString& i_rAppName, ImplJobSetup* io_pSetupData,
             vcl::PrinterController& io_rController);
-    virtual sal_Bool EndJob();
+    virtual bool EndJob();
 
 private:
     bool impl_doJob(

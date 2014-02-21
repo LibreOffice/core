@@ -27,7 +27,7 @@
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader )
+bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader )
 {
     sal_uInt32 nMetaType;
     sal_uInt32 nOrgPos = rStreamWMF.Tell();
@@ -38,7 +38,7 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
     rStreamWMF.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() == sal_False )
+        if ( !EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() )
             rStreamWMF.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -58,7 +58,7 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
+bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
 {
     sal_uInt32 nMetaType(0);
     sal_uInt32 nOrgPos = rStream.Tell();
@@ -79,7 +79,7 @@ sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigI
 
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == sal_False )
+        if ( !EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -111,7 +111,7 @@ bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem )
 {
     EMFWriter aEMFWriter(rTargetStream);

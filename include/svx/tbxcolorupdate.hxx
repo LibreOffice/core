@@ -57,7 +57,7 @@ namespace svx
         Color       maCurColor;
         Rectangle   maUpdRect;
         Size        maBmpSize;
-        sal_Bool        mbWasHiContrastMode;
+        bool        mbWasHiContrastMode;
     };
 
 //........................................................................

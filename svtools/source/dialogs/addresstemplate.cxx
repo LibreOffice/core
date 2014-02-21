@@ -668,8 +668,8 @@ void AssignmentPersistentData::Commit()
         // some knittings
         m_pFieldScroller->SetScrollHdl(LINK(this, AddressBookSourceDialog, OnFieldScroll));
         m_pAdministrateDatasources->SetClickHdl(LINK(this, AddressBookSourceDialog, OnAdministrateDatasources));
-        m_pDatasource->EnableAutocomplete(sal_True);
-        m_pTable->EnableAutocomplete(sal_True);
+        m_pDatasource->EnableAutocomplete(true);
+        m_pTable->EnableAutocomplete(true);
         m_pTable->SetGetFocusHdl(LINK(this, AddressBookSourceDialog, OnComboGetFocus));
         m_pDatasource->SetGetFocusHdl(LINK(this, AddressBookSourceDialog, OnComboGetFocus));
         m_pTable->SetLoseFocusHdl(LINK(this, AddressBookSourceDialog, OnComboLoseFocus));

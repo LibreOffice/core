@@ -120,7 +120,7 @@ private:
 
 protected:
     virtual void            PopupModeEnd();
-    virtual sal_Bool            Close();
+    virtual bool            Close();
     virtual void            DeleteFloatingWindow();
 
     sal_uInt16                  GetId() const { return m_nId; }

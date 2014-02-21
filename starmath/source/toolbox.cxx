@@ -268,7 +268,7 @@ void SmToolBoxWindow::AdjustPosSize( bool bSetPos )
 }
 
 
-sal_Bool SmToolBoxWindow::Close()
+bool SmToolBoxWindow::Close()
 {
     SmViewShell *pViewSh = GetView();
     if (pViewSh)

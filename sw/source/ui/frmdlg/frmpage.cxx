@@ -921,7 +921,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         }
 
         if ( sDlgType == "PictureDialog" )
-            m_pFixedRatioCB->Check( sal_False );
+            m_pFixedRatioCB->Check( false );
         else
         {
             if ( bNew )
@@ -2325,18 +2325,18 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
     RangeModifyHdl(&m_aWidthED);  // set reference values (for 100%)
 
     if (rSize.GetWidthPercent() == 0xff || rSize.GetHeightPercent() == 0xff)
-        m_pFixedRatioCB->Check(sal_True);
+        m_pFixedRatioCB->Check(true);
     if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff &&
         !m_pRelWidthCB->IsChecked())
     {
-        m_pRelWidthCB->Check(sal_True);
+        m_pRelWidthCB->Check(true);
         RelSizeClickHdl(m_pRelWidthCB);
         m_aWidthED.SetPrcntValue(rSize.GetWidthPercent(), FUNIT_CUSTOM);
     }
     if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff &&
         !m_pRelHeightCB->IsChecked())
     {
-        m_pRelHeightCB->Check(sal_True);
+        m_pRelHeightCB->Check(true);
         RelSizeClickHdl(m_pRelHeightCB);
         m_aHeightED.SetPrcntValue(rSize.GetHeightPercent(), FUNIT_CUSTOM);
     }
@@ -2450,10 +2450,10 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         switch( eMirror )
         {
         case RES_MIRROR_GRAPH_DONT: break;
-        case RES_MIRROR_GRAPH_VERT: m_pMirrorHorzBox->Check(sal_True); break;
-        case RES_MIRROR_GRAPH_HOR:  m_pMirrorVertBox->Check(sal_True); break;
-        case RES_MIRROR_GRAPH_BOTH: m_pMirrorHorzBox->Check(sal_True);
-                                    m_pMirrorVertBox->Check(sal_True);
+        case RES_MIRROR_GRAPH_VERT: m_pMirrorHorzBox->Check(true); break;
+        case RES_MIRROR_GRAPH_HOR:  m_pMirrorVertBox->Check(true); break;
+        case RES_MIRROR_GRAPH_BOTH: m_pMirrorHorzBox->Check(true);
+                                    m_pMirrorVertBox->Check(true);
                                     break;
         default:
             ;
@@ -2469,7 +2469,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         {
             case 1: // mirror at left / even pages
                 m_pLeftPagesRB->Check();
-                m_pMirrorHorzBox->Check(sal_True);
+                m_pMirrorHorzBox->Check(true);
                 break;
             case 2: // mirror on all pages
                 m_pAllPagesRB->Check();
@@ -2591,8 +2591,8 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
         m_pConnectED->SetText( aNewGrfName );
         //reset mirrors because maybe a Bitmap was swapped with
         //another type of graphic that cannot be mirrored.
-        m_pMirrorVertBox->Check(sal_False);
-        m_pMirrorHorzBox->Check(sal_False);
+        m_pMirrorVertBox->Check(false);
+        m_pMirrorHorzBox->Check(false);
         m_pAllPagesRB->Enable(false);
         m_pLeftPagesRB->Enable(false);
         m_pRightPagesRB->Enable(false);

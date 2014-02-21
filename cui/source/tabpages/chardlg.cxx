@@ -1353,9 +1353,9 @@ void SvxCharEffectsPage::Initialize()
     if ( !pColorTable.is() )
         pColorTable = XColorList::CreateStdColorList();
 
-    m_pUnderlineColorLB->SetUpdateMode( sal_False );
-    m_pOverlineColorLB->SetUpdateMode( sal_False );
-    m_pFontColorLB->SetUpdateMode( sal_False );
+    m_pUnderlineColorLB->SetUpdateMode( false );
+    m_pOverlineColorLB->SetUpdateMode( false );
+    m_pFontColorLB->SetUpdateMode( false );
 
     {
         SfxPoolItem* pDummy = NULL;
@@ -1377,9 +1377,9 @@ void SvxCharEffectsPage::Initialize()
         m_pFontColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
-    m_pUnderlineColorLB->SetUpdateMode( sal_True );
-    m_pOverlineColorLB->SetUpdateMode( sal_True );
-    m_pFontColorLB->SetUpdateMode( sal_True );
+    m_pUnderlineColorLB->SetUpdateMode( true );
+    m_pOverlineColorLB->SetUpdateMode( true );
+    m_pFontColorLB->SetUpdateMode( true );
     m_pFontColorLB->SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
 
     // handler
@@ -2044,7 +2044,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxContourItem& rItem = (SvxContourItem&)rSet.Get( nWhich );
             m_pOutlineBtn->SetState( (TriState)rItem.GetValue() );
-            m_pOutlineBtn->EnableTriState( sal_False );
+            m_pOutlineBtn->EnableTriState( false );
             break;
         }
     }
@@ -2073,7 +2073,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
             m_pShadowBtn->SetState( (TriState)rItem.GetValue() );
-            m_pShadowBtn->EnableTriState( sal_False );
+            m_pShadowBtn->EnableTriState( false );
             break;
         }
     }
@@ -2102,7 +2102,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get( nWhich );
             m_pBlinkingBtn->SetState( (TriState)rItem.GetValue() );
-            m_pBlinkingBtn->EnableTriState( sal_False );
+            m_pBlinkingBtn->EnableTriState( false );
             break;
         }
     }
@@ -2130,7 +2130,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxCharHiddenItem& rItem = (SvxCharHiddenItem&)rSet.Get( nWhich );
             m_pHiddenBtn->SetState( (TriState)rItem.GetValue() );
-            m_pHiddenBtn->EnableTriState( sal_False );
+            m_pHiddenBtn->EnableTriState( false );
             break;
         }
     }
@@ -2932,7 +2932,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             if ( nEsc > 0 )
             {
                 nFac = 1;
-                m_pHighPosBtn->Check( sal_True );
+                m_pHighPosBtn->Check( true );
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
                     nEsc = DFLT_ESC_SUPER;
@@ -2942,7 +2942,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             else
             {
                 nFac = -1;
-                m_pLowPosBtn->Check( sal_True );
+                m_pLowPosBtn->Check( true );
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
                     nEsc = DFLT_ESC_SUB;
@@ -2964,8 +2964,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            m_pNormalPosBtn->Check( sal_True );
-            m_pHighLowRB->Check( sal_True );
+            m_pNormalPosBtn->Check( true );
+            m_pHighLowRB->Check( true );
             PositionHdl_Impl( NULL );
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
@@ -2973,9 +2973,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_pHighPosBtn->Check( sal_False );
-        m_pNormalPosBtn->Check( sal_False );
-        m_pLowPosBtn->Check( sal_False );
+        m_pHighPosBtn->Check( false );
+        m_pNormalPosBtn->Check( false );
+        m_pLowPosBtn->Check( false );
     }
 
     // set BspFont
@@ -3033,7 +3033,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_pPairKerningBtn->Check( rItem.GetValue() );
     }
     else
-        m_pPairKerningBtn->Check( sal_False );
+        m_pPairKerningBtn->Check( false );
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
@@ -3072,13 +3072,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             const SvxCharRotateItem& rItem =
                     (SvxCharRotateItem&) rSet.Get( nWhich );
             if (rItem.IsBottomToTop())
-                m_p90degRB->Check( sal_True );
+                m_p90degRB->Check( true );
             else if (rItem.IsTopToBotton())
-                m_p270degRB->Check( sal_True );
+                m_p270degRB->Check( true );
             else
             {
                 DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
-                m_p0degRB->Check( sal_True );
+                m_p0degRB->Check( true );
             }
             m_pFitToLineCB->Check( rItem.IsFitToLine() );
         }
@@ -3086,14 +3086,14 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         {
             if( eState == SFX_ITEM_DONTCARE )
             {
-                m_p0degRB->Check( sal_False );
-                m_p90degRB->Check( sal_False );
-                m_p270degRB->Check( sal_False );
+                m_p0degRB->Check( false );
+                m_p90degRB->Check( false );
+                m_p270degRB->Check( false );
             }
             else
-                m_p0degRB->Check( sal_True );
+                m_p0degRB->Check( true );
 
-            m_pFitToLineCB->Check( sal_False );
+            m_pFitToLineCB->Check( false );
         }
         m_pFitToLineCB->SetClickHdl( aOldLink );
         m_pFitToLineCB->Enable( !m_p0degRB->IsChecked() );
@@ -3304,7 +3304,7 @@ SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
 
 void SvxCharTwoLinesPage::Initialize()
 {
-    m_pTwoLinesBtn->Check( sal_False );
+    m_pTwoLinesBtn->Check( false );
     TwoLinesHdl_Impl( NULL );
 
     m_pTwoLinesBtn->SetClickHdl( LINK( this, SvxCharTwoLinesPage, TwoLinesHdl_Impl ) );
@@ -3443,7 +3443,7 @@ sal_uInt16* SvxCharTwoLinesPage::GetRanges()
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
 {
-    m_pTwoLinesBtn->Check( sal_False );
+    m_pTwoLinesBtn->Check( false );
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     SfxItemState eState = rSet.GetItemState( nWhich );
 

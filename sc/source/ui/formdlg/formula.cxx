@@ -299,10 +299,10 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 }
 
 
-sal_Bool ScFormulaDlg::Close()
+bool ScFormulaDlg::Close()
 {
     DoEnter(false);
-    return sal_True;
+    return true;
 }
 
 //  --------------------------------------------------------------------------

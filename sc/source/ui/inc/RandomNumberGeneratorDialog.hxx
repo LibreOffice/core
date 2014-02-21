@@ -31,7 +31,7 @@ public:
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual void        SetActive();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
 private:
     // Widgets

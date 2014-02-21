@@ -662,8 +662,8 @@ void SlideTransitionPane::updateControls()
 
     if( aEffect.mbPresChangeAmbiguous )
     {
-        mpRB_ADVANCE_ON_MOUSE->Check( sal_False );
-        mpRB_ADVANCE_AUTO->Check( sal_False );
+        mpRB_ADVANCE_ON_MOUSE->Check( false );
+        mpRB_ADVANCE_AUTO->Check( false );
     }
     else
     {
@@ -749,7 +749,7 @@ void SlideTransitionPane::openSoundFileDialog()
                 OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (sal_True);
+                aWarningBox.SetModalInputMode (true);
                 bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
 
                 bValidSoundFile = false;

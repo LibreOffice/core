@@ -92,7 +92,7 @@ void SearchDialog::LoadConfig()
         }
     }
     else
-        m_pWrapAroundBox->Check( sal_True );
+        m_pWrapAroundBox->Check( true );
 }
 
 void SearchDialog::SaveConfig()
@@ -139,7 +139,7 @@ void SearchDialog::SetFocusOnEdit()
     m_pSearchEdit->GrabFocus();
 }
 
-sal_Bool SearchDialog::Close()
+bool SearchDialog::Close()
 {
     sal_Bool bRet = ModelessDialog::Close();
     m_aCloseHdl.Call( this );

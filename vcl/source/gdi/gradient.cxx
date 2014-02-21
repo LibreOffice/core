@@ -265,11 +265,11 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
     return *this;
 }
 
-sal_Bool Gradient::operator==( const Gradient& rGradient ) const
+bool Gradient::operator==( const Gradient& rGradient ) const
 {
 
     if ( mpImplGradient == rGradient.mpImplGradient )
-        return sal_True;
+        return true;
 
     if ( (mpImplGradient->meStyle           == rGradient.mpImplGradient->meStyle)           &&
          (mpImplGradient->mnAngle           == rGradient.mpImplGradient->mnAngle)           &&
@@ -281,9 +281,9 @@ sal_Bool Gradient::operator==( const Gradient& rGradient ) const
          (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    &&
          (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      &&
          (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor) )
-         return sal_True;
+         return true;
     else
-        return sal_False;
+        return false;
 }
 
 SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )

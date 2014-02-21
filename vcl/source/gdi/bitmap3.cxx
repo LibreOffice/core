@@ -236,10 +236,10 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
             (*pDitherMatrix)[i][j] = (sal_uInt8) ( fVal * pMtx[i][j] );
 }
 
-sal_Bool Bitmap::Convert( BmpConversion eConversion )
+bool Bitmap::Convert( BmpConversion eConversion )
 {
     const sal_uInt16    nBitCount = GetBitCount();
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     switch( eConversion )
     {
@@ -262,7 +262,7 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
             else if( nBitCount > 4 )
                 bRet = ImplConvertDown( 4, NULL );
             else
-                bRet = sal_True;
+                bRet = true;
         }
         break;
 
@@ -288,7 +288,7 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
             else if( nBitCount > 8 )
                 bRet = ImplConvertDown( 8 );
             else
-                bRet = sal_True;
+                bRet = true;
         }
         break;
 
@@ -308,7 +308,7 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
             if( nBitCount < 24 )
                 bRet = ImplConvertUp( 24, NULL );
             else
-                bRet = sal_True;
+                bRet = true;
         }
         break;
 
@@ -324,10 +324,10 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
+bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -376,7 +376,7 @@ sal_Bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
             }
 
             aNewBmp.ReleaseAccess( pWriteAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -396,10 +396,10 @@ sal_Bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplMakeMonoDither()
+bool Bitmap::ImplMakeMonoDither()
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -451,7 +451,7 @@ sal_Bool Bitmap::ImplMakeMonoDither()
             }
 
             aNewBmp.ReleaseAccess( pWriteAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -471,12 +471,12 @@ sal_Bool Bitmap::ImplMakeMonoDither()
     return bRet;
 }
 
-sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
+bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 {
     DBG_ASSERT( nGreys == 16 || nGreys == 256, "Only 16 or 256 greyscales are supported!" );
 
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -557,7 +557,7 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                 }
 
                 aNewBmp.ReleaseAccess( pWriteAcc );
-                bRet = sal_True;
+                bRet = true;
             }
 
             ReleaseAccess( pReadAcc );
@@ -576,19 +576,19 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
         else
         {
             ReleaseAccess( pReadAcc );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
+bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
 {
     DBG_ASSERT( nBitCount > GetBitCount(), "New BitCount must be greater!" );
 
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -637,7 +637,7 @@ sal_Bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
             }
 
             aNewBmp.ReleaseAccess( pWriteAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -657,12 +657,12 @@ sal_Bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
+bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 {
     DBG_ASSERT( nBitCount <= GetBitCount(), "New BitCount must be lower ( or equal when pExtColor is set )!" );
 
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc )
     {
@@ -761,7 +761,7 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
             delete[] pErrQuad2;
 
             aNewBmp.ReleaseAccess( pWriteAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -781,11 +781,11 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplConvertGhosted()
+bool Bitmap::ImplConvertGhosted()
 {
     Bitmap              aNewBmp;
     BitmapReadAccess*   pR = AcquireReadAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pR )
     {
@@ -808,7 +808,7 @@ sal_Bool Bitmap::ImplConvertGhosted()
             {
                 pW->CopyBuffer( *pR );
                 aNewBmp.ReleaseAccess( pW );
-                bRet = sal_True;
+                bRet = true;
             }
         }
         else
@@ -834,7 +834,7 @@ sal_Bool Bitmap::ImplConvertGhosted()
                 }
 
                 aNewBmp.ReleaseAccess( pW );
-                bRet = sal_True;
+                bRet = true;
             }
         }
 
@@ -855,7 +855,7 @@ sal_Bool Bitmap::ImplConvertGhosted()
     return bRet;
 }
 
-sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
     bool bRetval(false);
 
@@ -948,7 +948,7 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
+bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
     const Size  aSize( GetSizePixel() );
     bool        bRet;
@@ -1024,12 +1024,12 @@ void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
     }
 }
 
-sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
+bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 {
     const Size  aSizePix( GetSizePixel() );
     const long  nNewWidth = FRound( aSizePix.Width() * rScaleX );
     const long  nNewHeight = FRound( aSizePix.Height() * rScaleY );
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
     if( nNewWidth && nNewHeight )
     {
@@ -1076,7 +1076,7 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                         nActY++;
                     }
 
-                    bRet = sal_True;
+                    bRet = true;
                     aNewBmp.ReleaseAccess( pWriteAcc );
                 }
 
@@ -1093,12 +1093,12 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY )
+bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY )
 {
     const Size  aSizePix( GetSizePixel() );
     const long  nNewWidth = FRound( aSizePix.Width() * rScaleX );
     const long  nNewHeight = FRound( aSizePix.Height() * rScaleY );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( ( nNewWidth > 1L ) && ( nNewHeight > 1L ) )
     {
@@ -1185,7 +1185,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
             delete[] pLutInt;
             delete[] pLutFrac;
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -1193,7 +1193,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
         if( bRet )
         {
-            bRet = sal_False;
+            bRet = false;
             const Bitmap aOriginal(*this);
             *this = aNewBmp;
             aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
@@ -1257,7 +1257,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
                 delete[] pLutInt;
                 delete[] pLutFrac;
-                bRet = sal_True;
+                bRet = true;
             }
 
             ReleaseAccess( pReadAcc );
@@ -1281,7 +1281,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
 // #i121233# Added BMP_SCALE_SUPER from symphony code
 
-sal_Bool Bitmap::ImplScaleSuper(
+bool Bitmap::ImplScaleSuper(
     const double& rScaleX,
     const double& rScaleY )
 {
@@ -2140,7 +2140,7 @@ namespace
         }
     }
 
-    sal_Bool ImplScaleConvolutionHor(
+    bool ImplScaleConvolutionHor(
         Bitmap& rSource,
         Bitmap& rTarget,
         const double& rScaleX,
@@ -2333,7 +2333,7 @@ namespace
 // #i121233# Added BMP_SCALE_LANCZOS, BMP_SCALE_BICUBIC, BMP_SCALE_BILINEAR and
 // BMP_SCALE_BOX derived from the original commit from Tomas Vajngerl (see
 // bugzilla task for deitails) Thanks!
-sal_Bool Bitmap::ImplScaleConvolution(
+bool Bitmap::ImplScaleConvolution(
     const double& rScaleX,
     const double& rScaleY,
     const Kernel& aKernel)
@@ -2444,14 +2444,14 @@ sal_Bool Bitmap::ImplScaleConvolution(
 
 // ------------------------------------------------------------------------
 
-sal_Bool Bitmap::Dither( sal_uLong nDitherFlags )
+bool Bitmap::Dither( sal_uLong nDitherFlags )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const Size aSizePix( GetSizePixel() );
 
     if( aSizePix.Width() == 1 || aSizePix.Height() == 1 )
-        bRet = sal_True;
+        bRet = true;
     else if( nDitherFlags & BMP_DITHER_MATRIX )
         bRet = ImplDitherMatrix();
     else if( nDitherFlags & BMP_DITHER_FLOYD )
@@ -2462,12 +2462,12 @@ sal_Bool Bitmap::Dither( sal_uLong nDitherFlags )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplDitherMatrix()
+bool Bitmap::ImplDitherMatrix()
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     Bitmap              aNewBmp( GetSizePixel(), 8 );
     BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc && pWriteAcc )
     {
@@ -2510,7 +2510,7 @@ sal_Bool Bitmap::ImplDitherMatrix()
             }
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     ReleaseAccess( pReadAcc );
@@ -2530,10 +2530,10 @@ sal_Bool Bitmap::ImplDitherMatrix()
     return bRet;
 }
 
-sal_Bool Bitmap::ImplDitherFloyd()
+bool Bitmap::ImplDitherFloyd()
 {
     const Size  aSize( GetSizePixel() );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
     {
@@ -2559,7 +2559,7 @@ sal_Bool Bitmap::ImplDitherFloyd()
             long*       p1T = p1;
             long*       p2T = p2;
             long*       pTmp;
-            sal_Bool        bPal = pReadAcc->HasPalette();
+            bool        bPal = pReadAcc->HasPalette();
 
             pTmp = p2T;
 
@@ -2648,7 +2648,7 @@ sal_Bool Bitmap::ImplDitherFloyd()
 
             delete[] p1;
             delete[] p2;
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pReadAcc );
@@ -2669,12 +2669,12 @@ sal_Bool Bitmap::ImplDitherFloyd()
     return bRet;
 }
 
-sal_Bool Bitmap::ImplDitherFloyd16()
+bool Bitmap::ImplDitherFloyd16()
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     Bitmap              aNewBmp( GetSizePixel(), 24 );
     BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pReadAcc && pWriteAcc )
     {
@@ -2738,7 +2738,7 @@ sal_Bool Bitmap::ImplDitherFloyd16()
         // Destroy row buffer
         delete[] pErrQuad1;
         delete[] pErrQuad2;
-        bRet = sal_True;
+        bRet = true;
     }
 
     ReleaseAccess( pReadAcc );
@@ -2758,12 +2758,12 @@ sal_Bool Bitmap::ImplDitherFloyd16()
     return bRet;
 }
 
-sal_Bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
+bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 {
-    sal_Bool bRet;
+    bool bRet;
 
     if( GetColorCount() <= (sal_uLong) nColorCount )
-        bRet = sal_True;
+        bRet = true;
     else if( nColorCount )
     {
         if( BMP_REDUCE_SIMPLE == eReduce )
@@ -2774,18 +2774,18 @@ sal_Bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
             bRet = ImplReduceMedian( nColorCount );
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }
 
-sal_Bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
+bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 {
     Bitmap              aNewBmp;
     BitmapReadAccess*   pRAcc = AcquireReadAccess();
     const sal_uInt16        nColCount = std::min( nColorCount, (sal_uInt16) 256 );
     sal_uInt16              nBitCount;
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( nColCount <= 2 )
         nBitCount = 1;
@@ -2822,7 +2822,7 @@ sal_Bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
             }
 
             aNewBmp.ReleaseAccess( pWAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pRAcc );
@@ -2861,11 +2861,11 @@ extern "C" int SAL_CALL ImplPopularCmpFnc( const void* p1, const void* p2 )
     return nRet;
 }
 
-sal_Bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
+bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 {
     BitmapReadAccess*   pRAcc = AcquireReadAccess();
     sal_uInt16              nBitCount;
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( nColCount > 256 )
         nColCount = 256;
@@ -2986,7 +2986,7 @@ sal_Bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
             delete[] pIndexMap;
             aNewBmp.ReleaseAccess( pWAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         delete[] pCountTable;
@@ -3006,11 +3006,11 @@ sal_Bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
     return bRet;
 }
 
-sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
+bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 {
     BitmapReadAccess*   pRAcc = AcquireReadAccess();
     sal_uInt16              nBitCount;
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( nColCount < 17 )
         nBitCount = 4;
@@ -3076,7 +3076,7 @@ sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
             rtl_freeMemory( pColBuf );
             aNewBmp.ReleaseAccess( pWAcc );
-            bRet = sal_True;
+            bRet = true;
         }
 
         ReleaseAccess( pRAcc );
@@ -3226,28 +3226,28 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     }
 }
 
-sal_Bool Bitmap::Vectorize( PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
+bool Bitmap::Vectorize( PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
 }
 
-sal_Bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
+bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rMtf, cReduce, nFlags, pProgress );
 }
 
-sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
+bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                      short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-                     double fGamma, sal_Bool bInvert )
+                     double fGamma, bool bInvert )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // nothing to do => return quickly
     if( !nLuminancePercent && !nContrastPercent &&
         !nChannelRPercent && !nChannelGPercent && !nChannelBPercent &&
         ( fGamma == 1.0 ) && !bInvert )
     {
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
@@ -3365,7 +3365,7 @@ sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             delete[] cMapG;
             delete[] cMapB;
             ReleaseAccess( pAcc );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 

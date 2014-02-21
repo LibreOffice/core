@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
             if (pSubMenu)
             {
                 for (sal_uInt16 i = MN_SORT_ACTION; i < MN_SORT_ACTION + 5; i++)
-                    pSubMenu->CheckItem(i, sal_False);
+                    pSubMenu->CheckItem(i, false);
 
                 pSubMenu->CheckItem(nColumn + MN_SORT_ACTION);
             }

@@ -183,10 +183,10 @@ namespace dbmm
         return nResult;
     }
 
-    sal_Bool MacroMigrationDialog::Close()
+    bool MacroMigrationDialog::Close()
     {
         if ( m_pData->bMigrationIsRunning )
-            return sal_False;
+            return false;
         return MacroMigrationDialog_Base::Close();
     }
 

@@ -90,10 +90,10 @@ public:
     void Hide ();
 
 protected:
-    virtual sal_Bool Docking( const Point& rPos, Rectangle& rRect );
+    virtual bool Docking( const Point& rPos, Rectangle& rRect );
     virtual void     EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
     virtual void     ToggleFloatingMode();
-    virtual sal_Bool PrepareToggleFloatingMode();
+    virtual bool PrepareToggleFloatingMode();
     virtual void     StartDocking();
 
 private:

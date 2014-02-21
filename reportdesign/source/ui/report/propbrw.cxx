@@ -249,7 +249,7 @@ OUString PropBrw::getCurrentPage() const
 }
 //----------------------------------------------------------------------------
 
-sal_Bool PropBrw::Close()
+bool PropBrw::Close()
 {
     m_xLastSection.clear();
     // suspend the controller (it is allowed to veto)
@@ -259,7 +259,7 @@ sal_Bool PropBrw::Close()
         {
             Reference< XController > xController( m_xMeAsFrame->getController() );
             if ( xController.is() && !xController->suspend( sal_True ) )
-                return sal_False;
+                return false;
         }
         catch( const Exception& )
         {
@@ -273,7 +273,7 @@ sal_Bool PropBrw::Close()
 
     m_pDesignView->getController().executeUnChecked(SID_PROPERTYBROWSER_LAST_PAGE,uno::Sequence< beans::PropertyValue>());
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------

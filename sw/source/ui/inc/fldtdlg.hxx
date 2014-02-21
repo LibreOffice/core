@@ -38,7 +38,7 @@ class SwFldDlg: public SfxTabDialog
     sal_uInt16          m_nFuncId;
     sal_uInt16          m_nDbId;
 
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId );
     virtual void        Activate();
     virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage);

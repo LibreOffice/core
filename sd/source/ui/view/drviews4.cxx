@@ -914,7 +914,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
             SD_RESSTR(STR_POPUP_DELETE_SNAPLINE));
     }
 
-    pMenu->RemoveDisabledEntries(sal_False, sal_False);
+    pMenu->RemoveDisabledEntries(false, false);
 
     const sal_uInt16 nResult = pMenu->Execute(
         GetActiveWindow(),

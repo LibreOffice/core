@@ -109,7 +109,7 @@ SwFldDlg::~SwFldDlg()
 {
 }
 
-sal_Bool SwFldDlg::Close()
+bool SwFldDlg::Close()
 {
     m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,

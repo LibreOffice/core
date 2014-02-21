@@ -515,11 +515,11 @@ public:
     int             CreateTab();
     int             KillTab();
 
-    int             StatVRuler() const { return ((Window*)m_pVRuler)->IsVisible(); }
+    bool            StatVRuler() const { return ((Window*)m_pVRuler)->IsVisible(); }
     void            ChangeVRulerMetric(FieldUnit eUnit);
     void            GetVRulerMetric(FieldUnit& rToFill) const;
 
-    int             StatTab() const { return ((Window*)m_pHRuler)->IsVisible(); }
+    bool            StatTab() const { return ((Window*)m_pHRuler)->IsVisible(); }
     SvxRuler&       GetHRuler()    { return *m_pHRuler; }
     SvxRuler&       GetVRuler()    { return *m_pVRuler; }
     void            InvalidateRulerPos();

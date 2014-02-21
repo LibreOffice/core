@@ -107,7 +107,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             xBmp->getSize().Width == 200 && xBmp->getSize().Height == 200);
 
     CPPUNIT_ASSERT_MESSAGE( "alpha state mismatch",
-                            xBmp->hasAlpha() == aContainedBmpEx.IsTransparent());
+                            bool(xBmp->hasAlpha()) == aContainedBmpEx.IsTransparent());
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
                             xBmp->getScaledBitmap( geometry::RealSize2D(500,500), sal_False ).is());

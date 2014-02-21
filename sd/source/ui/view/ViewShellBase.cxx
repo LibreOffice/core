@@ -1212,7 +1212,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
 void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
 {
     if (mpViewTabBar.is()
-        && (mpViewTabBar->GetTabControl()->IsVisible()==sal_True) != bShow)
+        && mpViewTabBar->GetTabControl()->IsVisible() != bShow)
     {
         mpViewTabBar->GetTabControl()->Show(bShow ? sal_True : sal_False);
         mrBase.Rearrange();

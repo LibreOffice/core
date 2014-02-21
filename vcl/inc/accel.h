@@ -31,7 +31,7 @@ public:
     KeyCode         maKeyCode;
     Accelerator*    mpAccel;
     Accelerator*    mpAutoAccel;
-    sal_Bool            mbEnabled;
+    bool            mbEnabled;
 };
 
 void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 );

@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 
@@ -171,7 +172,9 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
 
     m_pCommandThread->execCondition().wait();
 
-    return m_pCommandThread->result();
+    return m_pCommandThread->result()
+        ? css::ui::dialogs::ExecutableDialogResults::OK
+        : css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
 void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
@@ -326,7 +329,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
 
         if ( aType == "checkbox" )
         {
-            sal_Bool bControlValue;
+            bool bControlValue;
             if ( ( rValue >>= bControlValue ) && bControlValue )
                 aBuffer.appendAscii( " true" );
             else
@@ -808,7 +811,7 @@ void UnxFilePicker::appendEscaped( OUStringBuffer &rBuffer, const OUString &rStr
     rBuffer.appendAscii( "\"", 1 );
 }
 
-sal_Bool UnxFilePicker::controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
+bool UnxFilePicker::controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
 {
     typedef struct {
         sal_Int16 nId;
@@ -856,13 +859,13 @@ sal_Bool UnxFilePicker::controlIdInfo( sal_Int16 nControlId, OUString &rType, sa
         rType = *(pPtr->pType);
         rTitleId = pPtr->nTitle;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool UnxFilePicker::controlActionInfo( sal_Int16 nControlAction, OUString &rType )
+bool UnxFilePicker::controlActionInfo( sal_Int16 nControlAction, OUString &rType )
 {
     typedef struct {
         sal_Int16 nId;
@@ -890,7 +893,7 @@ sal_Bool UnxFilePicker::controlActionInfo( sal_Int16 nControlAction, OUString &r
 
     rType = pPtr->pType;
 
-    return sal_True;
+    return true;
 }
 
 void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )

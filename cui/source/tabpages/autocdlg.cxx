@@ -151,12 +151,12 @@ static sal_Bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
     {
         if( 0 == rCmpClass.compareString(rEntry, rLB.GetEntry(i) ))
         {
-            rLB.SelectEntryPos(i, sal_True);
+            rLB.SelectEntryPos(i, true);
             return sal_True;
         }
     }
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        rLB.SelectEntryPos(nSelPos, sal_False);
+        rLB.SelectEntryPos(nSelPos, false);
     return sal_False;
 }
 

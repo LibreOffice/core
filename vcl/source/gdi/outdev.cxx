@@ -392,7 +392,7 @@ OutputDevice::~OutputDevice()
 
     if ( GetUnoGraphicsList() )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( sal_False );
+        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
         if ( pWrapper )
             pWrapper->ReleaseAllGraphics( this );
         delete mpUnoGraphicsList;
@@ -457,9 +457,9 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
     return bHasSupport;
 }
 
-void OutputDevice::EnableRTL( sal_Bool bEnable )
+void OutputDevice::EnableRTL( bool bEnable )
 {
-    mbEnableRTL = (bEnable != 0);
+    mbEnableRTL = bEnable;
     if( meOutDevType == OUTDEV_VIRDEV )
     {
         // virdevs default to not mirroring, they will only be set to mirroring
@@ -555,7 +555,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
             {
                 // steal the wingraphics from the other outdev
                 mpGraphics = pReleaseOutDev->mpGraphics;
-                pReleaseOutDev->ImplReleaseGraphics( sal_False );
+                pReleaseOutDev->ImplReleaseGraphics( false );
             }
             else
             {
@@ -670,7 +670,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
     return mpGraphics;
 }
 
-void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
+void OutputDevice::ImplReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -820,7 +820,7 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-sal_Bool OutputDevice::ImplIsRecordLayout() const
+bool OutputDevice::ImplIsRecordLayout() const
 {
     return mpOutDevData && mpOutDevData->mpRecordLayout;
 }
@@ -994,7 +994,7 @@ void OutputDevice::SetClipRegion()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( Region(), sal_False ) );
+        mpMetaFile->AddAction( new MetaClipRegionAction( Region(), false ) );
 
     ImplSetClipRegion( NULL );
 
@@ -1006,7 +1006,7 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, sal_True ) );
+        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, true ) );
 
     if ( rRegion.IsNull() )
     {
@@ -1130,7 +1130,7 @@ void OutputDevice::SetLineColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), sal_False ) );
+        mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
 
     if ( mbLineColor )
     {
@@ -1190,7 +1190,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
     Color aColor = ImplDrawModeToColor( rColor );
 
     if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( aColor, sal_True ) );
+        mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
 
     if( ImplIsColorTransparent( aColor ) )
     {
@@ -1219,7 +1219,7 @@ void OutputDevice::SetFillColor()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), sal_False ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
 
     if ( mbFillColor )
     {
@@ -1275,7 +1275,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
     }
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( aColor, sal_True ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
 
     if ( ImplIsColorTransparent( aColor ) )
     {
@@ -1328,7 +1328,7 @@ void OutputDevice::SetRefPoint()
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRefPointAction( Point(), sal_False ) );
+        mpMetaFile->AddAction( new MetaRefPointAction( Point(), false ) );
 
     mbRefPoint = false;
     maRefPoint.X() = maRefPoint.Y() = 0L;
@@ -1341,7 +1341,7 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 {
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, sal_True ) );
+        mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, true ) );
 
     mbRefPoint = true;
     maRefPoint = rRefPoint;
@@ -2459,9 +2459,9 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
     mpMetaFile = pMtf;
 }
 
-void OutputDevice::EnableOutput( sal_Bool bEnable )
+void OutputDevice::EnableOutput( bool bEnable )
 {
-    mbOutput = (bEnable != 0);
+    mbOutput = bEnable;
 
     if( mpAlphaVDev )
         mpAlphaVDev->EnableOutput( bEnable );
@@ -2510,7 +2510,7 @@ sal_uLong OutputDevice::GetColorCount() const
     return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );
 }
 
-sal_Bool OutputDevice::HasAlpha()
+bool OutputDevice::HasAlpha()
 {
     return mpAlphaVDev != NULL;
 }

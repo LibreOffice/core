@@ -149,13 +149,13 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     {
         case Font_PageNumber:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
-            pFont->SetTransparent(sal_True);
+            pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_BOLD);
             break;
 
         case Font_PageCount:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
-            pFont->SetTransparent(sal_True);
+            pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_NORMAL);
             {
                 const Size aSize (pFont->GetSize());

@@ -1065,7 +1065,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 
     // #100119# Get all resize events, even if height or width 0, or invisible
     if ( GetWindow() )
-        GetWindow()->EnableAllResize( sal_True );
+        GetWindow()->EnableAllResize( true );
 }
 
 void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
@@ -1627,7 +1627,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                         // support transparency only for special controls
                         pWindow->SetBackground();
                         pWindow->SetControlBackground();
-                        pWindow->SetPaintTransparent( sal_True );
+                        pWindow->SetPaintTransparent( true );
                         break;
                     }
 
@@ -1660,7 +1660,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                         case WINDOW_RADIOBUTTON:
                         case WINDOW_GROUPBOX:
                         case WINDOW_FIXEDLINE:
-                            pWindow->SetPaintTransparent( sal_False );
+                            pWindow->SetPaintTransparent( false );
                         default: ;
                     }
                     pWindow->Invalidate();  // Invalidate if control does not respond to it
@@ -1862,7 +1862,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
         break;
         case BASEPROPERTY_AUTOMNEMONICS:
         {
-            sal_Bool bAutoMnemonics = false;
+            bool bAutoMnemonics = false;
             Value >>= bAutoMnemonics;
             AllSettings aSettings = pWindow->GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -2314,9 +2314,9 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
                 pWindow->Show();
                 pWindow->Update();
-                pWindow->SetParentUpdateMode( sal_False );
+                pWindow->SetParentUpdateMode( false );
                 pWindow->Hide();
-                pWindow->SetParentUpdateMode( sal_True );
+                pWindow->SetParentUpdateMode( true );
 
                 pWindow->SetPosPixel( aOldPos );
                 if ( bWasVisible )
@@ -2341,10 +2341,10 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             {
                 sal_Bool bOldNW =pWindow->IsNativeWidgetEnabled();
                 if( bOldNW )
-                    pWindow->EnableNativeWidget(sal_False);
+                    pWindow->EnableNativeWidget(false);
                 pWindow->PaintToDevice( pDev, aP, aSz );
                 if( bOldNW )
-                    pWindow->EnableNativeWidget(sal_True);
+                    pWindow->EnableNativeWidget(true);
             }
         }
     }

@@ -39,12 +39,12 @@ public:
                 KeyCode( const ResId& rResId );
                 KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier = 0 )
                     { nCode = nKey | nModifier; eFunc = KEYFUNC_DONTKNOW; }
-                KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_Bool bMod2, sal_Bool bMod3 );
+                KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 );
                 KeyCode( KeyFuncType eFunction );
 
     sal_uInt16      GetFullCode() const { return nCode; }
     KeyFuncType GetFullFunction() const { return eFunc; }
-    sal_Bool        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
+    bool        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
 
     sal_uInt16      GetCode() const
                     { return (nCode & KEY_CODE); }
@@ -53,30 +53,30 @@ public:
                     { return (nCode & KEY_MODTYPE); }
     sal_uInt16      GetAllModifier() const
                     { return (nCode & KEY_ALLMODTYPE); }
-    sal_Bool        IsShift() const
+    bool        IsShift() const
                     { return ((nCode & KEY_SHIFT) != 0); }
-    sal_Bool        IsMod1() const
+    bool        IsMod1() const
                     { return ((nCode & KEY_MOD1) != 0); }
-    sal_Bool        IsMod2() const
+    bool        IsMod2() const
                     { return ((nCode & KEY_MOD2) != 0); }
-    sal_Bool        IsMod3() const
+    bool        IsMod3() const
                     { return ((nCode & KEY_MOD3) != 0); }
     sal_uInt16      GetGroup() const
                     { return (nCode & KEYGROUP_TYPE); }
 
     OUString        GetName( Window* pWindow = NULL ) const;
 
-    sal_Bool        IsFunction() const
+    bool        IsFunction() const
                     { return ((eFunc != KEYFUNC_DONTKNOW) ? sal_True : sal_False); }
 
     KeyFuncType GetFunction() const;
 
     KeyCode&    operator = ( const KeyCode& rKeyCode );
-    sal_Bool        operator ==( const KeyCode& rKeyCode ) const;
-    sal_Bool        operator !=( const KeyCode& rKeyCode ) const;
+    bool        operator ==( const KeyCode& rKeyCode ) const;
+    bool        operator !=( const KeyCode& rKeyCode ) const;
 };
 
-inline KeyCode::KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_Bool bMod2, sal_Bool bMod3 )
+inline KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 )
 {
     nCode = nKey;
     if( bShift )
@@ -90,7 +90,7 @@ inline KeyCode::KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_B
     eFunc = KEYFUNC_DONTKNOW;
 }
 
-inline sal_Bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
+inline bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (nCode == rKeyCode.nCode);
@@ -98,7 +98,7 @@ inline sal_Bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
         return (GetFunction() == rKeyCode.GetFunction());
 }
 
-inline sal_Bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
+inline bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (nCode != rKeyCode.nCode);
@@ -106,7 +106,7 @@ inline sal_Bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
         return (GetFunction() != rKeyCode.GetFunction());
 }
 
-inline sal_Bool KeyCode::IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const
+inline bool KeyCode::IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (GetFullCode() == rKeyCode.GetFullCode());

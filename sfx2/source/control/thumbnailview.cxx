@@ -64,7 +64,7 @@ ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableT
 ThumbnailView::~ThumbnailView()
 {
     com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
-            xComponent(GetAccessible(sal_False),
+            xComponent(GetAccessible(false),
                        com::sun::star::uno::UNO_QUERY);
 
     if (xComponent.is())
@@ -497,7 +497,7 @@ ThumbnailViewItem* ThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
 
 void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
 {
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( sal_False ) );
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( false ) );
 
     if( pAcc )
         pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
@@ -505,7 +505,7 @@ void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const ::com::sun::s
 
 bool ThumbnailView::ImplHasAccessibleListeners()
 {
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( sal_False ) );
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( false ) );
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
@@ -899,7 +899,7 @@ void ThumbnailView::GetFocus()
     }
 
     // Tell the accessible object that we got the focus.
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( sal_False ) );
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( false ) );
     if( pAcc )
         pAcc->GetFocus();
 
@@ -913,7 +913,7 @@ void ThumbnailView::LoseFocus()
     Control::LoseFocus();
 
     // Tell the accessible object that we lost the focus.
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( sal_False ) );
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation( GetAccessible( false ) );
     if( pAcc )
         pAcc->LoseFocus();
 }

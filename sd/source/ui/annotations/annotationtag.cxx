@@ -598,7 +598,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     const int BORDER_Y = 4; // pixels
 
     maSize = Size( aVDev.GetTextWidth( sAuthor ) + 2*BORDER_X, aVDev.GetTextHeight() + 2*BORDER_Y );
-    aVDev.SetOutputSizePixel( maSize, sal_False );
+    aVDev.SetOutputSizePixel( maSize, false );
 
     Color aBorderColor( maColor );
 

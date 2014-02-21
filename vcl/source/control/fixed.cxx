@@ -91,7 +91,7 @@ void FixedText::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 }
 
 // -----------------------------------------------------------------------
@@ -118,8 +118,8 @@ const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
 
 // -----------------------------------------------------------------------
 
-void FixedText::ImplInitSettings( sal_Bool bFont,
-                                  sal_Bool bForeground, sal_Bool bBackground )
+void FixedText::ImplInitSettings( bool bFont,
+                                  bool bForeground, bool bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -128,16 +128,16 @@ void FixedText::ImplInitSettings( sal_Bool bFont,
         Window* pParent = GetParent();
         if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
         {
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( true );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( true );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( false );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( false );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -268,7 +268,7 @@ void FixedText::Paint( const Rectangle& )
 void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       sal_uLong nFlags )
 {
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -330,24 +330,24 @@ void FixedText::StateChanged( StateChangedType nType )
         if ( (GetPrevStyle() & FIXEDTEXT_VIEW_STYLE) !=
              (GetStyle() & FIXEDTEXT_VIEW_STYLE) )
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitSettings( true, false, false );
             Invalidate();
         }
     }
     else if ( (nType == STATE_CHANGE_ZOOM)  ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -363,7 +363,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
@@ -511,7 +511,7 @@ SelectableFixedText::SelectableFixedText(Window* pParent, WinBits nStyle)
     // make it transparent
     SetControlBackground();
     SetBackground();
-    SetPaintTransparent( sal_True );
+    SetPaintTransparent( true );
 }
 
 // -----------------------------------------------------------------------
@@ -529,7 +529,7 @@ void FixedLine::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    ImplInitSettings( sal_True, sal_True, sal_True );
+    ImplInitSettings( true, true, true );
 }
 
 // -----------------------------------------------------------------------
@@ -556,8 +556,8 @@ const Color& FixedLine::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
 
 // -----------------------------------------------------------------------
 
-void FixedLine::ImplInitSettings( sal_Bool bFont,
-                                  sal_Bool bForeground, sal_Bool bBackground )
+void FixedLine::ImplInitSettings( bool bFont,
+                                  bool bForeground, bool bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -566,16 +566,16 @@ void FixedLine::ImplInitSettings( sal_Bool bFont,
         Window* pParent = GetParent();
         if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
         {
-            EnableChildTransparentMode( sal_True );
+            EnableChildTransparentMode( true );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( sal_True );
+            SetPaintTransparent( true );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( sal_False );
+            EnableChildTransparentMode( false );
             SetParentClipMode( 0 );
-            SetPaintTransparent( sal_False );
+            SetPaintTransparent( false );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -737,17 +737,17 @@ void FixedLine::StateChanged( StateChangedType nType )
               (nType == STATE_CHANGE_STYLE) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( sal_True, sal_False, sal_False );
+        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( sal_False, sal_True, sal_False );
+        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( sal_False, sal_False, sal_True );
+        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -763,7 +763,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( sal_True, sal_True, sal_True );
+        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }
@@ -800,16 +800,16 @@ void FixedBitmap::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( true );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( false );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( false );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -974,7 +974,7 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 void FixedImage::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
-    mbInUserDraw = sal_False;
+    mbInUserDraw = false;
     Control::ImplInit( pParent, nStyle, NULL );
     ImplInitSettings();
 }
@@ -995,16 +995,16 @@ void FixedImage::ImplInitSettings()
     Window* pParent = GetParent();
     if ( pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
-        EnableChildTransparentMode( sal_True );
+        EnableChildTransparentMode( true );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        SetPaintTransparent( sal_True );
+        SetPaintTransparent( true );
         SetBackground();
     }
     else
     {
-        EnableChildTransparentMode( sal_False );
+        EnableChildTransparentMode( false );
         SetParentClipMode( 0 );
-        SetPaintTransparent( sal_False );
+        SetPaintTransparent( false );
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
@@ -1082,10 +1082,10 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         }
     }
 
-    mbInUserDraw = sal_True;
+    mbInUserDraw = true;
     UserDrawEvent aUDEvt( pDev, Rectangle( rPos, rSize ), 0, nStyle );
     UserDraw( aUDEvt );
-    mbInUserDraw = sal_False;
+    mbInUserDraw = false;
 }
 
 // -----------------------------------------------------------------------
@@ -1194,10 +1194,10 @@ void FixedImage::SetImage( const Image& rImage )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FixedImage::SetModeImage( const Image& rImage )
+bool FixedImage::SetModeImage( const Image& rImage )
 {
     SetImage( rImage );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

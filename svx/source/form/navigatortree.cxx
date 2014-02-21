@@ -423,10 +423,10 @@ namespace svxform
                         pFormShell->GetImpl()->checkControlConversionSlotsForCurrentSelection( *aContextMenu.GetPopupMenu( SID_FM_CHANGECONTROLTYPE ) );
                     }
                     else
-                        aContextMenu.EnableItem( SID_FM_CHANGECONTROLTYPE, sal_False );
+                        aContextMenu.EnableItem( SID_FM_CHANGECONTROLTYPE, false );
 
                     // jetzt alles, was disabled wurde, wech
-                    aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+                    aContextMenu.RemoveDisabledEntries(true, true);
                     //////////////////////////////////////////////////////////
                     // OpenReadOnly setzen
 

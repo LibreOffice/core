@@ -1237,7 +1237,7 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
                             GetGrfSize( aSz );
 
                             VirtualDevice aVirtDev;
-                            aVirtDev.EnableOutput( sal_False );
+                            aVirtDev.EnableOutput( false );
 
                             MapMode aTmp( GetWin()->GetMapMode() );
                             aTmp.SetOrigin( aPt );

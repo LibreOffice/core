@@ -319,7 +319,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aFormatHtmlCB.Check((nMailingMode & TXTFORMAT_HTML) != 0);
     aFormatRtfCB.Check((nMailingMode & TXTFORMAT_RTF) != 0);
 
-    aAllRB.Check(sal_True);
+    aAllRB.Check(true);
 
     // Install handlers
     Link aLk = LINK(this, SwMailMergeDlg, ButtonHdl);

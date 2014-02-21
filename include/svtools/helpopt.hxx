@@ -36,9 +36,9 @@ public:
                     virtual ~SvtHelpOptions();
 
     void            SetExtendedHelp( sal_Bool b );
-    sal_Bool        IsExtendedHelp() const;
+    bool        IsExtendedHelp() const;
     void            SetHelpTips( sal_Bool b );
-    sal_Bool        IsHelpTips() const;
+    bool        IsHelpTips() const;
 
     const OUString& GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const OUString& rStyleSheet);

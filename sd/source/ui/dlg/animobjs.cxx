@@ -811,11 +811,11 @@ void AnimationWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-sal_Bool AnimationWindow::Close()
+bool AnimationWindow::Close()
 {
     if( maPlayLock.isLocked() )
     {
-        return sal_False;
+        return false;
     }
     else
     {
@@ -826,7 +826,7 @@ sal_Bool AnimationWindow::Close()
 
         SfxDockingWindow::Close();
 
-        return sal_True;
+        return true;
     }
 }
 
@@ -1132,7 +1132,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             aAnimBmp.aSizePix = aBitmapSize;
             aAnimBmp.nWait = nTime;
             aAnimBmp.eDisposal = DISPOSE_BACK;
-            aAnimBmp.bUserInput = sal_False;
+            aAnimBmp.bUserInput = false;
 
             aAnimation.Insert( aAnimBmp );
             aAnimation.SetDisplaySizePixel( aMaxSizePix );

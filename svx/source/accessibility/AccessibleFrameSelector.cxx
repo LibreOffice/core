@@ -147,7 +147,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleParent(  )
     IsValid();
     Reference< XAccessible > xRet;
     if(meBorder == FRAMEBORDER_NONE)
-        xRet = mpFrameSel->GetParent()->GetAccessible( sal_True );
+        xRet = mpFrameSel->GetParent()->GetAccessible( true );
     else
         xRet = mpFrameSel->CreateAccessible();
     return xRet;

@@ -214,7 +214,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 
                 m_pConnData->ResetConnLines();
                 m_pTableControl->lateInit();
-                m_pJoinControl->m_aCBNatural.Check(sal_False);
+                m_pJoinControl->m_aCBNatural.Check(false);
                 m_pTableControl->enableRelation(false);
                 OUString sEmpty;
                 m_pConnData->AppendConnLine(sEmpty,sEmpty);

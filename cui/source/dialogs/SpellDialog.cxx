@@ -422,7 +422,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
  */
 IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
 {
-    pThis->SetUpdateMode( sal_False );
+    pThis->SetUpdateMode( false );
     //show or hide AutoCorrect depending on the modules abilities
     pThis->m_pAutoCorrPB->Show(pThis->rParent.HasAutoCorrection());
     pThis->SpellContinue_Impl();
@@ -445,7 +445,7 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     pThis->LockFocusChanges(false);
     //show grammar CheckBox depending on the modules abilities
     pThis->m_pCheckGrammarCB->Check( pThis->rParent.IsGrammarChecking() );
-    pThis->SetUpdateMode( sal_True );
+    pThis->SetUpdateMode( true );
     pThis->Show();
     return 0;
 };
@@ -742,12 +742,12 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
 
 // -----------------------------------------------------------------------
 
-sal_Bool SpellDialog::Close()
+bool SpellDialog::Close()
 {
     GetBindings().GetDispatcher()->
         Execute(rParent.GetType(),
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
-    return sal_True;
+    return true;
 }
 // -----------------------------------------------------------------------
 
@@ -1641,8 +1641,8 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, com::sun:
 void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_uInt16 nStart, sal_uInt16 nEnd, bool bGrammarError)
 {
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR, sal_True );
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT, sal_True );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR, true );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT, true );
     pTextEngine->SetAttrib( TextAttribFontWeight(WEIGHT_BOLD), 0, nStart, nEnd );
     pTextEngine->SetAttrib( TextAttribFontColor(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED), 0, nStart, nEnd );
     m_nErrorStart = nStart;
@@ -1695,7 +1695,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
         delete pNewBackground;
     }
-    pTextEngine->SetModified(sal_True);
+    pTextEngine->SetModified(true);
 
     //adjust end position
     long nEndTemp = m_nErrorEnd;
@@ -2012,8 +2012,8 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
     //remove error marks
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR, sal_True );
-    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT, sal_True );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR, true );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT, true );
 
     //put the appropriate action on the Undo-stack
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(

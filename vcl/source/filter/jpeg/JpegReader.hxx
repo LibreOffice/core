@@ -43,7 +43,7 @@ struct JPEGCreateBitmapParam
     long     bGray;
 
     long     nAlignedWidth;  // these members will be filled by the
-    long     bTopDown;      // CreateBitmap method in svtools
+    bool     bTopDown;      // CreateBitmap method in svtools
 };
 
 class JPEGReader : public GraphicReader

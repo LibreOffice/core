@@ -142,7 +142,7 @@ public:
     virtual        ~ExtMgrDialog();
 
     virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const OUString &rText,
@@ -216,7 +216,7 @@ public:
 
     virtual short   Execute();
     virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const OUString &rText,

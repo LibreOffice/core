@@ -266,7 +266,7 @@ void ScMoveTableDlg::InitDocListBox()
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 
-    pLbDoc->SetUpdateMode( sal_True );
+    pLbDoc->SetUpdateMode( true );
     pLbDoc->InsertEntry(msNewDoc);
     pLbDoc->SelectEntryPos( nSelPos );
 }
@@ -336,7 +336,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
             }
         }
         pLbTable->InsertEntry( ScGlobal::GetRscString(STR_MOVE_TO_END) );
-        pLbTable->SetUpdateMode( sal_True );
+        pLbTable->SetUpdateMode( true );
         pLbTable->SelectEntryPos( 0 );
         ResetRenameInput();
     }

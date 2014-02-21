@@ -65,7 +65,7 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
-    virtual sal_Bool Close();
+    virtual bool Close();
 
     DECL_LINK( OnAsyncGetFocus, void* );
 

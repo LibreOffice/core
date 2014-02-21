@@ -58,7 +58,7 @@ public:
     sal_uInt32       nList;       // objectdata, first record
     sal_uInt32       ListEnd;     // objectdata, last record
     Seitenformat     Paper;       // data of paper
-    sal_Bool         BorderClip;  // clip objects at border (cheat due to alignment in NT)
+    bool         BorderClip;  // clip objects at border (cheat due to alignment in NT)
     sal_uInt8        StdPg;       // insert which standardpage ?
     PointType        U;           // origin
     sal_Int16        HlpLnH[20];  // guides
@@ -115,8 +115,8 @@ public:
     ObjLineType  ShdL;          // shadow outline (new 2.0)
     ObjAreaType  ShdF;          // shadow inside  (new 2.0)
     PointType    ShdVers;       // shadow offset max. 300.00%
-    sal_Bool     ShdAbs;        // True-> shadow offset is absolute instead of relative to font size
-    sal_Bool     NoSpc;         // True-> no space (for background area)
+    bool     ShdAbs;        // True-> shadow offset is absolute instead of relative to font size
+    bool     NoSpc;         // True-> no space (for background area)
     ObjAreaType  BackF;         // background area
     sal_uInt32 GetFont();
     void   SetFont(sal_uInt32 FontID);
@@ -139,7 +139,7 @@ public:
     sal_uInt8      Art;
     sal_uInt8      Layer;
     friend SvStream& ReadObjkType(SvStream& rIStream, ObjkType& rObjk);
-    friend sal_Bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
+    friend bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
 };
 
@@ -265,9 +265,9 @@ public:
     PointType   PixSize;      // size in Pixel (0 for vector)
     GrafStat    Format;       // see: GpmDef.Pas
     sal_uInt8   nPlanes;      // number of bitplanes (0 for vector)
-    sal_Bool    RawOut;       // output as raw  ?
-    sal_Bool    InvOut;       // output inverted ?
-    sal_Bool    LightOut;     // brighten? (SD20)
+    bool    RawOut;       // output as raw  ?
+    bool    InvOut;       // output inverted ?
+    bool    LightOut;     // brighten? (SD20)
     sal_uInt8   GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=HPGL 4=Raw $FF=Undef (to fix DrawBmp)
     INetURLObject aFltPath;   // for GraphicFilter
     friend SvStream& ReadBmapType(SvStream& rIStream, BmapType& rBmap);
@@ -300,11 +300,11 @@ class SgfFontOne {
 public:
     SgfFontOne*      Next;        // pointer to list
     sal_uInt32       IFID;
-    sal_Bool         Bold;
-    sal_Bool         Ital;
-    sal_Bool         Sans;
-    sal_Bool         Serf;
-    sal_Bool         Fixd;
+    bool         Bold;
+    bool         Ital;
+    bool         Sans;
+    bool         Serf;
+    bool         Fixd;
     FontFamily       SVFamil;
     rtl_TextEncoding SVChSet;
     OUString         SVFName;    // e.g. "Times New Roman" = 15 chars

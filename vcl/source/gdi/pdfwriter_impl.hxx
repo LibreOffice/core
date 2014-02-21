@@ -1010,7 +1010,7 @@ i12626
     bool checkEmitStructure();
 
     /* draws an emphasis mark */
-    void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     bool            m_bIsPDF_A1;
@@ -1153,7 +1153,7 @@ public:
     void setTextFillColor()
     {
         m_aGraphicsStack.front().m_aFont.SetFillColor( Color( COL_TRANSPARENT ) );
-        m_aGraphicsStack.front().m_aFont.SetTransparent( sal_True );
+        m_aGraphicsStack.front().m_aFont.SetTransparent( true );
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
     }
     void setTextColor( const Color& rColor )

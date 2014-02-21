@@ -786,7 +786,7 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     if ( pSalMenu != NULL )
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
-        pGtkSalMenu->Display( sal_True );
+        pGtkSalMenu->Display( true );
         pGtkSalMenu->UpdateFull();
     }
 }
@@ -807,7 +807,7 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
     if ( pSalMenu ) {
         GtkSalMenu* pGtkSalMenu = static_cast< GtkSalMenu* >( pSalMenu );
-        pGtkSalMenu->Display( sal_False );
+        pGtkSalMenu->Display( false );
     }
 }
 #endif
@@ -1534,10 +1534,10 @@ void GtkSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     }
 }
 
-sal_Bool GtkSalFrame::PostEvent( void* pData )
+bool GtkSalFrame::PostEvent( void* pData )
 {
     getDisplay()->SendInternalEvent( this, pData );
-    return sal_True;
+    return true;
 }
 
 void GtkSalFrame::SetTitle( const OUString& rTitle )
@@ -1806,7 +1806,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
                  * showing the float (cannot grab it to the float
                  * before show).
                  */
-                 m_pParent->grabPointer( sal_True, sal_True );
+                 m_pParent->grabPointer( true, true );
             }
 
             guint32 nUserTime = 0;
@@ -1853,7 +1853,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
             {
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
-                    grabPointer( sal_True, sal_True );
+                    grabPointer( true, true );
                 // #i44068# reset parent's IM context
                 if( m_pParent )
                     m_pParent->EndExtTextInput(0);
@@ -1867,7 +1867,7 @@ void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
             {
                 m_nFloats--;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 0)
-                    grabPointer( sal_False );
+                    grabPointer( false );
             }
             gtk_widget_hide( m_pWindow );
             if( m_pIMHandler )
@@ -2191,7 +2191,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
     }
 }
 
-sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
+bool GtkSalFrame::GetWindowState( SalFrameState* pState )
 {
     pState->mnState = WINDOWSTATE_STATE_NORMAL;
     pState->mnMask  = WINDOWSTATE_MASK_STATE;
@@ -2226,7 +2226,7 @@ sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
                        WINDOWSTATE_MASK_WIDTH        |
                        WINDOWSTATE_MASK_HEIGHT;
 
-    return sal_True;
+    return true;
 }
 
 typedef enum {
@@ -2681,13 +2681,13 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
         // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
         if( getDisplay()->MouseCaptured( this ) )
-            grabPointer( sal_True, sal_False );
+            grabPointer( true, false );
         else if( m_nFloats > 0 )
-            grabPointer( sal_True, sal_True );
+            grabPointer( true, true );
     }
 }
 
-void GtkSalFrame::grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents )
+void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
@@ -2869,10 +2869,10 @@ void GtkSalFrame::EndExtTextInput( sal_uInt16 nFlags )
         m_pIMHandler->endExtTextInput( nFlags );
 }
 
-sal_Bool GtkSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+bool GtkSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet
-    return sal_False;
+    return false;
 }
 
 LanguageType GtkSalFrame::GetInputLanguage()
@@ -3898,7 +3898,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     {
         // signalize theme changed for NWF caches
         // FIXME: should be called only once for a style change
-        GtkSalGraphics::bThemeChanged = sal_True;
+        GtkSalGraphics::bThemeChanged = true;
     }
 #endif
 }

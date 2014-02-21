@@ -350,8 +350,8 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
 
             if( ( pInfo && !pInfo->HasName() ) || !maTlbObjects.IsLinkableSelected() )
             {
-                pMenu->EnableItem( NAVIGATOR_DRAGTYPE_LINK, sal_False );
-                pMenu->EnableItem( NAVIGATOR_DRAGTYPE_URL, sal_False );
+                pMenu->EnableItem( NAVIGATOR_DRAGTYPE_LINK, false );
+                pMenu->EnableItem( NAVIGATOR_DRAGTYPE_URL, false );
                 meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
             }
 
@@ -912,7 +912,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
             pNavigatorWin->maToolbox.CheckItem( TBI_PEN );
         if( nState & NAVBTN_PEN_UNCHECKED &&
             pNavigatorWin->maToolbox.IsItemChecked( TBI_PEN ) )
-            pNavigatorWin->maToolbox.CheckItem( TBI_PEN, sal_False );
+            pNavigatorWin->maToolbox.CheckItem( TBI_PEN, false );
 
         // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();

@@ -45,7 +45,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
 
-    sal_Bool                    m_bExit;
+    bool                    m_bExit;
     ::osl::Condition            m_aExitCondition;
 
     NotifyType                  m_eNotifyType;

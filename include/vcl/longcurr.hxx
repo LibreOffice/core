@@ -45,7 +45,7 @@ protected:
     OUString                maCurrencySymbol;
     sal_uInt16              mnType;
     sal_uInt16              mnDecimalDigits;
-    sal_Bool                mbThousandSep;
+    bool                mbThousandSep;
 
                             LongCurrencyFormatter();
 public:
@@ -54,8 +54,8 @@ public:
     virtual void            Reformat();
     virtual void            ReformatAll();
 
-    void                    SetUseThousandSep( sal_Bool b );
-    sal_Bool                    IsUseThousandSep() const { return mbThousandSep; }
+    void                    SetUseThousandSep( bool b );
+    bool                    IsUseThousandSep() const { return mbThousandSep; }
 
     void                    SetCurrencySymbol( const OUString& rStr );
     OUString                GetCurrencySymbol() const;
@@ -70,7 +70,7 @@ public:
     void                    SetValue( BigInt nNewValue );
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
-    sal_Bool                IsEmptyValue() const { return GetField()->GetText().isEmpty(); }
+    bool                IsEmptyValue() const { return GetField()->GetText().isEmpty(); }
 
     BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
 };

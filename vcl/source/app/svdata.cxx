@@ -82,7 +82,7 @@ void ImplInitSVData()
 
     // init global instance data
     memset( pImplSVData, 0, sizeof( ImplSVData ) );
-    pImplSVData->maHelpData.mbAutoHelpId = sal_True;
+    pImplSVData->maHelpData.mbAutoHelpId = true;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 
     // mark default layout border as unitialized

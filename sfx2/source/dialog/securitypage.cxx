@@ -314,10 +314,10 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             // A Calc document that is shared will have 'm_eRedlingMode == RL_NONE'
             // In shared documents change recording and protection must be disabled,
             // similar to documents that do not support change recording at all.
-            m_pRecordChangesCB->Check( sal_False );
+            m_pRecordChangesCB->Check( false );
             m_pRecordChangesCB->Disable();
-            m_pProtectPB->Check( sal_False );
-            m_pUnProtectPB->Check( sal_False );
+            m_pProtectPB->Check( false );
+            m_pUnProtectPB->Check( false );
             m_pProtectPB->Disable();
             m_pUnProtectPB->Disable();
         }

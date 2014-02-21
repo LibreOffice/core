@@ -271,7 +271,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     aChoices, nContent );
 
     // show Subgroup for print range
-    aPrintRangeOpt.mbInternalOnly = sal_True;
+    aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("fromwhich", OUString(aStrings.GetString(6)),
                                                       OUString(),
                                                       aPrintRangeOpt);
@@ -294,7 +294,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                     0 );
 
     // create a an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, true );
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange", OUString(), aPageRangeOpt);

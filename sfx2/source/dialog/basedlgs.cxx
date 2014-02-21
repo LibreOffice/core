@@ -382,7 +382,7 @@ SfxModelessDialog::~SfxModelessDialog()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxModelessDialog::Close()
+bool SfxModelessDialog::Close()
 
 /*  [Description]
 
@@ -398,7 +398,7 @@ sal_Bool SfxModelessDialog::Close()
     pBindings->GetDispatcher_Impl()->Execute(
         pImp->pMgr->GetType(),
         SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
-    return sal_True;
+    return true;
 }
 
 //-------------------------------------------------------------------------
@@ -497,7 +497,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxFloatingWindow::Close()
+bool SfxFloatingWindow::Close()
 
 /*  [Description]
 
@@ -513,7 +513,7 @@ sal_Bool SfxFloatingWindow::Close()
     pBindings->GetDispatcher_Impl()->Execute(
             pImp->pMgr->GetType(),
             SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

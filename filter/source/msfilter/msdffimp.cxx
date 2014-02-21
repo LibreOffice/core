@@ -3837,7 +3837,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         {
                             BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, sal_False );
+                                aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false );
                             if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
                                 aBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
                             else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
@@ -3851,7 +3851,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         {
                             GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
-                                aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, sal_False );
+                                aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false );
                             if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
                                 aGdiMetaFile.Convert( MTF_CONVERSION_8BIT_GREYS );
                             else if ( eDrawMode == GRAPHICDRAWMODE_MONO )

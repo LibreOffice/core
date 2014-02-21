@@ -167,11 +167,11 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     if(lHeight)
     {
         m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FUNIT_TWIP);
-        m_pMaxHeightBtn->Check(sal_True);
+        m_pMaxHeightBtn->Check(true);
     }
     else
     {
-        m_pMaxHeightPageBtn->Check(sal_True);
+        m_pMaxHeightPageBtn->Check(true);
         m_pMaxHeightEdit->Enable(false);
     }
     m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
@@ -222,14 +222,14 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 
     if ( pColorList.is() )
     {
-        m_pLineColorBox->SetUpdateMode( sal_False );
+        m_pLineColorBox->SetUpdateMode( false );
 
         for ( long i = 0; i < pColorList->Count(); ++i )
         {
             XColorEntry* pEntry = pColorList->GetColor(i);
             m_pLineColorBox->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-        m_pLineColorBox->SetUpdateMode( sal_True );
+        m_pLineColorBox->SetUpdateMode( true );
     }
 
     // select color in the list or add it as a user color

@@ -124,15 +124,15 @@ private:
 
     TxtAlign            meAlign;
 
-    sal_Bool                mbIsFormatting      : 1;    // semaphore for the Hook's
-    sal_Bool                mbFormatted         : 1;
-    sal_Bool                mbUpdate            : 1;
-    sal_Bool                mbModified          : 1;
-    sal_Bool                mbUndoEnabled       : 1;
-    sal_Bool                mbIsInUndo          : 1;
-    sal_Bool                mbDowning           : 1;
-    sal_Bool                mbRightToLeft       : 1;
-    sal_Bool                mbHasMultiLineParas : 1;
+    bool                mbIsFormatting      : 1;    // semaphore for the Hook's
+    bool                mbFormatted         : 1;
+    bool                mbUpdate            : 1;
+    bool                mbModified          : 1;
+    bool                mbUndoEnabled       : 1;
+    bool                mbIsInUndo          : 1;
+    bool                mbDowning           : 1;
+    bool                mbRightToLeft       : 1;
+    bool                mbHasMultiLineParas : 1;
 
                         TextEngine( const TextEngine& ) : SfxBroadcaster()  {}
     TextEngine&         operator=( const TextEngine& )      { return *this; }
@@ -145,10 +145,10 @@ protected:
     void                ImpInitDoc();
     void                ImpRemoveText();
     TextPaM             ImpDeleteText( const TextSelection& rSel );
-    TextPaM             ImpInsertText( const TextSelection& rSel, sal_Unicode c, sal_Bool bOverwrite = sal_False );
+    TextPaM             ImpInsertText( const TextSelection& rSel, sal_Unicode c, bool bOverwrite = false );
     TextPaM             ImpInsertText( const TextSelection& rSel, const OUString& rText );
-    TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, sal_Bool bKeepEndingAttribs = sal_True );
-    TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
+    TextPaM             ImpInsertParaBreak( const TextSelection& rTextSelection, bool bKeepEndingAttribs = true );
+    TextPaM             ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs = true );
     void                ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndoAction* pCurUndo = 0 );
     TextPaM             ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight );
     void                ImpRemoveParagraph( sal_uLong nPara );
@@ -158,10 +158,10 @@ protected:
     // to remain compatible in the minor release we copy the above ImpInsertText
     // function and add the extra parameter we need but make sure this function
     // gets not exported. First and seconf parameter swapped to have a different signatur.
-    SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, sal_Bool bOverwrite = sal_False, sal_Bool bIsUserInput = sal_False );
+    SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite = false, bool bIsUserInput = false );
     // some other new functions needed that must not be exported to remain compatible
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker();
-    SAL_DLLPRIVATE sal_Bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
+    SAL_DLLPRIVATE bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // broadcast or adjust selections
     void                ImpParagraphInserted( sal_uLong nPara );
@@ -176,7 +176,7 @@ protected:
     void                CheckIdleFormatter();
     void                IdleFormatAndUpdate( TextView* pCurView = 0, sal_uInt16 nMaxTimerRestarts = 5 );
 
-    sal_Bool                CreateLines( sal_uLong nPara );
+    bool                CreateLines( sal_uLong nPara );
     void                CreateAndInsertEmptyLine( sal_uLong nPara );
     void                ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion* pPortion, sal_uInt16 nPortionStart, long nRemainingWidth );
     sal_uInt16              SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos );
@@ -187,23 +187,23 @@ protected:
     void                FormatDoc();
     void                FormatFullDoc();
     void                FormatAndUpdate( TextView* pCurView = 0 );
-    sal_Bool                IsFormatting() const { return mbIsFormatting; }
+    bool                IsFormatting() const { return mbIsFormatting; }
     void                UpdateViews( TextView* pCurView = 0 );
 
     void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
 
     void                UpdateSelections();
 
-    sal_Bool                IsFormatted() const { return mbFormatted; }
+    bool                IsFormatted() const { return mbFormatted; }
 
-    sal_uInt16              GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, sal_Bool bSmart = sal_False );
-    Rectangle           GetEditCursor( const TextPaM& rPaM, sal_Bool bSpecial, sal_Bool bPreferPortionStart = sal_False );
-    sal_uInt16              ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, sal_Bool bSmart );
+    sal_uInt16              GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
+    Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
+    sal_uInt16              ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart );
     long                ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nTextPortion );
-    long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart = sal_False );
+    long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_uInt16 nIndex2 );
     sal_uInt8                ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
-    void                ImpInitLayoutMode( OutputDevice* pOutDev, sal_Bool bDrawingR2LPortion = sal_False );
+    void                ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 
     sal_uLong               CalcTextHeight();
@@ -242,8 +242,8 @@ public:
     void                SetLeftMargin( sal_uInt16 n );
     sal_uInt16          GetLeftMargin() const;
 
-    void                SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool            GetUpdateMode() const { return mbUpdate; }
+    void                SetUpdateMode( bool bUpdate );
+    bool            GetUpdateMode() const { return mbUpdate; }
 
     sal_uInt16          GetViewCount() const;
     TextView*           GetView( sal_uInt16 nView ) const;
@@ -270,41 +270,41 @@ public:
     sal_uInt16          GetLineCount( sal_uLong nParagraph ) const;
     sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
 
-    void                SetRightToLeft( sal_Bool bR2L );
-    sal_Bool            IsRightToLeft() const { return mbRightToLeft; }
+    void                SetRightToLeft( bool bR2L );
+    bool            IsRightToLeft() const { return mbRightToLeft; }
 
-    sal_Bool            HasUndoManager() const { return mpUndoManager ? sal_True : sal_False; }
+    bool            HasUndoManager() const { return mpUndoManager ? sal_True : sal_False; }
     ::svl::IUndoManager&
                         GetUndoManager();
     void                UndoActionStart( sal_uInt16 nId = 0 );
     void                UndoActionEnd();
-    void                InsertUndo( TextUndo* pUndo, sal_Bool bTryMerge = sal_False );
-    sal_Bool            IsInUndo()                  { return mbIsInUndo; }
-    void                SetIsInUndo( sal_Bool bInUndo ) { mbIsInUndo = bInUndo; }
+    void                InsertUndo( TextUndo* pUndo, bool bTryMerge = false );
+    bool            IsInUndo()                  { return mbIsInUndo; }
+    void                SetIsInUndo( bool bInUndo ) { mbIsInUndo = bInUndo; }
     void                ResetUndo();
 
-    void                EnableUndo( sal_Bool bEnable );
-    sal_Bool            IsUndoEnabled()             { return mbUndoEnabled; }
+    void                EnableUndo( bool bEnable );
+    bool            IsUndoEnabled()             { return mbUndoEnabled; }
 
-    void                SetModified( sal_Bool bModified )   { mbModified = bModified; }
-    sal_Bool            IsModified() const              { return mbModified; }
+    void                SetModified( bool bModified )   { mbModified = bModified; }
+    bool            IsModified() const              { return mbModified; }
 
-    sal_Bool            Read( SvStream& rInput, const TextSelection* pSel = NULL );
+    bool            Read( SvStream& rInput, const TextSelection* pSel = NULL );
 
-    sal_Bool            Write( SvStream& rOutput, const TextSelection* pSel = NULL, sal_Bool bHTML = sal_False );
+    bool            Write( SvStream& rOutput, const TextSelection* pSel = NULL, bool bHTML = false );
 
-    TextPaM             GetPaM( const Point& rDocPos, sal_Bool bSmart = sal_True );
-    Rectangle           PaMtoEditCursor( const TextPaM& rPaM, sal_Bool bSpecial = sal_False );
+    TextPaM             GetPaM( const Point& rDocPos, bool bSmart = true );
+    Rectangle           PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
     OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
 
-    sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
+    bool            HasAttrib( sal_uInt16 nWhich ) const;
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
 
-    void                RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, sal_Bool bIdleFormatAndUpdate );
+    void                RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, bool bIdleFormatAndUpdate );
     void                RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib );
-    void                RemoveAttribs( sal_uLong nPara, sal_Bool bIdleFormatAndUpdate = sal_True );
-    void                SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_Bool bIdleFormatAndUpdate = sal_True );
+    void                RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate = true );
+    void                SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd, bool bIdleFormatAndUpdate = true );
 
     TxtAlign            GetTextAlign() const { return meAlign; }
     void                SetTextAlign( TxtAlign eAlign );
@@ -315,8 +315,8 @@ public:
     ::com::sun::star::lang::Locale  GetLocale();
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
 
-    static sal_Bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static sal_Bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
+    static bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
+    static bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
 
     Color               GetTextColor() const { return maTextColor; }
 };

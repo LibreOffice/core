@@ -198,7 +198,7 @@ GtkSalPrinter::impl_doJob(
         for (int nPage(0); nPage != nPages; ++nPage)
         {
             if (nPage == nPages - 1)
-                io_rController.setLastPage(sal_True);
+                io_rController.setLastPage(true);
             io_rController.printFilteredPage(nPage);
         }
         io_rController.setJobState(view::PrintableState_JOB_COMPLETED);
@@ -208,7 +208,7 @@ GtkSalPrinter::impl_doJob(
 }
 
 
-sal_Bool
+bool
 GtkSalPrinter::StartJob(
         const OUString* const i_pFileName,
         const OUString& i_rJobName,
@@ -232,7 +232,7 @@ GtkSalPrinter::StartJob(
     if (!aDialog.run())
     {
         io_rController.abortJob();
-        return sal_False;
+        return false;
     }
     aDialog.updateControllerPrintRange();
     m_pImpl->m_pPrinter = aDialog.getPrinter();
@@ -267,10 +267,10 @@ GtkSalPrinter::StartJob(
 }
 
 
-sal_Bool
+bool
 GtkSalPrinter::EndJob()
 {
-    sal_Bool bRet = PspSalPrinter::EndJob();
+    bool bRet = PspSalPrinter::EndJob();
 
     if (!lcl_useSystemPrintDialog())
         return bRet;
@@ -478,8 +478,8 @@ GtkPrintDialog::impl_initCustomTab()
         sal_Int32 nCurHelpText = 0;
         OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
-        sal_Bool bUseDependencyRow = sal_False;
-        sal_Bool bIgnore = sal_False;
+        bool bUseDependencyRow = false;
+        bool bIgnore = false;
         GtkWidget* pGroup = NULL;
         bool bGtkInternal = false;
 
@@ -607,7 +607,7 @@ GtkPrintDialog::impl_initCustomTab()
                 lcl_setHelpText(pWidget, aHelpTexts, 0);
                 m_aControlToPropertyMap[pWidget] = aPropertyName;
 
-                sal_Bool bVal = sal_False;
+                bool bVal = false;
                 pVal = m_rController.getValue(aPropertyName);
                 if (pVal)
                     pVal->Value >>= bVal;

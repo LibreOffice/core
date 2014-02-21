@@ -115,7 +115,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
         m_pNewStartCB->SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        m_pNewStartCB->EnableTriState(sal_False);
+        m_pNewStartCB->EnableTriState(false);
     }
     else
     {
@@ -133,7 +133,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
             nNewStart = 1;
 
         m_pNewStartNF->SetValue(nNewStart);
-        m_pNewStartNumberCB->EnableTriState(sal_False);
+        m_pNewStartNumberCB->EnableTriState(false);
     }
     else
     {

@@ -290,7 +290,7 @@ DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(Window* pParent, WinBits 
     SetSpinSize(1);
 
     SetDecimalDigits(0);
-    SetStrictFormat(sal_True);
+    SetStrictFormat(true);
 }
 
 void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
@@ -432,7 +432,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
         aApplFont.SetSize( pointAbsoluteSize );
         m_aAbsolute.SetControlFont( aApplFont );
 
-        aApplFont.SetTransparent( sal_True );
+        aApplFont.SetTransparent( true );
         m_aRecordText.SetControlFont( aApplFont );
         m_aRecordOf.SetControlFont( aApplFont );
         m_aRecordCount.SetControlFont( aApplFont );
@@ -603,7 +603,7 @@ sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
 
 void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
 {
-    sal_Bool bAvailable = GetState(nWhich);
+    bool bAvailable = GetState(nWhich);
     DbGridControl* pParent = (DbGridControl*)GetParent();
     Window* pWnd = NULL;
     switch (nWhich)
@@ -924,7 +924,7 @@ void DbGridControl::InsertHandleColumn()
 void DbGridControl::Init()
 {
     BrowserHeader* pNewHeader = CreateHeaderBar(this);
-    pHeader->SetMouseTransparent(sal_False);
+    pHeader->SetMouseTransparent(false);
 
     SetHeaderBar(pNewHeader);
     SetMode(m_nMode);
@@ -1792,7 +1792,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     // ignore any implicitly made updates
     bool bDisablePaint = !bUpdateCursor && IsPaintEnabled();
     if (bDisablePaint)
-        EnablePaint(sal_False);
+        EnablePaint(false);
 
     // adjust cache to the visible area
     Reference< XPropertySet > xSet = m_pSeekCursor->getPropertySet();
@@ -1833,7 +1833,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     AdjustRows();
 
     // ignore any updates implicit made
-    EnablePaint(sal_True);
+    EnablePaint(true);
 }
 
 void DbGridControl::RowInserted(long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bool bKeepSelection)
@@ -2763,7 +2763,7 @@ void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredP
     PopupMenu aContextMenu( SVX_RES( RID_SVXMNU_ROWS ) );
 
     PreExecuteRowContextMenu( (sal_uInt16)_nRow, aContextMenu );
-    aContextMenu.RemoveDisabledEntries( sal_True, sal_True );
+    aContextMenu.RemoveDisabledEntries( true, true );
     PostExecuteRowContextMenu( (sal_uInt16)_nRow, aContextMenu, aContextMenu.Execute( this, _rPreferredPos ) );
 
     // TODO: why this weird cast to sal_uInt16? What if we really have more than 65535 lines?
@@ -2806,7 +2806,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             else if (canCopyCellText(nRow, nColId))
             {
                 PopupMenu aContextMenu(SVX_RES(RID_SVXMNU_CELL));
-                aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+                aContextMenu.RemoveDisabledEntries(true, true);
                 switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_COPY:
@@ -3220,7 +3220,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
                 // Ctrl-Tab is used to step out of the control, without traveling to the
                 // remaining cells first
                 // -> build a new key event without the Ctrl-key, and let the very base class handle it
-                KeyCode aNewCode( KEY_TAB, bShift, sal_False, sal_False, sal_False );
+                KeyCode aNewCode( KEY_TAB, bShift, false, false, false );
                 KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
 
                 // call the Control - our direct base class will interpret this in a way we do not want (and do

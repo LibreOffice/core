@@ -152,7 +152,7 @@ private Q_SLOTS:
     sal_Int16 executeSlot() throw( ::com::sun::star::uno::RuntimeException ) { return execute(); }
 
     // XFilePicker functions
-    void setMultiSelectionModeSlot( sal_Bool bMode ) throw( ::com::sun::star::uno::RuntimeException ) { return setMultiSelectionMode( bMode ); }
+    void setMultiSelectionModeSlot( bool bMode ) throw( ::com::sun::star::uno::RuntimeException ) { return setMultiSelectionMode( bMode ); }
     void setDefaultNameSlot( const OUString &rName ) throw( ::com::sun::star::uno::RuntimeException ) { return setDefaultName( rName ); }
     void setDisplayDirectorySlot( const OUString &rDirectory ) throw( ::com::sun::star::uno::RuntimeException ) { return setDisplayDirectory( rDirectory ); }
     OUString getDisplayDirectorySlot() throw( ::com::sun::star::uno::RuntimeException ) { return getDisplayDirectory(); }
@@ -169,7 +169,7 @@ private Q_SLOTS:
     // XFilePickerControlAccess functions
     void setValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue ) throw (::com::sun::star::uno::RuntimeException) { return setValue( nControlId, nControlAction, rValue ); }
     ::com::sun::star::uno::Any getValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction ) throw (::com::sun::star::uno::RuntimeException) { return getValue( nControlId, nControlAction ); }
-    void enableControlSlot( sal_Int16 nControlId, sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException ) { return enableControl( nControlId, bEnable ); }
+    void enableControlSlot( sal_Int16 nControlId, bool bEnable ) throw( ::com::sun::star::uno::RuntimeException ) { return enableControl( nControlId, bEnable ); }
     void setLabelSlot( sal_Int16 nControlId, const OUString &rLabel ) throw (::com::sun::star::uno::RuntimeException) { return setLabel( nControlId, rLabel ); }
     OUString getLabelSlot( sal_Int16 nControlId ) throw (::com::sun::star::uno::RuntimeException) { return getLabel( nControlId ); }
 
@@ -185,7 +185,7 @@ Q_SIGNALS:
     sal_Int16 executeSignal();
 
     // XFilePicker functions
-    void setMultiSelectionModeSignal( sal_Bool bMode );
+    void setMultiSelectionModeSignal( bool bMode );
     void setDefaultNameSignal( const OUString &rName );
     void setDisplayDirectorySignal( const OUString &rDirectory );
     OUString getDisplayDirectorySignal();
@@ -202,7 +202,7 @@ Q_SIGNALS:
     // XFilePickerControlAccess functions
     void setValueSignal( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue );
     ::com::sun::star::uno::Any getValueSignal( sal_Int16 nControlId, sal_Int16 nControlAction );
-    void enableControlSignal( sal_Int16 nControlId, sal_Bool bEnable );
+    void enableControlSignal( sal_Int16 nControlId, bool bEnable );
     void setLabelSignal( sal_Int16 nControlId, const OUString &rLabel );
     OUString getLabelSignal( sal_Int16 nControlId );
 

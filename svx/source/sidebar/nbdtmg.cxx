@@ -72,7 +72,7 @@ Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetFamily( FAMILY_DONTKNOW );
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
-        aDefBulletFont.SetTransparent( sal_True );
+        aDefBulletFont.SetTransparent( true );
         bInit = sal_True;
     }
     return aDefBulletFont;
@@ -1827,7 +1827,7 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
                          aCreateFont.SetFamily( FAMILY_DONTKNOW );
                          aCreateFont.SetPitch( PITCH_DONTKNOW );
                          aCreateFont.SetWeight( WEIGHT_DONTKNOW );
-                         aCreateFont.SetTransparent( sal_True );
+                         aCreateFont.SetTransparent( true );
                          aFmt.SetBulletFont( &aCreateFont );
                         }
             }else

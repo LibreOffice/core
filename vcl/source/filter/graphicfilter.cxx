@@ -145,7 +145,7 @@ static void KillDirEntry( const OUString& rMainUrl )
                              comphelper::getProcessComponentContext() );
 
         aCnt.executeCommand( "delete",
-                             css::uno::makeAny( sal_Bool( sal_True ) ) );
+                             css::uno::makeAny( true ) );
     }
     catch(const css::ucb::CommandAbortedException&)
     {
@@ -1097,7 +1097,7 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const OUString& rFilterPat
 
 namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 
-GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
+GraphicFilter::GraphicFilter( bool bConfig ) :
     bUseConfig        ( bConfig ),
     nExpGraphHint     ( 0 )
 {
@@ -1153,7 +1153,7 @@ void GraphicFilter::ImplInit()
     }
 
     pErrorEx = new FilterErrorEx;
-    bAbort = sal_False;
+    bAbort = false;
 }
 
 sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
@@ -1219,7 +1219,7 @@ OUString GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry 
     return pConfig->GetImportWildcard( nFormat, nEntry );
 }
 
-sal_Bool GraphicFilter::IsImportPixelFormat( sal_uInt16 nFormat )
+bool GraphicFilter::IsImportPixelFormat( sal_uInt16 nFormat )
 {
     return pConfig->IsImportPixelFormat( nFormat );
 }
@@ -1285,7 +1285,7 @@ OUString GraphicFilter::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry 
     return pConfig->GetExportWildcard( nFormat, nEntry );
 }
 
-sal_Bool GraphicFilter::IsExportPixelFormat( sal_uInt16 nFormat )
+bool GraphicFilter::IsExportPixelFormat( sal_uInt16 nFormat )
 {
     return pConfig->IsExportPixelFormat( nFormat );
 }
@@ -1356,12 +1356,12 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     GraphicReader*          pContext = rGraphic.GetContext();
     GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
     bool                    bDummyContext = ( pContext == (GraphicReader*) 1 );
-    const sal_Bool              bLinkSet = rGraphic.IsLink();
+    const bool              bLinkSet = rGraphic.IsLink();
     FilterConfigItem*       pFilterConfigItem = NULL;
 
     Size                    aPreviewSizeHint( 0, 0 );
-    sal_Bool                bAllowPartialStreamRead = sal_False;
-    sal_Bool                bCreateNativeLink = sal_True;
+    bool                bAllowPartialStreamRead = false;
+    bool                bCreateNativeLink = true;
 
     ResetLastError();
 
@@ -1407,7 +1407,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         else
             nStmBegin = rIStream.Tell();
 
-        bAbort = sal_False;
+        bAbort = false;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // if pending, return GRFILTER_OK in order to request more bytes
         if( rIStream.GetError() == ERRCODE_IO_PENDING )
@@ -1736,7 +1736,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             {
                 rIStream.Seek( nStmBegin );
                 rIStream.Read( pBuf, nBufSize );
-                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, sal_True ) );
+                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, true ) );
             }
         }
     }
@@ -1844,7 +1844,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
-    bAbort              = sal_False;
+    bAbort              = false;
     sal_uInt16      nStatus = GRFILTER_OK;
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
@@ -1907,7 +1907,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                     if( !aBmp.Convert( (BmpConversion) nColorRes ) )
                         aBmp = aGraphic.GetBitmap();
                 }
-                sal_Bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", sal_True );
+                bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", true );
                 // save RLE encoded?
                 WriteDIB(aBmp, rOStm, bRleCoding, true);
 

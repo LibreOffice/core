@@ -374,7 +374,7 @@ public:
      @param         bRelease    Determines whether to release the fonts of the
                                 physically released graphics device.
      */
-    SAL_DLLPRIVATE void         ImplReleaseGraphics( sal_Bool bRelease = sal_True );
+    SAL_DLLPRIVATE void         ImplReleaseGraphics( bool bRelease = true );
 
     /** Initialize the graphics device's data structures.
      */
@@ -600,9 +600,9 @@ public:
                                               const OUString& rOrigStr, sal_uInt16 nStyle,
                                               MetricVector* pVector, OUString* pDisplayText, ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplDrawTextBackground( const SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bWordLine, sal_Bool bUnderlineAbove );
+    SAL_DLLPRIVATE void         ImplDrawTextLines( SalLayout&, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bWordLine, bool bUnderlineAbove );
     SAL_DLLPRIVATE bool         ImplDrawRotateText( SalLayout& );
-    SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, sal_Bool bTextLines );
+    SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines );
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawText( SalLayout& );
     SAL_DLLPRIVATE Rectangle    ImplGetTextBoundRect( const SalLayout& );
@@ -616,17 +616,17 @@ public:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
     SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
-    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, sal_Bool bIsAbove );
-    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, sal_Bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
+    SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontUnderline eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, sal_Bool bUnderlineAbove );
+    SAL_DLLPRIVATE void         ImplDrawTextLine( long nBaseX, long nX, long nY, long nWidth, FontStrikeout eStrikeout, FontUnderline eUnderline, FontUnderline eOverline, bool bUnderlineAbove );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
-    SAL_DLLPRIVATE static sal_Bool ImplIsUnderlineAbove( const Font& );
+    SAL_DLLPRIVATE static bool ImplIsUnderlineAbove( const Font& );
 
     SAL_DLLPRIVATE static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont );
-    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, sal_Bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
-    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+    SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2, long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
+    SAL_DLLPRIVATE void         ImplDrawEmphasisMark( long nBaseX, long nX, long nY, const PolyPolygon& rPolyPoly, bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
     static
     SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
     SAL_DLLPRIVATE void         ImplInitFontList() const;
@@ -675,16 +675,16 @@ public:
     /** @name Gradient functions
      */
     ///@{
-    SAL_DLLPRIVATE void         ImplDrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, sal_Bool bMtf, const PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         ImplDrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, sal_Bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         ImplDrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         ImplDrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const PolyPolygon* pClipPolyPoly );
     ///@}
 
     /** @name Hatch functions
      */
     ///@{
-    SAL_DLLPRIVATE void         ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, sal_Bool bMtf );
+    SAL_DLLPRIVATE void         ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf );
     SAL_DLLPRIVATE void         ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
-    SAL_DLLPRIVATE void         ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, sal_Bool bMtf );
+    SAL_DLLPRIVATE void         ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
     /** @name Wallpaper functions
@@ -757,7 +757,7 @@ public:
     /** @name Layout functions
      */
     ///@{
-    SAL_DLLPRIVATE sal_Bool     ImplIsRecordLayout() const;
+    SAL_DLLPRIVATE bool     ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
     SAL_DLLPRIVATE void         ReMirror( Rectangle &rRect ) const;
@@ -812,7 +812,7 @@ public:
                                               FontStrikeout eStrikeout,
                                               FontUnderline eUnderline,
                                               FontUnderline eOverline,
-                                              sal_Bool bUnderlineAbove = sal_False );
+                                              bool bUnderlineAbove = false );
 
     void                        DrawText( const Point& rStartPt, const OUString& rStr,
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
@@ -830,7 +830,7 @@ public:
     bool                        GetCaretPositions( const OUString&, sal_Int32* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
                                               sal_Int32* pDXAry = NULL, long nWidth = 0,
-                                              sal_Bool bCellBreaking = sal_True ) const;
+                                              bool bCellBreaking = true ) const;
     void                        DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
                                                  const OUString& rStr,
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
@@ -873,26 +873,26 @@ public:
     static OUString             GetNonMnemonicString( const OUString& rStr )
                                             { sal_Int32 nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
-    sal_Bool                    GetTextBoundRect( Rectangle& rRect,
+    bool                    GetTextBoundRect( Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    sal_Bool                    GetTextOutline( PolyPolygon&,
+    bool                    GetTextOutline( PolyPolygon&,
                                                 const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
-                                                sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
+                                                sal_Int32 nLen = -1, bool bOptimize = true,
                                                 sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    sal_Bool                    GetTextOutlines( PolyPolyVector&,
+    bool                    GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
-                                                 sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
+                                                 sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    sal_Bool                    GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
+    bool                    GetTextOutlines( ::basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
-                                                 sal_Int32 nLen = -1, sal_Bool bOptimize = sal_True,
+                                                 sal_Int32 nLen = -1, bool bOptimize = true,
                                                  sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;
 
-    sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
+    bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, int nBase, MetricVector& rVector );
 
     void                        DrawPixel( const Point& rPt );
@@ -1078,26 +1078,26 @@ public:
      */
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
 
-    void                        EnableMapMode( sal_Bool bEnable = sal_True );
-    sal_Bool                    IsMapModeEnabled() const { return mbMap; }
+    void                        EnableMapMode( bool bEnable = true );
+    bool                    IsMapModeEnabled() const { return mbMap; }
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
-    void                        EnableRTL( sal_Bool bEnable = sal_True);
-    sal_Bool                    IsRTLEnabled() const { return mbEnableRTL; }
+    void                        EnableRTL( bool bEnable = true);
+    bool                    IsRTLEnabled() const { return mbEnableRTL; }
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
 
-    void                        EnableOutput( sal_Bool bEnable = sal_True );
-    sal_Bool                    IsOutputEnabled() const { return mbOutput; }
-    sal_Bool                    IsDeviceOutput() const { return mbDevOutput; }
-    sal_Bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    sal_Bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+    void                        EnableOutput( bool bEnable = true );
+    bool                    IsOutputEnabled() const { return mbOutput; }
+    bool                    IsDeviceOutput() const { return mbDevOutput; }
+    bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
 
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
     Region                      GetClipRegion() const;
-    sal_Bool                    IsClipRegion() const { return mbClipRegion; }
+    bool                    IsClipRegion() const { return mbClipRegion; }
     Region                      GetActiveClipRegion() const;
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
@@ -1132,18 +1132,18 @@ public:
     void                        SetLineColor();
     void                        SetLineColor( const Color& rColor );
     const Color&                GetLineColor() const { return maLineColor; }
-    sal_Bool                    IsLineColor() const { return mbLineColor; }
+    bool                    IsLineColor() const { return mbLineColor; }
 
     void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
     const Color&                GetFillColor() const { return maFillColor; }
-    sal_Bool                    IsFillColor() const { return mbFillColor; }
+    bool                    IsFillColor() const { return mbFillColor; }
 
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );
 
     const Wallpaper&            GetBackground() const { return maBackground; }
-    sal_Bool                    IsBackground() const { return mbBackground; }
+    bool                    IsBackground() const { return mbBackground; }
 
     void                        SetFont( const Font& rNewFont );
     const Font&                 GetFont() const { return maFont; }
@@ -1159,15 +1159,15 @@ public:
     void                        SetTextFillColor( const Color& rColor );
 
     Color                       GetTextFillColor() const;
-    sal_Bool                    IsTextFillColor() const { return !maFont.IsTransparent(); }
+    bool                    IsTextFillColor() const { return !maFont.IsTransparent(); }
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
     const Color&                GetTextLineColor() const { return maTextLineColor; }
-    sal_Bool                    IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
+    bool                    IsTextLineColor() const { return (maTextLineColor.GetTransparency() == 0); }
     void                        SetOverlineColor();
     void                        SetOverlineColor( const Color& rColor );
     const Color&                GetOverlineColor() const { return maOverlineColor; }
-    sal_Bool                    IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
+    bool                    IsOverlineColor() const { return (maOverlineColor.GetTransparency() == 0); }
     void                        SetTextAlign( TextAlign eAlign );
     TextAlign                   GetTextAlign() const { return maFont.GetAlign(); }
 
@@ -1181,12 +1181,12 @@ public:
     virtual void                SetMapMode( const MapMode& rNewMapMode );
     virtual void                SetRelativeMapMode( const MapMode& rNewMapMode );
     const MapMode&              GetMapMode() const { return maMapMode; }
-    sal_Bool                    IsMapMode() const { return mbMap; }
+    bool                    IsMapMode() const { return mbMap; }
 
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
     const Point&                GetRefPoint() const { return maRefPoint; }
-    sal_Bool                    IsRefPoint() const { return mbRefPoint; }
+    bool                    IsRefPoint() const { return mbRefPoint; }
 
      // #i75163#
     basegfx::B2DHomMatrix       GetViewTransformation() const;
@@ -1321,16 +1321,16 @@ public:
     void                        Erase();
     void                        Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
-    sal_Bool                    AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
+    bool                    AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     int                         GetDevFontCount() const;
     FontInfo                    GetDevFont( int nDevFontIndex ) const;
     int                         GetDevFontSizeCount( const Font& ) const;
     Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
-    sal_Bool                    IsFontAvailable( const OUString& rFontName ) const;
+    bool                    IsFontAvailable( const OUString& rFontName ) const;
 
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const Font& rFont ) const;
-    sal_Bool                    GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                    GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
@@ -1349,7 +1349,7 @@ public:
 
     sal_uInt16                  GetBitCount() const;
 
-    sal_Bool                    GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+    bool                    GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
     /** Query the existence and depth of the alpha channel
 
@@ -1370,7 +1370,7 @@ public:
 
         @return sal_True, if this device has an alpha channel.
      */
-    sal_Bool                    HasAlpha();
+    bool                    HasAlpha();
 
     /// request XCanvas render interface for this OutputDevice
     css::uno::Reference< css::rendering::XCanvas >
@@ -1429,17 +1429,17 @@ public:
     // These all just call through to the private mpGraphics functions of the same name.
 
     // Query the platform layer for control support
-    sal_Bool                    IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
+    bool                    IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
 
     // Query the native control to determine if it was acted upon
-    sal_Bool                    HitTestNativeControl(   ControlType nType,
+    bool                    HitTestNativeControl(   ControlType nType,
                                                         ControlPart nPart,
                                                         const Rectangle& rControlRegion,
                                                         const Point& aPos,
                                                         bool& rIsInside ) const;
 
     // Request rendering of a particular control and/or part
-    sal_Bool                    DrawNativeControl(  ControlType nType,
+    bool                    DrawNativeControl(  ControlType nType,
                                                     ControlPart nPart,
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
@@ -1447,7 +1447,7 @@ public:
                                                     OUString aCaption );
 
     // Query the native control's actual drawing region (including adornment)
-    sal_Bool                    GetNativeControlRegion( ControlType nType,
+    bool                    GetNativeControlRegion( ControlType nType,
                                                         ControlPart nPart,
                                                         const Rectangle& rControlRegion,
                                                         ControlState nState,

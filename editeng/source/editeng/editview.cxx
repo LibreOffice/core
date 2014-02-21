@@ -901,11 +901,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             }
         }
         if ( pInsertMenu->GetItemCount() != 1)
-            aPopupMenu.EnableItem( MN_INSERT_SINGLE, sal_False );
+            aPopupMenu.EnableItem( MN_INSERT_SINGLE, false );
         if ( pInsertMenu->GetItemCount() < 2 )
-            aPopupMenu.EnableItem( MN_INSERT, sal_False );
+            aPopupMenu.EnableItem( MN_INSERT, false );
 
-        aPopupMenu.RemoveDisabledEntries( sal_True, sal_True );
+        aPopupMenu.RemoveDisabledEntries( true, true );
 
         Rectangle aTempRect = PIMPEE->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY );
         Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );

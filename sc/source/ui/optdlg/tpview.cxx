@@ -329,7 +329,7 @@ void ScTpContentOptions::InitGridOpt()
                 pColorLB->GetEntryPos( aStdCol ) )
             pColorLB->InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );
 
-        pColorLB->SetUpdateMode( sal_True );
+        pColorLB->SetUpdateMode( true );
 
         Invalidate();
     }

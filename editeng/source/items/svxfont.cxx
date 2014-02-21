@@ -678,8 +678,8 @@ void SvxDoDrawCapital::DoSpace( const sal_Bool bDraw )
         {
             sal_Bool bWordWise = pFont->IsWordLineMode();
             sal_Bool bTrans = pFont->IsTransparent();
-            pFont->SetWordLineMode( sal_False );
-            pFont->SetTransparent( sal_True );
+            pFont->SetWordLineMode( false );
+            pFont->SetTransparent( true );
             pFont->SetPhysFont( pOut );
             pOut->DrawStretchText( aSpacePos, nDiff, "  ", 0, 2 );
             pFont->SetWordLineMode( bWordWise );

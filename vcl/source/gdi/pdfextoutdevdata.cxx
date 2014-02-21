@@ -304,7 +304,7 @@ struct PageSyncData
     PageSyncData( GlobalSyncData* pGlobal ) : mbGroupIgnoreGDIMtfActions ( false ) { mpGlobalData = pGlobal; }
 
     void PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct );
-    sal_Bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData );
+    bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData );
 };
 void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct )
 {
@@ -319,12 +319,12 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
         aSync.nIdx = 0x7fffffff;    // sync not possible
     mActions.push_back( aSync );
 }
-sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData )
+bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( mActions.size() && ( mActions.front().nIdx == rCurGDIMtfAction ) )
     {
-        bRet = sal_True;
+        bRet = true;
         PDFExtOutDevDataSync aDataSync = mActions.front();
         mActions.pop_front();
         switch( aDataSync.eAct )
@@ -486,7 +486,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
     else if ( mbGroupIgnoreGDIMtfActions )
     {
         rCurGDIMtfAction++;
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -494,14 +494,14 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
 TYPEINIT1(PDFExtOutDevData,ExtOutDevData);
 PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mrOutDev                ( rOutDev ),
-    mbTaggedPDF             ( sal_False ),
-    mbExportNotes           ( sal_True ),
-    mbExportNotesPages      ( sal_False ),
-    mbTransitionEffects     ( sal_True ),
-    mbUseLosslessCompression( sal_True ),
-    mbReduceImageResolution ( sal_False ),
-    mbExportHiddenSlides    ( sal_False ),
-    mbExportNDests          ( sal_False ),
+    mbTaggedPDF             ( false ),
+    mbExportNotes           ( true ),
+    mbExportNotesPages      ( false ),
+    mbTransitionEffects     ( true ),
+    mbUseLosslessCompression( true ),
+    mbReduceImageResolution ( false ),
+    mbExportHiddenSlides    ( false ),
+    mbExportNDests          ( false ),
     mnFormsFormat           ( 0 ),
     mnPage                  ( -1 ),
     mpPageSyncData          ( NULL ),
@@ -532,59 +532,59 @@ void PDFExtOutDevData::SetCurrentPageNumber( const sal_Int32 nPage )
 {
     mnPage = nPage;
 }
-sal_Bool PDFExtOutDevData::GetIsLosslessCompression() const
+bool PDFExtOutDevData::GetIsLosslessCompression() const
 {
     return mbUseLosslessCompression;
 }
-void PDFExtOutDevData::SetIsLosslessCompression( const sal_Bool bUseLosslessCompression )
+void PDFExtOutDevData::SetIsLosslessCompression( const bool bUseLosslessCompression )
 {
     mbUseLosslessCompression = bUseLosslessCompression;
 }
-sal_Bool PDFExtOutDevData::GetIsReduceImageResolution() const
+bool PDFExtOutDevData::GetIsReduceImageResolution() const
 {
     return mbReduceImageResolution;
 }
-void PDFExtOutDevData::SetIsReduceImageResolution( const sal_Bool bReduceImageResolution )
+void PDFExtOutDevData::SetIsReduceImageResolution( const bool bReduceImageResolution )
 {
     mbReduceImageResolution = bReduceImageResolution;
 }
-sal_Bool PDFExtOutDevData::GetIsExportNotes() const
+bool PDFExtOutDevData::GetIsExportNotes() const
 {
     return mbExportNotes;
 }
-void PDFExtOutDevData::SetIsExportNotes( const sal_Bool bExportNotes )
+void PDFExtOutDevData::SetIsExportNotes( const bool bExportNotes )
 {
     mbExportNotes = bExportNotes;
 }
-sal_Bool PDFExtOutDevData::GetIsExportNotesPages() const
+bool PDFExtOutDevData::GetIsExportNotesPages() const
 {
     return mbExportNotesPages;
 }
-void PDFExtOutDevData::SetIsExportNotesPages( const sal_Bool bExportNotesPages )
+void PDFExtOutDevData::SetIsExportNotesPages( const bool bExportNotesPages )
 {
     mbExportNotesPages = bExportNotesPages;
 }
-sal_Bool PDFExtOutDevData::GetIsExportTaggedPDF() const
+bool PDFExtOutDevData::GetIsExportTaggedPDF() const
 {
     return mbTaggedPDF;
 }
-void PDFExtOutDevData::SetIsExportTaggedPDF( const sal_Bool bTaggedPDF )
+void PDFExtOutDevData::SetIsExportTaggedPDF( const bool bTaggedPDF )
 {
     mbTaggedPDF = bTaggedPDF;
 }
-sal_Bool PDFExtOutDevData::GetIsExportTransitionEffects() const
+bool PDFExtOutDevData::GetIsExportTransitionEffects() const
 {
     return mbTransitionEffects;
 }
-void PDFExtOutDevData::SetIsExportTransitionEffects( const sal_Bool bTransitionEffects )
+void PDFExtOutDevData::SetIsExportTransitionEffects( const bool bTransitionEffects )
 {
     mbTransitionEffects = bTransitionEffects;
 }
-sal_Bool PDFExtOutDevData::GetIsExportFormFields() const
+bool PDFExtOutDevData::GetIsExportFormFields() const
 {
     return mbExportFormFields;
 }
-void PDFExtOutDevData::SetIsExportFormFields( const sal_Bool bExportFomtFields )
+void PDFExtOutDevData::SetIsExportFormFields( const bool bExportFomtFields )
 {
     mbExportFormFields = bExportFomtFields;
 }
@@ -592,19 +592,19 @@ void PDFExtOutDevData::SetFormsFormat( const sal_Int32 nFormsFormat )
 {
     mnFormsFormat = nFormsFormat;
 }
-sal_Bool PDFExtOutDevData::GetIsExportBookmarks() const
+bool PDFExtOutDevData::GetIsExportBookmarks() const
 {
     return mbExportBookmarks;
 }
-void PDFExtOutDevData::SetIsExportBookmarks( const sal_Bool bExportBookmarks )
+void PDFExtOutDevData::SetIsExportBookmarks( const bool bExportBookmarks )
 {
     mbExportBookmarks = bExportBookmarks;
 }
-sal_Bool PDFExtOutDevData::GetIsExportHiddenSlides() const
+bool PDFExtOutDevData::GetIsExportHiddenSlides() const
 {
     return mbExportHiddenSlides;
 }
-void PDFExtOutDevData::SetIsExportHiddenSlides( const sal_Bool bExportHiddenSlides )
+void PDFExtOutDevData::SetIsExportHiddenSlides( const bool bExportHiddenSlides )
 {
     mbExportHiddenSlides = bExportHiddenSlides;
 }
@@ -612,11 +612,11 @@ std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
 {
     return maBookmarks;
 }
-sal_Bool PDFExtOutDevData::GetIsExportNamedDestinations() const
+bool PDFExtOutDevData::GetIsExportNamedDestinations() const
 {
     return mbExportNDests;
 }
-void PDFExtOutDevData::SetIsExportNamedDestinations( const sal_Bool bExportNDests )
+void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 {
     mbExportNDests = bExportNDests;
 }
@@ -624,7 +624,7 @@ void PDFExtOutDevData::ResetSyncData()
 {
     *mpPageSyncData = PageSyncData( mpGlobalSyncData );
 }
-sal_Bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx )
+bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx )
 {
     return mpPageSyncData->PlaySyncPageAct( rWriter, rIdx, *this );
 }

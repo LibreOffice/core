@@ -55,16 +55,16 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
         m_aOverTxt( this, PaResId( RID_ADDP_CHDEV_TXT_OVER ) )
 {
     FreeResource();
-    m_aPrinterBtn.Check( sal_True );
-    m_aFaxBtn.Check( sal_False );
-    m_aPDFBtn.Check( sal_False );
-    m_aOldBtn.Check( sal_False );
+    m_aPrinterBtn.Check( true );
+    m_aFaxBtn.Check( false );
+    m_aPDFBtn.Check( false );
+    m_aOldBtn.Check( false );
     if( AddPrinterDialog::getOldPrinterLocation().isEmpty() )
         m_aOldBtn.Enable( false );
     if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
-        m_aPrinterBtn.Check( sal_False );
-        m_aFaxBtn.Check( sal_True );
+        m_aPrinterBtn.Check( false );
+        m_aFaxBtn.Check( true );
         m_aPrinterBtn.Enable( false );
         m_aOldBtn.Enable( false );
     }
@@ -334,8 +334,8 @@ APNamePage::APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, De
         m_aFaxSwallowBox.Show( false );
 
     m_aNameEdt.SetText( AddPrinterDialog::uniquePrinterName( m_aNameEdt.GetText() ) );
-    m_aDefaultBox.Check( sal_False );
-    m_aFaxSwallowBox.Check( sal_False );
+    m_aDefaultBox.Check( false );
+    m_aFaxSwallowBox.Check( false );
 }
 
 APNamePage::~APNamePage()
@@ -666,8 +666,8 @@ APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
 {
     FreeResource();
 
-    m_aDefBtn.Check( sal_True );
-    m_aSelectBtn.Check( sal_False );
+    m_aDefBtn.Check( true );
+    m_aSelectBtn.Check( false );
     m_aSelectBtn.SetStyle( m_aSelectBtn.GetStyle() | WB_WORDBREAK );
 }
 
@@ -699,9 +699,9 @@ APPdfDriverPage::APPdfDriverPage( AddPrinterDialog* pParent )
 {
     FreeResource();
 
-    m_aDefBtn.Check( sal_True );
-    m_aDistBtn.Check( sal_False );
-    m_aSelectBtn.Check( sal_False );
+    m_aDefBtn.Check( true );
+    m_aDistBtn.Check( false );
+    m_aSelectBtn.Check( false );
     m_aSelectBtn.SetStyle( m_aSelectBtn.GetStyle() | WB_WORDBREAK );
 }
 

@@ -98,7 +98,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 protected:
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual void    Resize();
     virtual void    FillInfo( SfxChildWinInfo& ) const;
 

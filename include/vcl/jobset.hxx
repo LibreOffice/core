@@ -55,8 +55,8 @@ public:
 
     JobSetup&           operator=( const JobSetup& rJob );
 
-    sal_Bool                operator==( const JobSetup& rJobSetup ) const;
-    sal_Bool                operator!=( const JobSetup& rJobSetup ) const
+    bool                operator==( const JobSetup& rJobSetup ) const;
+    bool                operator!=( const JobSetup& rJobSetup ) const
                             { return !(JobSetup::operator==( rJobSetup )); }
 
     friend VCL_DLLPUBLIC SvStream&  ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup );

@@ -752,7 +752,7 @@ namespace dbaui
         }
         else
         {
-            m_aUnique.Check(sal_False);
+            m_aUnique.Check(false);
             m_pFields->initializeFrom(IndexFields());
             m_aDescription.SetText(OUString());
         }

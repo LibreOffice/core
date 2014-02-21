@@ -52,7 +52,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
 {
     // Disable display of bitmap names.
-    maBtAdrBook.EnableTextDisplay (sal_False);
+    maBtAdrBook.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();

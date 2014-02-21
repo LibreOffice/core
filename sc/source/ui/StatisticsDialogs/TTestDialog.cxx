@@ -48,7 +48,7 @@ ScTTestDialog::ScTTestDialog(
 ScTTestDialog::~ScTTestDialog()
 {}
 
-sal_Bool ScTTestDialog::Close()
+bool ScTTestDialog::Close()
 {
     return DoClose( ScTTestDialogWrapper::GetChildWindowId() );
 }

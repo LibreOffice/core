@@ -457,7 +457,7 @@ IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
     bAttrModified = sal_True;
     bool bIsProspect = m_pProspectCB->IsChecked();
     if (!bIsProspect)
-        m_pProspectCB_RTL->Check( sal_False );
+        m_pProspectCB_RTL->Check( false );
     m_pProspectCB_RTL->Enable( bIsProspect );
     m_pNoRB->Enable( !bIsProspect );
     m_pOnlyRB->Enable( !bIsProspect );
@@ -1886,10 +1886,10 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     InitFontStyle(*pChangedPreviewWN);
 
     // initialise colour list box
-    pInsertColorLB->SetUpdateMode(sal_False);
-    pDeletedColorLB->SetUpdateMode(sal_False);
-    pChangedColorLB->SetUpdateMode(sal_False);
-    pMarkColorLB->SetUpdateMode(sal_False);
+    pInsertColorLB->SetUpdateMode(false);
+    pDeletedColorLB->SetUpdateMode(false);
+    pChangedColorLB->SetUpdateMode(false);
+    pMarkColorLB->SetUpdateMode(false);
     pInsertColorLB->InsertEntry(sNone);
     pDeletedColorLB->InsertEntry(sNone);
     pChangedColorLB->InsertEntry(sNone);
@@ -1911,10 +1911,10 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
         pChangedColorLB->InsertEntry( aColor, sName );
         pMarkColorLB->InsertEntry( aColor, sName );
     }
-    pInsertColorLB->SetUpdateMode( sal_True );
-    pDeletedColorLB->SetUpdateMode( sal_True );
-    pChangedColorLB->SetUpdateMode( sal_True );
-    pMarkColorLB->SetUpdateMode( sal_True );
+    pInsertColorLB->SetUpdateMode( true );
+    pDeletedColorLB->SetUpdateMode( true );
+    pChangedColorLB->SetUpdateMode( true );
+    pMarkColorLB->SetUpdateMode( true );
 
     ColorData nColor = rInsertAttr.nColor;
 

@@ -974,7 +974,7 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
 
     // let derivees modify the menu
     PreExecuteColumnContextMenu( nColId, aContextMenu );
-    aContextMenu.RemoveDisabledEntries( sal_True, sal_True );
+    aContextMenu.RemoveDisabledEntries( true, true );
 
     // execute the menu
     sal_uInt16 nResult = aContextMenu.Execute( this, _rPreferredPos );

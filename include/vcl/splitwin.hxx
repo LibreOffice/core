@@ -60,7 +60,7 @@ private:
     sal_uInt16              mnSplitTest;
     sal_uInt16              mnSplitPos;
     sal_uInt16              mnMouseModifier;
-    sal_Bool                mbDragFull:1,
+    bool                mbDragFull:1,
                         mbHorz:1,
                         mbBottomRight:1,
                         mbCalc:1,
@@ -94,29 +94,29 @@ private:
     SAL_DLLPRIVATE void ImplUpdate();
     SAL_DLLPRIVATE void ImplSetWindowSize( long nDelta );
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
-    SAL_DLLPRIVATE void ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest ) const;
-    SAL_DLLPRIVATE void ImplGetAutoHideRect( Rectangle& rRect, sal_Bool bTest = sal_False ) const;
-    SAL_DLLPRIVATE void ImplGetFadeInRect( Rectangle& rRect, sal_Bool bTest = sal_False ) const;
-    SAL_DLLPRIVATE void ImplGetFadeOutRect( Rectangle& rRect, sal_Bool bTest = sal_False ) const;
+    SAL_DLLPRIVATE void ImplGetButtonRect( Rectangle& rRect, long nEx, bool bTest ) const;
+    SAL_DLLPRIVATE void ImplGetAutoHideRect( Rectangle& rRect, bool bTest = false ) const;
+    SAL_DLLPRIVATE void ImplGetFadeInRect( Rectangle& rRect, bool bTest = false ) const;
+    SAL_DLLPRIVATE void ImplGetFadeOutRect( Rectangle& rRect, bool bTest = false ) const;
     SAL_DLLPRIVATE void ImplDrawButtonRect( const Rectangle& rRect, long nSize );
-    SAL_DLLPRIVATE void ImplDrawAutoHide( sal_Bool bInPaint );
-    SAL_DLLPRIVATE void ImplDrawFadeIn( sal_Bool bInPaint );
-    SAL_DLLPRIVATE void ImplDrawFadeOut( sal_Bool bInPaint );
+    SAL_DLLPRIVATE void ImplDrawAutoHide( bool bInPaint );
+    SAL_DLLPRIVATE void ImplDrawFadeIn( bool bInPaint );
+    SAL_DLLPRIVATE void ImplDrawFadeOut( bool bInPaint );
     SAL_DLLPRIVATE void ImplNewAlign();
-    SAL_DLLPRIVATE void ImplDrawGrip( const Rectangle& rRect, sal_Bool bHorz, sal_Bool bLeft );
-    SAL_DLLPRIVATE void ImplDrawFadeArrow( const Point& rPt, sal_Bool bHorz, sal_Bool bLeft );
+    SAL_DLLPRIVATE void ImplDrawGrip( const Rectangle& rRect, bool bHorz, bool bLeft );
+    SAL_DLLPRIVATE void ImplDrawFadeArrow( const Point& rPt, bool bHorz, bool bLeft );
     SAL_DLLPRIVATE void ImplStartSplit( const MouseEvent& rMEvt );
 
     static SAL_DLLPRIVATE void ImplDrawBorder( SplitWindow* pWin );
     static SAL_DLLPRIVATE void ImplDrawBorderLine( SplitWindow* pWin );
-    static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, sal_Bool bHide,
-                                             sal_Bool bRows, sal_Bool bDown = sal_True );
+    static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
+                                             bool bRows, bool bDown = true );
     static SAL_DLLPRIVATE void ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet );
     static SAL_DLLPRIVATE void ImplDrawBack( SplitWindow* pWindow, const Rectangle& rRect,
                                              const Wallpaper* pWall, const Bitmap* pBitmap );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
-                                                sal_Bool bRows, sal_Bool bDown = sal_True );
+                                                bool bRows, bool bDown = true );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
     static SAL_DLLPRIVATE void ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos );
@@ -152,12 +152,12 @@ public:
     void                InsertItem( sal_uInt16 nId, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,
                                     SplitWindowItemBits nBits = 0 );
-    void                RemoveItem( sal_uInt16 nId, sal_Bool bHide = sal_True );
+    void                RemoveItem( sal_uInt16 nId, bool bHide = true );
     void                Clear();
 
     void                SplitItem( sal_uInt16 nId, long nNewSize,
-                                   sal_Bool bPropSmall = sal_False,
-                                   sal_Bool bPropGreat = sal_False );
+                                   bool bPropSmall = false,
+                                   bool bPropGreat = false );
     void                SetItemSize( sal_uInt16 nId, long nNewSize );
     long                GetItemSize( sal_uInt16 nId ) const;
     /** Set a range that limits the (variable part of the) size with an
@@ -178,32 +178,32 @@ public:
     sal_uInt16              GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId = 0 ) const;
     sal_uInt16              GetItemId( sal_uInt16 nPos, sal_uInt16 nSetId = 0 ) const;
     sal_uInt16              GetItemCount( sal_uInt16 nSetId = 0 ) const;
-    sal_Bool                IsItemValid( sal_uInt16 nId ) const;
+    bool                IsItemValid( sal_uInt16 nId ) const;
 
-    sal_Bool                IsNoAlign() const { return mbNoAlign; }
+    bool                IsNoAlign() const { return mbNoAlign; }
     void                SetAlign( WindowAlign eNewAlign = WINDOWALIGN_TOP );
     WindowAlign         GetAlign() const { return meAlign; }
-    sal_Bool                IsHorizontal() const { return mbHorz; }
+    bool                IsHorizontal() const { return mbHorz; }
 
-    sal_Bool                IsSplitting() const { return IsTracking(); }
+    bool                IsSplitting() const { return IsTracking(); }
 
     void                SetMaxSizePixel( long nNewMaxSize ) { mnMaxSize = nNewMaxSize; }
     long                GetMaxSizePixel() const { return mnMaxSize; }
 
     Size                CalcLayoutSizePixel( const Size& aNewSize );
 
-    void                ShowAutoHideButton( sal_Bool bShow = sal_True );
-    sal_Bool                IsAutoHideButtonVisible() const { return mbAutoHide; }
-    void                ShowFadeInHideButton( sal_Bool bShow = sal_True );
-    void                ShowFadeInButton( sal_Bool bShow = sal_True ) { ShowFadeInHideButton( bShow ); }
-    sal_Bool                IsFadeInButtonVisible() const { return mbFadeIn; }
-    void                ShowFadeOutButton( sal_Bool bShow = sal_True );
-    sal_Bool                IsFadeOutButtonVisible() const { return mbFadeOut; }
+    void                ShowAutoHideButton( bool bShow = true );
+    bool                IsAutoHideButtonVisible() const { return mbAutoHide; }
+    void                ShowFadeInHideButton( bool bShow = true );
+    void                ShowFadeInButton( bool bShow = true ) { ShowFadeInHideButton( bShow ); }
+    bool                IsFadeInButtonVisible() const { return mbFadeIn; }
+    void                ShowFadeOutButton( bool bShow = true );
+    bool                IsFadeOutButtonVisible() const { return mbFadeOut; }
     long                GetFadeInSize() const;
-    sal_Bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
+    bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
 
-    void                SetAutoHideState( sal_Bool bAutoHide );
-    sal_Bool                GetAutoHideState() const { return mbAutoHideIn; }
+    void                SetAutoHideState( bool bAutoHide );
+    bool                GetAutoHideState() const { return mbAutoHideIn; }
 
     void                SetStartSplitHdl( const Link& rLink ) { maStartSplitHdl = rLink; }
     const Link&         GetStartSplitHdl() const { return maStartSplitHdl; }

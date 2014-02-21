@@ -869,7 +869,7 @@ void SvxLineDefTabPage::FillDialog_Impl()
     if( eXDS == XDASH_RECTRELATIVE )
         m_pCbxSynchronize->Check();
     else
-        m_pCbxSynchronize->Check( sal_False );
+        m_pCbxSynchronize->Check( false );
 
     m_pNumFldNumber1->SetValue( aDash.GetDots() );
     SetMetricValue( *m_pMtrLength1, aDash.GetDotLen(), ePoolUnit );

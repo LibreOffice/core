@@ -63,7 +63,7 @@ SwLabPreview::SwLabPreview(Window* pParent)
     SetBackground(Wallpaper(rWinColor));
 
     Font aFont = GetFont();
-    aFont.SetTransparent(sal_True);
+    aFont.SetTransparent(true);
     aFont.SetWeight  (WEIGHT_NORMAL);
     SetFont(aFont);
 
@@ -116,7 +116,7 @@ void SwLabPreview::Paint(const Rectangle &)
     SetLineColor(rWinColor);
     SetFillColor(aGrayColor);
     Font aPaintFont(GetFont());
-    aPaintFont.SetTransparent(sal_False);
+    aPaintFont.SetTransparent(false);
     SetFont(aPaintFont);
 
     // size of region to be displayed

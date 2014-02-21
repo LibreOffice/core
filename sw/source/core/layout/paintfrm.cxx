@@ -7047,7 +7047,7 @@ const Font& SwPageFrm::GetEmptyPageFont()
         pEmptyPgFont->SetStyleName( aEmptyOUStr );
         pEmptyPgFont->SetName(OUString("Helvetica"));
         pEmptyPgFont->SetFamily( FAMILY_SWISS );
-        pEmptyPgFont->SetTransparent( sal_True );
+        pEmptyPgFont->SetTransparent( true );
         pEmptyPgFont->SetColor( COL_GRAY );
     }
 
@@ -7303,7 +7303,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         OutputDevice *pOld = pSh->GetOut();
         VirtualDevice aDev( *pOld );
-        aDev.EnableOutput( sal_False );
+        aDev.EnableOutput( false );
 
         GDIMetaFile aMet;
         MapMode aMap( pOld->GetMapMode().GetMapUnit() );

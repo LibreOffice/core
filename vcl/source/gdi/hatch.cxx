@@ -80,7 +80,7 @@ Hatch& Hatch::operator=( const Hatch& rHatch )
     return *this;
 }
 
-sal_Bool Hatch::operator==( const Hatch& rHatch ) const
+bool Hatch::operator==( const Hatch& rHatch ) const
 {
 
     return( mpImplHatch == rHatch.mpImplHatch ||

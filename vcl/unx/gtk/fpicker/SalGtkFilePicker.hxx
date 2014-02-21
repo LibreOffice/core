@@ -206,8 +206,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         SalGtkFilePicker( const SalGtkFilePicker& );
         SalGtkFilePicker& operator=( const SalGtkFilePicker& );
 
-        sal_Bool FilterNameExists( const OUString& rTitle );
-        sal_Bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
+        bool FilterNameExists( const OUString& rTitle );
+        bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
         void ensureFilterList( const OUString& _rInitialCurrentFilter );
 
@@ -271,7 +271,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         OUString m_aInitialFilter;
 
         bool bVersionWidthUnset;
-        sal_Bool mbPreviewState;
+        bool mbPreviewState;
         gulong mHID_Preview;
         GtkWidget* m_pPreview;
         GtkFileFilter* m_pPseudoFilter;

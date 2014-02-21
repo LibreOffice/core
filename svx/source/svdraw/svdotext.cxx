@@ -871,7 +871,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
             pMtf = NULL;
 
         if(pMtf)
-            pMtf->Pause(sal_True);
+            pMtf->Pause(true);
 
         Font aFontMerk(pOut->GetFont());
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ) );
@@ -885,7 +885,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         pOut->SetFont(aFontMerk);
 
         if(pMtf)
-            pMtf->Pause(sal_False);
+            pMtf->Pause(false);
 
         bNoStretching = (aSize1 == aSize2);
 
@@ -1851,7 +1851,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     // create the MetaFile
     pRetval = new GDIMetaFile;
     VirtualDevice aBlackHole;
-    aBlackHole.EnableOutput(sal_False);
+    aBlackHole.EnableOutput(false);
     pRetval->Record(&aBlackHole);
     Point aPaintPos = aPaintRect.TopLeft();
 

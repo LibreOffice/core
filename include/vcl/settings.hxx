@@ -62,7 +62,7 @@ private:
     sal_uInt16                          mnDragLinkCode;
     sal_uInt16                          mnContextMenuCode;
     sal_uInt16                          mnContextMenuClicks;
-    sal_Bool                            mbContextMenuDown;
+    bool                            mbContextMenuDown;
     sal_uLong                           mnScrollRepeat;
     sal_uLong                           mnButtonStartRepeat;
     sal_uLong                           mnButtonRepeat;
@@ -155,9 +155,9 @@ public:
                                         { CopyData(); mpData->mnContextMenuClicks = nClicks; }
     sal_uInt16                          GetContextMenuClicks() const
                                         { return mpData->mnContextMenuClicks; }
-    void                            SetContextMenuDown( sal_Bool bDown )
+    void                            SetContextMenuDown( bool bDown )
                                         { CopyData(); mpData->mbContextMenuDown = bDown; }
-    sal_Bool                            GetContextMenuDown() const
+    bool                            GetContextMenuDown() const
                                         { return mpData->mbContextMenuDown; }
 
     void                            SetScrollRepeat( sal_uLong nRepeat )
@@ -198,8 +198,8 @@ public:
 
     const MouseSettings&            operator =( const MouseSettings& rSet );
 
-    sal_Bool                            operator ==( const MouseSettings& rSet ) const;
-    sal_Bool                            operator !=( const MouseSettings& rSet ) const
+    bool                            operator ==( const MouseSettings& rSet ) const;
+    bool                            operator !=( const MouseSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -230,6 +230,8 @@ struct FrameStyle
         , bottom(2)
     {}
 };
+
+enum AutoState { AUTO_STATE_OFF, AUTO_STATE_ON, AUTO_STATE_AUTO };
 
 // -----------------
 // - ImplStyleData -
@@ -327,25 +329,25 @@ private:
     sal_uLong                       mnLogoDisplayTime;
     sal_uLong                       mnDisplayOptions;
     sal_uLong                       mnToolbarIconSize;
-    sal_uLong                       mnUseFlatMenus;
+    bool                       mnUseFlatMenus;
     sal_uLong                       mnOptions;
     sal_uInt16                      mnScreenZoom;
     sal_uInt16                      mnScreenFontZoom;
-    sal_uInt16                      mnHighContrast;
-    sal_uInt16                      mnUseSystemUIFonts;
+    bool                      mnHighContrast;
+    bool                      mnUseSystemUIFonts;
     sal_uInt16                      mnAutoMnemonic;
-    sal_uInt16                      mnUseImagesInMenus;
-    sal_uLong                       mnUseFlatBorders;
-    sal_Bool                        mbPreferredUseImagesInMenus;
+    AutoState                      mnUseImagesInMenus;
+    bool                       mnUseFlatBorders;
+    bool                        mbPreferredUseImagesInMenus;
     long                            mnMinThumbSize;
     sal_uLong                       mnSymbolsStyle;
     sal_uLong                       mnPreferredSymbolsStyle;
-    sal_uInt16                      mnSkipDisabledInMenus;
-    sal_Bool                        mbHideDisabledMenuItems;
-    sal_Bool                        mbAcceleratorsInContextMenus;
+    bool                      mnSkipDisabledInMenus;
+    bool                        mbHideDisabledMenuItems;
+    bool                        mbAcceleratorsInContextMenus;
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
-    sal_Bool                        mbPrimaryButtonWarpsSlider;
+    bool                        mbPrimaryButtonWarpsSlider;
     Wallpaper                       maWorkspaceGradient;
     DialogStyle                     maDialogStyle;
     FrameStyle                      maFrameStyle;
@@ -360,7 +362,7 @@ private:
     Size                            maListBoxPreviewDefaultLogicSize;
     Size                            maListBoxPreviewDefaultPixelSize;
     sal_uInt16                      mnListBoxPreviewDefaultLineWidth;
-    sal_Bool                        mbPreviewUsesCheckeredBackground;
+    bool                        mbPreviewUsesCheckeredBackground;
 
     OUString                        maPersonaHeaderFooter; ///< Cache the settings to detect changes.
 
@@ -424,10 +426,6 @@ private:
 #define STYLE_SYMBOLS_SIFR          ((sal_uLong)9)
 #define STYLE_SYMBOLS_TANGO_TESTING ((sal_uLong)10)
 #define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)11)
-
-#define STYLE_MENUIMAGES_OFF  ((sal_uInt16)0)
-#define STYLE_MENUIMAGES_ON   ((sal_uInt16)1)
-#define STYLE_MENUIMAGES_AUTO ((sal_uInt16)2)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((sal_uLong)0xFFFFFFFF)
 
@@ -642,44 +640,44 @@ public:
     const Color&                    GetInactiveTabColor() const
                                         { return mpData->maInactiveTabColor; }
 
-    void                            SetHighContrastMode( sal_Bool bHighContrast )
+    void                            SetHighContrastMode( bool bHighContrast )
                                         { CopyData(); mpData->mnHighContrast = bHighContrast; }
-    sal_Bool                            GetHighContrastMode() const
-                                        { return (sal_Bool) mpData->mnHighContrast; }
-    void                            SetUseSystemUIFonts( sal_Bool bUseSystemUIFonts )
+    bool                            GetHighContrastMode() const
+                                        { return mpData->mnHighContrast; }
+    void                            SetUseSystemUIFonts( bool bUseSystemUIFonts )
                                         { CopyData(); mpData->mnUseSystemUIFonts = bUseSystemUIFonts; }
-    sal_Bool                            GetUseSystemUIFonts() const
-                                        { return (sal_Bool) mpData->mnUseSystemUIFonts; }
-    void                            SetUseFlatBorders( sal_Bool bUseFlatBorders )
+    bool                            GetUseSystemUIFonts() const
+                                        { return mpData->mnUseSystemUIFonts; }
+    void                            SetUseFlatBorders( bool bUseFlatBorders )
                                         { CopyData(); mpData->mnUseFlatBorders = bUseFlatBorders; }
-    sal_Bool                            GetUseFlatBorders() const
-                                        { return (sal_Bool) mpData->mnUseFlatBorders; }
-    void                            SetUseFlatMenus( sal_Bool bUseFlatMenus )
+    bool                            GetUseFlatBorders() const
+                                        { return mpData->mnUseFlatBorders; }
+    void                            SetUseFlatMenus( bool bUseFlatMenus )
                                         { CopyData(); mpData->mnUseFlatMenus = bUseFlatMenus; }
-    sal_Bool                            GetUseFlatMenus() const
-                                        { return (sal_Bool) mpData->mnUseFlatMenus; }
-    void                            SetUseImagesInMenus( sal_Bool bUseImagesInMenus )
-                                        { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus; }
-    sal_Bool                            GetUseImagesInMenus() const;
-    void                                                       SetPreferredUseImagesInMenus( sal_Bool bPreferredUseImagesInMenus )
+    bool                            GetUseFlatMenus() const
+                                        { return mpData->mnUseFlatMenus; }
+    void                            SetUseImagesInMenus( bool bUseImagesInMenus )
+    { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus ? AUTO_STATE_ON : AUTO_STATE_OFF; }
+    bool                            GetUseImagesInMenus() const;
+    void                                                       SetPreferredUseImagesInMenus( bool bPreferredUseImagesInMenus )
                                         { CopyData(); mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus; }
-    sal_Bool                                                   GetPreferredUseImagesInMenus() const
+    bool                                                   GetPreferredUseImagesInMenus() const
                                         { return mpData->mbPreferredUseImagesInMenus; }
-    void                                                       SetSkipDisabledInMenus( sal_Bool bSkipDisabledInMenus )
+    void                                                       SetSkipDisabledInMenus( bool bSkipDisabledInMenus )
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
-    sal_Bool                            GetSkipDisabledInMenus() const
-                                        { return (sal_Bool) mpData->mnSkipDisabledInMenus; }
-    void                                                       SetHideDisabledMenuItems( sal_Bool bHideDisabledMenuItems )
+    bool                            GetSkipDisabledInMenus() const
+                                        { return mpData->mnSkipDisabledInMenus; }
+    void                                                       SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
                                         { CopyData(); mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems; }
-    sal_Bool                            GetHideDisabledMenuItems() const
+    bool                            GetHideDisabledMenuItems() const
                                         { return mpData->mbHideDisabledMenuItems; }
-    void                            SetAcceleratorsInContextMenus( sal_Bool bAcceleratorsInContextMenus )
+    void                            SetAcceleratorsInContextMenus( bool bAcceleratorsInContextMenus )
                                         { CopyData(); mpData->mbAcceleratorsInContextMenus = bAcceleratorsInContextMenus; }
-    sal_Bool                        GetAcceleratorsInContextMenus() const
+    bool                        GetAcceleratorsInContextMenus() const
                                         { return mpData->mbAcceleratorsInContextMenus; }
-    void                            SetPrimaryButtonWarpsSlider( sal_Bool bPrimaryButtonWarpsSlider )
+    void                            SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider )
                                         { CopyData(); mpData->mbPrimaryButtonWarpsSlider = bPrimaryButtonWarpsSlider; }
-    sal_Bool                        GetPrimaryButtonWarpsSlider() const
+    bool                        GetPrimaryButtonWarpsSlider() const
                                         { return mpData->mbPrimaryButtonWarpsSlider; }
 
     void                            SetCairoFontOptions( const void *pOptions )
@@ -837,9 +835,9 @@ public:
                                         { CopyData(); mpData->mnOptions = nOptions; }
     sal_uLong                           GetOptions() const
                                         { return mpData->mnOptions; }
-    void                            SetAutoMnemonic( sal_Bool bAutoMnemonic )
+    void                            SetAutoMnemonic( bool bAutoMnemonic )
                                         { CopyData(); mpData->mnAutoMnemonic = (sal_uInt16)bAutoMnemonic; }
-    sal_Bool                            GetAutoMnemonic() const
+    bool                            GetAutoMnemonic() const
                                         { return mpData->mnAutoMnemonic ? sal_True : sal_False; }
 
     void                            SetFontColor( const Color& rColor )
@@ -944,8 +942,8 @@ public:
 
     const StyleSettings&            operator =( const StyleSettings& rSet );
 
-    sal_Bool                            operator ==( const StyleSettings& rSet ) const;
-    sal_Bool                            operator !=( const StyleSettings& rSet ) const
+    bool                            operator ==( const StyleSettings& rSet ) const;
+    bool                            operator !=( const StyleSettings& rSet ) const
                                         { return !(*this == rSet); }
 
 protected:
@@ -966,9 +964,9 @@ class ImplMiscData
 
 private:
     sal_uLong                           mnRefCount;
-    sal_uInt16                          mnEnableATT;
-    sal_Bool                            mbEnableLocalizedDecimalSep;
-    sal_uInt16                          mnDisablePrinting;
+    AutoState                          mnEnableATT;
+    bool                            mbEnableLocalizedDecimalSep;
+    AutoState                          mnDisablePrinting;
 };
 
 // ----------------
@@ -990,14 +988,14 @@ public:
 #ifdef WNT
     void                            SetEnableATToolSupport( sal_Bool bEnable );
 #endif
-    sal_Bool                        GetEnableATToolSupport() const;
-    sal_Bool                        GetDisablePrinting() const;
-    void                            SetEnableLocalizedDecimalSep( sal_Bool bEnable );
-    sal_Bool                        GetEnableLocalizedDecimalSep() const;
+    bool                        GetEnableATToolSupport() const;
+    bool                        GetDisablePrinting() const;
+    void                            SetEnableLocalizedDecimalSep( bool bEnable );
+    bool                        GetEnableLocalizedDecimalSep() const;
     const MiscSettings&             operator =( const MiscSettings& rSet );
 
-    sal_Bool                            operator ==( const MiscSettings& rSet ) const;
-    sal_Bool                            operator !=( const MiscSettings& rSet ) const
+    bool                            operator ==( const MiscSettings& rSet ) const;
+    bool                            operator !=( const MiscSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -1055,8 +1053,8 @@ public:
 
     const HelpSettings&             operator =( const HelpSettings& rSet );
 
-    sal_Bool                            operator ==( const HelpSettings& rSet ) const;
-    sal_Bool                            operator !=( const HelpSettings& rSet ) const
+    bool                            operator ==( const HelpSettings& rSet ) const;
+    bool                            operator !=( const HelpSettings& rSet ) const
                                         { return !(*this == rSet); }
 };
 
@@ -1165,8 +1163,8 @@ public:
 
     const AllSettings&                      operator =( const AllSettings& rSet );
 
-    sal_Bool                                    operator ==( const AllSettings& rSet ) const;
-    sal_Bool                                    operator !=( const AllSettings& rSet ) const
+    bool                                    operator ==( const AllSettings& rSet ) const;
+    bool                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
     static void                             LocaleSettingsChanged( sal_uInt32 nHint );
     SvtSysLocale&                           GetSysLocale() { return mpData->maSysLocale; }

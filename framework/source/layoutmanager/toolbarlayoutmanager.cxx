@@ -962,7 +962,7 @@ OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int3
     OUString aAddonGenericTitle(FWK_RESSTR(STR_TOOLBAR_TITLE_ADDON));
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    OUString aNumStr = rI18nHelper.GetNum( nNumber, 0, sal_False, sal_False );
+    OUString aNumStr = rI18nHelper.GetNum( nNumber, 0, false, false );
     aAddonGenericTitle = aAddonGenericTitle.replaceFirst( "%num%", aNumStr );
 
     return OUString( aAddonGenericTitle );

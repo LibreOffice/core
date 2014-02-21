@@ -290,12 +290,12 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     // update modes)
     VirtualDevice aVDev;
     aVDev.SetOutputSizePixel( aAnimSize );
-    aVDev.EnableMapMode( sal_False );
+    aVDev.EnableMapMode( false );
 
     // setup mask VDev (alpha VDev is currently rather slow)
     VirtualDevice aVDevMask;
     aVDevMask.SetOutputSizePixel( aAnimSize );
-    aVDevMask.EnableMapMode( sal_False );
+    aVDevMask.EnableMapMode( false );
 
     switch( aAnimation.GetCycleMode() )
     {

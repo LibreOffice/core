@@ -38,7 +38,7 @@ namespace pcr
             ,m_aListBox(this)
     {
         m_aListBox.SetBackground(GetBackground());
-        m_aListBox.SetPaintTransparent( sal_True );
+        m_aListBox.SetPaintTransparent( true );
         m_aListBox.Show();
     }
 

@@ -1629,7 +1629,7 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
     sal_Bool bOldMap( rVDev.IsMapModeEnabled() );
-    rVDev.EnableMapMode( sal_False );
+    rVDev.EnableMapMode( false );
 
     bool bRet( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor, nNumTilesX, nNumTilesY,
                                         nNumTilesX, nNumTilesY, rTileSizePixel, pAttr, nFlags, aTileInfo ) );
@@ -1947,7 +1947,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
     bool bOldMap( rOut.IsMapModeEnabled() );
 
     if( bDrawInPixel )
-        rOut.EnableMapMode( sal_False );
+        rOut.EnableMapMode( false );
 
     for( nY=0; nY < nNumTilesY; ++nY )
     {

@@ -1713,13 +1713,13 @@ sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
     if (pChildWindow != NULL)
         pSearchDialog = pChildWindow->GetWindow();
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(false,sal_True);
+        pSearchDialog->EnableInput(false,true);
 
     sal_uInt16 nResult = rMessageBox.Execute();
 
     // Unlock the search dialog.
     if (pSearchDialog != NULL)
-        pSearchDialog->EnableInput(true,sal_True);
+        pSearchDialog->EnableInput(true,true);
 
     return nResult;
 }

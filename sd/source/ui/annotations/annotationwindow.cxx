@@ -328,7 +328,7 @@ void AnnotationWindow::InitControls()
         mpOutliner->SetRefDevice( pDev );
     }
 
-    mpTextWindow->EnableRTL( sal_False );
+    mpTextWindow->EnableRTL( false );
     mpOutlinerView = new OutlinerView ( mpOutliner, mpTextWindow );
     mpOutliner->InsertView(mpOutlinerView );
     mpTextWindow->SetOutlinerView(mpOutlinerView);

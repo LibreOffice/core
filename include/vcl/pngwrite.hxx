@@ -44,7 +44,7 @@ namespace vcl
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData = NULL );
         ~PNGWriter();
 
-        sal_Bool Write( SvStream& rStm );
+        bool Write( SvStream& rStm );
 
         // additional method to be able to modify all chunk before they are stored
         struct ChunkData

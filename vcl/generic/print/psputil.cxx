@@ -44,7 +44,7 @@ sal_Int32
 getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
 {
     // get sign
-    sal_Bool bNegative = nValue < 0;
+    bool bNegative = nValue < 0;
     nValue = bNegative ? -nValue : nValue;
 
     // get required buffer size, must be a multiple of two
@@ -134,7 +134,7 @@ appendStr (const sal_Char* pSrc, sal_Char* pDst)
  * copy strings to file
  */
 
-sal_Bool
+bool
 WritePS (osl::File* pFile, const sal_Char* pString)
 {
     sal_uInt64 nInLength = rtl_str_getLength (pString);
@@ -146,7 +146,7 @@ WritePS (osl::File* pFile, const sal_Char* pString)
     return nInLength == nOutLength;
 }
 
-sal_Bool
+bool
 WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength)
 {
     sal_uInt64 nOutLength = 0;
@@ -157,7 +157,7 @@ WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength)
     return nInLength == nOutLength;
 }
 
-sal_Bool
+bool
 WritePS (osl::File* pFile, const OString &rString)
 {
     sal_uInt64 nInLength = rString.getLength();
@@ -169,7 +169,7 @@ WritePS (osl::File* pFile, const OString &rString)
     return nInLength == nOutLength;
 }
 
-sal_Bool
+bool
 WritePS (osl::File* pFile, const OUString &rString)
 {
     return WritePS (pFile, OUStringToOString(rString, RTL_TEXTENCODING_ASCII_US));

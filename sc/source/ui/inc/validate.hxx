@@ -172,7 +172,7 @@ public:
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    sal_Bool Close();
+    bool Close();
 };
 
 

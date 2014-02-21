@@ -161,7 +161,7 @@ void Accelerator::ImplInit()
 {
     mnCurId             = 0;
     mnCurRepeat         = 0;
-    mbIsCancel          = sal_False;
+    mbIsCancel          = false;
     mpDel               = NULL;
 }
 
@@ -217,7 +217,7 @@ void Accelerator::ImplDeleteData()
 // -----------------------------------------------------------------------
 
 void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
-                                   sal_Bool bEnable, Accelerator* pAutoAccel )
+                                   bool bEnable, Accelerator* pAutoAccel )
 {
     DBG_ASSERT( nItemId, "Accelerator::InsertItem(): ItemId == 0" );
 
@@ -356,7 +356,7 @@ void Accelerator::Select()
 
 void Accelerator::InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode )
 {
-    ImplInsertAccel( nItemId, rKeyCode, sal_True, NULL );
+    ImplInsertAccel( nItemId, rKeyCode, true, NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -447,7 +447,7 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
     maCurKeyCode    = KeyCode();
     mnCurId         = 0;
     mnCurRepeat     = 0;
-    mbIsCancel      = sal_False;
+    mbIsCancel      = false;
 
     // delete and copy tables
     ImplDeleteData();

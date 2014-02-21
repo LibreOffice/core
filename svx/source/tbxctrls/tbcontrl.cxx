@@ -266,7 +266,7 @@ private:
 
 protected:
     virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual Window* GetPreferredKeyInputWindow();
     virtual void    GetFocus();
 
@@ -294,7 +294,7 @@ private:
 
 protected:
     virtual void    Resize();
-    virtual sal_Bool    Close();
+    virtual bool    Close();
     virtual Window* GetPreferredKeyInputWindow();
     virtual void    GetFocus();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -351,7 +351,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
     , bInSpecialMode( bInSpec )
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
-    EnableAutocomplete( sal_True );
+    EnableAutocomplete( true );
     EnableUserDraw( true );
     SetUserItemSize( Size( 0, 30 ) );
 }
@@ -1232,7 +1232,7 @@ void SvxColorWindow_Impl::StartSelection()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxColorWindow_Impl::Close()
+bool SvxColorWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -1537,7 +1537,7 @@ void SvxFrameWindow_Impl::StartSelection()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxFrameWindow_Impl::Close()
+bool SvxFrameWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -1652,7 +1652,7 @@ void SvxLineWindow_Impl::Resize()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxLineWindow_Impl::Close()
+bool SvxLineWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -1991,7 +1991,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
         if ( bDoFill )
         {
-            pBox->SetUpdateMode( sal_False );
+            pBox->SetUpdateMode( false );
             pBox->Clear();
 
             {
@@ -2059,7 +2059,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 pBox->SetStyle( nWinBits );
             }
 
-            pBox->SetUpdateMode( sal_True );
+            pBox->SetUpdateMode( true );
             pBox->SetFamily( eFamily );
 
             sal_uInt16 nLines = std::min( pBox->GetEntryCount(), MAX_STYLES_ENTRIES );

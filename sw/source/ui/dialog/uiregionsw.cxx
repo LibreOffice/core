@@ -980,7 +980,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
     if(!CheckPasswd(pBox))
         return 0;
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
-    pBox->EnableTriState(sal_False);
+    pBox->EnableTriState(false);
     sal_Bool bMulti = 1 < m_pTree->GetSelectionCount();
     sal_Bool bFile = pBox->IsChecked();
     if(pEntry)
@@ -992,7 +992,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
                 if( RET_NO == QueryBox( this, SW_RES(QB_CONNECT) ).Execute() )
-                    pBox->Check( sal_False );
+                    pBox->Check( false );
             }
             if( bFile )
                 pSectRepr->SetContent(false);
@@ -1571,7 +1571,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     m_pCurName->SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
     m_pDDECB->SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
     ChangeProtectHdl(m_pProtectCB);
-    m_pSubRegionED->EnableAutocomplete( sal_True, sal_True );
+    m_pSubRegionED->EnableAutocomplete( true, true );
 }
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
@@ -1728,7 +1728,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
                 }
             }
             else if(!bChange)
-                m_pPasswdCB->Check(sal_False);
+                m_pPasswdCB->Check(false);
         }
     }
     else
@@ -1750,7 +1750,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     {
         if( m_pWrtSh->HasSelection() &&
             RET_NO == QueryBox( this, SW_RES(QB_CONNECT) ).Execute() )
-            pBox->Check( sal_False );
+            pBox->Check( false );
     }
 
     sal_Bool bFile = pBox->IsChecked();
@@ -1764,11 +1764,11 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     if( bFile )
     {
         m_pFileNameED->GrabFocus();
-        m_pProtectCB->Check( sal_True );
+        m_pProtectCB->Check( true );
     }
     else
     {
-        m_pDDECB->Check(sal_False);
+        m_pDDECB->Check(false);
         DDEHdl(m_pDDECB);
     }
     return 0;

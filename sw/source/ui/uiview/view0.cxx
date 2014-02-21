@@ -299,7 +299,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VIEW_SMOOTH_SCROLL:
                 aBool.SetValue( pOpt->IsSmoothScroll()); break;
             case FN_VLINEAL:
-                aBool.SetValue( 0 != StatVRuler() ); break;
+                aBool.SetValue( StatVRuler() ); break;
             case FN_HSCROLLBAR:
                 if( pOpt->getBrowseMode() )
                 {

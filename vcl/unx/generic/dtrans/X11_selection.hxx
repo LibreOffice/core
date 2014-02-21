@@ -465,7 +465,7 @@ namespace x11 {
         // for XDropTarget{Drag|Drop}Context
         void accept( sal_Int8 dragOperation, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
         void reject( XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
-        void dropComplete( sal_Bool success, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void dropComplete( bool success, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
 
         // for XDragSourceContext
         sal_Int32 getCurrentCursor();

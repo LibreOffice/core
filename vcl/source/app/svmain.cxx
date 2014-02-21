@@ -156,9 +156,9 @@ int ImplSVMain()
     if( bInit )
     {
         // call application main
-        pSVData->maAppData.mbInAppMain = sal_True;
+        pSVData->maAppData.mbInAppMain = true;
         nReturn = pSVData->mpApp->Main();
-        pSVData->maAppData.mbInAppMain = sal_False;
+        pSVData->maAppData.mbInAppMain = false;
     }
 
     if( pSVData->mxDisplayConnection.is() )
@@ -187,7 +187,7 @@ int ImplSVMain()
 int SVMain()
 {
     // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern sal_Bool ImplSVMainHook( int* );
+    extern bool ImplSVMainHook( int* );
 
     int nRet;
     if( !Application::IsConsoleOnly() && ImplSVMainHook( &nRet ) )
@@ -352,7 +352,7 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mbDeInit = sal_True;
+    pSVData->mbDeInit = true;
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 

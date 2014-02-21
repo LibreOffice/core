@@ -274,7 +274,7 @@ void SvxShowText::SetFont( const Font& rFont )
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlign( ALIGN_TOP );
     aFont.SetSize( PixelToLogic( Size( 0, nWinHeight/2 ) ) );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     Control::SetFont( aFont );
     mnY = ( nWinHeight - GetTextHeight() ) / 2;
 
@@ -313,7 +313,7 @@ SvxShowText::~SvxShowText()
 void SvxCharacterMap::init()
 {
     aFont = GetFont();
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     aFont.SetFamily( FAMILY_DONTKNOW );
     aFont.SetPitch( PITCH_DONTKNOW );
     aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );

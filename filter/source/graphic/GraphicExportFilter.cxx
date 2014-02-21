@@ -84,7 +84,7 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
 
     if ( !aInternalFilterName.isEmpty() )
     {
-        GraphicFilter aGraphicFilter( sal_True );
+        GraphicFilter aGraphicFilter( true );
 
         sal_uInt16 nFilterCount = aGraphicFilter.GetExportFormatCount();
         sal_uInt16 nFormat;

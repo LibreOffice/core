@@ -305,7 +305,7 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
         (*ppScrollbar)->SetScrollHdl( LINK( this, SwView, ScrollHdl ));
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
-    (*ppScrollbar)->EnableDrag( sal_True );
+    (*ppScrollbar)->EnableDrag( true );
 
     if(GetWindow())
         InvalidateBorder();
