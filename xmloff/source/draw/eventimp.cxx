@@ -150,10 +150,11 @@ XMLEventSoundContext::~XMLEventSoundContext()
 TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
-:   SvXMLImportContext(rImp, nPrfx, rLocalName),
-    mxShape( rxShape ), mbScript( sal_False ), meClickAction( ClickAction_NONE ),
-    meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
-    meSpeed( AnimationSpeed_MEDIUM ), mnVerb(0), mbPlayFull( sal_False )
+    : SvXMLImportContext(rImp, nPrfx, rLocalName)
+    , mxShape(rxShape), mbValid(false), mbScript(sal_False)
+    , meClickAction(ClickAction_NONE), meEffect(EK_none)
+    , meDirection(ED_none), mnStartScale(100), meSpeed(AnimationSpeed_MEDIUM)
+    , mnVerb(0), mbPlayFull(sal_False)
 {
     static const OUString sXMLClickName( "click" );
 
