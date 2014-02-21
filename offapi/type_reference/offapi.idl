@@ -17577,7 +17577,7 @@ module com {
      published interface XExtendedDocumentHandler {
       interface ::com::sun::star::xml::sax::XDocumentHandler;
       void startCDATA() raises (::com::sun::star::xml::sax::SAXException);
-      void endCDATA();
+      void endCDATA() raises (::com::sun::star::xml::sax::SAXException);
       void comment([in] string sComment) raises (::com::sun::star::xml::sax::SAXException);
       void allowLineBreak() raises (::com::sun::star::xml::sax::SAXException);
       void unknown([in] string sString) raises (::com::sun::star::xml::sax::SAXException);

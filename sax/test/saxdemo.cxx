@@ -225,7 +225,7 @@ public: // ExtendedDocumentHandler
     virtual void SAL_CALL startCDATA(void) throw (SAXException,RuntimeException)
     {
     }
-    virtual void SAL_CALL endCDATA(void) throw (RuntimeException)
+    virtual void SAL_CALL endCDATA(void) throw (SAXException,RuntimeException)
     {
     }
     virtual void SAL_CALL comment(const OUString& /* sComment */) throw (SAXException,RuntimeException)

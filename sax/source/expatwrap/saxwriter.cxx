@@ -939,7 +939,7 @@ public: // XDocumentHandler
 
 public: // XExtendedDocumentHandler
     virtual void SAL_CALL startCDATA(void) throw(SAXException, RuntimeException);
-    virtual void SAL_CALL endCDATA(void) throw(RuntimeException);
+    virtual void SAL_CALL endCDATA(void) throw(SAXException,RuntimeException);
     virtual void SAL_CALL comment(const OUString& sComment)
         throw(SAXException, RuntimeException);
     virtual void SAL_CALL unknown(const OUString& sString)
@@ -1283,7 +1283,7 @@ void SAXWriter::startCDATA(void) throw(SAXException, RuntimeException)
     m_bIsCDATA = sal_True;
 }
 
-void SAXWriter::endCDATA(void) throw (RuntimeException)
+void SAXWriter::endCDATA(void) throw (SAXException,RuntimeException)
 {
     if( ! m_bDocStarted || ! m_bIsCDATA)
     {
