@@ -67,7 +67,7 @@
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
 #include <cstring>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 #include <ucbhelper/fileidentifierconverter.hxx>
@@ -505,7 +505,7 @@ void ZipPackage::parseContentType()
 
 void ZipPackage::getZipFileContents()
 {
-    auto_ptr < ZipEnumeration > pEnum ( m_pZipFile->entries() );
+    boost::scoped_ptr < ZipEnumeration > pEnum ( m_pZipFile->entries() );
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder, *pCurrent;
     OUString sTemp, sDirName;

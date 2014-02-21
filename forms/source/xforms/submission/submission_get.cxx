@@ -18,8 +18,6 @@
  */
 
 
-#include <memory>
-
 #include "submission_get.hxx"
 #include "serialization_app_xml.hxx"
 #include "serialization_urlencoded.hxx"
@@ -31,6 +29,8 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace CSS::uno;
 using namespace CSS::ucb;
@@ -50,7 +50,7 @@ CSubmissionGet::CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< 
 CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
 {
     // GET always uses apllicatin/x-www-formurlencoded
-    auto_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
+    boost::scoped_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();
 

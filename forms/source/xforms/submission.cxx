@@ -52,7 +52,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 
 
@@ -76,7 +76,6 @@ using com::sun::star::frame::XFrame;
 using xforms::Submission;
 using xforms::Model;
 using xforms::MIP;
-using std::auto_ptr;
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -310,7 +309,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
         xResult, aMethod.equalsIgnoreAsciiCase("get"));
 
     // submit result; set encoding, etc.
-    auto_ptr<CSubmission> xSubmission;
+    boost::scoped_ptr<CSubmission> xSubmission;
     if (aMethod.equalsIgnoreAsciiCase("PUT"))
         xSubmission.reset(new CSubmissionPut( getAction(), aFragment));
     else if (aMethod.equalsIgnoreAsciiCase("post"))

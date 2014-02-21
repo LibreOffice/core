@@ -57,8 +57,6 @@ std::type_info const & getSimpleReferenceObjectTypeInfo()
 #include <cppunit/plugin/TestPlugIn.h>
 #include <boost/scoped_ptr.hpp>
 
-#include <memory>
-
 namespace {
 
 class DerivedCondition: public salhelper::Condition {
@@ -110,7 +108,7 @@ public:
 
 void Test::testCondition() {
     osl::Mutex mutex;
-    std::auto_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
+    boost::scoped_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
     CPPUNIT_ASSERT(typeid (*p.get()) != typeid (salhelper::Condition));
     CPPUNIT_ASSERT(typeid (p.get()) == typeid (salhelper::Condition *));
     CPPUNIT_ASSERT(

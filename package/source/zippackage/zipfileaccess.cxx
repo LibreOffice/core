@@ -33,8 +33,6 @@
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>
 
-#include <memory>
-
 using namespace ::com::sun::star;
 
 #if OSL_DEBUG_LEVEL > 0

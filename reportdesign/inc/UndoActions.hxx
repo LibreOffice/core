@@ -44,7 +44,6 @@
 #include <svx/svdundo.hxx>
 
 #include <functional>
-#include <memory>
 
 namespace dbaui
 {

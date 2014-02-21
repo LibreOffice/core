@@ -23,7 +23,7 @@
 #include "svtools/fileview.hxx"
 #include <tools/debug.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 //........................................................................
 namespace svt
@@ -103,7 +103,7 @@ namespace svt
         if ( nMaxTimeout <= nMinTimeout )
             nMaxTimeout = nMinTimeout + 30000;
 
-        ::std::auto_ptr< FileViewAsyncAction > pActionDescriptor;
+        boost::scoped_ptr< FileViewAsyncAction > pActionDescriptor;
         if ( nMinTimeout )
         {
             pActionDescriptor.reset( new FileViewAsyncAction );

@@ -46,6 +46,8 @@
 
 #include "serialization.hxx"
 
+#include <memory>
+
 namespace CSS = com::sun::star;
 
 class CSubmissionPut;

@@ -21,7 +21,7 @@
 #include "propertyeditor.hxx"
 #include "propctrlr.hrc"
 #include <tools/debug.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 //............................................................................
 namespace pcr
@@ -67,7 +67,7 @@ namespace pcr
             sal_uInt16 nTmpPage = m_pPropBox->GetCurPage();
             if (nTmpPage)
                 m_nActivePage = nTmpPage;
-            ::std::auto_ptr<Window> aTemp(m_pPropBox);
+            boost::scoped_ptr<Window> aTemp(m_pPropBox);
             m_pPropBox = NULL;
         }
 

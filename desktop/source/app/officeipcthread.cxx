@@ -23,7 +23,7 @@
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "dispatchwatcher.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <stdio.h>
 #include <osl/process.h>
 #include <unotools/bootstrap.hxx>
@@ -713,7 +713,7 @@ void OfficeIPCThread::execute()
             if (aArguments.isEmpty())
                 continue;
 
-            std::auto_ptr< CommandLineArgs > aCmdLineArgs;
+            boost::scoped_ptr< CommandLineArgs > aCmdLineArgs;
             try
             {
                 Parser p(aArguments);

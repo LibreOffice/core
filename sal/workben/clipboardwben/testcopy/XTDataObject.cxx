@@ -23,7 +23,6 @@
 
 #include <windows.h>
 #include <ole2.h>
-#include <memory>
 
 //------------------------------------------------------------------------
 // namespace directives

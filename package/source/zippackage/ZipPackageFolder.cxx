@@ -37,7 +37,7 @@
 #include <EncryptedDataHeader.hxx>
 #include <rtl/random.h>
 #include <rtl/instance.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;

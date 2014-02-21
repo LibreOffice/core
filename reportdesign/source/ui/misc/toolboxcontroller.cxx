@@ -43,8 +43,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-#include <memory>
-
 namespace rptui
 {
     using namespace svt;
