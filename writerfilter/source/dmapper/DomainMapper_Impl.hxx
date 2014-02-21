@@ -774,6 +774,9 @@ public:
 
     /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
     std::vector<beans::PropertyValue> m_aSubInteropGrabBag;
+
+private:
+    void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
 };
 } //namespace dmapper
 } //namespace writerfilter
