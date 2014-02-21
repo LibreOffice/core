@@ -263,12 +263,70 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case OOX_TOKEN( doc, spacing ):
             {
-                OptValue<OUString> oBefore = rAttribs.getString(OOX_TOKEN(doc, before));
-                if (oBefore.has())
+                // Spacing before
+                if( !rAttribs.getBool(OOX_TOKEN(doc, beforeAutospacing), false) )
                 {
-                    TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
-                    rSpacing.nValue = TWIPS_TO_MM(oBefore.get().toInt32());
-                    rSpacing.bHasValue = true;
+                    OptValue<sal_Int32> oBefore = rAttribs.getInteger(OOX_TOKEN(doc, before));
+                    if (oBefore.has())
+                    {
+                        TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
+                        rSpacing.nUnit = TextSpacing::POINTS;
+                        rSpacing.nValue = TWIPS_TO_MM(oBefore.get());
+                        rSpacing.bHasValue = true;
+                    }
+                    else
+                    {
+                        OptValue<sal_Int32> oBeforeLines = rAttribs.getInteger(OOX_TOKEN(doc, beforeLines));
+                        if (oBeforeLines.has())
+                        {
+                            TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
+                            rSpacing.nUnit = TextSpacing::PERCENT;
+                            rSpacing.nValue = oBeforeLines.get() * MAX_PERCENT / 100;
+                            rSpacing.bHasValue = true;
+                        }
+                    }
+                }
+
+                // Spacing after
+                if( !rAttribs.getBool(OOX_TOKEN(doc, afterAutospacing), false) )
+                {
+                    OptValue<sal_Int32> oAfter = rAttribs.getInteger(OOX_TOKEN(doc, after));
+                    if (oAfter.has())
+                    {
+                        TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
+                        rSpacing.nUnit = TextSpacing::POINTS;
+                        rSpacing.nValue = TWIPS_TO_MM(oAfter.get());
+                        rSpacing.bHasValue = true;
+                    }
+                    else
+                    {
+                        OptValue<sal_Int32> oAfterLines = rAttribs.getInteger(OOX_TOKEN(doc, afterLines));
+                        if (oAfterLines.has())
+                        {
+                            TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
+                            rSpacing.nUnit = TextSpacing::PERCENT;
+                            rSpacing.nValue = oAfterLines.get() * MAX_PERCENT / 100;
+                            rSpacing.bHasValue = true;
+                        }
+                    }
+                }
+
+                // Line spacing
+                OptValue<OUString> oLineRule = rAttribs.getString(OOX_TOKEN(doc, lineRule));
+                OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(OOX_TOKEN(doc, line));
+                if (oLineSpacing.has())
+                {
+                    if( !oLineRule.has() || oLineRule.get() == "auto" )
+                    {
+                        maLineSpacing.nUnit = TextSpacing::PERCENT;
+                        maLineSpacing.nValue = oLineSpacing.get() * MAX_PERCENT / 240;
+                    }
+                    else
+                    {
+                        maLineSpacing.nUnit = TextSpacing::POINTS;
+                        maLineSpacing.nValue = TWIPS_TO_MM(oLineSpacing.get());
+                    }
+                    maLineSpacing.bHasValue = true;
                 }
             }
             break;

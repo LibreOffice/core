@@ -400,9 +400,9 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     maBulletList.pushToPropMap( pFilterBase, rioBulletMap );
 
     if ( maParaTopMargin.bHasValue || bPushDefaultValues )
-        aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 18.0 ) ) );
+        aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 12.0 ) ) );
     if ( maParaBottomMargin.bHasValue || bPushDefaultValues )
-        aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 18.0 ) ) );
+        aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( fCharacterSize != 0.0 ? fCharacterSize : getCharHeightPoints ( 12.0 ) ) );
     if ( nNumberingType == NumberingType::BITMAP )
     {
         fCharacterSize = getCharHeightPoints( fCharacterSize );

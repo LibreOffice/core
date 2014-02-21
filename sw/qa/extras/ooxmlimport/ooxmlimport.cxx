@@ -40,6 +40,8 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
@@ -1890,6 +1892,66 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.doc
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(xRun, "CharFontNameComplex"));
     CPPUNIT_ASSERT_EQUAL(OUString("MS Mincho"), getProperty<OUString>(xRun, "CharFontNameAsian"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-para-spacing.docx")
+{
+    // Paragraph spacing inside a group shape was not imported
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+
+    // 1st paragraph has 1.5x line spacing but it has no spacing before/after.
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraphOfText(1, xText),1);
+    ::com::sun::star::style::LineSpacing aLineSpacing = getProperty<::com::sun::star::style::LineSpacing>(xRun, "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(::com::sun::star::style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(150), aLineSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
+
+    // 2nd paragraph has double line spacing but it has no spacing before/after.
+    xRun.set(getRun(getParagraphOfText(2, xText),1));
+    aLineSpacing = getProperty<::com::sun::star::style::LineSpacing>(xRun, "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(::com::sun::star::style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(200), aLineSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
+
+    // 3rd paragraph has 24 pt line spacing but it has no spacing before/after.
+    xRun.set(getRun(getParagraphOfText(3, xText),1));
+    aLineSpacing = getProperty<::com::sun::star::style::LineSpacing>(xRun, "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(::com::sun::star::style::LineSpacingMode::MINIMUM), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(847), aLineSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
+
+    // 4th paragraph has 1.75x line spacing but it has no spacing before/after.
+    xRun.set(getRun(getParagraphOfText(4, xText),1));
+    aLineSpacing = getProperty<::com::sun::star::style::LineSpacing>(xRun, "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(::com::sun::star::style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(175), aLineSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
+
+    // 5th paragraph has margins which are defined by w:beforeLines and w:afterLines.
+    xRun.set(getRun(getParagraphOfText(5, xText),1));
+    aLineSpacing = getProperty<::com::sun::star::style::LineSpacing>(xRun, "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(::com::sun::star::style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(741), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
+
+    // 6th paragraph has margins which are defined by w:before and w:after.
+    xRun.set(getRun(getParagraphOfText(6, xText),1));
+    aLineSpacing = getProperty<::com::sun::star::style::LineSpacing>(xRun, "ParaLineSpacing");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(::com::sun::star::style::LineSpacingMode::PROP), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aLineSpacing.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(423), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(635), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
+
+    // 7th paragraph has auto paragraph margins a:afterAutospacing and a:beforeAutospacing, which means margins must be ignored.
+    xRun.set(getRun(getParagraphOfText(7, xText),1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
 }
 #endif
 

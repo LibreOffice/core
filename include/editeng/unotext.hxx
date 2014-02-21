@@ -136,7 +136,7 @@ class SvxItemPropertySet;
     {OUString(UNO_NAME_EDIT_PARA_IS_HYPHEN),    EE_PARA_HYPHENATE,          ::getBooleanCppuType(),                0, 0 }, \
     {OUString(UNO_NAME_EDIT_PARA_LASTLINEADJ),  EE_PARA_JUST,               ::getCppuType((const sal_Int16*)0),            0, MID_LAST_LINE_ADJUST }, \
     {OUString(UNO_NAME_EDIT_PARA_LMARGIN),      EE_PARA_LRSPACE,            ::getCppuType((const sal_Int32*)0),            0, MID_TXT_LMARGIN|SFX_METRIC_ITEM }, \
-    {OUString(UNO_NAME_EDIT_PARA_LINESPACING),  EE_PARA_SBL,                ::getCppuType((const ::com::sun::star::style::LineSpacing*)0),     0, 0 }, \
+    {OUString(UNO_NAME_EDIT_PARA_LINESPACING),  EE_PARA_SBL,                ::getCppuType((const ::com::sun::star::style::LineSpacing*)0),     0, CONVERT_TWIPS}, \
     {OUString(UNO_NAME_EDIT_PARA_RMARGIN),      EE_PARA_LRSPACE,            ::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN|SFX_METRIC_ITEM }, \
     {OUString(UNO_NAME_EDIT_PARA_TAPSTOPS),     EE_PARA_TABS,               ::getCppuType((const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >*)0), 0, 0 }, \
     {OUString(UNO_NAME_EDIT_PARA_TMARGIN),      EE_PARA_ULSPACE,            ::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN|SFX_METRIC_ITEM },\
