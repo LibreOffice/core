@@ -61,13 +61,13 @@ struct ProviderRequest
             )
     {
         if (!xRet.is() && (Implname == sImplementationName))
-        try
-        {
-            xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
-        }
-        catch(...)
-        {
-        }
+            try
+            {
+                xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
+            }
+            catch(...)
+            {
+            }
         return xRet.is();
     }
 
