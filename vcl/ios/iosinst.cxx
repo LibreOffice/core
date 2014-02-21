@@ -30,6 +30,7 @@
 #include "headless/svpdummies.hxx"
 #include "generic/gendata.hxx"
 #include "quartz/utils.h"
+#include <vcl/settings.hxx>
 
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
