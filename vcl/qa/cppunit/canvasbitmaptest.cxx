@@ -613,8 +613,11 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& ) throw (lang::IllegalArgumentException,
-                                                                                                                             uno::RuntimeException)
+    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB(
+        const uno::Sequence< rendering::RGBColor >&)
+            throw (lang::IllegalArgumentException,
+                   uno::RuntimeException,
+                   std::exception)
     {
         CPPUNIT_ASSERT_MESSAGE("convertIntegerFromRGB: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
