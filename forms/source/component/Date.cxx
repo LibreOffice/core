@@ -88,9 +88,11 @@ Sequence<Type> ODateModel::_getTypes()
 
 //------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True )
-                        // use the old control name for compytibility reasons
-            ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
+    : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD,
+        FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True)
+    // use the old control name for compytibility reasons
+    , OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
+    , m_bDateTimeField(false)
 {
     m_nClassId = FormComponentType::DATEFIELD;
     initValueProperty( PROPERTY_DATE, PROPERTY_ID_DATE );
@@ -112,8 +114,9 @@ ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
 
 //------------------------------------------------------------------------------
 ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
-    :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
+    : OEditBaseModel(_pOriginal, _rxFactory)
+    , OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
+    , m_bDateTimeField(false)
 {
     setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_DATEFORMAT ) );
 }
