@@ -192,6 +192,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
         case TAB_OVER_MARGIN: return mbTabOverMargin;
         case SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
+        case FOOTNOTE_NO_INDENTATION: return mbFootnoteNoIndentation;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the SwViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -350,6 +351,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 
         case SURROUND_TEXT_WRAP_SMALL:
             mbSurroundTextWrapSmall = value;
+            break;
+
+        case FOOTNOTE_NO_INDENTATION:
+            mbFootnoteNoIndentation = value;
             break;
 
         // COMPATIBILITY FLAGS END

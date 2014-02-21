@@ -332,6 +332,12 @@ void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
+
+    Reference< XMultiServiceFactory > xFactory( xDoc, UNO_QUERY );
+    Reference< XPropertySet > xSettings( xFactory->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
+
+    if (msFilterName.equals(OUString( "writer_MS_Word_2003_XML" )))
+        xSettings->setPropertyValue( "FootnoteNoIndentation", makeAny( sal_True ) );
 }
 // XInitialization
 void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )

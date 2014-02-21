@@ -584,6 +584,7 @@ private:
     bool mbBackgroundParaOverDrawings;
     bool mbTabOverMargin;
     bool mbSurroundTextWrapSmall;
+    bool mbFootnoteNoIndentation;
 
     bool mbLastBrowseMode                           : 1;
 

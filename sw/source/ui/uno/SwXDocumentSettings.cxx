@@ -124,7 +124,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMBED_FONTS,
     HANDLE_EMBED_SYSTEM_FONTS,
     HANDLE_TAB_OVER_MARGIN,
-    HANDLE_SURROUND_TEXT_WRAP_SMALL
+    HANDLE_SURROUND_TEXT_WRAP_SMALL,
+    HANDLE_FOOTNOTE_NO_INDENTATION
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -195,6 +196,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("SurroundTextWrapSmall"), HANDLE_SURROUND_TEXT_WRAP_SMALL, cppu::UnoType<bool>::get(), 0, 0},
+        { OUString("FootnoteNoIndentation"), HANDLE_FOOTNOTE_NO_INDENTATION, cppu::UnoType<bool>::get(), 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -799,6 +801,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL, bTmp);
         }
         break;
+        case HANDLE_FOOTNOTE_NO_INDENTATION:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::FOOTNOTE_NO_INDENTATION, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1216,6 +1224,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_SURROUND_TEXT_WRAP_SMALL:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_FOOTNOTE_NO_INDENTATION:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::FOOTNOTE_NO_INDENTATION );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

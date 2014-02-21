@@ -155,6 +155,11 @@ void RtfFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc
 void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     m_xDstDoc = xDoc;
+
+   uno::Reference< lang::XMultiServiceFactory > xFactory( xDoc, uno::UNO_QUERY );
+   uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
+
+   xSettings->setPropertyValue( "FootnoteNoIndentation", uno::makeAny( sal_True ) );
 }
 
 void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/) throw(uno::Exception, uno::RuntimeException)

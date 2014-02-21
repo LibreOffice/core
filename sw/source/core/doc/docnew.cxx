@@ -315,6 +315,7 @@ SwDoc::SwDoc()
     mbBackgroundParaOverDrawings(false),
     mbTabOverMargin(false),
     mbSurroundTextWrapSmall(false),
+    mbFootnoteNoIndentation(false),
     mbLastBrowseMode( false ),
     mn32DummyCompatabilityOptions1(0),
     mn32DummyCompatabilityOptions2(0),

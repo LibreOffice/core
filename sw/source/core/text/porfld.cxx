@@ -551,7 +551,8 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         {
             if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
                  // #i32902#
-                 !IsFtnNumPortion() )
+                 !IsFtnNumPortion() ||
+                 IsFtnNumPortion() && rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::FOOTNOTE_NO_INDENTATION) )
             {
                 nDiff = rInf.Left()
                     + rInf.GetTxtFrm()->GetTxtNode()->
