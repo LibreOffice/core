@@ -768,9 +768,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSubTotalDescriptor > SAL_CALL
                             createSubTotalDescriptor( sal_Bool bEmpty )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   applySubTotals( const ::com::sun::star::uno::Reference<
+    virtual void SAL_CALL   applySubTotals(const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::sheet::XSubTotalDescriptor >& xDescriptor,
-                                sal_Bool bReplace ) throw(::com::sun::star::uno::RuntimeException);
+                                sal_Bool bReplace)
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual void SAL_CALL   removeSubTotals() throw(::com::sun::star::uno::RuntimeException);
 
                             // XImportable

@@ -5835,8 +5835,9 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTot
 }
 
 void SAL_CALL ScCellRangeObj::applySubTotals(
-                const uno::Reference<sheet::XSubTotalDescriptor>& xDescriptor,
-                sal_Bool bReplace ) throw(uno::RuntimeException)
+    const uno::Reference<sheet::XSubTotalDescriptor>& xDescriptor,
+    sal_Bool bReplace)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
