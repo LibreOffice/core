@@ -1,3 +1,4 @@
+#include<iostream>
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -135,13 +136,18 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             << expr->getType() << expr->getSourceRange();
 #endif
     } else if (sub->isIntegerConstantExpr(compiler.getASTContext())) {
-        report(
-            DiagnosticsEngine::Warning,
-            ("implicit conversion (%0) of integer constant expression of type"
-             " %1 to %2"),
-            expr->getLocStart())
-            << expr->getCastKindName() << expr->getSubExpr()->getType()
-            << expr->getType() << expr->getSourceRange();
+        CallExpr const * ce = dyn_cast<CallExpr>(sub);
+        if (ce == nullptr
+            || ce->getBuiltinCallee() != Builtin::BI__builtin_expect)
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                ("implicit conversion (%0) of integer constant expression of"
+                 " type %1 to %2"),
+                expr->getLocStart())
+                << expr->getCastKindName() << expr->getSubExpr()->getType()
+                << expr->getType() << expr->getSourceRange();
+        }
     }
     return true;
 }

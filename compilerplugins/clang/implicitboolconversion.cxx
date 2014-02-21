@@ -192,7 +192,9 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
                     && !(compat::getParamType(*t, n)->isSpecificBuiltinType(
                              BuiltinType::Int)
                          || (compat::getParamType(*t, n)->isSpecificBuiltinType(
-                                 BuiltinType::UInt))))
+                                 BuiltinType::UInt))
+                         || (compat::getParamType(*t, n)->isSpecificBuiltinType(
+                                 BuiltinType::Long))))
                 {
                     reportWarning(i);
                 }
