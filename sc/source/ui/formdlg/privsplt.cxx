@@ -34,9 +34,11 @@
 #*
 #************************************************************************/
 
-ScPrivatSplit::ScPrivatSplit( Window* pParent, const ResId& rResId,
-                             SC_SPLIT_DIRECTION eSplit):
-                        Control( pParent, rResId )
+ScPrivatSplit::ScPrivatSplit(Window* pParent, const ResId& rResId,
+                             SC_SPLIT_DIRECTION eSplit)
+    : Control(pParent, rResId)
+    , nDeltaX(0)
+    , nDeltaY(0)
 {
     Point aPos=GetPosPixel();
     nOldX=(short)aPos.X();
