@@ -583,7 +583,7 @@ void _InitCore()
     aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] =                new SvxShadowItem( RES_SHADOW );
     aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] =              new SvxMacroItem( RES_FRMMACRO );
     aAttrTab[ RES_COL- POOLATTR_BEGIN ] =                   new SwFmtCol;
-    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] =                 new SvxFmtKeepItem( sal_False, RES_KEEP );
+    aAttrTab[ RES_KEEP - POOLATTR_BEGIN ] =                 new SvxFmtKeepItem( false, RES_KEEP );
     aAttrTab[ RES_URL - POOLATTR_BEGIN ] =                  new SwFmtURL();
     aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] =     new SwFmtEditInReadonly;
     aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] =         new SwFmtLayoutSplit;

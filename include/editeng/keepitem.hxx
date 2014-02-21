@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC SvxFmtKeepItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    inline SvxFmtKeepItem( const sal_Bool bKeep /*= sal_False*/,
+    inline SvxFmtKeepItem( const bool bKeep /*= false*/,
                            const sal_uInt16 _nWhich  );
     inline SvxFmtKeepItem& operator=( const SvxFmtKeepItem& rSplit );
 
@@ -50,7 +50,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxFmtKeepItem::SvxFmtKeepItem( const sal_Bool bKeep, const sal_uInt16 _nWhich ) :
+inline SvxFmtKeepItem::SvxFmtKeepItem( const bool bKeep, const sal_uInt16 _nWhich ) :
     SfxBoolItem( _nWhich, bKeep )
 {}
 

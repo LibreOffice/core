@@ -314,7 +314,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_KEEPN:
                 if( PARDID->nKeep )
                 {
-                    pSet->Put( SvxFmtKeepItem( sal_True, PARDID->nKeep ));
+                    pSet->Put( SvxFmtKeepItem( true, PARDID->nKeep ));
                 }
                 break;
 

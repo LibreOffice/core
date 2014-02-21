@@ -2497,7 +2497,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                                     if ( !pTmpSet )
                                         pTmpSet = new SfxItemSet(rNode.GetSwAttrSet());
 
-                                    const SvxFmtKeepItem aKeepItem( sal_True, RES_KEEP );
+                                    const SvxFmtKeepItem aKeepItem( true, RES_KEEP );
                                     pTmpSet->Put( aKeepItem );
                                 }
                             }

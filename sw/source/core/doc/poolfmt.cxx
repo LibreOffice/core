@@ -467,7 +467,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
                 if( get(IDocumentSettingAccess::HTML_MODE) )
                     aUL.SetLower( HTML_PARSPACE );
-                aSet.Put( SvxFmtKeepItem( sal_True, RES_KEEP ));
+                aSet.Put( SvxFmtKeepItem( true, RES_KEEP ));
 
                 pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
 

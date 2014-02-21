@@ -1430,7 +1430,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             if ( bBefore )
             {
                 if ( !pNew->GetSwAttrSet().GetKeep().GetValue()  )
-                    pNew->SetAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
+                    pNew->SetAttr( SvxFmtKeepItem( true, RES_KEEP ) );
             }
             else
             {
@@ -1438,7 +1438,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     rDoc.GetNodes()[nNdIdx]->GetStartNode()->GetTableNode();
                 SwTable &rTbl = pNd->GetTable();
                 if ( !rTbl.GetFrmFmt()->GetKeep().GetValue() )
-                    rTbl.GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
+                    rTbl.GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem( true, RES_KEEP ) );
                 if ( pUndo )
                     pUndo->SetUndoKeep();
             }

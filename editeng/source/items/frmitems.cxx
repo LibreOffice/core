@@ -155,7 +155,7 @@ TYPEINIT1_FACTORY(SvxShadowItem, SfxPoolItem, new SvxShadowItem(0));
 TYPEINIT1_FACTORY(SvxBoxItem, SfxPoolItem, new SvxBoxItem(0));
 TYPEINIT1_FACTORY(SvxBoxInfoItem, SfxPoolItem, new SvxBoxInfoItem(0));
 TYPEINIT1_FACTORY(SvxFmtBreakItem, SfxEnumItem, new SvxFmtBreakItem(SVX_BREAK_NONE, 0));
-TYPEINIT1_FACTORY(SvxFmtKeepItem, SfxBoolItem, new SvxFmtKeepItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxFmtKeepItem, SfxBoolItem, new SvxFmtKeepItem(false, 0));
 TYPEINIT1_FACTORY(SvxLineItem, SfxPoolItem, new SvxLineItem(0));
 TYPEINIT1_FACTORY(SvxFrameDirectionItem, SfxUInt16Item, new SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0));
 
@@ -3101,7 +3101,7 @@ SfxPoolItem* SvxFmtKeepItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_Int8 bIsKeep;
     rStrm.ReadSChar( bIsKeep );
-    return new SvxFmtKeepItem( sal_Bool( bIsKeep != 0 ), Which() );
+    return new SvxFmtKeepItem( bIsKeep != 0, Which() );
 }
 
 
