@@ -608,8 +608,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
                                 OUString(")");
     m_pIconStyleLB->InsertEntry(entryForAuto);
 
-    for (const vcl::IconThemeInfo& i : mInstalledIconThemes) {
-        m_pIconStyleLB->InsertEntry(i.GetDisplayName());
+    for (std::vector<vcl::IconThemeInfo>::const_iterator aI = mInstalledIconThemes.begin(); aI != mInstalledIconThemes.end(); ++aI) {
+        m_pIconStyleLB->InsertEntry(aI->GetDisplayName());
     }
 
     // separate auto and other icon themes
