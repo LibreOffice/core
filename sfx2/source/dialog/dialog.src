@@ -54,7 +54,7 @@ InfoBox MSG_POOL_STYLE_NAME
 };
 String STR_DELETE_STYLE_USED
 {
-    Text [ en-US ] = "One or more of the selected styles is in use in this document.\nIf you delete these styles, text will revert to the parent style.\n" ;
+    Text [ en-US ] = "One or more of the selected styles is in use in this document.\nIf you delete these styles, text will revert to the parent style.\nDo you still wish to delete these styles?\n" ;
 };
 String STR_DELETE_STYLE
 {
