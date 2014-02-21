@@ -2427,3 +2427,28 @@
  #include "GrAppData.h"
  
  namespace gr
+--- misc/silgraphite-2.3.1/engine/include/graphite/SegmentAux.h	Thu Jan 22 00:36:40 2009
++++ misc/build/silgraphite-2.3.1/engine/include/graphite/SegmentAux.h	Sat Aug 22 19:36:32 2009
+@@ -232,8 +232,12 @@
+ protected:
+ 	// Constructor that includes output-slot mapping list, used for non-contiguous lists:
+ 	GlyphSetIterator(Segment & seg, size_t islout, RcVector * qvislout)
+-		: m_pseg(&seg), m_vit(qvislout->Vector().begin() + islout)
++		: m_pseg(&seg), m_vit(qvislout->Vector().begin())
+ 	{
++		if( islout < qvislout->Vector().size())
++			m_vit += islout;
++		else
++			m_vit = qvislout->Vector().end();
+ 		m_qvislout = qvislout;
+ 		m_qvislout->IncRefCount();
+ 	}
+@@ -289,7 +293,7 @@
+  
+ 	// Relational operators.
+   	// Forward iterator requirements
+-	bool operator==(const GlyphSetIterator & rhs) const throw()	{ return m_vit == rhs.m_vit; }
++	bool operator==(const GlyphSetIterator & rhs) const throw()	{ return (m_qvislout == NULL) || (m_vit == rhs.m_vit); }
+ 	bool operator!=(const GlyphSetIterator & rhs) const throw()	{ return !(*this == rhs); }
+ 
+ 	// Random access iterator requirements
