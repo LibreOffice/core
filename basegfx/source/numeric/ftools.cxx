@@ -25,29 +25,6 @@ namespace basegfx
     // init static member of class fTools
     double ::basegfx::fTools::mfSmallValue = 0.000000001;
 
-    double snapToNearestMultiple(double v, const double fStep)
-    {
-        if(fTools::equalZero(fStep))
-        {
-            // with a zero step, all snaps to 0.0
-            return 0.0;
-        }
-        else
-        {
-            const double fHalfStep(fStep * 0.5);
-            const double fChange(fHalfStep - fmod(v + fHalfStep, fStep));
-
-            if(basegfx::fTools::equal(fabs(v), fabs(fChange)))
-            {
-                return 0.0;
-            }
-            else
-            {
-                return v + fChange;
-            }
-        }
-    }
-
     double snapToZeroRange(double v, double fWidth)
     {
         if(fTools::equalZero(fWidth))
