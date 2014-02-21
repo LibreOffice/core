@@ -100,6 +100,8 @@ namespace
 OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                    :EditBrowseBox( pParent,EBBF_NOROWPICTURE, WB_3DLOOK, BROWSER_COLUMNSELECTION | BROWSER_KEEPSELECTION |  BROWSER_HIDESELECT |
                                   BROWSER_HIDECURSOR | BROWSER_HLINESFULL | BROWSER_VLINESFULL )
+                   ,m_nSeekRow(0)
+                   ,m_nMaxColumns(0)
                    ,m_aFunctionStrings(ModuleRes(STR_QUERY_FUNCTIONS))
                    ,m_nVisibleCount(0)
                    ,m_nLastSortColumn(SORT_COLUMN_NONE)
