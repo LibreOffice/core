@@ -24,12 +24,12 @@ search_path_is_valid(const OUString& dir)
 {
     osl::DirectoryItem dirItem;
     osl::FileBase::RC retvalGet = osl::DirectoryItem::get(dir, dirItem);
-    if (retvalGet != osl::FileBase::RC::E_None) {
+    if (retvalGet != osl::FileBase::E_None) {
         return false;
     }
     osl::FileStatus fileStatus(osl_FileStatus_Mask_Type);
     osl::FileBase::RC retvalStatus = dirItem.getFileStatus(fileStatus);
-    if (retvalStatus != osl::FileBase::RC::E_None) {
+    if (retvalStatus != osl::FileBase::E_None) {
         return false;
     }
 
@@ -56,8 +56,9 @@ IconThemeScanner::ScanDirectoryForIconThemes(const OUString& path)
         return false;
     }
     mFoundIconThemes.clear();
-    for (const OUString& pathToTheme : iconThemePaths) {
-        AddIconThemeByPath(pathToTheme);
+    for (std::vector<OUString>::iterator aI = iconThemePaths.begin(); aI != iconThemePaths.end(); ++aI)
+    {
+        AddIconThemeByPath(*aI);
     }
     return true;
 }
@@ -68,7 +69,7 @@ IconThemeScanner::AddIconThemeByPath(const OUString &url)
     if (!IconThemeInfo::UrlCanBeParsed(url)) {
         return false;
     }
-    IconThemeInfo newTheme{url};
+    IconThemeInfo newTheme(url);
     mFoundIconThemes.push_back(newTheme);
     return true;
 }
@@ -80,15 +81,15 @@ IconThemeScanner::ReadIconThemesFromPath(const OUString& dir)
 
     osl::Directory dirToScan(dir);
     osl::FileBase::RC retvalOpen = dirToScan.open();
-    if (retvalOpen != osl::FileBase::RC::E_None) {
+    if (retvalOpen != osl::FileBase::E_None) {
         return found;
     }
 
     osl::DirectoryItem directoryItem;
-    while (dirToScan.getNextItem(directoryItem) == osl::FileBase::RC::E_None) {
+    while (dirToScan.getNextItem(directoryItem) == osl::FileBase::E_None) {
         osl::FileStatus status(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL | osl_FileStatus_Mask_FileName);
         osl::FileBase::RC retvalStatus = directoryItem.getFileStatus(status);
-        if (retvalStatus != osl::FileBase::RC::E_None) {
+        if (retvalStatus != osl::FileBase::E_None) {
             continue;
         }
         if (!status.isRegular()) {
@@ -115,12 +116,12 @@ IconThemeScanner::FileIsValidIconTheme(const OUString& filename)
     // check whether the file is a regular file
     osl::DirectoryItem dirItem;
     osl::FileBase::RC retvalGet = osl::DirectoryItem::get(filename, dirItem);
-    if (retvalGet != osl::FileBase::RC::E_None) {
+    if (retvalGet != osl::FileBase::E_None) {
         return false;
     }
     osl::FileStatus fileStatus(osl_FileStatus_Mask_Type);
     osl::FileBase::RC retvalStatus = dirItem.getFileStatus(fileStatus);
-    if (retvalStatus != osl::FileBase::RC::E_None) {
+    if (retvalStatus != osl::FileBase::E_None) {
         return false;
     }
     if (!fileStatus.isRegular()) {
@@ -138,7 +139,7 @@ IconThemeScanner::IconThemeIsInstalled(const OUString& themeId) const
 /*static*/ boost::shared_ptr<IconThemeScanner>
 IconThemeScanner::Create(const OUString &path)
 {
-    boost::shared_ptr<IconThemeScanner> retval(new IconThemeScanner{});
+    boost::shared_ptr<IconThemeScanner> retval(new IconThemeScanner);
     retval->ScanDirectoryForIconThemes(path);
     return retval;
 }
