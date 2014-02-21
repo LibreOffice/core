@@ -34,6 +34,7 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
     XMLTransformerContext( rImp, rQName ),
     m_bIgnoreCharacters( bIgnoreChars ),
     m_bIgnoreElements( bIgnoreElems ),
+    m_bAllowCharactersRecursive( false ),
     m_bRecursiveUse( sal_False )
 {
 }
