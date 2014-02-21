@@ -658,7 +658,7 @@ public:
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, bool bActive );      // only for Undo etc.
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
     SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const;
-    void            SetGrammar( formula::FormulaGrammar::Grammar eGram );
+    SC_DLLPUBLIC void SetGrammar( formula::FormulaGrammar::Grammar eGram );
     SC_DLLPUBLIC sal_uInt8          GetLinkMode( SCTAB nTab ) const;
     bool            IsLinked( SCTAB nTab ) const;
     SC_DLLPUBLIC const OUString  GetLinkDoc( SCTAB nTab ) const;

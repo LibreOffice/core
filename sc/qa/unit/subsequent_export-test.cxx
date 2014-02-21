@@ -32,6 +32,7 @@
 #include "scopetools.hxx"
 #include "cellvalue.hxx"
 #include <postit.hxx>
+#include <tokenstringcontext.hxx>
 
 #include "svx/svdoole2.hxx"
 #include "tabprotection.hxx"
@@ -43,6 +44,7 @@
 #include "editeng/section.hxx"
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/borderline.hxx>
+#include <formula/grammar.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
@@ -85,6 +87,8 @@ public:
     void testCellBordersXLS();
     void testCellBordersXLSX();
 
+    void testSharedFormulaExportXLS();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -108,6 +112,7 @@ public:
     CPPUNIT_TEST(testSheetProtectionXLSX);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
+    CPPUNIT_TEST(testSharedFormulaExportXLS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1078,6 +1083,96 @@ void ScExportTest::testCellBordersXLS()
 void ScExportTest::testCellBordersXLSX()
 {
     testExcelCellBorders(XLSX);
+}
+
+void ScExportTest::testSharedFormulaExportXLS()
+{
+    struct
+    {
+        bool checkContent( ScDocument* pDoc )
+        {
+            formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
+            pDoc->SetGrammar(eGram);
+            sc::TokenStringContext aCxt(pDoc, eGram);
+
+            // Check the title row.
+
+            OUString aActual = pDoc->GetString(0,1,0);
+            OUString aExpected = "Response";
+            if (aActual != aExpected)
+            {
+                cerr << "Wrong content in A2: expected='" << aExpected << "', actual='" << aActual << "'" << endl;
+                return false;
+            }
+
+            aActual = pDoc->GetString(1,1,0);
+            aExpected = "Response";
+            if (aActual != aExpected)
+            {
+                cerr << "Wrong content in B2: expected='" << aExpected << "', actual='" << aActual << "'" << endl;
+                return false;
+            }
+
+            // A3:A12 and B3:B12 are numbers from 1 to 10.
+            for (SCROW i = 0; i <= 9; ++i)
+            {
+                double fExpected = i + 1.0;
+                ScAddress aPos(0,i+2,0);
+                double fActual = pDoc->GetValue(aPos);
+                if (fExpected != fActual)
+                {
+                    cerr << "Wrong value in A" << (i+2) << ": expected=" << fExpected << ", actual=" << fActual << endl;
+                    return false;
+                }
+
+                aPos.IncCol();
+                ScFormulaCell* pFC = pDoc->GetFormulaCell(aPos);
+                if (!pFC)
+                {
+                    cerr << "B" << (i+2) << " should be a formula cell." << endl;
+                    return false;
+                }
+
+                OUString aFormula = pFC->GetCode()->CreateString(aCxt, aPos);
+                aExpected = "Coefficients!RC[-1]";
+                if (aFormula != aExpected)
+                {
+                    cerr << "Wrong formula in B" << (i+2) << ": expected='" << aExpected << "', actual='" << aFormula << "'" << endl;
+                    return false;
+                }
+
+                fActual = pDoc->GetValue(aPos);
+                if (fExpected != fActual)
+                {
+                    cerr << "Wrong value in B" << (i+2) << ": expected=" << fExpected << ", actual=" << fActual << endl;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Check the content of the original.
+    bool bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the original document failed.", bRes);
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLS);
+    xDocSh->DoClose();
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload file.", xDocSh2.Is());
+
+    pDoc = xDocSh2->GetDocument();
+
+    // Check the content of the reloaded. This should be identical.
+    bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
+
+    xDocSh2->DoClose();
 }
 
 ScExportTest::ScExportTest()
