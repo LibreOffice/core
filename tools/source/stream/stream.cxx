@@ -1221,12 +1221,6 @@ SvStream& SvStream::WriteCharPtr( const char* pBuf )
     return *this;
 }
 
-SvStream& SvStream::WriteUCharPtr( const unsigned char* pBuf )
-{
-    Write( (char*)pBuf, strlen( (char*)pBuf ) );
-    return *this;
-}
-
 SvStream& SvStream::WriteStream( SvStream& rStream )
 {
     const sal_uInt32 cBufLen = 0x8000;

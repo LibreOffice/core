@@ -333,7 +333,6 @@ public:
     SvStream&       WriteFloat( float nFloat );
     SvStream&       WriteDouble( const double& rDouble );
     SvStream&       WriteCharPtr( const char* pBuf );
-    SvStream&       WriteUCharPtr( const unsigned char* pBuf );
 
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( sal_Int32 nInt32 );
