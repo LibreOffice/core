@@ -60,7 +60,7 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
       mpSelectionAnchor(),
       mpCurrentPage(),
       mnUpdateLockCount(0),
-      mbIsUpdateCurrentPagePending(false)
+      mbIsUpdateCurrentPagePending(true)
 {
     CountSelectedPages ();
 }
@@ -375,27 +375,39 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
     mbIsUpdateCurrentPagePending = false;
 
     // Make the first selected page the current page.
+    SharedPageDescriptor pCurrentPageDescriptor;
     const sal_Int32 nPageCount (GetPageCount());
     for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
     {
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
-        if (pDescriptor && pDescriptor->HasState(PageDescriptor::ST_Selected))
+        if ( ! pDescriptor)
+            continue;
+        if (pDescriptor->HasState(PageDescriptor::ST_Selected))
         {
-            // Switching the current slide normally sets also the selection
-            // to just the new current slide.  To prevent that, we store
-            // (and at the end of this scope restore) the current selection.
-            ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
-
-            mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
-
-            // Restore the selection and prevent a recursive call to
-            // UpdateCurrentPage().
-            SetPageSelection(pSelection, false);
-            return;
+            pCurrentPageDescriptor = pDescriptor;
+            break;
         }
     }
+    if ( ! pCurrentPageDescriptor && nPageCount>0)
+    {
+        // No page is selected.  Make the first slide the current page.
+        pCurrentPageDescriptor = mrModel.GetPageDescriptor(0);
+    }
 
-    // No page is selected.  Do not change the current slide.
+    if (pCurrentPageDescriptor)
+    {
+        // Switching the current slide normally sets also the
+        // selection to just the new current slide.  To prevent that,
+        // we store (and at the end of this scope restore) the current
+        // selection.
+        ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
+
+        mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pCurrentPageDescriptor);
+
+        // Restore the selection and prevent a recursive call to
+        // UpdateCurrentPage().
+        SetPageSelection(pSelection, false);
+    }
 }
 
 

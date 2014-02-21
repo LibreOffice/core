@@ -81,11 +81,14 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
 {
     if (mnCurrentSlideIndex != nSlideIndex)
     {
+        PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter.GetController().GetPageSelector());
+
+        mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
+
         ReleaseCurrentSlide();
         AcquireCurrentSlide(nSlideIndex);
 
         // Update the selection.
-        mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
         if (mpCurrentSlide)
         {
             mrSlideSorter.GetController().GetPageSelector().SelectPage(mpCurrentSlide);
