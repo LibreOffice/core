@@ -76,7 +76,7 @@ class IconThemeSelectorTest : public CppUnit::TestFixture
 IconThemeSelectorTest::GetFakeInstalledThemes()
 {
     std::vector<vcl::IconThemeInfo> r;
-    vcl::IconThemeInfo a{};
+    vcl::IconThemeInfo a;
     a.mThemeId = "tango";
     r.push_back(a);
     a.mThemeId = "oxygen";
