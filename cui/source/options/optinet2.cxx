@@ -980,18 +980,16 @@ sal_Bool MozPluginTabPage::isInstalled()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
-    char lnkFilePath[NPP_PATH_MAX] = {0};
     char lnkReferFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
-    strcat(lnkFilePath, pHome);
-    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION);
+    OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
 
     struct stat sBuf;
-    if (0 > lstat(lnkFilePath, &sBuf))
+    if (0 > lstat(lnkFilePath.getStr(), &sBuf))
         return false;
     if (!S_ISLNK(sBuf.st_mode))
         return false;
-    if (0 >= readlink(lnkFilePath, lnkReferFilePath, NPP_PATH_MAX))
+    if (0 >= readlink(lnkFilePath.getStr(), lnkReferFilePath, NPP_PATH_MAX))
         return false;
     // If the link is relative, then we regard it as non-standard
     if (lnkReferFilePath[0] != '/')
@@ -1031,17 +1029,15 @@ sal_Bool MozPluginTabPage::installPlugin()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
-    char lnkFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
-    strcat(lnkFilePath, pHome);
-    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION);
-    remove(lnkFilePath);
+    OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
+    remove(lnkFilePath.getStr());
 
     // create the dirs if necessary
     struct stat buf;
     char tmpDir[NPP_PATH_MAX] = {0};
     sprintf(tmpDir, "%s/.mozilla", pHome);
-    if (0 > stat(lnkFilePath, &buf))
+    if (0 > stat(lnkFilePath.getStr(), &buf))
     {
         mkdir(tmpDir, 0755);
         strcat(tmpDir, "/plugins");
@@ -1058,7 +1054,7 @@ sal_Bool MozPluginTabPage::installPlugin()
     strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
     // create the link
-    if (0 != symlink(realFilePath, lnkFilePath))
+    if (0 != symlink(realFilePath, lnkFilePath.getStr()))
         return false;
     return true;
 #endif
@@ -1080,12 +1076,10 @@ sal_Bool MozPluginTabPage::uninstallPlugin()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
-    char lnkFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
-    strcat(lnkFilePath, pHome);
-    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION);
+    OString lnkFilePath(OString(pHome) + OString("/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION));
 
-    if(0 > remove(lnkFilePath))
+    if(0 > remove(lnkFilePath.getStr()))
         return false;
     return true;
 #endif
