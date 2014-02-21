@@ -608,13 +608,12 @@ public:
 // classes for cells and their content
 // class SchXMLTableCellContext
 SchXMLTableCellContext::SchXMLTableCellContext(
-    SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport,
-    const OUString& rLocalName,
-    SchXMLTable& aTable ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
-        mrImportHelper( rImpHelper ),
-        mrTable( aTable )
+    SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
+    const OUString& rLocalName, SchXMLTable& aTable)
+    : SvXMLImportContext(rImport, XML_NAMESPACE_TABLE, rLocalName)
+    , mrImportHelper(rImpHelper)
+    , mrTable(aTable)
+    , mbReadText(false)
 {
 }
 
