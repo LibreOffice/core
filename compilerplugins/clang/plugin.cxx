@@ -60,6 +60,7 @@ const Stmt* Plugin::parentStmt( const Stmt* stmt )
     {
     if( parents.empty())
         buildParents( compiler );
+if(parents.count(stmt)!=1)stmt->dump();
     assert( parents.count( stmt ) == 1 );
     return parents[ stmt ];
     }
@@ -79,6 +80,7 @@ class ParentBuilder
     {
     public:
         bool VisitFunctionDecl( const FunctionDecl* function );
+        bool VisitObjCMethodDecl( const ObjCMethodDecl* method );
         void walk( const Stmt* stmt );
         unordered_map< const Stmt*, const Stmt* >* parents;
     };
@@ -103,6 +105,19 @@ bool ParentBuilder::VisitFunctionDecl( const FunctionDecl* function )
             (*parents)[ init_expression ] = NULL;
             walk( init_expression );
             }
+        }
+    return true;
+    }
+
+bool ParentBuilder::VisitObjCMethodDecl( const ObjCMethodDecl* method )
+    {
+//    if( ignoreLocation( declaration ))
+//        return true; ???
+    if( method->hasBody())
+        {
+        const Stmt* body = method->getBody();
+        (*parents)[ body ] = NULL; // no parent
+        walk( body );
         }
     return true;
     }
