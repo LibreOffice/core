@@ -2833,6 +2833,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 ,   sPropertySourceName(sAPI_source_name)
 ,   sPropertyCurrentPresentation(sAPI_current_presentation)
 ,   nElementToken(nToken)
+,   nSource(0)
 ,   nType(ReferenceFieldPart::PAGE_DESC)
 ,   bNameOK(sal_False)
 ,   bTypeOK(sal_False)
