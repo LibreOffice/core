@@ -229,8 +229,7 @@ void HTMLOption::GetColor( Color& rColor ) const
     DBG_ASSERT( (nToken>=HTML_OPTION_COLOR_START && nToken<HTML_OPTION_COLOR_END) || nToken==HTML_O_SIZE,
         "GetColor: Option is not a color." );
 
-    OUString aTmp( aValue );
-    aTmp = aTmp.toAsciiUpperCase();
+    OUString aTmp(aValue.toAsciiLowerCase());
     sal_uInt32 nColor = SAL_MAX_UINT32;
     if( '#' != aTmp[0] )
         nColor = GetHTMLColor( aTmp );
@@ -252,9 +251,9 @@ void HTMLOption::GetColor( Color& rColor ) const
             }
             nColor *= 16;
             if( c >= '0' && c <= '9' )
-                nColor += (c - 48);
-            else if( c >= 'A' && c <= 'F' )
-                nColor += (c - 55);
+                nColor += (c - '0');
+            else if( c >= 'a' && c <= 'f' )
+                nColor += (c + 0xa - 'a');
         }
     }
 
