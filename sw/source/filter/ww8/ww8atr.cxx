@@ -4552,55 +4552,48 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
     {
         default:
             break;
-        case SVX_LINE_SPACE_AUTO:
-            nSpace = (short)( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
-            nMulti = 1;
+        case SVX_LINE_SPACE_FIX: // Fix
+            nSpace = -(short)rSpacing.GetLineHeight();
             break;
-        case SVX_LINE_SPACE_FIX:
-        case SVX_LINE_SPACE_MIN:
+        case SVX_LINE_SPACE_MIN: // At least
+            nSpace = (short)rSpacing.GetLineHeight();
+            break;
+        case SVX_LINE_SPACE_AUTO:
         {
-            switch ( rSpacing.GetInterLineSpaceRule() )
+            if( rSpacing.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX ) // Leading
             {
-                case SVX_INTER_LINE_SPACE_FIX:      // unser Durchschuss
+                // gibt es aber nicht in WW - also wie kommt man an
+                // die MaxLineHeight heran?
+                nSpace = (short)rSpacing.GetInterLineSpace();
+                sal_uInt16 nScript =
+                    i18n::ScriptType::LATIN;
+                const SwAttrSet *pSet = 0;
+                if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwFmt ) )
                 {
-                    // gibt es aber nicht in WW - also wie kommt man an
-                    // die MaxLineHeight heran?
-                    nSpace = (short)rSpacing.GetInterLineSpace();
-                    sal_uInt16 nScript =
-                        i18n::ScriptType::LATIN;
-                    const SwAttrSet *pSet = 0;
-                    if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwFmt ) )
+                    const SwFmt *pFmt = (const SwFmt*)( GetExport().pOutFmtNode );
+                    pSet = &pFmt->GetAttrSet();
+                }
+                else if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtNode ) )
+                {
+                    const SwTxtNode* pNd = (const SwTxtNode*)GetExport().pOutFmtNode;
+                    pSet = &pNd->GetSwAttrSet();
+                    if ( g_pBreakIt->GetBreakIter().is() )
                     {
-                        const SwFmt *pFmt = (const SwFmt*)( GetExport().pOutFmtNode );
-                        pSet = &pFmt->GetAttrSet();
-                    }
-                    else if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtNode ) )
-                    {
-                        const SwTxtNode* pNd = (const SwTxtNode*)GetExport().pOutFmtNode;
-                        pSet = &pNd->GetSwAttrSet();
-                        if ( g_pBreakIt->GetBreakIter().is() )
-                        {
-                            nScript = g_pBreakIt->GetBreakIter()->
-                                getScriptType(pNd->GetTxt(), 0);
-                        }
-                    }
-                    OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
-                    if ( pSet )
-                    {
-                        nSpace = nSpace + (short)( AttrSetToLineHeight( *GetExport().pDoc,
-                            *pSet, *Application::GetDefaultDevice(), nScript ) );
+                        nScript = g_pBreakIt->GetBreakIter()->
+                            getScriptType(pNd->GetTxt(), 0);
                     }
                 }
-                break;
-            case SVX_INTER_LINE_SPACE_PROP:
+                OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
+                if ( pSet )
+                {
+                    nSpace = nSpace + (short)( AttrSetToLineHeight( *GetExport().pDoc,
+                        *pSet, *Application::GetDefaultDevice(), nScript ) );
+                }
+            }
+            else // Proportional
+            {
                 nSpace = (short)( ( 240L * rSpacing.GetPropLineSpace() ) / 100L );
                 nMulti = 1;
-                break;
-            default:                    // z.B. Minimum oder FIX?
-                if ( SVX_LINE_SPACE_FIX == rSpacing.GetLineSpaceRule() )
-                    nSpace = -(short)rSpacing.GetLineHeight();
-                else
-                    nSpace = (short)rSpacing.GetLineHeight();
                 break;
             }
         }
@@ -4608,7 +4601,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
     }
     // if nSpace is negative, it is a fixed size in 1/20 of a point
     // if nSpace is positive and nMulti is 1, it is 1/240 of a single line height
-    // otherwise, I have no clue what the heck it is
+    // otherwise, it is a minimum size in 1/20 of a point
     ParaLineSpacing_Impl( nSpace, nMulti );
 }
 
