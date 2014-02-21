@@ -565,9 +565,10 @@ OUString ReplaceStringHookProc( const OUString& rStr )
 }
 
 Desktop::Desktop()
-: m_bCleanedExtensionCache( false )
-, m_bServicesRegistered( false )
-, m_aBootstrapError( BE_OK )
+    : m_bCleanedExtensionCache(false)
+    , m_bServicesRegistered(false)
+    , m_aBootstrapError(BE_OK)
+    , m_aBootstrapStatus(BS_OK)
 {
     SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::Desktop" );
 }
