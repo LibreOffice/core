@@ -357,7 +357,6 @@ std::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::
 svl::SharedStringPool::SharedStringPool()
 svx::frame::Style::Style(editeng::SvxBorderLine const&, double, unsigned short)
 utl::MediaDescriptor::PROP_DEEPDETECTION()
-utl::toISO8601(com::sun::star::util::Time const&)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::BinaryObj> >)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, boost::shared_ptr<writerfilter::Reference<writerfilter::Properties> >)

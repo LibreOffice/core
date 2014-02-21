@@ -222,33 +222,6 @@ OUString toISO8601(const starutil::DateTime& rDateTime)
     return rBuffer.makeStringAndClear();
 }
 
-OUString toISO8601(const starutil::Time& rTime)
-{
-    OUStringBuffer rBuffer;
-    if( rTime.Hours < 10 )
-        rBuffer.append('0');
-    rBuffer.append((sal_Int32) rTime.Hours);
-    rBuffer.append(':');
-    if( rTime.Minutes < 10 )
-        rBuffer.append('0');
-    rBuffer.append((sal_Int32) rTime.Minutes);
-    rBuffer.append(':');
-    if( rTime.Seconds < 10 )
-        rBuffer.append('0');
-    rBuffer.append((sal_Int32) rTime.Seconds);
-    if ( rTime.NanoSeconds > 0)
-    {
-        OSL_ENSURE(rTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
-        rBuffer.append(',');
-        std::ostringstream ostr;
-        ostr.fill('0');
-        ostr.width(9);
-        ostr << rTime.NanoSeconds;
-        rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
-    }
-    return rBuffer.makeStringAndClear();
-}
-
 /** convert ISO8601 DateTime String to util::DateTime */
 bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime)
 {
