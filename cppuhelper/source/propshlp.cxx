@@ -1078,7 +1078,8 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     sal_Int32 nEle,
     sal_Bool bSorted )
     SAL_THROW(())
-    : aInfos(pProps, nEle)
+    : m_pReserved(NULL)
+    , aInfos(pProps, nEle)
     , bRightOrdered( sal_False )
 {
     init( bSorted );
@@ -1088,7 +1089,8 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     const Sequence< Property > & aProps,
     sal_Bool bSorted )
     SAL_THROW(())
-    : aInfos(aProps)
+    : m_pReserved(NULL)
+    , aInfos(aProps)
     , bRightOrdered( sal_False )
 {
     init( bSorted );
