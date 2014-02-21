@@ -452,7 +452,7 @@ void SwXTextDocument::GetNumberFormatter()
 
             }
             OSL_ENSURE(pNumFmt, "No number formatter available");
-            if(!pNumFmt->GetNumberFormatter())
+            if (pNumFmt && !pNumFmt->GetNumberFormatter())
                 pNumFmt->SetNumberFormatter(pDocShell->GetDoc()->GetNumberFormatter( sal_True ));
         }
     }
