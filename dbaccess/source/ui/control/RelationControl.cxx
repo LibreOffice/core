@@ -124,10 +124,11 @@ namespace dbaui
 
     // class ORelationControl
     ORelationControl::ORelationControl( OTableListBoxControl* pParent )
-        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
-        ,m_pBoxControl(pParent)
-        ,m_xSourceDef( NULL )
-        ,m_xDestDef( NULL )
+        : EditBrowseBox(pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
+        , m_pBoxControl(pParent)
+        , m_nDataPos(0)
+        , m_xSourceDef(NULL)
+        , m_xDestDef(NULL)
     {
     }
 
