@@ -106,12 +106,14 @@ static inline OUString getBuildId()
 }
 
 //------------------------------------------------------------------------------
+#if defined LINUX || defined SOLARIS
 static inline OUString getBaseInstallation()
 {
     OUString aPathVal("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }
+#endif
 
 //------------------------------------------------------------------------------
 
