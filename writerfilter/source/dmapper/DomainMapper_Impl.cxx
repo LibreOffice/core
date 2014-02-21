@@ -1358,7 +1358,7 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
         try
         {
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if ((!bLeft && !m_pSettingsTable->GetEvenAndOddHeaders()) || (m_pSettingsTable->GetEvenAndOddHeaders()))
+            if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
             {
                 PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
@@ -1369,7 +1369,7 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 
                 // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
                 // Even if the 'Even' header is blank - the flag should be imported (so it would look in LO like in Word)
-                if( m_pSettingsTable->GetEvenAndOddHeaders() )
+                if (GetSettingsTable()->GetEvenAndOddHeaders())
                     xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
 
                 //set the interface
@@ -1410,7 +1410,7 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
         try
         {
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if ((!bLeft && !m_pSettingsTable->GetEvenAndOddHeaders()) || (m_pSettingsTable->GetEvenAndOddHeaders()))
+            if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
             {
                 PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
@@ -1421,7 +1421,7 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 
                 // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
                 // Even if the 'Even' footer is blank - the flag should be imported (so it would look in LO like in Word)
-                if( m_pSettingsTable->GetEvenAndOddHeaders() )
+                if (GetSettingsTable()->GetEvenAndOddHeaders())
                     xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
 
                 //set the interface
@@ -4061,7 +4061,7 @@ void DomainMapper_Impl::ResetParaMarkerRedline( )
 
 void DomainMapper_Impl::ApplySettingsTable()
 {
-    if( m_pSettingsTable && m_xTextFactory.is() )
+    if (m_pSettingsTable && m_xTextFactory.is())
     {
         try
         {
