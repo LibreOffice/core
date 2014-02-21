@@ -70,9 +70,6 @@ class XMLPropertyBackpatcher
     /// name of the property to preserve
     OUString sPreservePropertyName;
 
-    /// default value for unresolved properties (if bDefaultHandling)
-    A aDefault;
-
     /// backpatch list type
     typedef ::std::vector<
                 ::com::sun::star::uno::Reference<
