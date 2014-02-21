@@ -75,31 +75,6 @@ namespace basegfx
         }
     }
 
-    double snapToRange(double v, double fLow, double fHigh)
-    {
-        if(fTools::equal(fLow, fHigh))
-        {
-            // with no range all snaps to range bound
-            return 0.0;
-        }
-        else
-        {
-            if(fLow > fHigh)
-            {
-                // correct range order. Evtl. assert this (?)
-                std::swap(fLow, fHigh);
-            }
-
-            if(v < fLow || v > fHigh)
-            {
-                return snapToZeroRange(v - fLow, fHigh - fLow) + fLow;
-            }
-            else
-            {
-                return v;
-            }
-        }
-    }
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

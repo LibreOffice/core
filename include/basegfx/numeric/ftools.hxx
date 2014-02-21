@@ -152,10 +152,6 @@ namespace basegfx
      */
     double snapToZeroRange(double v, double fWidth);
 
-    /** Snap v to the range [fLow .. fHigh] using modulo
-     */
-    double snapToRange(double v, double fLow, double fHigh);
-
     /** return fValue with the sign of fSignCarrier, thus evtl. changed
     */
     inline double copySign(double fValue, double fSignCarrier)
