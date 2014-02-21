@@ -22592,9 +22592,9 @@
       <element name="suppressOverlap" tokenid="ooxml:CT_PPrBase_suppressOverlap"/>
       <element name="jc" tokenid="ooxml:CT_PPrBase_jc"/>
       <element name="textDirection" tokenid="ooxml:CT_PPrBase_textDirection"/>
-      <element name="textAlignment" tokenid="sprm:PWAlignFont"/>
-      <element name="textboxTightWrap" tokenid="sprm:PTightWrap"/>
-      <element name="outlineLvl" tokenid="sprm:POutLvl"/>
+      <element name="textAlignment" tokenid="ooxml:CT_PPrBase_textAlignment"/>
+      <element name="textboxTightWrap" tokenid="ooxml:CT_PPrBase_textboxTightWrap"/>
+      <element name="outlineLvl" tokenid="ooxml:CT_PPrBase_outlineLvl"/>
       <element name="divId" tokenid="ooxml:CT_PPrBase_divId"/>
       <element name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
     </resource>

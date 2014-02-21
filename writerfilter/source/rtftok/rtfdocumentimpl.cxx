@@ -2126,7 +2126,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PWAlignFont, pValue);
+        m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_textAlignment, pValue);
         return 0;
     }
 

@@ -1234,7 +1234,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case NS_ooxml::LN_CT_PPrBase_autoSpaceDN:
         break;
-    case NS_sprm::LN_PWAlignFont:
+    case NS_ooxml::LN_CT_PPrBase_textAlignment:
         {
             sal_Int16 nAlignment = 0;
             switch (nIntValue)
@@ -1257,10 +1257,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             }
             rContext->Insert( PROP_PARA_VERT_ALIGNMENT, uno::makeAny( nAlignment) );
         }
-        break;  // sprmPWAlignFont
+        break;
     case NS_ooxml::LN_CT_PPrBase_textDirection:
         break;
-    case NS_sprm::LN_POutLvl:
+    case NS_ooxml::LN_CT_PPrBase_outlineLvl:
         {
             sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
             if( m_pImpl->IsStyleSheetImport() )
@@ -1275,7 +1275,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 rContext->Insert(PROP_OUTLINE_LEVEL, uno::makeAny ( nLvl ));
             }
         }
-        break;  // sprmPOutLvl
+        break;
     case NS_ooxml::LN_CT_PPrBase_bidi:
         {
             if (nIntValue != 0)
