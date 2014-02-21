@@ -60,8 +60,8 @@
 #include "xfstyle.hxx"
 
 XFStyle::XFStyle()
+    : m_enumFamily(enumXFStyleUnknown)
 {
-
 }
 
 XFStyle::~XFStyle()
