@@ -1,7 +1,9 @@
 Android-specific notes
 
 Note that this document has not necessarily been updated to match
-reality... 
+reality...
+
+For instructions on how to build for Android, see README.cross.
 
 * Getting something running on an emulated device
 

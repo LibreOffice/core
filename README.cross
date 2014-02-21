@@ -345,12 +345,12 @@ from Linux:
 --enable-dbgutil
 --enable-debug
 --enable-werror
---with-android-ndk=/home/tml/android-ndk-r8d
---with-android-ndk-toolchain-version=4.6
+--with-android-ndk=/home/tml/android-ndk-r9c
+--with-android-ndk-toolchain-version=4.8
 --with-android-sdk=/home/tml/adt-bundle-linux/sdk
 --with-distro=LibreOfficeAndroid
 
-And here is an autogen.input for Android on X86:
+And here is an (quite old) autogen.input for Android on X86:
 
 --with-android-ndk=/opt/libreoffice/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
@@ -358,8 +358,6 @@ And here is an autogen.input for Android on X86:
 --build=i586-suse-linux
 --enable-ccache
 --with-distro=LibreOfficeAndroidX86
---with-num-cpus=6
---with-max-jobs=6
 
 There are a couple of (more or less) interactive apps that you can run
 on the emulator or on a device that use LibreOffice code. Look in
