@@ -172,8 +172,9 @@ short SvxCharacterMap::Execute()
 // class SvxShowText =====================================================
 
 SvxShowText::SvxShowText(Window* pParent, sal_Bool bCenter)
-:   Control( pParent ),
-    mbCenter( bCenter)
+    : Control(pParent)
+    , mnY(0)
+    , mbCenter(bCenter)
 {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowText(Window *pParent, VclBuilder::stringmap &)
