@@ -3509,11 +3509,9 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         StartParagraph(ww8::WW8TableNodeInfo::Pointer_t());
 
         // Write paragraph properties.
-        m_pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
         StartParagraphProperties();
         aAttrIter.OutParaAttr(false);
         EndParagraphProperties(0, 0, 0, 0);
-        m_pSerializer->endElementNS(XML_w, XML_pPr);
 
         do {
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
