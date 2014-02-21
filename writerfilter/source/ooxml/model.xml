@@ -5335,16 +5335,26 @@
       </define>
 
       <define name="ST_PositiveFixedPercentage">
-        <empty/>
+        <data type="long">
+          <xs:documentation>Positive fixed precentage</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">27273042316900</param>
+        </data>
       </define>
 
       <define name="ST_PositivePercentage">
-        <empty/>
+        <data type="long">
+          <xs:documentation>Positive precentage</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">27273042316900</param>
+        </data>
       </define>
 
       <define name="ST_Percentage">
-        <data type="int">
-          <xs:documentation>Percentage</xs:documentation>
+        <data type="long">
+          <xs:documentation>Precentage</xs:documentation>
+          <param name="minInclusive">0</param>
+          <param name="maxInclusive">27273042316900</param>
         </data>
       </define>
 
@@ -5483,7 +5493,7 @@
       <value name="bg1" tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
       <value name="tx1" tokenid="ooxml:ST_SchemeColorVal_tx1">tx1</value>
       <value name="bg2" tokenid="ooxml:ST_SchemeColorVal_bg2">bg2</value>
-      <value name="tx2" tokenid="ooxml:ST_SchemeColorVal">tx2</value>
+      <value name="tx2" tokenid="ooxml:ST_SchemeColorVal_tx2">tx2</value>
       <value name="accent1" tokenid="ooxml:ST_SchemeColorVal_accent1">accent1</value>
       <value name="accent2" tokenid="ooxml:ST_SchemeColorVal_accent2">accent2</value>
       <value name="accent3" tokenid="ooxml:ST_SchemeColorVal_accent3">accent3</value>
@@ -5493,9 +5503,8 @@
     </resource>
     <resource name="ST_PositiveCoordinate" resource="Integer" generated="yes"/>
     <resource name="ST_HexColorRGB" resource="Hex"/>
-    <resource name="ST_PositivePercentage" resource="Value">
-      <action name="characters" action="positivePercentage"/>
-    </resource>
+    <resource name="ST_PositivePercentage" resource="Integer" generated="yes"/>
+    <resource name="ST_PositiveFixedPercentage" resource="Integer" generated="yes"/>
     <resource name="ST_Percentage" resource="Integer" generated="yes"/>
 
     <resource name="EG_ColorTransform" resource="Properties" tag="character">
