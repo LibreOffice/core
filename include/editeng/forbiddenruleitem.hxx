@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvxForbiddenRuleItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxForbiddenRuleItem( sal_Bool bOn /*= sal_False*/,
+    SvxForbiddenRuleItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

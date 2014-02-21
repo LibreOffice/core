@@ -503,7 +503,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_NOCWRAP:
                 if( PARDID->nForbRule )
                 {
-                    pSet->Put( SvxForbiddenRuleItem( sal_False,
+                    pSet->Put( SvxForbiddenRuleItem( false,
                                                     PARDID->nForbRule ));
                 }
                 break;
