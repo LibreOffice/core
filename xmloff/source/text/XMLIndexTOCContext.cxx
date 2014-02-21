@@ -94,15 +94,14 @@ SvXMLEnumMapEntry const aIndexTypeMap[] =
 };
 
 
-XMLIndexTOCContext::XMLIndexTOCContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sTitle("Title")
-,   sIsProtected("IsProtected")
-,   sName("Name")
-,   bValid(sal_False)
+XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
+    sal_uInt16 nPrfx, const OUString& rLocalName)
+    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    , sTitle("Title")
+    , sIsProtected("IsProtected")
+    , sName("Name")
+    , eIndexType(TEXT_INDEX_UNKNOWN)
+    , bValid(sal_False)
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
