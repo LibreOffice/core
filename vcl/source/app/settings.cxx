@@ -718,7 +718,7 @@ bool StyleSettings::GetUseImagesInMenus() const
         return false;
     case AUTO_STATE_ON:
         return true;
-    case AUTO_STATE_AUTO:
+    default: // AUTO_STATE_AUTO:
         return GetPreferredUseImagesInMenus();
     }
 }
