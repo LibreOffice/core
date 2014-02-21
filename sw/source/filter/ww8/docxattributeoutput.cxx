@@ -1121,7 +1121,8 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         FSNS( XML_w, XML_eastAsianLayout ),
         FSNS( XML_w, XML_specVanish ),
         FSNS( XML_w, XML_oMath ),
-        FSNS( XML_w, XML_rPrChange )
+        FSNS( XML_w, XML_rPrChange ),
+        FSNS( XML_w14, XML_glow ),
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -1132,6 +1133,94 @@ void DocxAttributeOutput::InitCollectedRunProperties()
         aSeqOrder[i] = aOrder[i];
 
     m_pSerializer->mark( aSeqOrder );
+
+}
+
+namespace
+{
+
+struct NameToId
+{
+    const OUString  maName;
+    const sal_Int32 maId;
+};
+
+const NameToId aNameToIdMapping[] =
+{
+    { OUString("val"),       FSNS( XML_w14, XML_val ) },
+    { OUString("rad"),       FSNS( XML_w14, XML_rad ) },
+    { OUString("schemeClr"), FSNS( XML_w14, XML_schemeClr ) },
+    { OUString("srgbClr"),   FSNS( XML_w14, XML_srgbClr ) },
+    { OUString("tint"),      FSNS( XML_w14, XML_tint ) },
+    { OUString("shade"),     FSNS( XML_w14, XML_shade ) },
+    { OUString("alpha"),     FSNS( XML_w14, XML_alpha ) },
+    { OUString("hueMod"),    FSNS( XML_w14, XML_hueMod ) },
+    { OUString("sat"),       FSNS( XML_w14, XML_sat ) },
+    { OUString("satOff"),    FSNS( XML_w14, XML_satOff ) },
+    { OUString("satMod"),    FSNS( XML_w14, XML_satMod ) },
+    { OUString("lum"),       FSNS( XML_w14, XML_lum ) },
+    { OUString("lumOff"),    FSNS( XML_w14, XML_lumOff ) },
+    { OUString("lumMod"),    FSNS( XML_w14, XML_lumMod ) },
+};
+
+void lclProcessRecursiveGrabBag(sal_Int32 aElementId, css::uno::Sequence<css::beans::PropertyValue> aElements, sax_fastparser::FSHelperPtr pSerializer)
+{
+    css::uno::Sequence<css::beans::PropertyValue> aAttributes;
+    FastAttributeList* pAttributes = pSerializer->createAttrList();
+
+    for (sal_Int32 j=0; j < aElements.getLength(); ++j)
+    {
+        if( aElements[j].Name == "attributes")
+        {
+            aElements[j].Value >>= aAttributes;
+        }
+    }
+
+    for (sal_Int32 j=0; j < aAttributes.getLength(); ++j)
+    {
+        uno::Any aAny = aAttributes[j].Value;
+        OString aValue;
+
+        if(aAny.getValueType() == getCppuType<sal_Int32>())
+        {
+            aValue = OString::number(aAny.get<sal_Int32>());
+        }
+        else if(aAny.getValueType() == getCppuType<OUString>())
+        {
+            aValue =  OUStringToOString(aAny.get<OUString>(), RTL_TEXTENCODING_ASCII_US);
+        }
+
+        sal_Int32 aLength = sizeof (aNameToIdMapping) / sizeof(NameToId);
+        for (sal_Int32 i=0; i < aLength; ++i)
+        {
+            if(aAttributes[j].Name == aNameToIdMapping[i].maName)
+            {
+                pAttributes->add( aNameToIdMapping[i].maId, aValue.getStr());
+            }
+        }
+    }
+
+    XFastAttributeListRef xAttributesList( pAttributes );
+
+    pSerializer->startElement(aElementId, xAttributesList);
+
+    for (sal_Int32 j=0; j < aElements.getLength(); ++j)
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aSumElements;
+
+        sal_Int32 aLength = sizeof (aNameToIdMapping) / sizeof(NameToId);
+        for (sal_Int32 i=0; i < aLength; ++i)
+        {
+            if( aElements[j].Name == aNameToIdMapping[i].maName)
+            {
+                aElements[j].Value >>= aSumElements;
+                lclProcessRecursiveGrabBag(aNameToIdMapping[i].maId, aSumElements, pSerializer);
+            }
+        }
+    }
+
+    pSerializer->endElement(aElementId);
+}
 
 }
 
@@ -1168,6 +1257,12 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pCharLangAttrList = NULL;
 
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
+    }
+
+    if (m_aTextEffectsGrabBag.getLength() > 0)
+    {
+        lclProcessRecursiveGrabBag(FSNS( XML_w14, XML_glow ), m_aTextEffectsGrabBag, m_pSerializer);
+        m_aTextEffectsGrabBag.realloc(0);
     }
 }
 
@@ -6341,6 +6436,12 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 i->first == "CharThemeOriginalColor" )
         {
             // just skip these, they were processed before
+        }
+        else if (i->first == "CharGlowTextEffect")
+        {
+            uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+            i->second >>= aGrabBagSeq;
+            m_aTextEffectsGrabBag = aGrabBagSeq;
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << i->first);
