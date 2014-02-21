@@ -773,7 +773,15 @@ void BarChart::createShapes()
                             }
                             else //m_nDimension!=3
                             {
+                                // performance improvement: alloc the sequence before the rendering
+                                // otherwise we have 2 realloc calls
                                 drawing::PolyPolygonShape3D aPoly;
+                                aPoly.SequenceX.realloc(1);
+                                aPoly.SequenceY.realloc(1);
+                                aPoly.SequenceZ.realloc(1);
+                                aPoly.SequenceX[0].realloc(5);
+                                aPoly.SequenceY[0].realloc(5);
+                                aPoly.SequenceZ[0].realloc(5);
                                 drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
                                 drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
 
