@@ -80,19 +80,41 @@ void PropertyMapper::getValueMap(
     tPropertyNameMap::const_iterator aIt( rNameMap.begin() );
     tPropertyNameMap::const_iterator aEnd( rNameMap.end() );
 
-    for( ; aIt != aEnd; ++aIt )
+    uno::Reference< beans::XMultiPropertySet > xMultiPropSet(xSourceProp, uno::UNO_QUERY);
+    if(xMultiPropSet.is())
     {
-        OUString aTarget = aIt->first;
-        OUString aSource = aIt->second;
-        try
+        uno::Sequence< rtl::OUString > aPropSourceNames(rNameMap.size());
+        uno::Sequence< rtl::OUString > aPropTargetNames(rNameMap.size());
+        for(sal_Int32 i = 0; aIt != aEnd; ++aIt, ++i)
         {
-            uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
-            if( aAny.hasValue() )
-                rValueMap.insert( tPropertyNameValueMap::value_type( aTarget, aAny ) );
+            aPropSourceNames[i] = aIt->first;
+            aPropTargetNames[i] = aIt->second;
         }
-        catch( const uno::Exception& e )
+
+        uno::Sequence< uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
+
+        for(sal_Int32 i = 0, n = rNameMap.size(); i < n; ++i)
         {
-            ASSERT_EXCEPTION( e );
+            if( xValues[i].hasValue() )
+                rValueMap.insert( tPropertyNameValueMap::value_type( aPropTargetNames[i], xValues[i] ) );
+        }
+    }
+    else
+    {
+        for( ; aIt != aEnd; ++aIt )
+        {
+            OUString aTarget = aIt->first;
+            OUString aSource = aIt->second;
+            try
+            {
+                uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
+                if( aAny.hasValue() )
+                    rValueMap.insert( tPropertyNameValueMap::value_type( aTarget, aAny ) );
+            }
+            catch( const uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
     }
 }
