@@ -755,6 +755,9 @@ public:
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
     bool isInIndexContext() { return m_bStartIndex;}
+
+private:
+    void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
 };
 } //namespace dmapper
 } //namespace writerfilter

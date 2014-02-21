@@ -1337,14 +1337,18 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
     return xRet;
 }
 
-
-void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
+void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
 {
+    const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
+    const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
+    const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
+    const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
+
     m_bInHeaderFooterImport = true;
 
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
-    //ask for the header name of the given type
+    //ask for the header/footer name of the given type
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
     if(pSectionContext)
     {
@@ -1362,21 +1366,22 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
             {
                 PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-                //switch on header use
+                //switch on header/footer use
                 xPageStyle->setPropertyValue(
-                        rPropNameSupplier.GetName(PROP_HEADER_IS_ON),
-                        uno::makeAny(sal_True) );
+                        rPropNameSupplier.GetName(ePropIsOn),
+                        uno::makeAny(sal_True));
 
                 // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
-                // Even if the 'Even' header is blank - the flag should be imported (so it would look in LO like in Word)
+                // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
                 if (GetSettingsTable()->GetEvenAndOddHeaders())
-                    xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
+                    xPageStyle->setPropertyValue(rPropNameSupplier.GetName(ePropShared), uno::makeAny(false));
 
                 //set the interface
-                uno::Reference< text::XText > xHeaderText;
-                xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
-                m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW),
-                            m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xHeaderText->getStart())));
+                uno::Reference< text::XText > xText;
+                xPageStyle->getPropertyValue(rPropNameSupplier.GetName(bLeft? ePropTextLeft: ePropText)) >>= xText;
+
+                m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
+                            m_bIsNewDoc? uno::Reference<text::XTextCursor>(): m_xBodyText->createTextCursorByRange(xText->getStart())));
             }
             else
             {
@@ -1389,58 +1394,15 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
     }
 }
 
+void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
+{
+    PushPageHeaderFooter(/* bHeader = */ true, eType);
+}
 
 void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 {
-    m_bInHeaderFooterImport = true;
-
-    //get the section context
-    PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
-    //ask for the footer name of the given type
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-    if(pSectionContext)
-    {
-        uno::Reference< beans::XPropertySet > xPageStyle =
-                pSectionContext->GetPageStyle(
-                    GetPageStyles(),
-                    m_xTextFactory,
-                    eType == SectionPropertyMap::PAGE_FIRST );
-        if (!xPageStyle.is())
-            return;
-        try
-        {
-            bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
-            {
-                PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
-                //switch on footer use
-                xPageStyle->setPropertyValue(
-                        rPropNameSupplier.GetName(PROP_FOOTER_IS_ON),
-                        uno::makeAny(sal_True) );
-
-                // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
-                // Even if the 'Even' footer is blank - the flag should be imported (so it would look in LO like in Word)
-                if (GetSettingsTable()->GetEvenAndOddHeaders())
-                    xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
-
-                //set the interface
-                uno::Reference< text::XText > xFooterText;
-                xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
-                m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ),
-                            m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xFooterText->getStart())));
-            }
-            else
-            {
-                m_bDiscardHeaderFooter = true;
-            }
-        }
-        catch( const uno::Exception& )
-        {
-        }
-    }
+    PushPageHeaderFooter(/* bHeader = */ false, eType);
 }
-
 
 void DomainMapper_Impl::PopPageHeaderFooter()
 {
