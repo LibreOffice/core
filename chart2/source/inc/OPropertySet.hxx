@@ -33,7 +33,7 @@
 #include <osl/mutex.hxx>
 #include "charttoolsdllapi.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace property
 {
@@ -226,7 +226,7 @@ private:
     ::osl::Mutex &   m_rMutex;
 
     /// pImpl idiom implementation
-    ::std::auto_ptr< impl::ImplOPropertySet > m_pImplProperties;
+    boost::scoped_ptr< impl::ImplOPropertySet > m_pImplProperties;
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
 };
 
