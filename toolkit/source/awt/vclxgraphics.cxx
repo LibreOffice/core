@@ -57,9 +57,10 @@ IMPL_XTYPEPROVIDER_START( VCLXGraphics )
 IMPL_XTYPEPROVIDER_END
 
 VCLXGraphics::VCLXGraphics()
+    : mpOutputDevice(NULL)
+    , meRasterOp(ROP_OVERPAINT)
+    , mpClipRegion(NULL)
 {
-    mpOutputDevice = NULL;
-    mpClipRegion = NULL;
 }
 
 VCLXGraphics::~VCLXGraphics()
