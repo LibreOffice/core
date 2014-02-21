@@ -47,13 +47,12 @@ TYPEINIT1( XMLIndexTOCStylesContext, SvXMLImportContext );
 
 
 XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
-    SvXMLImport& rImport,
-    Reference<XPropertySet> & rPropSet,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName )
-:   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sLevelParagraphStyles(sAPI_LevelParagraphStyles)
-,   rTOCPropertySet(rPropSet)
+    SvXMLImport& rImport, Reference<XPropertySet> & rPropSet,
+    sal_uInt16 nPrfx, const OUString& rLocalName)
+    : SvXMLImportContext(rImport, nPrfx, rLocalName)
+    , sLevelParagraphStyles(sAPI_LevelParagraphStyles)
+    , rTOCPropertySet(rPropSet)
+    , nOutlineLevel(0)
 {
 }
 
