@@ -184,7 +184,7 @@ IconThemeSelectorTest::DifferentPreferredThemesAreInequal()
     vcl::IconThemeSelector s1;
     vcl::IconThemeSelector s2;
     s1.SetPreferredIconTheme("oxygen");
-    s2.SetUseHighContrastTheme("katze");
+    s2.SetUseHighContrastTheme(true);
     bool equal = (s1 == s2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Different preferred themes are detected as inequal", false, equal);
 }
