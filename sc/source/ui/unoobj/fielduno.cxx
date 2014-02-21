@@ -191,12 +191,15 @@ public:
     sal_Int32       GetFieldPos() const     { return nFieldPos; }
 };
 
-ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource) :
-    ScEditEngineDefaulter( *pSource ),
-    eMode( SC_UNO_COLLECT_NONE ),
-    nFieldCount( 0 ),
-    mnFieldType(text::textfield::Type::UNSPECIFIED),
-    pFound( NULL )
+ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
+    : ScEditEngineDefaulter(*pSource)
+    , eMode(SC_UNO_COLLECT_NONE)
+    , nFieldCount(0)
+    , mnFieldType(text::textfield::Type::UNSPECIFIED)
+    , pFound(NULL)
+    , nFieldPar(0)
+    , nFieldPos(0)
+    , nFieldIndex(0)
 {
     if (pSource)
     {
