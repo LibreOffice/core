@@ -83,7 +83,7 @@ IconThemeInfo::UrlCanBeParsed(const OUString& url)
         return false;
     }
 
-    if (!fname.endsWithIgnoreAsciiCase(EXTENSION_FOR_ICON_PACKAGES, nullptr)) {
+    if (!fname.endsWithIgnoreAsciiCase(EXTENSION_FOR_ICON_PACKAGES)) {
         return false;
     }
 
