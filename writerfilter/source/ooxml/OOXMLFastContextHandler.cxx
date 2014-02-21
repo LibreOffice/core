@@ -1790,8 +1790,11 @@ void OOXMLFastContextHandlerTable::newPropertySet
  */
 
 OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
-(OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandlerProperties(pContext), mbForwardEventsSaved(false), mnMyXNoteType(0)
+    (OOXMLFastContextHandler * pContext)
+    : OOXMLFastContextHandlerProperties(pContext)
+    , mbForwardEventsSaved(false)
+    , mnMyXNoteId(0)
+    , mnMyXNoteType(0)
 {
 }
 
