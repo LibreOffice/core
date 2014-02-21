@@ -206,6 +206,45 @@ XclExpShrfmlaBuffer::XclExpShrfmlaBuffer( const XclExpRoot& rRoot ) :
 {
 }
 
+bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
+{
+    using namespace formula;
+
+    FormulaToken** pTokens = rArray.GetArray();
+    sal_uInt16 nLen = rArray.GetLen();
+    for (sal_uInt16 i = 0; i < nLen; ++i)
+    {
+        const FormulaToken* p = pTokens[i];
+        switch (p->GetType())
+        {
+            case svSingleRef:
+            {
+                const ScSingleRefData& rRefData = static_cast<const ScToken*>(p)->GetSingleRef();
+                if (!GetFormulaCompiler().IsRef2D(rRefData))
+                    // Excel's shared formula cannot include 3D reference.
+                    return false;
+            }
+            break;
+            case svDoubleRef:
+            {
+                const ScComplexRefData& rRefData = static_cast<const ScToken*>(p)->GetDoubleRef();
+                if (!GetFormulaCompiler().IsRef2D(rRefData))
+                    // Excel's shared formula cannot include 3D reference.
+                    return false;
+            }
+            break;
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            case svExternalName:
+                // External references aren't allowed.
+                return false;
+            default:
+                ;
+        }
+    }
+    return true;
+}
+
 XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
     const ScFormulaCell& rScCell, const ScAddress& rScPos )
 {
@@ -215,7 +254,19 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         // This formula cell is not shared formula cell.
         return xRec;
 
-    XclExpShrfmlaMap::iterator aIt = maRecMap.find( pShrdScTokArr );
+    // Check to see if this shared formula contains any tokens that Excel's shared formula cannot handle.
+    if (maBadTokens.count(pShrdScTokArr) > 0)
+        // Already on the black list. Skip it.
+        return xRec;
+
+    if (!IsValidTokenArray(*pShrdScTokArr))
+    {
+        // We can't export this as shared formula.
+        maBadTokens.insert(pShrdScTokArr);
+        return xRec;
+    }
+
+    TokensType::iterator aIt = maRecMap.find(pShrdScTokArr);
     if( aIt == maRecMap.end() )
     {
         // create a new record
