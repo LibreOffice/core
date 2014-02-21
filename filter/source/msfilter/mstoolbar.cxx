@@ -180,15 +180,16 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    va_end( ap );
 }
 
-TBCHeader::TBCHeader() : bSignature( 0x3 )
-,bVersion( 0x01 )
-,bFlagsTCR( 0 )
-,tct(0x1) // default to Button
-,tcid(0)
-,tbct(0)
+TBCHeader::TBCHeader()
+    : bSignature(0x3)
+    , bVersion(0x01)
+    , bFlagsTCR(0)
+    , tct(0x1) // default to Button
+    , tcid(0)
+    , tbct(0)
+    , bPriority(0)
 {
 }
-
 
 TBCHeader::~TBCHeader()
 {
