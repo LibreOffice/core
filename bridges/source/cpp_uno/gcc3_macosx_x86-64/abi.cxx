@@ -245,7 +245,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE( "Unhandled case: pType->eTypeClass == %d", pTypeRef->eTypeClass );
 #endif
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
     }
     return 0; /* Never reached.  */
 }
@@ -288,7 +288,7 @@ bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool 
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE( "Unhandled case: classes[n] == %d", classes[n] );
 #endif
-            OSL_ASSERT(0);
+            OSL_ASSERT(false);
         }
     return true;
 }
@@ -297,7 +297,7 @@ bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef 
 {
     int g, s;
 
-    return examine_argument( pTypeRef, true, g, s ) == 0;
+    return !examine_argument( pTypeRef, true, g, s );
 }
 
 void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct ) throw ()
