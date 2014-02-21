@@ -70,7 +70,7 @@ TYPEINIT1_FACTORY(SvxLineSpacingItem, SfxPoolItem , new SvxLineSpacingItem(LINE_
 TYPEINIT1_FACTORY(SvxAdjustItem, SfxPoolItem, new SvxAdjustItem(SVX_ADJUST_LEFT, 0));
 TYPEINIT1_FACTORY(SvxWidowsItem, SfxByteItem, new SvxWidowsItem(0, 0));
 TYPEINIT1_FACTORY(SvxOrphansItem, SfxByteItem, new SvxOrphansItem(0, 0));
-TYPEINIT1_FACTORY(SvxHyphenZoneItem, SfxPoolItem, new SvxHyphenZoneItem(sal_False, 0));
+TYPEINIT1_FACTORY(SvxHyphenZoneItem, SfxPoolItem, new SvxHyphenZoneItem(false, 0));
 TYPEINIT1_FACTORY(SvxTabStopItem, SfxPoolItem, new SvxTabStopItem(0));
 TYPEINIT1_FACTORY(SvxFmtSplitItem, SfxBoolItem, new SvxFmtSplitItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxPageModelItem, SfxStringItem, new SvxPageModelItem(0));
@@ -668,11 +668,11 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
 
 // class SvxHyphenZoneItem -----------------------------------------------
 
-SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId ) :
+SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
     bHyphen = bHyph;
-    bPageEnd = sal_True;
+    bPageEnd = true;
     nMinLead = nMinTrail = 0;
     nMaxHyphens = 255;
 }
@@ -812,9 +812,9 @@ SfxPoolItem* SvxHyphenZoneItem::Create(SvStream& rStrm, sal_uInt16) const
     sal_Int8 _bHyphen, _bHyphenPageEnd;
     sal_Int8 _nMinLead, _nMinTrail, _nMaxHyphens;
     rStrm.ReadSChar( _bHyphen ).ReadSChar( _bHyphenPageEnd ).ReadSChar( _nMinLead ).ReadSChar( _nMinTrail ).ReadSChar( _nMaxHyphens );
-    SvxHyphenZoneItem* pAttr = new SvxHyphenZoneItem( sal_False, Which() );
-    pAttr->SetHyphen( sal_Bool( _bHyphen != 0 ) );
-    pAttr->SetPageEnd( sal_Bool( _bHyphenPageEnd != 0 ) );
+    SvxHyphenZoneItem* pAttr = new SvxHyphenZoneItem( false, Which() );
+    pAttr->SetHyphen( _bHyphen != 0 );
+    pAttr->SetPageEnd( _bHyphenPageEnd != 0 );
     pAttr->GetMinLead() = _nMinLead;
     pAttr->GetMinTrail() = _nMinTrail;
     pAttr->GetMaxHyphens() = _nMaxHyphens;

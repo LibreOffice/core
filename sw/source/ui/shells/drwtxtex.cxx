@@ -414,7 +414,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 aDlgAttr.Put(aEditAttr);
 
-                aDlgAttr.Put( SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE) );
+                aDlgAttr.Put( SvxHyphenZoneItem( false, RES_PARATR_HYPHENZONE) );
                 aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
                 aDlgAttr.Put( SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT ) );
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );

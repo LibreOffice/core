@@ -582,7 +582,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
                                     SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
                                     0 );
             aNewAttr.Put( aAttr );
-            aNewAttr.Put( SvxHyphenZoneItem( sal_False, SID_ATTR_PARA_HYPHENZONE ) );
+            aNewAttr.Put( SvxHyphenZoneItem( false, SID_ATTR_PARA_HYPHENZONE ) );
             aNewAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, SID_ATTR_PARA_PAGEBREAK ) );
             aNewAttr.Put( SvxFmtSplitItem( sal_True, SID_ATTR_PARA_SPLIT)  );
             aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );

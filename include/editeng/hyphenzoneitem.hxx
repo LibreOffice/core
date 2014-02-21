@@ -34,8 +34,8 @@ class SvXMLUnitConverter;
 
 class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
 {
-    sal_Bool bHyphen:  1;
-    sal_Bool bPageEnd: 1;
+    bool      bHyphen  : 1;
+    bool      bPageEnd : 1;
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;
     sal_uInt8 nMaxHyphens;
@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxHyphenZoneItem( const sal_Bool bHyph /*= sal_False*/,
+    SvxHyphenZoneItem( const bool bHyph /*= false*/,
                        const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -62,11 +62,11 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
-    inline void SetHyphen( const sal_Bool bNew ) { bHyphen = bNew; }
-    inline sal_Bool IsHyphen() const { return bHyphen; }
+    inline void SetHyphen( const bool bNew ) { bHyphen = bNew; }
+    inline bool IsHyphen() const { return bHyphen; }
 
-    inline void SetPageEnd( const sal_Bool bNew ) { bPageEnd = bNew; }
-    inline sal_Bool IsPageEnd() const { return bPageEnd; }
+    inline void SetPageEnd( const bool bNew ) { bPageEnd = bNew; }
+    inline bool IsPageEnd() const { return bPageEnd; }
 
     inline sal_uInt8 &GetMinLead() { return nMinLead; }
     inline sal_uInt8 GetMinLead() const { return nMinLead; }

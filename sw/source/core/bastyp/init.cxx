@@ -534,7 +534,7 @@ void _InitCore()
     aAttrTab[ RES_PARATR_ORPHANS- POOLATTR_BEGIN ] =        new SvxOrphansItem( 0, RES_PARATR_ORPHANS );
     aAttrTab[ RES_PARATR_TABSTOP- POOLATTR_BEGIN ] =        new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
 
-    pItem = new SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE );
+    pItem = new SvxHyphenZoneItem( false, RES_PARATR_HYPHENZONE );
     ((SvxHyphenZoneItem*)pItem)->GetMaxHyphens() = 0; // Default: 0
     aAttrTab[ RES_PARATR_HYPHENZONE- POOLATTR_BEGIN ] =     pItem;
 
