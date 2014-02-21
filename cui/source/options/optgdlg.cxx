@@ -594,6 +594,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     }
 
     // Set known icon themes
+    OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
     m_pIconStyleLB->Clear();
     StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
@@ -602,7 +603,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
     const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
-    OUString entryForAuto = OUString("Auto (") +
+    OUString entryForAuto = sAutoStr + OUString(" (") +
                                 autoIconTheme.GetDisplayName() +
                                 OUString(")");
     m_pIconStyleLB->InsertEntry(entryForAuto);
