@@ -146,7 +146,6 @@ public:
         @see mark()
      */
     void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
-    void copyTopMarkPush();
     void copyTopMarkPop();
 
 private:

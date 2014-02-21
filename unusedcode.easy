@@ -323,7 +323,6 @@ registry::tools::Options::initOptions(std::vector<std::basic_string<char, std::c
 registry::tools::convertToFileUrl(char const*, int)
 rtl_OUString::convertFromString::test()
 sax_fastparser::FastSerializerHelper::copyTopMarkPop()
-sax_fastparser::FastSerializerHelper::copyTopMarkPush()
 sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::produce()
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)

@@ -161,11 +161,6 @@ void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )
     mpSerializer->mergeTopMarks( eMergeType );
 }
 
-void FastSerializerHelper::copyTopMarkPush()
-{
-    mpSerializer->copyTopMarkPush();
-}
-
 void FastSerializerHelper::copyTopMarkPop()
 {
     mpSerializer->copyTopMarkPop();

@@ -309,12 +309,6 @@ namespace sax_fastparser {
         }
     }
 
-    void FastSaxSerializer::copyTopMarkPush()
-    {
-        assert (!maMarkStack.empty());
-        maSavedMarkStack.push(boost::shared_ptr< ForMerge > ( new ForMerge(*maMarkStack.top())));
-    }
-
     void FastSaxSerializer::copyTopMarkPop()
     {
         assert (!maSavedMarkStack.empty());

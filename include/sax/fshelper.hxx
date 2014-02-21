@@ -142,7 +142,6 @@ public:
     void mark( ::com::sun::star::uno::Sequence< sal_Int32 > aOrder =
             ::com::sun::star::uno::Sequence< sal_Int32 >() );
     void mergeTopMarks( MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
-    void copyTopMarkPush();
     void copyTopMarkPop();
 
     /*
