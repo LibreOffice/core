@@ -83,15 +83,17 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
         case TOOLBOXITEM_BUTTON :
         {
             ToolBoxItemBits nBits = m_pToolBox->GetItemBits( m_nItemId );
-            if (( nBits & TIB_DROPDOWN ) == TIB_DROPDOWN)
+            if (
+                 (( nBits & TIB_DROPDOWN ) == TIB_DROPDOWN) ||
+                 (( nBits & TIB_DROPDOWNONLY ) == TIB_DROPDOWNONLY)
+               )
                 m_nRole = AccessibleRole::BUTTON_DROPDOWN;
-            else if (( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
-                ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK ) )
+            else if (
+                ( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
+                ( ( nBits & TIB_RADIOCHECK ) == TIB_RADIOCHECK ) ||
+                ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK )
+               )
                 m_nRole = AccessibleRole::TOGGLE_BUTTON;
-            else if ( (nBits & TIB_DROPDOWN) == TIB_DROPDOWN )
-            {
-                m_nRole = AccessibleRole::BUTTON_DROPDOWN;
-            }
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )
                 m_nRole = AccessibleRole::PANEL;
             break;
