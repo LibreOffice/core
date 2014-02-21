@@ -93,7 +93,6 @@ struct Gradient
     } maCoords;
     sal_Int32             mnId;
     bool                  mbBoundingBoxUnits;
-    bool                  mbLinearBoundingBoxUnits;
 
 //    explicit Gradient(GradientType eType) : maStops(), maTransform(), meType(eType), maCoords.mfCX(0.0), maCoords.mfCY(0.0), maCoords.mfFX(0.0), maCoords.mfFY(0.0), maCoords.mfR(0.0), mnId(0), mbBoundingBoxUnits(false)
     explicit Gradient(GradientType eType) : maStops(), maTransform(), meType(eType), mnId(0), mbBoundingBoxUnits(false)
