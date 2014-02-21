@@ -138,13 +138,13 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
     switch(aName)
     {
         case NS_ooxml::LN_CT_Percentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(aValue.getInt()));
+            mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
             break;
         case NS_ooxml::LN_CT_PositiveFixedPercentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(aValue.getInt()));
+            mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
             break;
         case NS_ooxml::LN_CT_PositivePercentage_val:
-            mpGrabBagStack->appendElement("val", makeAny(aValue.getInt()));
+            mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
             break;
         case NS_ooxml::LN_CT_SchemeColor_val:
             mpGrabBagStack->appendElement("val", makeAny(getSchemeColorTypeString(aValue.getInt())));
