@@ -665,6 +665,7 @@ private:
     void DoWriteAnnotationMarks( );
     void WritePostponedGraphic();
     void WritePostponedMath();
+    void WritePostponedFormControl(const SdrObject* pObject);
     void WritePostponedDiagram();
     void WritePostponedChart();
     void WritePostponedVMLDrawing();
@@ -785,6 +786,7 @@ private:
     const SwOLENode* m_postponedMath;
     const SdrObject* m_postponedChart;
     Size m_postponedChartSize;
+    std::vector<const SdrObject*> m_aPostponedFormControls;
     const SwField* pendingPlaceholder;
     /// Maps postit fields to ID's, used in commentRangeStart/End, commentReference and comment.xml.
     std::vector< std::pair<const SwPostItField*, sal_Int32> > m_postitFields;

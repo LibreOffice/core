@@ -80,6 +80,8 @@
 #include <editeng/editobj.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/fmglob.hxx>
+#include <svx/svdouno.hxx>
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/datetimeutils.hxx>
@@ -696,6 +698,11 @@ void DocxAttributeOutput::EndRun()
     m_pSerializer->endElementNS( XML_w, XML_r );
 
     WritePostponedMath();
+
+    for (std::vector<const SdrObject*>::iterator it = m_aPostponedFormControls.begin(); it != m_aPostponedFormControls.end(); ++it)
+        WritePostponedFormControl(*it);
+    m_aPostponedFormControls.clear();
+
     WritePendingPlaceholder();
 
     // if there is some redlining in the document, output it
@@ -3311,6 +3318,26 @@ void DocxAttributeOutput::WritePostponedMath()
     m_postponedMath = NULL;
 }
 
+void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
+{
+    if (pObject && pObject->GetObjInventor() == FmFormInventor)
+    {
+        if (SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
+        {
+            uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
+            uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);
+            if (xInfo->supportsService("com.sun.star.form.component.DateField"))
+            {
+                uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+                OUString aHelpText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+                m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+                RunText(aHelpText);
+                m_pSerializer->endElementNS(XML_w, XML_r);
+            }
+        }
+    }
+}
+
 /*
  * Write w:pict hierarchy  end element of w:rPr tag.
  */
@@ -3417,11 +3444,16 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 }
             }
             break;
+        case sw::Frame::eFormControl:
+            {
+                const SdrObject* pObject = rFrame.GetFrmFmt().FindRealSdrObject();
+                m_aPostponedFormControls.push_back(pObject);
+            }
+            break;
         default:
             OSL_TRACE( "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& rNdTopLeft ) - frame type '%s'\n",
                     rFrame.GetWriterType() == sw::Frame::eTxtBox? "eTxtBox":
-                    ( rFrame.GetWriterType() == sw::Frame::eOle? "eOle":
-                      ( rFrame.GetWriterType() == sw::Frame::eFormControl? "eFormControl": "???" ) ) );
+                    ( rFrame.GetWriterType() == sw::Frame::eOle? "eOle": "???" ) );
             break;
     }
 

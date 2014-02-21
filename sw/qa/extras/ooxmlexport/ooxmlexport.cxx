@@ -2280,6 +2280,14 @@ DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Description"), getProperty<OUString>(getShape(1), "Description"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFormControl, "form-control.docx")
+{
+    if (!m_bExported)
+        return;
+    // "[Date]" was missing.
+    getParagraph(1, "Foo [Date] bar.");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testBehinddoc, "behinddoc.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

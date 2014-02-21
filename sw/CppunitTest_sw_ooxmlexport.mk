@@ -58,6 +58,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport,\
 	drawinglayer/drawinglayer \
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
+	forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
     linguistic/source/lng \
