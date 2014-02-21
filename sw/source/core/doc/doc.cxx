@@ -410,7 +410,7 @@ const i18n::ForbiddenCharacters*
 {
     const i18n::ForbiddenCharacters* pRet = 0;
     if( mxForbiddenCharsTable.is() )
-        pRet = mxForbiddenCharsTable->GetForbiddenCharacters( nLang, sal_False );
+        pRet = mxForbiddenCharsTable->GetForbiddenCharacters( nLang, false );
     if( bLocaleData && !pRet && g_pBreakIt )
         pRet = &g_pBreakIt->GetForbidden( (LanguageType)nLang );
     return pRet;

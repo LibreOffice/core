@@ -46,7 +46,7 @@ public:
     ~SvxForbiddenCharactersTable() {}
 
     Map& GetMap() { return maMap; }
-    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault );
+    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault );
     void    SetForbiddenCharacters(  sal_uInt16 nLanguage , const com::sun::star::i18n::ForbiddenCharacters& );
     void    ClearForbiddenCharacters( sal_uInt16 nLanguage );
 };

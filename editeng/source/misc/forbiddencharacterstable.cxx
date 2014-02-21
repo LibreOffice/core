@@ -30,7 +30,7 @@ SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( const ::com::sun::star
     m_xContext = rxContext;
 }
 
-const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault )
+const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault )
 {
     com::sun::star::i18n::ForbiddenCharacters* pForbiddenCharacters = NULL;
     Map::iterator it = maMap.find( nLanguage );

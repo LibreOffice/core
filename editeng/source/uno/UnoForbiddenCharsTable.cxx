@@ -53,7 +53,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
         throw RuntimeException();
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
-    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
+    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, false );
     if(!pForbidden)
         throw NoSuchElementException();
 
@@ -69,7 +69,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
         return sal_False;
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
-    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, sal_False );
+    const ForbiddenCharacters* pForbidden = mxForbiddenChars->GetForbiddenCharacters( eLang, false );
 
     return NULL != pForbidden;
 }
