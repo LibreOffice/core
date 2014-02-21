@@ -20,7 +20,7 @@
 class IconThemeSelectorTest;
 
 namespace vcl {
-struct IconThemeInfo;
+class IconThemeInfo;
 
 /** This class helps to choose an icon theme from a list of installed themes.
  *
