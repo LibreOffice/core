@@ -147,7 +147,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
             mpGrabBagStack->appendElement("val", makeAny(sal_Int32(aValue.getInt())));
             break;
         case NS_ooxml::LN_CT_SchemeColor_val:
-            mpGrabBagStack->appendElement("val", makeAny(getSchemeColorTypeString(aValue.getInt())));
+            mpGrabBagStack->appendElement("val", makeAny(getSchemeColorTypeString(sal_Int32(aValue.getInt()))));
             break;
         case NS_ooxml::LN_CT_SRgbColor_val:
             {
@@ -159,7 +159,7 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
             }
             break;
         case NS_ooxml::LN_CT_Glow_rad:
-            mpGrabBagStack->appendElement("rad", makeAny(aValue.getInt()));
+            mpGrabBagStack->appendElement("rad", makeAny(sal_Int32(aValue.getInt())));
             break;
         default:
             break;
