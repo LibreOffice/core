@@ -107,7 +107,6 @@ SdrItemBrowser::ForceParent()
 SdrItemBrowser::SdrItemBrowser(SdrView&)
 SfxAcceleratorConfigPage::Create(Window*, SfxItemSet const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
-SfxBindings::GetDispatchProvider_Impl() const
 SfxBindings::GetSlot(unsigned short)
 SfxBindings::GetSystemWindow() const
 SfxDispatcher::IsOnTop(SfxShell const&)

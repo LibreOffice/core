@@ -2180,11 +2180,6 @@ void SfxBindings::SetDispatchProvider_Impl( const ::com::sun::star::uno::Referen
         pImp->pSubBindings->SetDispatchProvider_Impl( pImp->xProv );
 }
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & SfxBindings::GetDispatchProvider_Impl() const
-{
-    return pImp->xProv;
-}
-
 SystemWindow* SfxBindings::GetSystemWindow() const
 {
     SfxViewFrame *pFrame = pDispatcher->GetFrame();
