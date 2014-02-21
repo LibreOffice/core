@@ -357,13 +357,13 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
 
 // the office always writes the start and end html tag in upper cases and
 // without spaces both tags don't allow parameters
-const std::string TAG_HTML = std::string("<HTML>");
-const std::string TAG_END_HTML = std::string("</HTML>");
+const std::string TAG_HTML = std::string("<html>");
+const std::string TAG_END_HTML = std::string("</html>");
 
 // The body tag may have parameters so we need to search for the
-// closing '>' manually e.g. <BODY param> #92840#
-const std::string TAG_BODY = std::string("<BODY");
-const std::string TAG_END_BODY = std::string("</BODY");
+// closing '>' manually e.g. <body param> #92840#
+const std::string TAG_BODY = std::string("<body");
+const std::string TAG_END_BODY = std::string("</body");
 
 Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
 {
