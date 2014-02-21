@@ -136,8 +136,6 @@ public:
     // calls the protected inline-function BrowseBox::GetFirstVisibleColNumber()
     sal_Int16 GetFirstVisibleColumNumber() const;
 
-    sal_Int32 GetTotalWidth() const;
-
     bool CellContainsNumbers( sal_Int32 nRow, sal_uInt16 nCol ) const;
 
     sal_uInt32 GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const;

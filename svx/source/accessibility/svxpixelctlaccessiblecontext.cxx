@@ -557,15 +557,12 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
 
     }
 }
+
 void SvxPixelCtlAccessible::Invalidate()
 {
     pPixelCtl = 0;
 }
-void SvxPixelCtlAccessible::ThrowExceptionIfNotAlive( void ) throw( lang::DisposedException )
-{
-    if( IsNotAlive() )
-        throw lang::DisposedException();
-}
+
 void SvxPixelCtlAccessible::IsValid() throw (uno::RuntimeException)
 {
     if(!pPixelCtl)

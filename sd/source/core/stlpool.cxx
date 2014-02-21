@@ -607,12 +607,6 @@ void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool,
     RenameAndCopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets, rRenameSuffix );
 }
 
-void SdStyleSheetPool::RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, OUString &rRenameSuffix)
-{
-    SdStyleSheetVector aTmpSheets;
-    RenameAndCopySheets( rSourcePool, eFamily, aTmpSheets, rRenameSuffix );
-}
-
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily )
 {
     SdStyleSheetVector aTmpSheets;

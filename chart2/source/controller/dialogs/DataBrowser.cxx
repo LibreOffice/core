@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// header for class SvNumberformat
 #include <svl/zformat.hxx>
-// header for SvNumberFormatter
 #include <svl/zforlist.hxx>
 
 #include "DataBrowser.hxx"
@@ -1374,14 +1372,6 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
         }
     }
     return 0;
-}
-
-sal_Int32 DataBrowser::GetTotalWidth() const
-{
-    sal_uLong nWidth = 0;
-    for ( sal_uInt16 nCol = 0; nCol < ColCount(); ++nCol )
-        nWidth += GetColumnWidth( nCol );
-    return static_cast< sal_Int32 >( nWidth );
 }
 
 } // namespace chart

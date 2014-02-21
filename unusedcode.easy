@@ -143,7 +143,6 @@ SvxNumRule::Create(SvStream&)
 SvxNumberFormat::Create(SvStream&)
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 SvxPixelCtlAccessible::Invalidate()
-SvxPixelCtlAccessible::ThrowExceptionIfNotAlive()
 SvxPixelCtlAccessible::ensureIsValidAddress(int, int)
 SvxPixelCtlAccessible::ensureIsValidIndex(int)
 SvxRectCtlAccessibleContext::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
@@ -321,7 +320,6 @@ oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::AttributeConversion::decodeDouble(rtl::OUString const&)
 oox::core::Decrypt::aes128cbc(std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> >&)
-oox::drawingml::Shape::getWps()
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 oox::xls::FormulaParser::convertBoolToFormula(bool) const
 oox::xls::WorkbookHelper::getDocShell()
@@ -374,3 +372,4 @@ writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::ch
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, rtl::OUString const&)
 writerfilter::dump(writerfilter::OutputWithDepth<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >&, char const*, unsigned int)
 writerfilter::resourcemodel::resolveAttributeProperties(writerfilter::Properties&, writerfilter::Value&)
+writerfilter::toString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)

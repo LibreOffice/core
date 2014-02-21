@@ -63,13 +63,6 @@ OPropEditCtrl::OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPositio
     m_strHelpText = ModuleRes(nHelpId);
 }
 
-OPropEditCtrl::OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition)
-    :Edit(pParent, _rRes)
-    ,m_nPos(nPosition)
-{
-    m_strHelpText = ModuleRes(nHelpId);
-}
-
 void
 OPropEditCtrl::SetSpecialReadOnly(sal_Bool _bReadOnly)
 {
@@ -92,26 +85,12 @@ OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, 
     m_strHelpText = ModuleRes(nHelpId);
 }
 
-OPropNumericEditCtrl::OPropNumericEditCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition)
-    :NumericField(pParent, _rRes)
-    ,m_nPos(nPosition)
-{
-    m_strHelpText = ModuleRes(nHelpId);
-}
-
 OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
     :ListBox(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
     m_strHelpText = ModuleRes(nHelpId);
 }
-OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, const ResId& _rRes,short nPosition)
-    :ListBox(pParent, _rRes)
-    ,m_nPos(nPosition)
-{
-    m_strHelpText = ModuleRes(nHelpId);
-}
-
 
 void
 OPropListBoxCtrl::SetSpecialReadOnly(sal_Bool _bReadOnly)

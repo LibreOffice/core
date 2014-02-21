@@ -249,8 +249,6 @@ public:
     inline sal_Bool IsAlive( void ) const;
     /// @returns true if it's not disposed and no in disposing
     inline sal_Bool IsNotAlive( void ) const;
-    /// throws the exception DisposedException if it's not alive
-    void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
 
 protected:
     /** @attention  This method requires locked mutex's and a living object.
