@@ -173,7 +173,7 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
+bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
 #ifdef IOS
     (void) nDX;

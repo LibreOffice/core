@@ -56,7 +56,7 @@ public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu();
 
-    virtual sal_Bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
+    virtual bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );

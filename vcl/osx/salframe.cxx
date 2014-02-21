@@ -290,7 +290,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalFrame::PostEvent( void *pData )
+bool AquaSalFrame::PostEvent( void *pData )
 {
     GetSalData()->mpFirstInstance->PostUserEvent( this, SALEVENT_USEREVENT, pData );
     return TRUE;
@@ -648,7 +648,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
+bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 {
     if ( !mpNSWindow )
         return FALSE;
@@ -1538,7 +1538,7 @@ bool AquaSalFrame::SetPluginParent( SystemParentData* )
     return sal_False;
 }
 
-sal_Bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet
     return FALSE;

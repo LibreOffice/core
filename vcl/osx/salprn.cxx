@@ -164,14 +164,14 @@ void AquaSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
+bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
+bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
     // FIXME: implement driver data
     if( io_pSetupData && io_pSetupData->mpDriverData )
@@ -241,7 +241,7 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
+bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
         return sal_False;
@@ -623,7 +623,7 @@ AquaSalPrinter::~AquaSalPrinter()
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
+bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
                                const OUString& i_rJobName,
                                const OUString& i_rAppName,
                                ImplJobSetup* i_pSetupData,
@@ -634,7 +634,7 @@ sal_Bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
+bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
                                const OUString& /*i_rJobName*/,
                                const OUString& /*i_rAppName*/,
                                sal_uLong /*i_nCopies*/,
@@ -648,14 +648,14 @@ sal_Bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::EndJob()
+bool AquaSalPrinter::EndJob()
 {
     return mpInfoPrinter->EndJob();
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::AbortJob()
+bool AquaSalPrinter::AbortJob()
 {
     return mpInfoPrinter->AbortJob();
 }
@@ -669,7 +669,7 @@ SalGraphics* AquaSalPrinter::StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_b
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::EndPage()
+bool AquaSalPrinter::EndPage()
 {
     return mpInfoPrinter->EndPage();
 }

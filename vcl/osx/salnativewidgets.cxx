@@ -268,7 +268,7 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
  * drawing of the control defined by nPart.
  *
  */
-sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     bool bOk = sal_False;
 
@@ -402,7 +402,7 @@ sal_Bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPa
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-sal_Bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                         const Point& rPos, bool& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
@@ -494,7 +494,7 @@ UInt32 AquaSalGraphics::getTrackState( ControlState nState )
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
+bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     ControlPart nPart,
                     const Rectangle& rControlRegion,
                     ControlState nState,
@@ -1210,7 +1210,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState /*nState*/,
+bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState /*nState*/,
                                                const ImplControlValue& aValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 

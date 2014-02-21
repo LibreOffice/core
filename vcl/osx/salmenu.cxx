@@ -517,7 +517,7 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
     }
 }
 
-sal_Bool AquaSalMenu::VisibleMenuBar()
+bool AquaSalMenu::VisibleMenuBar()
 {
     // Enable/disable experimental native menus code?
     //

@@ -73,9 +73,9 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* i_pGraphics );
-    virtual sal_Bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData );
-    virtual sal_Bool                SetPrinterData( ImplJobSetup* pSetupData );
-    virtual sal_Bool                SetData( sal_uLong i_nFlags, ImplJobSetup* i_pSetupData );
+    virtual bool                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData );
+    virtual bool                SetPrinterData( ImplJobSetup* pSetupData );
+    virtual bool                SetData( sal_uLong i_nFlags, ImplJobSetup* i_pSetupData );
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
                                              long& o_rOutWidth, long& o_rOutHeight,
                                              long& o_rPageOffX, long& o_rPageOffY,
@@ -127,7 +127,7 @@ class AquaSalPrinter : public SalPrinter
     AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter );
     virtual ~AquaSalPrinter();
 
-    virtual sal_Bool                    StartJob( const OUString* i_pFileName,
+    virtual bool                    StartJob( const OUString* i_pFileName,
                                               const OUString& i_rJobName,
                                               const OUString& i_rAppName,
                                               sal_uLong i_nCopies,
@@ -135,16 +135,16 @@ class AquaSalPrinter : public SalPrinter
                                               bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual sal_Bool                    StartJob( const OUString* i_pFileName,
+    virtual bool                    StartJob( const OUString* i_pFileName,
                                               const OUString& rJobName,
                                               const OUString& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
                                               vcl::PrinterController& i_rListener );
 
-    virtual sal_Bool                    EndJob();
-    virtual sal_Bool                    AbortJob();
+    virtual bool                    EndJob();
+    virtual bool                    AbortJob();
     virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, sal_Bool i_bNewJobData );
-    virtual sal_Bool                    EndPage();
+    virtual bool                    EndPage();
     virtual sal_uLong                   GetErrorCode();
 
     private:

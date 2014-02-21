@@ -143,7 +143,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
     }
 }
 
-sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
+bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
                                             const PhysicalFontFace* pFontData,
                                             sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
                                             sal_Int32* pGlyphWidths, int nGlyphCount,
@@ -666,7 +666,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
 
 #ifndef IOS
 
-sal_Bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
+bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
                                    void* pEpsData, sal_uLong nByteCount )
 {
     // convert the raw data to an NSImageRef
@@ -857,7 +857,7 @@ bool AquaSalGraphics::drawPolyLine(
     return true;
 }
 
-sal_Bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
+bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
@@ -1082,12 +1082,12 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
     RefreshRect( nX, nY, nWidth, nHeight );
 }
 
-sal_Bool AquaSalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
+bool AquaSalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
-sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
+bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
                                                  const SalPoint* const*, const sal_uInt8* const* )
 {
     return sal_False;
