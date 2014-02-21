@@ -115,7 +115,8 @@ long ChildrenManagerImpl::GetChildCount (void) const throw ()
 
 ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape> ChildrenManagerImpl::GetChildShape(long nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException,
+           ::com::sun::star::lang::IndexOutOfBoundsException)
 {
     uno::Reference<XAccessible> xAcc = GetChild(nIndex);
     ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();

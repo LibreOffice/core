@@ -86,7 +86,8 @@ Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShap
 
 ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape> ChildrenManager::GetChildShape(long nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException,
+           ::com::sun::star::lang::IndexOutOfBoundsException)
 {
     OSL_ASSERT (mpImpl != NULL);
     return mpImpl->GetChildShape(nIndex);

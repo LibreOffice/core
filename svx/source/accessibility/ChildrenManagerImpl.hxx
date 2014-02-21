@@ -121,7 +121,8 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape> GetChildShape(long nIndex)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::lang::IndexOutOfBoundsException);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex

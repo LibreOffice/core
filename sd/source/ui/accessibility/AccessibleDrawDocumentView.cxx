@@ -476,7 +476,7 @@ void SAL_CALL
 //=====  XAccessibleGroupPosition  =========================================
 uno::Sequence< sal_Int32 > SAL_CALL
     AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
-    throw (uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard g;
 
