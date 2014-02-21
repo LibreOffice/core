@@ -393,6 +393,7 @@ private:
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
     bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
+    bool PostponeOLE( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt );
 
     /// checks whether the current component is a diagram
     bool IsDiagram (const SdrObject* sdrObject);
@@ -668,6 +669,7 @@ private:
     void WritePostponedFormControl(const SdrObject* pObject);
     void WritePostponedDiagram();
     void WritePostponedChart();
+    void WritePostponedOLE();
     void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
 
@@ -785,6 +787,15 @@ private:
     };
     std::list< PostponedDrawing >* m_postponedVMLDrawing;
     std::list< PostponedDrawing >* m_postponedDMLDrawing;
+
+    struct PostponedOLE
+    {
+        PostponedOLE( SwOLENode* rObject, const Size rSize, const SwFlyFrmFmt* rFrame ) : object( rObject ), size( rSize ), frame( rFrame ) {};
+        SwOLENode* object;
+        const Size size;
+        const SwFlyFrmFmt* frame;
+    };
+    std::list< PostponedOLE >* m_postponedOLE;
 
     const SwOLENode* m_postponedMath;
     const SdrObject* m_postponedChart;

@@ -1071,6 +1071,9 @@ void DocxAttributeOutput::StartRunProperties()
 
     assert(!m_postponedDMLDrawing);
     m_postponedDMLDrawing = new std::list< PostponedDrawing >;
+
+    assert( !m_postponedOLE );
+    m_postponedOLE = new std::list< PostponedOLE >;
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -1325,6 +1328,8 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     //We need to write w:pict tag after the w:rPr.
     WritePostponedVMLDrawing();
     WritePostponedDMLDrawing();
+
+    WritePostponedOLE();
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
@@ -3306,6 +3311,8 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
         return;
     if( WriteOLEMath( pSdrObj, rOLENode, rSize ))
         return;
+    if( PostponeOLE( pSdrObj, rOLENode, rSize, pFlyFrmFmt ))
+        return;
     // Then we fall back to just export the object as a graphic.
     if( m_postponedGraphic == NULL )
         FlyFrameGraphic( 0, rSize, pFlyFrmFmt, &rOLENode );
@@ -3465,6 +3472,83 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             }
         }
     }
+}
+
+bool DocxAttributeOutput::PostponeOLE( const SdrObject*, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt )
+{
+    if( m_postponedVMLDrawing == NULL )
+        return false;
+    m_postponedOLE->push_back( PostponedOLE( &rNode, rSize, pFlyFrmFmt ) );
+    return true;
+}
+
+/*
+ * Write w:object hierarchy for embedded objects after end element of w:rPr tag.
+ */
+void DocxAttributeOutput::WritePostponedOLE()
+{
+    if( m_postponedOLE == NULL )
+        return;
+
+    SAL_INFO( "sw.ww8", OSL_THIS_FUNC );
+
+    for( std::list< PostponedOLE >::iterator it = m_postponedOLE->begin();
+         it != m_postponedOLE->end();
+         ++it )
+    {
+        // write embedded file
+        OString sId = m_rExport.WriteOLENode( *it->object );
+
+        if( sId.isEmpty() )
+        {
+            // the embedded file could not be saved
+            // fallback: save as an image
+            FlyFrameGraphic( 0, it->size, it->frame, it->object );
+            continue;
+        }
+
+        // write preview image
+        const Graphic* pGraphic = const_cast< SwOLENode* >( it->object )->GetGraphic();
+        OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
+
+        m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
+
+        OStringBuffer sShapeStyle, sShapeId;
+        sShapeStyle.append( "width:" ).append( double( it->size.Width() ) / 20 )
+                            .append( "pt;height:" ).append( double( it->size.Height() ) / 20 )
+                            .append( "pt" ); //from VMLExport::AddRectangleDimensions(), it does: value/20
+        sShapeId.append( "ole_" ).append( sId );
+
+        // shape definition
+        m_pSerializer->startElementNS( XML_v, XML_shape,
+                                       XML_id, sShapeId.getStr(),
+                                       XML_style, sShapeStyle.getStr(),
+                                       FSNS( XML_o, XML_ole ), "", //compulsory, even if it's empty
+                                       FSEND );
+
+        // shape filled with the preview image
+        m_pSerializer->singleElementNS( XML_v, XML_imagedata,
+                                        FSNS( XML_r, XML_id ), OUStringToOString( sImageId, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                        FSEND );
+
+        m_pSerializer->endElementNS( XML_v, XML_shape );
+
+        // OLE object definition
+        m_pSerializer->singleElementNS( XML_o, XML_OLEObject,
+                                        XML_Type, "Embed",
+                                        XML_ProgID,"Excel.Sheet.12", //TODO: should be auto-detected somehow
+                                        XML_ShapeID, sShapeId.getStr(),
+                                        XML_DrawAspect, "Content",
+                                        XML_ObjectID, "_" + OString::number( rand() ),
+                                        FSNS( XML_r, XML_id ), sId.getStr(),
+                                        FSEND );
+
+        m_pSerializer->endElementNS( XML_w, XML_object );
+    }
+
+    // clear list of postponed objects
+    delete m_postponedOLE;
+    m_postponedOLE = NULL;
 }
 
 /*
@@ -6520,6 +6604,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
       m_postponedDMLDrawing(NULL),
+      m_postponedOLE( NULL ),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),

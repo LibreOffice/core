@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <vector>
 #include <boost/optional.hpp>
+#include <ndole.hxx>
 
 class DocxAttributeOutput;
 class DocxExportFilter;
@@ -83,6 +84,9 @@ class DocxExport : public MSWordExportBase
 
     /// Footer counter.
     sal_Int32 m_nFooters;
+
+    /// OLE objects counter.
+    sal_Int32 m_nOLEObjects;
 
     ///Footer and Header counter in Section properties
     sal_Int32 m_nHeadersFootersInSection;
@@ -159,6 +163,9 @@ public:
 
     /// Returns the relationd id
     OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount, ::sax_fastparser::FSHelperPtr m_pSerializer );
+    OString WriteOLENode( const SwOLENode& rNode );
+    bool lcl_CopyStream( css::uno::Reference< css::io::XInputStream> xIn, css::uno::Reference< css::io::XOutputStream > xOut );
+
     /// Writes the shape using drawingML syntax.
     void OutputDML( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 

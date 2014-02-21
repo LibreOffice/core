@@ -66,6 +66,7 @@
 #include "ww8par.hxx"
 #include "ww8scan.hxx"
 #include <oox/token/properties.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
@@ -355,6 +356,45 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
     aChartExport.ExportContent();
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+}
+
+OString DocxExport::WriteOLENode( const SwOLENode& rNode )
+{
+    uno::Reference <embed::XEmbeddedObject> xObj( const_cast<SwOLENode&>(rNode).GetOLEObj().GetOleRef() );
+    OUString sId, sMediaType;
+    comphelper::EmbeddedObjectContainer* aContainer = const_cast<SwOLENode&>(rNode).GetOLEObj().GetObject().GetContainer();
+    uno::Reference< io::XInputStream > xInStream = aContainer->GetObjectStream( xObj, &sMediaType );
+
+    OUString sFileName = "embeddings/Microsoft_Excel_Worksheet" + OUString::number( ++m_nOLEObjects ) + ".xlsx";
+    uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()
+                                                                      .appendAscii( "word/" )
+                                                                      .append( sFileName )
+                                                                      .makeStringAndClear(),
+                                                                      sMediaType );
+
+    if( lcl_CopyStream( xInStream, xOutStream ) )
+
+        sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
+                sFileName, false );
+
+    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+}
+
+// function copied from embeddedobj/source/msole/oleembed.cxx
+bool DocxExport::lcl_CopyStream( uno::Reference<io::XInputStream> xIn, uno::Reference<io::XOutputStream> xOut )
+{
+    const sal_Int32 nChunkSize = 4096;
+    uno::Sequence< sal_Int8 > aData(nChunkSize);
+    sal_Int32 nTotalRead = 0;
+    sal_Int32 nRead = 0;
+    do
+    {
+        nRead = xIn->readBytes(aData, nChunkSize);
+        nTotalRead += nRead;
+        xOut->writeBytes(aData);
+    } while (nRead == nChunkSize);
+    return nTotalRead != 0;
 }
 
 void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
@@ -1319,6 +1359,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_pSections( NULL ),
       m_nHeaders( 0 ),
       m_nFooters( 0 ),
+      m_nOLEObjects( 0 ),
       m_nHeadersFootersInSection(0),
       m_pVMLExport( NULL ),
       m_pSdrExport( NULL )
