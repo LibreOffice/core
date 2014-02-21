@@ -51,7 +51,7 @@ else
 # create a symlink "LO_lib" because the .so are in a directory with platform
 # specific name like build/lib.linux-x86_64-3.3
 
-python3_cflags = $(ZLIB_CFLAGS)
+python3_cflags = $(ZLIB_CFLAGS) $(gb_LTOFLAGS)
 ifneq (,$(ENABLE_VALGRIND))
     python3_cflags += $(VALGRIND_CFLAGS)
 endif
@@ -85,6 +85,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
 			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \
+			$(gb_LTOFLAGS) \
 			)" \
 		&& MAKEFLAGS= $(MAKE) \
 			$(if $(filter MACOSX,$(OS)),DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
