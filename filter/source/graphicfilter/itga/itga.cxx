@@ -116,6 +116,7 @@ TGAReader::TGAReader(SvStream &rTGA)
     , mpColorMap(NULL)
     , mbStatus(sal_True)
     , mnTGAVersion(1)
+    , mnDestBitDepth(8)
     , mbIndexing(sal_False)
     , mbEncoding(sal_False)
 {
