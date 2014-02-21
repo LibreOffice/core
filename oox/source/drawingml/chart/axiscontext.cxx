@@ -101,7 +101,7 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
             switch( nElement )
             {
                 case C_TOKEN( axId ):
-                    mrModel.mnAxisId = rAttribs.getInteger( XML_val, -1 );
+                    mrModel.mnAxisId = std::abs(rAttribs.getInteger( XML_val, -1 ));
                     return 0;
                 case C_TOKEN( crossAx ):
                     mrModel.mnCrossAxisId = rAttribs.getInteger( XML_val, -1 );

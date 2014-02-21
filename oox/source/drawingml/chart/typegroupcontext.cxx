@@ -78,7 +78,7 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back(std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
@@ -116,7 +116,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back( std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( barDir ):
             mrModel.mnBarDir = rAttribs.getToken( XML_val, XML_col );
@@ -167,7 +167,7 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back( std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( bubble3D ):
             // default is 'false', not 'true' as specified
@@ -211,7 +211,7 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back(std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
@@ -311,7 +311,7 @@ ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, co
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back(std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
@@ -344,7 +344,7 @@ ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, 
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back(std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( dLbls ):
             return new DataLabelsContext( *this, mrModel.mxLabels.create() );
@@ -377,7 +377,7 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( axId ):
-            mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
+            mrModel.maAxisIds.push_back( std::abs(rAttribs.getInteger( XML_val, -1 )) );
             return 0;
         case C_TOKEN( ser ):
             return new SurfaceSeriesContext( *this, mrModel.maSeries.create() );
