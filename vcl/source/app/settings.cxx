@@ -681,11 +681,11 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
         return true;
 
     if (mpData->mIconTheme != rSet.mpData->mIconTheme) {
-        return sal_False;
+        return false;
     }
 
     if (*mpData->mIconThemeSelector != *rSet.mpData->mIconThemeSelector) {
-        return sal_False;
+        return false;
     }
 
     if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
