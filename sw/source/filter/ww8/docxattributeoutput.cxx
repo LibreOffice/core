@@ -3020,10 +3020,18 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         else
             pGraphic = pOLENode->GetGraphic();
 
-        m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
-        OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
+        if (m_aRelIdCache.find(pGraphic) != m_aRelIdCache.end())
+            // We already have a RelId for this Graphic.
+            aRelId = m_aRelIdCache[pGraphic];
+        else
+        {
+            // Not in cache, then need to write it.
+            m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
+            OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
 
-        aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
+            aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
+            m_aRelIdCache[pGraphic] = aRelId;
+        }
 
         nImageType = XML_embed;
     }

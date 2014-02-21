@@ -824,6 +824,9 @@ private:
 
     bool m_setFootnote;
 
+    /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
+    std::map<const Graphic*, OString> m_aRelIdCache;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
