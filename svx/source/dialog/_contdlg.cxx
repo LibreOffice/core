@@ -535,11 +535,13 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
                 aStbStatus.Invalidate();
             else if ( bGraphicLinked )
             {
-                MessageDialog aQBox( this,"QueryUnlinkGraphicsDialog","svx/ui/queryunlinkgraphicsdialog.ui");
+                MessageDialog aQBox(this, "QueryUnlinkGraphicsDialog",
+                    "svx/ui/queryunlinkgraphicsdialog.ui");
 
-                if ( aQBox.Execute() != RET_YES )
+                if (aQBox.Execute() != RET_YES)
                 {
-                    aTbx1.CheckItem( TBI_PIPETTE, bPipette = sal_False );
+                    bPipette = false;
+                    aTbx1.CheckItem(TBI_PIPETTE, bPipette);
                     aStbStatus.Invalidate();
                 }
             }
