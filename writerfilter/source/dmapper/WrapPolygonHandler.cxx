@@ -147,8 +147,10 @@ drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 }
 
 WrapPolygonHandler::WrapPolygonHandler()
-: LoggedProperties(dmapper_logger, "WrapPolygonHandler")
-, mpPolygon(new WrapPolygon)
+    : LoggedProperties(dmapper_logger, "WrapPolygonHandler")
+    , mpPolygon(new WrapPolygon)
+    , mnX(0)
+    , mnY(0)
 {
 }
 
