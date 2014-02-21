@@ -161,11 +161,6 @@ void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )
     mpSerializer->mergeTopMarks( eMergeType );
 }
 
-void FastSerializerHelper::copyTopMarkPop()
-{
-    mpSerializer->copyTopMarkPop();
-}
-
 FastAttributeList * FastSerializerHelper::createAttrList()
 {
     return new FastAttributeList( mxTokenHandler );

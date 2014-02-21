@@ -146,7 +146,6 @@ public:
         @see mark()
      */
     void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
-    void copyTopMarkPop();
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;

@@ -322,7 +322,6 @@ registry::tools::Options::badOption(char const*, char const*) const
 registry::tools::Options::initOptions(std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
 registry::tools::convertToFileUrl(char const*, int)
 rtl_OUString::convertFromString::test()
-sax_fastparser::FastSerializerHelper::copyTopMarkPop()
 sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::produce()
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
