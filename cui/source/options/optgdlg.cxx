@@ -1142,13 +1142,15 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     m_pAsianSupportCB->SetClickHdl( aLink );
     m_pCTLSupportCB->SetClickHdl( aLink );
 
-    m_pAsianSupportCB->Check( m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled() );
+    m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled();
+    m_pAsianSupportCB->Check(m_bOldAsian);
     m_pAsianSupportCB->SaveValue();
     sal_Bool bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK);
     m_pAsianSupportCB->Enable(!bReadonly);
     SupportHdl( m_pAsianSupportCB );
 
-    m_pCTLSupportCB->Check( m_bOldCtl = pLangConfig->aLanguageOptions.IsCTLFontEnabled() );
+    m_bOldCtl = pLangConfig->aLanguageOptions.IsCTLFontEnabled();
+    m_pCTLSupportCB->Check(m_bOldCtl);
     m_pCTLSupportCB->SaveValue();
     bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT);
     m_pCTLSupportCB->Enable(!bReadonly);
