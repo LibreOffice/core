@@ -189,7 +189,6 @@ static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 
 int GetHTMLToken( const OUString& rName )
 {
-    OUString aNameUpper = rName.toAsciiUpperCase();
     if( !bSortKeyWords )
     {
         qsort( (void*) aHTMLTokenTab,
@@ -201,12 +200,12 @@ int GetHTMLToken( const OUString& rName )
 
     int nRet = 0;
 
-    if (!aNameUpper.compareTo(OOO_STRING_SVTOOLS_HTML_comment, 3))
+    if( !rName.compareTo( OOO_STRING_SVTOOLS_HTML_comment, 3  ) )
         return HTML_COMMENT;
 
     void* pFound;
     HTML_TokenEntry aSrch;
-    aSrch.pUToken = &aNameUpper;
+    aSrch.pUToken = &rName;
     aSrch.nToken = -1;
 
     pFound = bsearch( (sal_Char *) &aSrch,

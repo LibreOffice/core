@@ -881,7 +881,7 @@ int HTMLParser::_GetNextRawToken()
                 }
 
                 OUString aTok( sTmpBuffer.toString() );
-                aTok = aTok.toAsciiUpperCase();
+                aTok = aTok.toAsciiLowerCase();
                 bool bDone = false;
                 if( bReadScript || !aEndToken.isEmpty() )
                 {
@@ -1126,7 +1126,7 @@ int HTMLParser::_GetNextToken()
 
                     // Search token in table:
                     sSaveToken = aToken;
-                    aToken = aToken.toAsciiUpperCase();
+                    aToken = aToken.toAsciiLowerCase();
                     if( 0 == (nRet = GetHTMLToken( aToken )) )
                         // Unknown control
                         nRet = HTML_UNKNOWNCONTROL_ON;
@@ -1462,10 +1462,8 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 
             OUString sName( aToken.copy( nStt, nPos-nStt ) );
 
-            // PlugIns require original token name. Convert to upper case only for searching.
-            OUString sNameUpperCase( sName.toAsciiUpperCase() );
-
-            nToken = GetHTMLOption( sNameUpperCase ); // Name is ready
+            // PlugIns require original token name. Convert to lower case only for searching.
+            nToken = GetHTMLOption( sName.toAsciiLowerCase() ); // Name is ready
             DBG_ASSERTWARNING( nToken!=HTML_O_UNKNOWN,
                         "GetOption: unknown HTML option" );
             bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
@@ -1913,7 +1911,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         sCmp = pHeader;
     }
 
-    sCmp = sCmp.toAsciiUpperCase();
+    sCmp = sCmp.toAsciiLowerCase();
 
     // A HTML document must have a '<' in the first line
     sal_Int32 nStart = sCmp.indexOf('<');
