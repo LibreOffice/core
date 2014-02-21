@@ -129,29 +129,39 @@ static PHLayout pPHLayout[] =
     { EPP_LAYOUT_2COLUMNSANDTITLE,      { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, sal_True, sal_True, sal_False }
 };
 
-PPTWriterBase::PPTWriterBase() :
-    mXModel (0),
-    mXStatusIndicator (0),
-    mbStatusIndicator (false),
-    maFraction (1, 576),
-    maMapModeSrc (MAP_100TH_MM),
-    maMapModeDest (MAP_INCH, Point(), maFraction, maFraction),
-    meLatestPageType (NORMAL),
-    mpStyleSheet (0)
+PPTWriterBase::PPTWriterBase()
+    : mXModel(0)
+    , mXStatusIndicator(0)
+    , mbStatusIndicator(false)
+    , mbPresObj(false)
+    , mbEmptyPresObj(false)
+    , mnAngle(0)
+    , mnPages(0)
+    , mnMasterPages(0)
+    , maFraction(1, 576)
+    , maMapModeSrc(MAP_100TH_MM)
+    , maMapModeDest(MAP_INCH, Point(), maFraction, maFraction)
+    , meLatestPageType(NORMAL)
+    , mpStyleSheet(0)
 {
     DBG(printf ("PPTWriterBase::PPTWriterBase()\n"));
 }
 
 PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
-                              const Reference< XStatusIndicator > & rXStatInd ) :
-    mXModel (rXModel),
-    mXStatusIndicator (rXStatInd),
-    mbStatusIndicator (false),
-    maFraction (1, 576),
-    maMapModeSrc (MAP_100TH_MM),
-    maMapModeDest (MAP_INCH, Point(), maFraction, maFraction),
-    meLatestPageType (NORMAL),
-    mpStyleSheet (0)
+                              const Reference< XStatusIndicator > & rXStatInd )
+    : mXModel(rXModel)
+    , mXStatusIndicator(rXStatInd)
+    , mbStatusIndicator(false)
+    , mbPresObj(false)
+    , mbEmptyPresObj(false)
+    , mnAngle(0)
+    , mnPages(0)
+    , mnMasterPages(0)
+    , maFraction(1, 576)
+    , maMapModeSrc(MAP_100TH_MM)
+    , maMapModeDest(MAP_INCH, Point(), maFraction, maFraction)
+    , meLatestPageType (NORMAL)
+    , mpStyleSheet(0)
 {
 }
 
