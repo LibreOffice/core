@@ -234,8 +234,10 @@ sal_Bool ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) con
 }
 
 ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterInfo* pInf)
-:   mnType(nTyp),
-    mpPageMasterInfo(pInf)
+    : mnType(nTyp)
+    , mpPageMasterInfo(pInf)
+    , mnGapX(0)
+    , mnGapY(0)
 {
     // create full info (initialze with typical values)
     Point aPagePos(0,0);
