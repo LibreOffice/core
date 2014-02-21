@@ -299,6 +299,7 @@ XclObj::XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEsch
     mnObjType( nObjType ),
     nObjId(0),
     nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
+    mnScTab(0),
     bFirstOnSheet( !rObjMgr.HasObj() ),
     mbOwnEscher( bOwnEscher )
 {
