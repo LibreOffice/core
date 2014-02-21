@@ -642,7 +642,8 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
         sal_uInt16 nFndPos;
         const SwPosition* pEnd;
         SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetCntntNode(), nCnt ));
-        const SwRangeRedline* pRedl = pDest->GetRedline( aSrcPos, &nFndPos );
+        pDest->GetRedline( aSrcPos, &nFndPos );
+        const SwRangeRedline* pRedl;
         while( nFndPos--
               && *( pEnd = ( pRedl = pDest->GetRedlineTbl()[ nFndPos ] )->End() ) == aSrcPos
               && *pRedl->Start() < aSrcPos )
