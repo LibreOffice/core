@@ -52,6 +52,12 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
+    void pushStackOfMembers();
+    void popStackOfMembers();
+
+    IntVectorPtr getCurrentGrid();
+    IntVectorPtr getCurrentSpans( );
+
 public:
 
     DomainMapperTableManager(bool bOOXML);
@@ -59,7 +65,7 @@ public:
 
     // use this method to avoid adding the properties for the table
     // but in the provided properties map.
-    inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
+    void SetStyleProperties( PropertyMapPtr pProperties );
 
     virtual bool sprm(Sprm & rSprm);
 
@@ -68,9 +74,6 @@ public:
 
     virtual void endOfCellAction();
     virtual void endOfRowAction();
-
-    IntVectorPtr getCurrentGrid();
-    IntVectorPtr getCurrentSpans( );
 
     inline virtual void cellProps(TablePropertyMapPtr pProps)
     {
