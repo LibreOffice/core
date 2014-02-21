@@ -64,8 +64,10 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_aCB_PrimaryColumn(   this, ModuleRes( CB_PRIMARY_COLUMN  ) )
     ,m_aFT_KeyName(         this, ModuleRes( FT_KEYNAME         ) )
     ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
+    ,m_nOldOperation(0)
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
+    ,m_bPKeyAllowed(false)
     ,m_bUseHeaderAllowed(sal_True)
 {
 
