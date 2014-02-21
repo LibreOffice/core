@@ -56,6 +56,8 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
            ,OPropertySetHelper(OResultSetBase::rBHelper)
            ,m_xDelegatorResultSet(_xResultSet)
            ,m_aWarnings( Reference< XWarningsSupplier >( _xResultSet, UNO_QUERY ) )
+           ,m_nResultSetType(0)
+           ,m_nResultSetConcurrency(0)
            ,m_bIsBookmarkable(sal_False)
 {
     SAL_INFO("dbaccess", "OResultSet::OResultSet" );
@@ -86,7 +88,7 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
             }
         }
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
     }
 }
