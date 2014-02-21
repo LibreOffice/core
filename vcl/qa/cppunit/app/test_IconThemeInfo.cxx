@@ -109,7 +109,7 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined1()
     bool thrown = false;
     OUString fname("images_oxygen");
     try {
-        OUString sname = vcl::IconThemeInfo::FileNameToThemeId(fname);
+        vcl::IconThemeInfo::FileNameToThemeId(fname);
     }
     catch (std::runtime_error&) {
         thrown = true;
@@ -123,7 +123,7 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
     bool thrown = false;
     OUString fname("image_oxygen.zip");
     try {
-        OUString sname = vcl::IconThemeInfo::FileNameToThemeId(fname);
+        vcl::IconThemeInfo::FileNameToThemeId(fname);
     }
     catch (std::runtime_error&) {
         thrown = true;
