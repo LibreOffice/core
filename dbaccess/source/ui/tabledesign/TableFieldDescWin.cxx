@@ -46,7 +46,8 @@
 using namespace dbaui;
 // class OTableFieldDescWin
 OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
-    :TabPage(pParent, WB_3DLOOK)
+    : TabPage(pParent, WB_3DLOOK)
+    , m_eChildFocus(NONE)
 {
     // Header
     m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
