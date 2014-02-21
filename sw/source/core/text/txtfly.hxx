@@ -319,13 +319,19 @@ inline bool SwTxtFly::IsOn() const
 
 inline bool SwTxtFly::Relax( const SwRect &rRect )
 {
-    bOn &= IsAnyFrm( rRect );
+    if (bOn)
+    {
+        bOn = IsAnyFrm( rRect );
+    }
     return bOn;
 }
 
 inline bool SwTxtFly::Relax()
 {
-    bOn &= IsAnyFrm();
+    if (bOn)
+    {
+        bOn = IsAnyFrm();
+    }
     return bOn;
 }
 
