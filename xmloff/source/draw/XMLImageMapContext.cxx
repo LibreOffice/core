@@ -554,12 +554,13 @@ XMLImageMapCircleContext::XMLImageMapCircleContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XIndexContainer> xMap) :
-        XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
-                                 "com.sun.star.image.ImageMapCircleObject"),
-        bXOK(sal_False),
-        bYOK(sal_False),
-        bRadiusOK(sal_False)
+    Reference<XIndexContainer> xMap)
+    : XMLImageMapObjectContext(rImport, nPrefix, rLocalName, xMap,
+          "com.sun.star.image.ImageMapCircleObject")
+    , nRadius(0)
+    , bXOK(false)
+    , bYOK(false)
+    , bRadiusOK(false)
 {
 }
 
