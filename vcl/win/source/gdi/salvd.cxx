@@ -219,7 +219,7 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
+bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignDC || !mhBmp )
         return TRUE;    // ???

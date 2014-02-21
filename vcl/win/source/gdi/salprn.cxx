@@ -1188,7 +1188,7 @@ void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
     mbGraphics = FALSE;
 }
 
-sal_Bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
 {
     if ( ImplUpdateSalJobSetup( this, pSetupData, TRUE, static_cast<WinSalFrame*>(pFrame) ) )
     {
@@ -1199,14 +1199,14 @@ sal_Bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
     return FALSE;
 }
 
-sal_Bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
 {
     if ( !ImplTestSalJobSetup( this, pSetupData, FALSE ) )
         return FALSE;
     return ImplUpdateSalPrnIC( this, pSetupData );
 }
 
-sal_Bool WinSalInfoPrinter::SetData( sal_uLong nFlags, ImplJobSetup* pSetupData )
+bool WinSalInfoPrinter::SetData( sal_uLong nFlags, ImplJobSetup* pSetupData )
 {
     ImplJobSetupToDevMode( this, pSetupData, nFlags );
     if ( ImplUpdateSalJobSetup( this, pSetupData, TRUE, NULL ) )
@@ -1451,7 +1451,7 @@ static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
     return nRet;
 }
 
-sal_Bool WinSalPrinter::StartJob( const OUString* pFileName,
+bool WinSalPrinter::StartJob( const OUString* pFileName,
                            const OUString& rJobName,
                            const OUString&,
                            sal_uLong nCopies,
@@ -1580,7 +1580,7 @@ sal_Bool WinSalPrinter::StartJob( const OUString* pFileName,
     return TRUE;
 }
 
-sal_Bool WinSalPrinter::EndJob()
+bool WinSalPrinter::EndJob()
 {
     HDC hDC = mhDC;
     if ( isValid() && hDC )
@@ -1612,7 +1612,7 @@ sal_Bool WinSalPrinter::EndJob()
     return TRUE;
 }
 
-sal_Bool WinSalPrinter::AbortJob()
+bool WinSalPrinter::AbortJob()
 {
     mbAbort = TRUE;
 
@@ -1705,7 +1705,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
     return mpGraphics;
 }
 
-sal_Bool WinSalPrinter::EndPage()
+bool WinSalPrinter::EndPage()
 {
     HDC hDC = mhDC;
     if ( hDC && mpGraphics )

@@ -1543,7 +1543,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly
@@ -1560,7 +1560,7 @@ sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint*
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // for NT, we can handover the array directly
@@ -1612,7 +1612,7 @@ sal_Bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* 
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
+bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
@@ -1750,7 +1750,7 @@ static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSiz
     return bRetValue;
 }
 
-sal_Bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
+bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
     sal_Bool bRetValue = FALSE;
 

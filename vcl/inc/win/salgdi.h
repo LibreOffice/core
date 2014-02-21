@@ -214,9 +214,9 @@ protected:
         const ::basegfx::B2DVector& rLineWidth,
         basegfx::B2DLineJoin,
         com::sun::star::drawing::LineCap);
-    virtual sal_Bool    drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
-    virtual sal_Bool    drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
-    virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
+    virtual bool    drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual bool    drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
@@ -243,15 +243,15 @@ protected:
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
     virtual void        invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
+    virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
 
     // native widget rendering methods that require mirroring
-    virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                               const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
-    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const OUString& aCaption );
-    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+    virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
@@ -328,7 +328,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
+    virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_GlyphId* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -374,7 +374,7 @@ public:
 
     virtual bool            supportsOperation( OutDevSupportType ) const;
     // Query the platform layer for control support
-    virtual sal_Bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
 
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;

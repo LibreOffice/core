@@ -1097,7 +1097,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalFrame::PostEvent( void* pData )
+bool WinSalFrame::PostEvent( void* pData )
 {
     return (sal_Bool)ImplPostMessage( mhWnd, SAL_MSG_USEREVENT, 0, (LPARAM)pData );
 }
@@ -1857,7 +1857,7 @@ void WinSalFrame::SetWindowState( const SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalFrame::GetWindowState( SalFrameState* pState )
+bool WinSalFrame::GetWindowState( SalFrameState* pState )
 {
     if ( maState.mnWidth && maState.mnHeight )
     {
@@ -3483,7 +3483,7 @@ LanguageType WinSalFrame::GetInputLanguage()
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
+bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
 {
     sal_Bool bRet = FALSE;
     sal_IntPtr nLangType = aLangType;

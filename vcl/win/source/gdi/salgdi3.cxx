@@ -2539,7 +2539,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
     return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont);
 }
 
-sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
+bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const PhysicalFontFace* pFont, sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {

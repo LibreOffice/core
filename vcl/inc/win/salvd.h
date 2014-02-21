@@ -51,7 +51,7 @@ public:
 
     virtual SalGraphics*            GetGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
+    virtual bool                    SetSize( long nNewDX, long nNewDY );
     virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 

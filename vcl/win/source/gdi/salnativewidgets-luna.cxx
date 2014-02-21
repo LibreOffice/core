@@ -236,7 +236,7 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
  *  Returns TRUE if the platform supports native
  *  drawing of the control defined by nPart
  */
-sal_Bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     HTHEME hTheme = NULL;
 
@@ -351,7 +351,7 @@ sal_Bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-sal_Bool WinSalGraphics::hitTestNativeControl( ControlType,
+bool WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
                               const Point&,
@@ -1163,7 +1163,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
  *  aValue:         An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
+bool WinSalGraphics::drawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,
                             ControlState nState,
@@ -1296,7 +1296,7 @@ sal_Bool WinSalGraphics::drawNativeControl( ControlType nType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-sal_Bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
+bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,
                                 ControlState nState,
