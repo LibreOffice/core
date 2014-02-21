@@ -6612,7 +6612,6 @@ AC_MSG_CHECKING([which memory allocator to use])
 if test "$with_alloc" = "system"; then
     AC_MSG_RESULT([system])
     ALLOC="SYS_ALLOC"
-    AC_CHECK_FUNCS([malloc realloc calloc free])
 fi
 if test "$with_alloc" = "tcmalloc"; then
     AC_MSG_RESULT(tcmalloc)
@@ -6635,7 +6634,6 @@ if test "$with_alloc" = "jemalloc"; then
     else
         AC_MSG_RESULT([system])
         ALLOC="SYS_ALLOC"
-        AC_CHECK_FUNCS([malloc realloc calloc free])
     fi
 fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
