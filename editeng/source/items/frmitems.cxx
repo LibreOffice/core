@@ -421,9 +421,9 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    bAutoFirst      ( 0 ),
-    bExplicitZeroMarginValRight(sal_False),
-    bExplicitZeroMarginValLeft(sal_False)
+    bAutoFirst      ( false ),
+    bExplicitZeroMarginValRight(false),
+    bExplicitZeroMarginValLeft(false)
 {
 }
 
@@ -442,9 +442,9 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    bAutoFirst      ( 0 ),
-    bExplicitZeroMarginValRight(sal_False),
-    bExplicitZeroMarginValLeft(sal_False)
+    bAutoFirst      ( false ),
+    bExplicitZeroMarginValRight(false),
+    bExplicitZeroMarginValLeft(false)
 {
 }
 

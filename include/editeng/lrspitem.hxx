@@ -56,9 +56,9 @@ class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
     long    nRightMargin;       // The unproblematic right edge
 
     sal_uInt16  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
-    sal_Bool    bAutoFirst  : 1;    // Automatic calculation of the first line indent
-    sal_Bool bExplicitZeroMarginValRight;
-    sal_Bool bExplicitZeroMarginValLeft;
+    bool        bAutoFirst  : 1;    // Automatic calculation of the first line indent
+    bool        bExplicitZeroMarginValRight;
+    bool        bExplicitZeroMarginValLeft;
 
     void   AdjustLeft();        // nLeftMargin and nTxtLeft are being adjusted.
 
@@ -99,13 +99,13 @@ public:
     inline long GetRight() const { return nRightMargin;}
     inline void SetLeftValue( const long nL ) { nTxtLeft = nLeftMargin = nL; }
     inline void SetRightValue( const long nR ) { nRightMargin = nR; }
-    inline sal_Bool IsAutoFirst()  const { return bAutoFirst; }
-    inline void SetAutoFirst( const sal_Bool bNew ) { bAutoFirst = bNew; }
+    inline bool IsAutoFirst()  const { return bAutoFirst; }
+    inline void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
 
-    inline sal_Bool IsExplicitZeroMarginValRight()  const { return bExplicitZeroMarginValRight; }
-    inline sal_Bool IsExplicitZeroMarginValLeft()  const { return bExplicitZeroMarginValLeft; }
-    inline void SetExplicitZeroMarginValRight( const sal_Bool eR ) { bExplicitZeroMarginValRight = eR; }
-    inline void SetExplicitZeroMarginValLeft( const sal_Bool eL ) { bExplicitZeroMarginValLeft = eL; }
+    inline bool IsExplicitZeroMarginValRight()  const { return bExplicitZeroMarginValRight; }
+    inline bool IsExplicitZeroMarginValLeft()  const { return bExplicitZeroMarginValLeft; }
+    inline void SetExplicitZeroMarginValRight( const bool eR ) { bExplicitZeroMarginValRight = eR; }
+    inline void SetExplicitZeroMarginValLeft( const bool eL ) { bExplicitZeroMarginValLeft = eL; }
     // Query/Setting the percentage values
     inline void SetPropLeft( const sal_uInt16 nProp = 100 )
                     { nPropLeftMargin = nProp; }
@@ -153,7 +153,7 @@ inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
 {
     if (0 == nR)
     {
-        SetExplicitZeroMarginValRight(sal_True);
+        SetExplicitZeroMarginValRight(true);
     }
     nRightMargin = (nR * nProp) / 100;
     nPropRightMargin = nProp;
@@ -170,7 +170,7 @@ inline void SvxLRSpaceItem::SetTxtLeft( const long nL, const sal_uInt16 nProp )
 {
     if (0 == nL)
     {
-        SetExplicitZeroMarginValLeft(sal_True);
+        SetExplicitZeroMarginValLeft(true);
     }
     nTxtLeft = (nL * nProp) / 100;
     nPropLeftMargin = nProp;
