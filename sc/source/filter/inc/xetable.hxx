@@ -31,6 +31,8 @@
 #include "xestyle.hxx"
 #include "xeextlst.hxx"
 
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
 
@@ -192,8 +194,18 @@ public:
     XclExpShrfmlaRef CreateOrExtendShrfmla( const ScFormulaCell& rScCell, const ScAddress& rScPos );
 
 private:
-    typedef ::std::map< const ScTokenArray*, XclExpShrfmlaRef > XclExpShrfmlaMap;
-    XclExpShrfmlaMap    maRecMap;       /// Map containing the SHRFMLA records.
+    /**
+     * Check for presence of token that's not allowed in Excel's shared
+     * formula. Refer to the "SharedParsedFormula" section of [MS-XLS] spec
+     * for more info.
+     */
+    bool IsValidTokenArray( const ScTokenArray& rArray ) const;
+
+    typedef boost::unordered_map<const ScTokenArray*, XclExpShrfmlaRef> TokensType;
+    typedef boost::unordered_set<const ScTokenArray*> BadTokenArraysType;
+
+    TokensType         maRecMap;    /// Map containing the SHRFMLA records.
+    BadTokenArraysType maBadTokens; /// shared tokens we should *not* export as SHRFMLA
 };
 
 // Multiple operations ========================================================

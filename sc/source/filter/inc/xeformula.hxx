@@ -79,6 +79,9 @@ public:
         @descr  This is used i.e. for linked macros in push buttons. */
     XclTokenArrayRef    CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
+    bool IsRef2D( const ScSingleRefData& rRefData ) const;
+    bool IsRef2D( const ScComplexRefData& rRefData ) const;
+
 private:
     typedef boost::shared_ptr< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
     XclExpFmlaCompImplRef mxImpl;
