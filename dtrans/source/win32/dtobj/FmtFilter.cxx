@@ -355,8 +355,8 @@ std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFr
     return htmlHeader.str();
 }
 
-// the office always writes the start and end html tag in upper cases and
-// without spaces both tags don't allow parameters
+// the case of these tags has to match what we output in our filters
+// both tags don't allow parameters
 const std::string TAG_HTML = std::string("<html>");
 const std::string TAG_END_HTML = std::string("</html>");
 
