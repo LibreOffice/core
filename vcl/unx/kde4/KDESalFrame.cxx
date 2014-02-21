@@ -198,7 +198,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
         pKey = "Theme";
         if ( aGroup.hasKey( pKey ) )
-            style.SetPreferredSymbolsStyleName( readEntryUntranslated( &aGroup, pKey ) );
+            style.SetPreferredIconTheme( readEntryUntranslated( &aGroup, pKey ) );
 
         //toolbar
         pKey = "toolbarFont";
