@@ -572,8 +572,11 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException,
-                                                                                                                                         uno::RuntimeException)
+    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB(
+        const uno::Sequence< ::sal_Int8 >& deviceColor)
+            throw (lang::IllegalArgumentException,
+                   uno::RuntimeException,
+                   std::exception)
     {
         const sal_Size  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
