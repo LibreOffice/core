@@ -64,6 +64,7 @@ CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponent
     : ThreadHelpBase     (&Application::GetSolarMutex()                   )
     , m_xContext         (rxContext                                       )
     , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
+    , m_eOperation(E_CLOSE_DOC)
     , m_lStatusListener  (m_aLock.getShareableOslMutex()                  )
     , m_pSysWindow(NULL)
 {
