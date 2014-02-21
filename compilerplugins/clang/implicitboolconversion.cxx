@@ -43,8 +43,9 @@ if(t1->isSpecificBuiltinType(BuiltinType::UChar))return true;
         return false;
     }
     std::string name(t2->getDecl()->getNameAsString());
-    return name == "sal_Bool" || name == "FcBool" || name == "UBool"
-        || name == "dbus_bool_t" || name == "gboolean" || name == "hb_bool_t";
+    return name == "sal_Bool" || name == "BOOL" || name == "FcBool"
+        || name == "UBool" || name == "dbus_bool_t" || name == "gboolean"
+        || name == "hb_bool_t";
 }
 
 bool isBoolExpr(Expr const * expr) {
