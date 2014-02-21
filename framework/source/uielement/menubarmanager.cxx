@@ -1925,11 +1925,6 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
     }
 }
 
-const Reference< XComponentContext >& MenuBarManager::getComponentContext()
-{
-    return m_xContext;
-}
-
 void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId)
 {
     Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );

@@ -105,8 +105,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getComponentContext();
-
         virtual ~MenuBarManager();
 
         // XInterface
