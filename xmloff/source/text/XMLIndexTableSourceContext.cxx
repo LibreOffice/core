@@ -56,18 +56,17 @@ TYPEINIT1(XMLIndexTableSourceContext, XMLIndexSourceBaseContext);
 
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
-    SvXMLImport& rImport,
-    sal_uInt16 nPrfx,
-    const OUString& rLocalName,
-    Reference<XPropertySet> & rPropSet) :
-        XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_False),
-        sCreateFromLabels(sAPI_CreateFromLabels),
-        sLabelCategory(sAPI_LabelCategory),
-        sLabelDisplayType(sAPI_LabelDisplayType),
-        bSequenceOK(sal_False),
-        bDisplayFormatOK(sal_False),
-        bUseCaption(sal_True)
+    SvXMLImport& rImport, sal_uInt16 nPrfx,
+    const OUString& rLocalName, Reference<XPropertySet> & rPropSet)
+    : XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
+                                  rPropSet, sal_False)
+    , sCreateFromLabels(sAPI_CreateFromLabels)
+    , sLabelCategory(sAPI_LabelCategory)
+    , sLabelDisplayType(sAPI_LabelDisplayType)
+    , nDisplayFormat(0)
+    , bSequenceOK(sal_False)
+    , bDisplayFormatOK(sal_False)
+    , bUseCaption(sal_True)
 {
 }
 
