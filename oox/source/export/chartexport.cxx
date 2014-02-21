@@ -443,6 +443,7 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mbHasCategoryLabels( sal_False )
     , mbHasZAxis( sal_False )
     , mbIs3DChart( sal_False )
+    , mSeriesCount(0)
 {
 }
 
@@ -1041,9 +1042,11 @@ void ChartExport::exportPlotArea( )
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
     for( sal_Int32 nCSIdx=0; nCSIdx<aCooSysSeq.getLength(); ++nCSIdx )
     {
+
         Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCSIdx], uno::UNO_QUERY );
         if( ! xCTCnt.is())
             continue;
+        mSeriesCount=0;
         Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
         for( sal_Int32 nCTIdx=0; nCTIdx<aCTSeq.getLength(); ++nCTIdx )
         {
@@ -1691,10 +1694,10 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
 
                     // TODO: idx and order
                     pFS->singleElement( FSNS( XML_c, XML_idx ),
-                        XML_val, I32S(nSeriesIdx),
+                        XML_val, I32S(mSeriesCount),
                         FSEND );
                     pFS->singleElement( FSNS( XML_c, XML_order ),
-                        XML_val, I32S(nSeriesIdx),
+                        XML_val, I32S(mSeriesCount++),
                         FSEND );
 
                     // export label
