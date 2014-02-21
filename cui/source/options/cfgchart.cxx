@@ -30,12 +30,15 @@ using namespace com::sun::star;
 TYPEINIT1( SvxChartColorTableItem, SfxPoolItem );
 
 SvxChartColorTable::SvxChartColorTable()
-{}
+    : nNextElementNumber(0)
+{
+}
 
-SvxChartColorTable::SvxChartColorTable( const SvxChartColorTable & _rSource ) :
-        m_aColorEntries( _rSource.m_aColorEntries ),
-        nNextElementNumber( m_aColorEntries.size() + 1 )
-{}
+SvxChartColorTable::SvxChartColorTable(const SvxChartColorTable & _rSource)
+    : m_aColorEntries(_rSource.m_aColorEntries)
+    , nNextElementNumber(m_aColorEntries.size() + 1)
+{
+}
 
 // accessors
 size_t SvxChartColorTable::size() const
