@@ -70,7 +70,9 @@ void ViewCacheContext::NotifyPreviewCreation (
     }
     else
     {
-        OSL_ASSERT(pDescriptor);
+        // It is OK when a preview was created for a page that is not
+        // currently displayed because both normal and master pages are
+        // kept in the same cache.
     }
 }
 
