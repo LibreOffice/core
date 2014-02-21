@@ -11,6 +11,7 @@
 #define INCLUDED_COMPILERPLUGINS_CLANG_COMPAT_HXX
 
 #include "clang/AST/Decl.h"
+#include "clang/AST/Expr.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticIDs.h"
@@ -42,6 +43,14 @@ inline clang::QualType getParamType(
     return type.getParamType(i);
 #else
     return type.getArgType(i);
+#endif
+}
+
+inline unsigned getBuiltinCallee(clang::CallExpr const & expr) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+    return expr.getBuiltinCallee();
+#else
+    return expr.isBuiltinCall();
 #endif
 }
 

@@ -10,6 +10,7 @@
 
 #include "clang/Lex/Lexer.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -138,7 +139,7 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
     } else if (sub->isIntegerConstantExpr(compiler.getASTContext())) {
         CallExpr const * ce = dyn_cast<CallExpr>(sub);
         if (ce == nullptr
-            || ce->getBuiltinCallee() != Builtin::BI__builtin_expect)
+            || compat::getBuiltinCallee(*ce) != Builtin::BI__builtin_expect)
         {
             report(
                 DiagnosticsEngine::Warning,
