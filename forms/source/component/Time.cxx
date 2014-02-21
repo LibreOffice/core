@@ -122,11 +122,12 @@ Sequence<Type> OTimeModel::_getTypes()
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True )
-                                    // use the old control name for compytibility reasons
-            ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD)
+    : OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD,
+        FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True)
+      // use the old control name for compatibility reasons
+    , OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
+    , m_bDateTimeField(false)
 {
-
     m_nClassId = FormComponentType::TIMEFIELD;
     initValueProperty( PROPERTY_TIME, PROPERTY_ID_TIME );
 
@@ -134,11 +135,11 @@ OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
 }
 
 //------------------------------------------------------------------------------
-OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
-    :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD )
+OTimeModel::OTimeModel(const OTimeModel* _pOriginal, const Reference<XComponentContext>& _rxFactory)
+    : OEditBaseModel(_pOriginal, _rxFactory)
+    , OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
+    , m_bDateTimeField(false)
 {
-
     setAggregateSet( m_xAggregateFastSet, getOriginalHandle( PROPERTY_ID_TIMEFORMAT ) );
 }
 
