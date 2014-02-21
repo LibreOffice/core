@@ -28,7 +28,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

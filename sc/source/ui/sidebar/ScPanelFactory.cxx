@@ -31,6 +31,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <rtl/ref.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <boost/bind.hpp>
@@ -92,73 +93,86 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
 {
     Reference<ui::XUIElement> xElement;
 
-    const ::comphelper::NamedValueCollection aArguments (rArguments);
-    Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
-    Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
-    const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
-    SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
+    try
+    {
+        const ::comphelper::NamedValueCollection aArguments (rArguments);
+        Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
+        Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
+        const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
+        SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-    ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || pParentWindow==NULL)
-        throw RuntimeException(
-            "PanelFactory::createUIElement called without ParentWindow",
-            NULL);
-    if ( ! xFrame.is())
-        throw RuntimeException(
-            "PanelFactory::createUIElement called without Frame",
-            NULL);
-    if (pBindings == NULL)
-        throw RuntimeException(
-            "PanelFactory::createUIElement called without SfxBindings",
-            NULL);
+        ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+        if ( ! xParentWindow.is() || pParentWindow==NULL)
+            throw RuntimeException(
+                "PanelFactory::createUIElement called without ParentWindow",
+                NULL);
+        if ( ! xFrame.is())
+            throw RuntimeException(
+                "PanelFactory::createUIElement called without Frame",
+                NULL);
+        if (pBindings == NULL)
+            throw RuntimeException(
+                "PanelFactory::createUIElement called without SfxBindings",
+                NULL);
 
-#define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
-    if (DoesResourceEndWith("/AlignmentPropertyPanel"))
-    {
-        AlignmentPropertyPanel* pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
-            rsResourceURL,
-            xFrame,
-            pPanel,
-            ui::LayoutSize(-1,-1,-1));
-    }
-    else if (DoesResourceEndWith("/CellAppearancePropertyPanel"))
-    {
-        CellAppearancePropertyPanel* pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
-            rsResourceURL,
-            xFrame,
-            pPanel,
-            ui::LayoutSize(-1,-1,-1));
-    }
-    else if (DoesResourceEndWith("/NumberFormatPropertyPanel"))
-    {
-        NumberFormatPropertyPanel* pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
-            rsResourceURL,
-            xFrame,
-            pPanel,
-            ui::LayoutSize(-1,-1,-1));
-    }
-    else if (DoesResourceEndWith("/NavigatorPanel"))
-    {
-        Window* pPanel = new ScNavigatorDlg(pBindings, NULL, pParentWindow, false);
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
-            rsResourceURL,
-            xFrame,
-            pPanel,
-            ui::LayoutSize(0,-1,-1));
-    }
-    else if (DoesResourceEndWith("/FunctionsPanel"))
-    {
-        Window* pPanel = new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX));
-        xElement = sfx2::sidebar::SidebarPanelBase::Create(
-            rsResourceURL,
-            xFrame,
-            pPanel,
-            ui::LayoutSize(0,-1,-1));
-    }
+    #define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
+        if (DoesResourceEndWith("/AlignmentPropertyPanel"))
+        {
+            AlignmentPropertyPanel* pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                rsResourceURL,
+                xFrame,
+                pPanel,
+                ui::LayoutSize(-1,-1,-1));
+        }
+        else if (DoesResourceEndWith("/CellAppearancePropertyPanel"))
+        {
+            CellAppearancePropertyPanel* pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                rsResourceURL,
+                xFrame,
+                pPanel,
+                ui::LayoutSize(-1,-1,-1));
+        }
+        else if (DoesResourceEndWith("/NumberFormatPropertyPanel"))
+        {
+            NumberFormatPropertyPanel* pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                rsResourceURL,
+                xFrame,
+                pPanel,
+                ui::LayoutSize(-1,-1,-1));
+        }
+        else if (DoesResourceEndWith("/NavigatorPanel"))
+        {
+            Window* pPanel = new ScNavigatorDlg(pBindings, NULL, pParentWindow, false);
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                rsResourceURL,
+                xFrame,
+                pPanel,
+                ui::LayoutSize(0,-1,-1));
+        }
+        else if (DoesResourceEndWith("/FunctionsPanel"))
+        {
+            Window* pPanel = new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX));
+            xElement = sfx2::sidebar::SidebarPanelBase::Create(
+                rsResourceURL,
+                xFrame,
+                pPanel,
+                ui::LayoutSize(0,-1,-1));
+        }
 #undef DoesResourceEndWith
+    }
+    catch (const uno::RuntimeException &)
+    {
+        throw;
+    }
+    catch (const uno::Exception& e)
+    {
+        throw lang::WrappedTargetRuntimeException(
+            OUString("ScPanelFactory::createUIElement exception"),
+            0, uno::makeAny(e));
+    }
 
     return xElement;
 }
