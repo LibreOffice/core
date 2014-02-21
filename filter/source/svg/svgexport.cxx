@@ -214,7 +214,10 @@ class VariableDateTimeField : public VariableTextField
 public:
     sal_Int32 format;
 
-    VariableDateTimeField() {}
+    VariableDateTimeField()
+        : format(0)
+    {
+    }
     TEXT_FIELD_GET_CLASS_NAME_METHOD( VariableDateTimeField )
     virtual sal_Bool equalTo( const TextField & aTextField ) const
     {
