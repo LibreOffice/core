@@ -35,7 +35,7 @@ namespace sdr
     {
         drawinglayer::primitive2d::Primitive2DSequence OverlayRectangle::createOverlayObjectPrimitive2DSequence()
         {
-            const basegfx::B2DRange aHatchRange(getBasePosition(), getSecondPosition());
+            const basegfx::B2DRange aHatchRange(getBasePosition(), maSecondPosition);
             basegfx::BColor aColor(getBaseColor().getBColor());
             static double fChange(0.1); // just small optical change, do not make it annoying
 
@@ -92,18 +92,6 @@ namespace sdr
 
             // #i53216# check blink time value range
             mnBlinkTime = impCheckBlinkTimeValueRange(mnBlinkTime);
-        }
-
-        void OverlayRectangle::setSecondPosition(const basegfx::B2DPoint& rNew)
-        {
-            if(rNew != maSecondPosition)
-            {
-                // remember new value
-                maSecondPosition = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
         }
 
         void OverlayRectangle::Trigger(sal_uInt32 nTime)

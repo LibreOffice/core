@@ -61,9 +61,6 @@ namespace sdr
                 sal_uInt32 nBlinkTime,
                 bool bAnimate);
 
-            const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-            void setSecondPosition(const basegfx::B2DPoint&);
-
             // data read access
             double getTransparence() const { return mfTransparence; }
             double getDiscreteGrow() const { return mfDiscreteGrow; }
