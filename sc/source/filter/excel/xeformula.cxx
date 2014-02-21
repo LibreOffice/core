@@ -322,6 +322,9 @@ public:
     /** Returns true, if the passed formula type allows 3D references only. */
     bool                Is3DRefOnly( XclFormulaType eType ) const;
 
+    bool IsRef2D( const ScSingleRefData& rRefData, bool bCheck3DFlag ) const;
+    bool IsRef2D( const ScComplexRefData& rRefData, bool bCheck3DFlag ) const;
+
     // ------------------------------------------------------------------------
 private:
     const XclExpCompConfig* GetConfigForType( XclFormulaType eType ) const;
@@ -390,8 +393,6 @@ private:
     // reference handling -----------------------------------------------------
 
     SCTAB               GetScTab( const ScSingleRefData& rRefData ) const;
-    bool                IsRef2D( const ScSingleRefData& rRefData ) const;
-    bool                IsRef2D( const ScComplexRefData& rRefData ) const;
 
     void                ConvertRefData( ScSingleRefData& rRefData, XclAddress& rXclPos,
                             bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const;
@@ -1814,13 +1815,13 @@ SCTAB XclExpFmlaCompImpl::GetScTab( const ScSingleRefData& rRefData ) const
     return rRefData.toAbs(*mxData->mpScBasePos).Tab();
 }
 
-bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData ) const
+bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData, bool bCheck3DFlag ) const
 {
     /*  rRefData.IsFlag3D() determines if sheet name is always visible, even on
         the own sheet. If 3D references are allowed, the passed reference does
         not count as 2D reference. */
 
-    if (mxData->mpLinkMgr && rRefData.IsFlag3D())
+    if (bCheck3DFlag && rRefData.IsFlag3D())
         return false;
 
     if (rRefData.IsTabDeleted())
@@ -1832,9 +1833,9 @@ bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData ) const
         return rRefData.Tab() == GetCurrScTab();
 }
 
-bool XclExpFmlaCompImpl::IsRef2D( const ScComplexRefData& rRefData ) const
+bool XclExpFmlaCompImpl::IsRef2D( const ScComplexRefData& rRefData, bool bCheck3DFlag ) const
 {
-    return IsRef2D( rRefData.Ref1 ) && IsRef2D( rRefData.Ref2 );
+    return IsRef2D(rRefData.Ref1, bCheck3DFlag) && IsRef2D(rRefData.Ref2, bCheck3DFlag);
 }
 
 void XclExpFmlaCompImpl::ConvertRefData(
@@ -1937,7 +1938,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
             mxData->mpLinkMgr->StoreCell(aRefData, *mxData->mpScBasePos);
 
         // create the tRef, tRefErr, tRefN, tRef3d, or tRefErr3d token
-        if( !mxData->mrCfg.mb3DRefOnly && IsRef2D( aRefData ) )
+        if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr))
         {
             // 2D reference (not in defined names, but allowed in range lists)
             sal_uInt8 nBaseId = (!mxData->mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_REFN :
@@ -1982,7 +1983,7 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpScToken& rTokData )
         mxData->mpLinkMgr->StoreCellRange(aRefData, *mxData->mpScBasePos);
 
     // create the tArea, tAreaErr, tAreaN, tArea3d, or tAreaErr3d token
-    if( !mxData->mrCfg.mb3DRefOnly && IsRef2D( aRefData ) )
+    if (!mxData->mrCfg.mb3DRefOnly && IsRef2D(aRefData, mxData->mpLinkMgr))
     {
         // 2D reference (not in name formulas, but allowed in range lists)
         sal_uInt8 nBaseId = (!mxData->mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_AREAN :
@@ -2662,6 +2663,14 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
     return mxImpl->CreateNameXFormula( nExtSheet, nExtName );
 }
 
-// ============================================================================
+bool XclExpFormulaCompiler::IsRef2D( const ScSingleRefData& rRefData ) const
+{
+    return mxImpl->IsRef2D(rRefData, true);
+}
+
+bool XclExpFormulaCompiler::IsRef2D( const ScComplexRefData& rRefData ) const
+{
+    return mxImpl->IsRef2D(rRefData, true);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
