@@ -379,6 +379,9 @@ void DocxExport::ExportDocument_Impl()
     // init sections
     m_pSections = new MSWordSections( *this );
 
+    // Make sure images are counted from one, even when exporting multiple documents.
+    oox::drawingml::DrawingML::ResetCounters();
+
     WriteMainText();
 
     WriteFootnotesEndnotes();
