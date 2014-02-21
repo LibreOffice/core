@@ -8,6 +8,8 @@
 
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
+CLANG_COMMA :=,
+
 # You may occassionally want to override some of these
 CLANGCXX=$(filter-out -m32 -m64,$(CXX))
 
@@ -86,7 +88,9 @@ $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(s
 
 $(CLANGOUTDIR)/plugin.so: $(CLANGOBJS)
 	@echo [build LNK] $(subst $(BUILDDIR)/,,$@)
-	$(QUIET)$(CLANGCXX) -shared $(CLANGOBJS) -o $@
+	$(QUIET)$(CLANGCXX) -shared $(CLANGOBJS) -o $@ \
+		$(if $(filter MACOSX,$(OS)),-Wl$(CLANG_COMMA)-flat_namespace \
+			-Wl$(CLANG_COMMA)-undefined -Wl$(CLANG_COMMA)suppress)
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
 $(CLANGOUTDIR)/clang-timestamp: $(CLANGBUILD)/bin/clang
