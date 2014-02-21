@@ -91,7 +91,7 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleChildCount(  ) throw (uno::Runtime
 
   -----------------------------------------------------------------------*/
 uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int32 i )
-    throw (uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     IsValid();
@@ -811,7 +811,8 @@ sal_Int32 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChildCount( void ) t
     return 0;
 }
 
-uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChild( sal_Int32 ) throw ( RuntimeException )
+uno::Reference< XAccessible > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChild( sal_Int32 )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException();
 }
