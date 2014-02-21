@@ -646,10 +646,12 @@ void TBCComboDropdownSpecific::Print( FILE* fp)
         indent_printf(fp," no data " );
 }
 
-TBCCDData::TBCCDData() : cwstrItems( 0 )
-,iSel( 0 )
-,cLines( 0 )
-,dxWidth( 0 )
+TBCCDData::TBCCDData()
+    : cwstrItems(0)
+    , cwstrMRU(0)
+    , iSel(0)
+    , cLines(0)
+    , dxWidth(0)
 {
 }
 
