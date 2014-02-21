@@ -149,8 +149,8 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 /* always return true if queried for the properties of
    the file system. If you think this is wrong under any
    of the target platforms fix it!!!! */
-#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
-#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
+#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (true)
+#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (true)
 #endif /* FREEBSD || MACOSX || OPENBSD */
 
 #if defined(NETBSD)
@@ -204,8 +204,8 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 /* always return true if queried for the properties of
    the file system. If you think this is wrong under any
    of the target platforms fix it!!!! */
-#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
-#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
+#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (true)
+#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (true)
 #endif /* SOLARIS */
 
 #   define __OSL_STATFS_INIT(a)         (memset(&(a), 0, sizeof(__OSL_STATFS_STRUCT)))
@@ -215,9 +215,9 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #   define __OSL_STATFS_STRUCT                   struct dummy {int i;}
 #   define __OSL_STATFS_INIT(a)                  ((void)a)
 #   define __OSL_STATFS(dir, sfs)                (1)
-#   define __OSL_STATFS_ISREMOTE(sfs)            (0)
-#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
-#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
+#   define __OSL_STATFS_ISREMOTE(sfs)            (false)
+#   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (true)
+#   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (true)
 #endif /* HAVE_STATFS_H */
 
 
