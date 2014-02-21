@@ -3370,7 +3370,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
 
 void SAL_CALL ScCellRangesBase::removeChartDataChangeEventListener( const uno::Reference<
                                     chart::XChartDataChangeEventListener >& aListener )
-                                throw(uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( pDocShell && !aRanges.empty() )

@@ -371,7 +371,8 @@ public:
                                       std::exception);
     virtual void SAL_CALL   removeChartDataChangeEventListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw (::com::sun::star::uno::RuntimeException,
+                                       std::exception);
     virtual double SAL_CALL getNotANumber() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isNotANumber( double nNumber )
                                 throw(::com::sun::star::uno::RuntimeException);
