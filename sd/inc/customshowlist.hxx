@@ -37,6 +37,11 @@ public:
     using std::vector<SdCustomShow*>::begin;
     using std::vector<SdCustomShow*>::iterator;
 
+    SdCustomShowList()
+        : mnCurPos(0)
+    {
+    }
+
     sal_uInt16 GetCurPos() const { return mnCurPos; }
     void Seek(sal_uInt16 nNewPos) { mnCurPos = nNewPos; }
 
