@@ -300,8 +300,8 @@ bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
     const KSHORT nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
-    // Nur Portions mit echter Breite koennen ein sal_True zurueckliefern
-    // Notizen beispielsweise setzen niemals bFull==sal_True
+    // Nur Portions mit echter Breite koennen ein true zurueckliefern
+    // Notizen beispielsweise setzen niemals bFull==true
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
     {
         Truncate();

@@ -61,7 +61,7 @@ void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
             Rectangle aRect( OutputDevice::LogicToLogic( aSwRect.SVRect(),
                                                          rMap, aMap ) );
             IMapRectangleObject aObj( aRect, rNote.GetURL(), OUString(), OUString(),
-                                      rNote.GetTarget(), OUString(), sal_True, sal_False );
+                                      rNote.GetTarget(), OUString(), true, false );
             pMap->InsertIMapObject( aObj );
         }
     }

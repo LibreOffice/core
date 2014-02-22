@@ -72,7 +72,7 @@ sal_Bool SwTxtFrmInfo::IsOneLine() const
         return sal_False;
     else
     {
-        // For follows sal_False of course
+        // For follows false of course
         if( pFrm->GetFollow() )
             return sal_False;
         pLay = pLay->GetNext();

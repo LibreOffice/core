@@ -351,9 +351,9 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
 
 #if OSL_DEBUG_LEVEL > 1
-    static sal_Bool bOne = sal_False;
-    static sal_Bool bLast = sal_False;
-    static sal_Bool bCenter = sal_False;
+    static bool bOne = false;
+    static bool bLast = false;
+    static bool bCenter = false;
     bOneBlock |= bOne;
     bLastBlock |= bLast;
     bLastCenter |= bCenter;
@@ -513,12 +513,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     // If we are looking for a position inside a field which covers
     // more than one line we may not skip any "empty portions" at the
     // beginning of a line
-    const sal_Bool bInsideFirstField = pCMS && pCMS->pSpecialPos &&
+    const bool bInsideFirstField = pCMS && pCMS->pSpecialPos &&
                                        ( pCMS->pSpecialPos->nLineOfst ||
                                          SP_EXTEND_RANGE_BEFORE ==
                                          pCMS->pSpecialPos->nExtendRange );
 
-    sal_Bool bWidth = pCMS && pCMS->bRealWidth;
+    bool bWidth = pCMS && pCMS->bRealWidth;
     if( !pCurr->GetLen() && !pCurr->Width() )
     {
         if ( pCMS && pCMS->bRealHeight )
@@ -541,7 +541,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
         size_t nKanaIdx = 0;
         long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
 
-        sal_Bool bNoTxt = sal_True;
+        bool bNoTxt = true;
 
         // First all portions without Len at beginning of line are skipped.
         // Exceptions are the mean special portions from WhichFirstPortion:
@@ -559,7 +559,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 //            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
             if( pPor->InTxtGrp() || pPor->IsBreakPortion() || pPor->InTabGrp() )
             {
-                bNoTxt = sal_False;
+                bNoTxt = false;
                 nTmpFirst = nX;
             }
             if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
@@ -578,7 +578,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
             if( pPor->InFixMargGrp() )
             {
                 if( pPor->IsMarginPortion() )
-                    bNoTxt = sal_False;
+                    bNoTxt = false;
                 else
                 {
                     // fix margin portion => next SpaceAdd, KanaComp value
@@ -697,12 +697,11 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 
                         if( pCMS && pCMS->b2Lines )
                         {
-                            sal_Bool bRecursion = sal_True;
-                            if ( ! pCMS->p2Lines )
+                            const bool bRecursion = pCMS->p2Lines;
+                            if ( !bRecursion )
                             {
                                 pCMS->p2Lines = new Sw2LinesPos;
                                 pCMS->p2Lines->aLine = SwRect(aCharPos, aCharSize);
-                                bRecursion = sal_False;
                             }
 
                             if( ((SwMultiPortion*)pPor)->HasRotation() )
@@ -745,7 +744,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                             SetPropFont( 50 );
 
                         GETGRID( GetTxtFrm()->FindPageFrm() )
-                        const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
+                        const bool bHasGrid = pGrid && GetInfo().SnapToGrid();
                         const sal_uInt16 nRubyHeight = bHasGrid ?
                                                    pGrid->GetRubyHeight() : 0;
 
@@ -767,7 +766,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                             Next();
                         }
 
-                        sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
+                        const bool bSpaceChg = ((SwMultiPortion*)pPor)->
                                                 ChgSpaceAdd( pCurr, nSpaceAdd );
                         Point aOldPos = pOrig->Pos();
 
@@ -777,7 +776,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                         // for the adjustment inside the recursion
                         const sal_uInt16 nOldRubyHeight = pCurr->Height();
                         const sal_uInt16 nOldRubyRealHeight = pCurr->GetRealHeight();
-                        const sal_Bool bChgHeight =
+                        const bool bChgHeight =
                                 ((SwMultiPortion*)pPor)->IsRuby() && bHasGrid;
 
                         if ( bChgHeight )
@@ -960,7 +959,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                             }
                          }
                     }
-                    bWidth = sal_False;
+                    bWidth = false;
                     break;
                 }
             }
@@ -969,7 +968,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
         if( pPor )
         {
             OSL_ENSURE( !pPor->InNumberGrp() || bInsideFirstField, "Number surprise" );
-            sal_Bool bEmptyFld = sal_False;
+            bool bEmptyFld = false;
             if( pPor->InFldGrp() && pPor->GetLen() )
             {
                 SwFldPortion *pTmp = (SwFldPortion*)pPor;
@@ -989,7 +988,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                     nPorHeight = pTmp->Height();
                     nPorAscent = pTmp->GetAscent();
                     nX += nAddX;
-                    bEmptyFld = sal_True;
+                    bEmptyFld = true;
                 }
             }
             // 8513: Fields in justified text, skipped
@@ -1205,7 +1204,7 @@ bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 
     // Indicates that a position inside a special portion (field, number portion)
     // is requested.
-    const sal_Bool bSpecialPos = pCMS && pCMS->pSpecialPos;
+    const bool bSpecialPos = pCMS && pCMS->pSpecialPos;
     sal_Int32 nFindOfst = nOfst;
 
     if ( bSpecialPos )
@@ -1307,14 +1306,14 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;
 
-    const sal_Bool bLeftOver = x < nLeftMargin;
+    const bool bLeftOver = x < nLeftMargin;
     if( bLeftOver )
         x = nLeftMargin;
-    const sal_Bool bRightOver = x > nRightMargin;
+    const bool bRightOver = x > nRightMargin;
     if( bRightOver )
         x = nRightMargin;
 
-    sal_Bool bRightAllowed = pCMS && ( pCMS->eState == MV_NONE );
+    const bool bRightAllowed = pCMS && ( pCMS->eState == MV_NONE );
 
     // Until here everything in document coordinates.
     x -= nLeftMargin;
@@ -1325,8 +1324,8 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // in which nX is situated.
     SwLinePortion *pPor = pCurr->GetFirstPortion();
     sal_Int32 nCurrStart  = nStart;
-    sal_Bool bHolePortion = sal_False;
-    sal_Bool bLastHyph = sal_False;
+    bool bHolePortion = false;
+    bool bLastHyph = false;
 
     std::deque<sal_uInt16> *pKanaComp = pCurr->GetpKanaComp();
     sal_Int32 nOldIdx = GetInfo().GetIdx();
@@ -1423,7 +1422,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             bLastHyph = pPor->InHyphGrp();
     }
 
-    const sal_Bool bLastPortion = (0 == pPor->GetPortion());
+    const bool bLastPortion = (0 == pPor->GetPortion());
 
     if( nX==nWidth )
     {
@@ -1442,7 +1441,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     sal_Int32 nLength = pPor->GetLen();
 
-    sal_Bool bFieldInfo = pCMS && pCMS->bFieldInfo;
+    const bool bFieldInfo = pCMS && pCMS->bFieldInfo;
 
     if( bFieldInfo && ( nWidth30 < nX || bRightOver || bLeftOver ||
         ( pPor->InNumberGrp() && !pPor->IsFtnNumPortion() ) ||

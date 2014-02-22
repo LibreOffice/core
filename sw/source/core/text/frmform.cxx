@@ -73,7 +73,7 @@ void ValidateTxt( SwFrm *pFrm )     // Friend of frame
              pFrm->Frm().Width() == pFrm->GetUpper()->Prt().Width() ) ||
          (   pFrm->IsVertical() &&
              pFrm->Frm().Height() == pFrm->GetUpper()->Prt().Height() ) )
-        pFrm->mbValidSize = sal_True;
+        pFrm->mbValidSize = true;
 }
 
 void SwTxtFrm::ValidateFrm()
@@ -127,7 +127,7 @@ void _ValidateBodyFrm( SwFrm *pFrm )
             pFrm->Calc();
         else
         {
-            sal_Bool bOld = ((SwSectionFrm*)pFrm)->IsCntntLocked();
+            const bool bOld = ((SwSectionFrm*)pFrm)->IsCntntLocked();
             ((SwSectionFrm*)pFrm)->SetCntntLock( true );
             pFrm->Calc();
             if( !bOld )
@@ -375,7 +375,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
         {
             if( IsInFtn() && !IsInSct() )
             {
-                SwTwips nReal = Grow( nChgHght, sal_True );
+                SwTwips nReal = Grow( nChgHght, true );
                 if( nReal < nChgHght )
                 {
                     SwTwips nBot = (*fnRect->fnYInc)( (Frm().*fnRect->fnGetBottom)(),
@@ -485,11 +485,11 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
                 if( bHasToFit || !IsMoveable() ||
                     ( IsInSct() && !FindSctFrm()->MoveAllowed(this) ) )
                 {
-                    SetUndersized( sal_True );
+                    SetUndersized( true );
                     Shrink( std::min( ( nFrmHeight - nRstHeight), nPrtHeight ) );
                 }
                 else
-                    SetUndersized( sal_False );
+                    SetUndersized( false );
             }
         }
         else if( nChgHeight )
@@ -642,7 +642,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
                     else
                     {
                         if( !pFtnBoss )
-                            pFtnBoss = pFoll->FindFtnBossFrm( sal_True );
+                            pFtnBoss = pFoll->FindFtnBossFrm( true );
                         pFtnBoss->ChangeFtnRef( pFoll, (SwTxtFtn*)pHt, this );
                     }
                     SetFtn( true );
@@ -735,7 +735,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
                     else
                     {
                         if( !pFtnBoss )
-                            pFtnBoss = FindFtnBossFrm( sal_True );
+                            pFtnBoss = FindFtnBossFrm( true );
                         pFtnBoss->ChangeFtnRef( this, (SwTxtFtn*)pHt, pNew );
                     }
                     pNew->SetFtn( true );
@@ -942,14 +942,14 @@ bool SwTxtFrm::CalcPreps()
                     Shrink( nMust - nIs );
                     if( Prt().Width() < 0 )
                         Prt().Width( 0 );
-                    SetUndersized( sal_True );
+                    SetUndersized( true );
                 }
                 else if ( ! bVert && nIs > nMust )
                 {
                     Shrink( nIs - nMust );
                     if( Prt().Height() < 0 )
                         Prt().Height( 0 );
-                    SetUndersized( sal_True );
+                    SetUndersized( true );
                 }
             }
         }
@@ -1609,9 +1609,9 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
     // If necessary the pPara
     KSHORT nOld  = ((const SwTxtMargin&)rLine).GetDropHeight();
-    sal_Bool bShrink = sal_False,
-         bGrow   = sal_False,
-         bGoOn   = rLine.IsOnceMore();
+    bool bShrink = false;
+    bool bGrow   = false;
+    bool bGoOn   = rLine.IsOnceMore();
     sal_uInt8 nGo    = 0;
     while( bGoOn )
     {
@@ -1629,16 +1629,16 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         {
             const KSHORT nNew = ((const SwTxtMargin&)rLine).GetDropHeight();
             if( nOld == nNew )
-                bGoOn = sal_False;
+                bGoOn = false;
             else
             {
                 if( nOld > nNew )
-                    bShrink = sal_True;
+                    bShrink = true;
                 else
-                    bGrow = sal_True;
+                    bGrow = true;
 
                 if( bShrink == bGrow || 5 < nGo )
-                    bGoOn = sal_False;
+                    bGoOn = false;
 
                 nOld = nNew;
             }

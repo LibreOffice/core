@@ -279,7 +279,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
                Prt().SSize().Height() + 1;
     else
     {
-        pFnt->SetFntChg( sal_True );
+        pFnt->SetFntChg( true );
         pFnt->ChgPhysFnt( pSh, *pOut );
         nRet = pFnt->GetHeight( pSh, *pOut );
     }

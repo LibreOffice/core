@@ -55,15 +55,15 @@ using namespace ::com::sun::star;
  * - SurvivalKit: For how long do we get past the last char of the line.
  * - RightMargin abstains from adjusting position with -1
  * - GetCharRect returns a GetEndCharRect for MV_RIGHTMARGIN
- * - GetEndCharRect sets bRightMargin to sal_True
- * - SwTxtCursor::bRightMargin is set to sal_False by CharCrsrToLine
+ * - GetEndCharRect sets bRightMargin to true
+ * - SwTxtCursor::bRightMargin is set to false by CharCrsrToLine
  */
 
 namespace
 {
 
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
-                          const sal_Bool bRightMargin, const sal_Bool bNoScroll = sal_True )
+                          const bool bRightMargin, const bool bNoScroll = true )
 {
     // RightMargin in the last master line
     const sal_Int32 nOffset = rPos.nContent.GetIndex();
@@ -187,7 +187,7 @@ bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::GetCharRect with swapped frame" );
 
     if( IsLocked() || IsHiddenNow() )
-        return sal_False;
+        return false;
 
     // Find the right frame first. We need to keep in mind that:
     // - the cached information could be invalid  (GetPara() == 0)
@@ -426,7 +426,7 @@ bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         SwTxtSizeInfo aInf( pFrm );
         SwTxtCursor aLine( pFrm, &aInf );
         SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
-        aTmpState.bRealHeight = sal_True;
+        aTmpState.bRealHeight = true;
         if( aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY ) )
         {
             if( aTmpState.aRealHeight.X() >= 0 )
@@ -781,11 +781,11 @@ bool SwTxtFrm::RightMargin(SwPaM *pPam, bool bAPI) const
 
 class SwSetToRightMargin
 {
-    sal_Bool bRight;
+    bool bRight;
 public:
-    inline SwSetToRightMargin() : bRight( sal_False ) { }
+    inline SwSetToRightMargin() : bRight( false ) { }
     inline ~SwSetToRightMargin() { SwTxtCursor::SetRightMargin( bRight ); }
-    inline void SetRight( const sal_Bool bNew ) { bRight = bNew; }
+    inline void SetRight( const bool bNew ) { bRight = bNew; }
 };
 
 bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
@@ -1324,7 +1324,7 @@ bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
      */
     const SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *(pPam->GetPoint()),
                                            SwTxtCursor::IsRightMargin() );
-    const sal_Bool bRet = pFrm->_UnitUp( pPam, nOffset, bSetInReadOnly );
+    const bool bRet = pFrm->_UnitUp( pPam, nOffset, bSetInReadOnly );
 
     // No SwTxtCursor::SetRightMargin( false );
     // Instead we have a SwSetToRightMargin in _UnitUp
@@ -1405,7 +1405,6 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             return;
         }
     }
-    sal_Bool bFill = sal_True;
     SwFont *pFnt;
     SwTxtFmtColl* pColl = GetTxtNode()->GetTxtColl();
     MSHORT nFirst = GetTxtNode()->GetSwAttrSet().GetULSpace().GetLower();
@@ -1434,13 +1433,15 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     if( !pSh->GetViewOptions()->getBrowseMode() || pSh->GetViewOptions()->IsPrtFormat() )
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
-    pFnt->SetFntChg( sal_True );
+    pFnt->SetFntChg( true );
     pFnt->ChgPhysFnt( pSh, *pOut );
 
     SwTwips nLineHeight = pFnt->GetHeight( pSh, *pOut );
 
+    bool bFill = false;
     if( nLineHeight )
     {
+        bFill = true;
         const SvxULSpaceItem &rUL = pSet->GetULSpace();
         SwTwips nDist = std::max( rUL.GetLower(), rUL.GetUpper() );
         if( rFill.Fill().nColumnCnt )
@@ -1469,7 +1470,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         else
             nDiff = -1;
         if( rFill.bInner )
-            bFill = sal_False;
+            bFill = false;
         else
         {
             const SvxTabStopItem &rRuler = pSet->GetTabStops();
@@ -1510,7 +1511,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                     }
                 }
                 else
-                    bFill = sal_False;
+                    bFill = false;
             }
             else
             {
@@ -1530,13 +1531,13 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                         rRect.Left( nRight );
                     }
                     else
-                        bFill = sal_False;
+                        bFill = false;
                 }
                 else if( FILL_INDENT == rFill.Mode() )
                 {
                     SwTwips nIndent = rFill.X();
                     if( !rFill.bEmpty || nIndent > nRight )
-                        bFill = sal_False;
+                        bFill = false;
                     else
                     {
                         nIndent -= rFill.Left();
@@ -1548,7 +1549,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                             rRect.Left( nIndent + rFill.Left() );
                         }
                         else
-                            bFill = sal_False;
+                            bFill = false;
                     }
                 }
                 else if( rFill.X() > nLeft )
@@ -1688,7 +1689,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                         if( !rFill.bEmpty )
                             rFill.nLineWidth += FILL_MIN_DIST;
                         if( rRect.Left() < rFill.nLineWidth )
-                            bFill = sal_False;
+                            bFill = false;
                     }
                 }
             }
@@ -1709,13 +1710,11 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 nRectBottom = SwitchHorizontalToVertical( nRectBottom );
 
             if( (*fnRect->fnYDiff)( nLimit, nRectBottom ) < 0 )
-                bFill = sal_False;
+                bFill = false;
             else
                 rRect.Width( 1 );
         }
     }
-    else
-        bFill = sal_False;
     ((SwCrsrMoveState*)rFill.pCMS)->bFillRet = bFill;
     delete pFnt;
 }

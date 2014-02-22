@@ -124,7 +124,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
             nX,         line number's x position
             pFnt,       line number's font
             nLineNr,    the first line number
-            bLineNum is set back to sal_False if the numbering is completely
+            bLineNum is set back to false if the numbering is completely
             outside of the paint rect
         */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
@@ -204,8 +204,8 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     aDrawInf.SetRight( LONG_MAX );
     aDrawInf.SetFrm( pTxtFrm );
     aDrawInf.SetFont( pFnt );
-    aDrawInf.SetSnapToGrid( sal_False );
-    aDrawInf.SetIgnoreFrmRTL( sal_True );
+    aDrawInf.SetSnapToGrid( false );
+    aDrawInf.SetIgnoreFrmRTL( true );
 
     bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, *pSh->GetOut() ) > nMax;

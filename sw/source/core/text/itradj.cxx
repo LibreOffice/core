@@ -301,7 +301,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
         CalcRightMargin( pCurrent, nReal );
 
     // #i49277#
-    const sal_Bool bDoNotJustifyLinesWithManualBreak =
+    const bool bDoNotJustifyLinesWithManualBreak =
                 GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
 
     SwLinePortion *pPos = pCurrent->GetPortion();
@@ -427,7 +427,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     long nKanaDiffSum = 0;
     SwTwips nRepaintOfst = 0;
     SwTwips nX = 0;
-    sal_Bool bNoCompression = sal_False;
+    bool bNoCompression = false;
 
     // Do not forget: CalcRightMargin() sets pCurrent->Width() to the line width!
     CalcRightMargin( pCurrent, 0 );
@@ -479,7 +479,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                         ((SwGluePortion*)pPos)->GetPrtGlue() :
                         0;
 
-                bNoCompression = sal_False;
+                bNoCompression = false;
             }
 
             if( nKanaDiffSum )
@@ -630,14 +630,14 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
     sal_Int32 nLen = 0;
 
     // If we only have one line, the text portion is consecutive and we center, then ...
-    sal_Bool bComplete = 0 == nStart;
-    const sal_Bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
-    sal_Bool bMultiTab = sal_False;
+    bool bComplete = 0 == nStart;
+    const bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
+    bool bMultiTab = false;
 
     while( pPos )
     {
         if ( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasTabulator() )
-            bMultiTab = sal_True;
+            bMultiTab = true;
         else if( pPos->InFixMargGrp() &&
                ( bTabCompat ? ! pPos->InTabGrp() : ! bMultiTab ) )
         {
@@ -680,7 +680,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
             }
 
             pGlue = (SwFlyPortion*)pPos;
-            bComplete = sal_False;
+            bComplete = false;
         }
         nLen = nLen + pPos->GetLen();
         pPos = pPos->GetPortion();

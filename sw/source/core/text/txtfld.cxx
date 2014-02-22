@@ -77,7 +77,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     SwExpandPortion *pRet = 0;
     SwFrm *pFrame = (SwFrm*)pFrm;
     SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
-    const sal_Bool bName = rInf.GetOpt().IsFldName();
+    const bool bName = rInf.GetOpt().IsFldName();
 
     SwCharFmt* pChFmt = 0;
     bool bNewFlyPor = false;
@@ -96,7 +96,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     SwViewShell *pSh = rInf.GetVsh();
     SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : 0 );
     bool const bInClipboard( (pDoc) ? pDoc->IsClipBoard() : true );
-    sal_Bool bPlaceHolder = false;
+    bool bPlaceHolder = false;
 
     switch( pFld->GetTyp()->Which() )
     {
@@ -159,7 +159,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 SwPageNumberFieldType *pPageNr = (SwPageNumberFieldType *)pFld->GetTyp();
 
                 const SwRootFrm* pTmpRootFrm = pSh->GetLayout();
-                const sal_Bool bVirt = pTmpRootFrm->IsVirtPageNum();
+                const bool bVirt = pTmpRootFrm->IsVirtPageNum();
 
                 MSHORT nVirtNum = pFrame->GetVirtPageNum();
                 MSHORT nNumPages = pTmpRootFrm->GetPageNum();
@@ -442,8 +442,8 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             nLevel = MAXLEVEL - 1;
 
         const SwNumFmt &rNumFmt = pNumRule->Get( nLevel );
-        const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
-        const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
+        const bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
+        const bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         const bool bLabelAlignmentPosAndSpaceModeActive(
                 rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
         const KSHORT nMinDist = bLabelAlignmentPosAndSpaceModeActive

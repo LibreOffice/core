@@ -339,7 +339,7 @@ void SwTxtFrm::Init()
         // set flags directly to save a ResetPreps call,
         // and thereby an unnecessary GetPara call
         // don't set bOrphan, bLocked or bWait to false!
-        // bOrphan = bFlag7 = bFlag8 = sal_False;
+        // bOrphan = bFlag7 = bFlag8 = false;
     }
 }
 
@@ -874,7 +874,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             Prepare( PREP_CLEAR );
             _InvalidatePrt();
             lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
-            SetDerivedR2L( sal_False );
+            SetDerivedR2L( false );
             CheckDirChange();
             // OD 09.12.2002 #105576# - Force complete paint due to existing
             // indents.
@@ -1181,7 +1181,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_FRAMEDIR, false ) )
             {
-                SetDerivedR2L( sal_False );
+                SetDerivedR2L( false );
                 CheckDirChange();
                 // OD 09.12.2002 #105576# - Force complete paint due to existing
                 // indents.
@@ -1270,7 +1270,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             bSetFldsDirty = true;
             break;
         case RES_FRAMEDIR :
-            SetDerivedR2L( sal_False );
+            SetDerivedR2L( false );
             CheckDirChange();
             break;
         default:
@@ -1849,7 +1849,7 @@ bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, bool &bSplit 
 }
 
 /* SwTxtFrm::WouldFit()
- * sal_True: wenn ich aufspalten kann.
+ * true: wenn ich aufspalten kann.
  * Es soll und braucht nicht neu formatiert werden.
  * Wir gehen davon aus, dass bereits formatiert wurde und dass
  * die Formatierungsdaten noch aktuell sind.
@@ -2005,7 +2005,7 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
     if( !HasPara() && !(IsValid() && IsEmpty()) )
     {
         // Calc() must be called, because frame position can be wrong
-        const sal_Bool bFormat = GetValidSizeFlag();
+        const bool bFormat = GetValidSizeFlag();
         Calc();
         // Es kann durchaus sein, dass Calc() das Format()
         // nicht anstiess (weil wir einst vom Idle-Zerstoerer
@@ -2204,7 +2204,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         {
             SwFntObj *pOldFont = pLastFont;
             pLastFont = NULL;
-            aFont.SetFntChg( sal_True );
+            aFont.SetFntChg( true );
             aFont.ChgPhysFnt( pVsh, *pOut );
             mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
             pLastFont->Unlock();
@@ -2214,7 +2214,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         else
         {
             Font aOldFont = pOut->GetFont();
-            aFont.SetFntChg( sal_True );
+            aFont.SetFntChg( true );
             aFont.ChgPhysFnt( pVsh, *pOut );
             mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
             pLastFont->Unlock();
