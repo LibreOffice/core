@@ -73,7 +73,6 @@ oslModule SAL_CALL osl_loadAsciiModule(const sal_Char *pszModuleName, sal_Int32 
     char buffer[PATH_MAX];
     char* dot;
     void* hModule;
-    oslModule pModule = NULL;
 
     if (!pszModuleName)
         return NULL;
@@ -102,25 +101,32 @@ oslModule SAL_CALL osl_loadAsciiModule(const sal_Char *pszModuleName, sal_Int32 
 
     hModule = dlopen( buffer, RTLD_LOCAL);
     if (hModule != NULL)
-        pModule = (oslModule)hModule;
-    else
-    {
-        sal_Char szError[ PATH_MAX*2 ];
-        sprintf( szError, "Module: %s;\n error: %s;\n\n"
-                 "Please contact technical support and report above informations.\n\n",
-                 buffer, dlerror() );
+        return (oslModule)hModule;
+
+    // do not show in case rc=2 ENOENT, we must parse dlerror
+    // string to detect it
+    char* err = dlerror();
+    if (!err)
+        return NULL;
+
+    if (strstr( err, "rc=2") != NULL)
+        return NULL;
+
+    sal_Char szError[ PATH_MAX*2 ];
+    sprintf( szError, "Module: %s;\n error: %s;\n\n"
+             "Please contact technical support and report above informations.\n\n",
+             buffer, err);
 #if OSL_DEBUG_LEVEL>0
-        debug_printf("osl_loadModule error %s", szError);
+    debug_printf("osl_loadModule error %s", szError);
 #endif
 
 #if (OSL_DEBUG_LEVEL==0) || !defined(OSL_DEBUG_LEVEL)
-        WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
-                      szError, "Critical error: DosLoadModule failed",
-                      0, MB_ERROR | MB_OK | MB_MOVEABLE);
+    WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
+                  szError, "Critical error: DosLoadModule failed",
+                  0, MB_ERROR | MB_OK | MB_MOVEABLE);
 #endif
-    }
 
-    return pModule;
+    return NULL;
 }
 
 /*****************************************************************************/
