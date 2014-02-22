@@ -333,6 +333,9 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
 
 sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
+    if (!mpStm)
+        return false;
+
     if( ERRCODE_IO_PENDING == mpStm->GetError() )
         mpStm->ResetError();
 
