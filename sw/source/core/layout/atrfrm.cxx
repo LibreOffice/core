@@ -171,35 +171,35 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
 
 SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SfxPoolItem( RES_FRM_SIZE ),
-    aSize( nWidth, nHeight ),
-    eFrmHeightType( eSize ),
-    eFrmWidthType( ATT_FIX_SIZE )
+    m_aSize( nWidth, nHeight ),
+    m_eFrmHeightType( eSize ),
+    m_eFrmWidthType( ATT_FIX_SIZE )
 {
-    nWidthPercent = eWidthPercentRelation = nHeightPercent = eHeightPercentRelation = 0;
+    m_nWidthPercent = m_eWidthPercentRelation = m_nHeightPercent = m_eHeightPercentRelation = 0;
 }
 
 SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
 {
-    aSize = rCpy.GetSize();
-    eFrmHeightType = rCpy.GetHeightSizeType();
-    eFrmWidthType = rCpy.GetWidthSizeType();
-    nHeightPercent = rCpy.GetHeightPercent();
-    eHeightPercentRelation  = rCpy.GetHeightPercentRelation();
-    nWidthPercent  = rCpy.GetWidthPercent();
-    eWidthPercentRelation  = rCpy.GetWidthPercentRelation();
+    m_aSize = rCpy.GetSize();
+    m_eFrmHeightType = rCpy.GetHeightSizeType();
+    m_eFrmWidthType = rCpy.GetWidthSizeType();
+    m_nHeightPercent = rCpy.GetHeightPercent();
+    m_eHeightPercentRelation  = rCpy.GetHeightPercentRelation();
+    m_nWidthPercent  = rCpy.GetWidthPercent();
+    m_eWidthPercentRelation  = rCpy.GetWidthPercentRelation();
     return *this;
 }
 
 bool SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return( eFrmHeightType  == ((SwFmtFrmSize&)rAttr).eFrmHeightType &&
-            eFrmWidthType  == ((SwFmtFrmSize&)rAttr).eFrmWidthType &&
-            aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
-            nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
-            eWidthPercentRelation == ((SwFmtFrmSize&)rAttr).GetWidthPercentRelation() &&
-            nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() &&
-            eHeightPercentRelation == ((SwFmtFrmSize&)rAttr).GetHeightPercentRelation() );
+    return( m_eFrmHeightType  == ((SwFmtFrmSize&)rAttr).m_eFrmHeightType &&
+            m_eFrmWidthType  == ((SwFmtFrmSize&)rAttr).m_eFrmWidthType &&
+            m_aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
+            m_nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
+            m_eWidthPercentRelation == ((SwFmtFrmSize&)rAttr).GetWidthPercentRelation() &&
+            m_nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() &&
+            m_eHeightPercentRelation == ((SwFmtFrmSize&)rAttr).GetHeightPercentRelation() );
 }
 
 SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
@@ -216,8 +216,8 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_FRMSIZE_SIZE:
         {
             awt::Size aTmp;
-            aTmp.Height = TWIP_TO_MM100(aSize.Height());
-            aTmp.Width = TWIP_TO_MM100(aSize.Width());
+            aTmp.Height = TWIP_TO_MM100(m_aSize.Height());
+            aTmp.Width = TWIP_TO_MM100(m_aSize.Width());
             rVal.setValue(&aTmp, ::getCppuType((const awt::Size*)0));
         }
         break;
@@ -246,14 +246,14 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FRMSIZE_WIDTH :
-            rVal <<= (sal_Int32)TWIP_TO_MM100(aSize.Width());
+            rVal <<= (sal_Int32)TWIP_TO_MM100(m_aSize.Width());
         break;
         case MID_FRMSIZE_HEIGHT:
             // #95848# returned size should never be zero.
             // (there was a bug that allowed for setting height to 0.
             // Thus there some documents existing with that not allowed
             // attribut value which may cause problems on import.)
-            rVal <<= (sal_Int32)TWIP_TO_MM100(aSize.Height() < MINLAY ? MINLAY : aSize.Height() );
+            rVal <<= (sal_Int32)TWIP_TO_MM100(m_aSize.Height() < MINLAY ? MINLAY : m_aSize.Height() );
         break;
         case MID_FRMSIZE_SIZE_TYPE:
             rVal <<= (sal_Int16)GetHeightSizeType();
@@ -292,7 +292,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     aTmp.Width() = MM100_TO_TWIP(aTmp.Width());
                 }
                 if(aTmp.Height() && aTmp.Width())
-                    aSize = aTmp;
+                    m_aSize = aTmp;
                 else
                     bRet = false;
             }
@@ -359,7 +359,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     nWd = MM100_TO_TWIP(nWd);
                 if(nWd < MINLAY)
                    nWd = MINLAY;
-                aSize.Width() = nWd;
+                m_aSize.Width() = nWd;
             }
             else
                 bRet = false;
@@ -374,7 +374,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     nHg = MM100_TO_TWIP(nHg);
                 if(nHg < MINLAY)
                     nHg = MINLAY;
-                aSize.Height() = nHg;
+                m_aSize.Height() = nHg;
             }
             else
                 bRet = false;

@@ -40,13 +40,13 @@ enum SwFrmSize
 
 class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
 {
-    Size      aSize;
-    SwFrmSize eFrmHeightType;
-    SwFrmSize eFrmWidthType;
-    sal_uInt8     nWidthPercent;
-    sal_Int16     eWidthPercentRelation;
-    sal_uInt8     nHeightPercent;
-    sal_Int16     eHeightPercentRelation;
+    Size      m_aSize;
+    SwFrmSize m_eFrmHeightType;
+    SwFrmSize m_eFrmWidthType;
+    sal_uInt8 m_nWidthPercent;
+    sal_Int16 m_eWidthPercentRelation;
+    sal_uInt8 m_nHeightPercent;
+    sal_Int16 m_eHeightPercentRelation;
 
     // For tables: width can be given in percent.
 
@@ -77,28 +77,28 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    SwFrmSize GetHeightSizeType() const { return eFrmHeightType; }
-    void SetHeightSizeType( SwFrmSize eSize ) { eFrmHeightType = eSize; }
+    SwFrmSize GetHeightSizeType() const { return m_eFrmHeightType; }
+    void SetHeightSizeType( SwFrmSize eSize ) { m_eFrmHeightType = eSize; }
 
-    SwFrmSize GetWidthSizeType() const { return eFrmWidthType; }
-    void SetWidthSizeType( SwFrmSize eSize ) { eFrmWidthType = eSize; }
+    SwFrmSize GetWidthSizeType() const { return m_eFrmWidthType; }
+    void SetWidthSizeType( SwFrmSize eSize ) { m_eFrmWidthType = eSize; }
 
-    const Size& GetSize() const { return aSize; }
-          void  SetSize( const Size &rNew ) { aSize = rNew; }
+    const Size& GetSize() const { return m_aSize; }
+          void  SetSize( const Size &rNew ) { m_aSize = rNew; }
 
-    SwTwips GetHeight() const { return aSize.Height(); }
-    SwTwips GetWidth()  const { return aSize.Width();  }
-    void    SetHeight( const SwTwips nNew ) { aSize.Height() = nNew; }
-    void    SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
+    SwTwips GetHeight() const { return m_aSize.Height(); }
+    SwTwips GetWidth()  const { return m_aSize.Width();  }
+    void    SetHeight( const SwTwips nNew ) { m_aSize.Height() = nNew; }
+    void    SetWidth ( const SwTwips nNew ) { m_aSize.Width()  = nNew; }
 
-    sal_uInt8    GetHeightPercent() const{ return nHeightPercent; }
-    sal_Int16   GetHeightPercentRelation() const { return eHeightPercentRelation;  }
-    sal_uInt8   GetWidthPercent() const { return nWidthPercent;  }
-    sal_Int16   GetWidthPercentRelation() const { return eWidthPercentRelation;  }
-    void    SetHeightPercent( sal_uInt8 n ) { nHeightPercent = n; }
-    void    SetHeightPercentRelation ( sal_Int16 n ) { eHeightPercentRelation  = n; }
-    void    SetWidthPercent ( sal_uInt8 n ) { nWidthPercent  = n; }
-    void    SetWidthPercentRelation ( sal_Int16 n ) { eWidthPercentRelation  = n; }
+    sal_uInt8    GetHeightPercent() const{ return m_nHeightPercent; }
+    sal_Int16   GetHeightPercentRelation() const { return m_eHeightPercentRelation;  }
+    sal_uInt8   GetWidthPercent() const { return m_nWidthPercent;  }
+    sal_Int16   GetWidthPercentRelation() const { return m_eWidthPercentRelation;  }
+    void    SetHeightPercent( sal_uInt8 n ) { m_nHeightPercent = n; }
+    void    SetHeightPercentRelation ( sal_Int16 n ) { m_eHeightPercentRelation  = n; }
+    void    SetWidthPercent ( sal_uInt8 n ) { m_nWidthPercent  = n; }
+    void    SetWidthPercentRelation ( sal_Int16 n ) { m_eWidthPercentRelation  = n; }
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(sal_Bool bInP) const
