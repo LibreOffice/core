@@ -59,9 +59,8 @@ using namespace ::com::sun::star;
  * - SwTxtCursor::bRightMargin is set to sal_False by CharCrsrToLine
  */
 
-/*************************************************************************
- *                      GetAdjFrmAtPos()
- *************************************************************************/
+namespace
+{
 
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
                           const sal_Bool bRightMargin, const sal_Bool bNoScroll = sal_True )
@@ -101,6 +100,8 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
         OSL_ENSURE( pFrmAtPos, "+GetCharRect: no frame with my rightmargin" );
     }
     return pFrmAtPos ? pFrmAtPos : pFrm;
+}
+
 }
 
 bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew )
