@@ -81,7 +81,7 @@ sal::detail::textenc::BadInputConversionAction
 sal::detail::textenc::handleBadInputUnicodeToTextConversion(
     bool bUndefined, sal_uInt32 nUtf32, sal_uInt32 nFlags, char ** pDestBufPtr,
     char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
-    sal_Size nPrefixLen, bool * pPrefixWritten)
+    size_t nPrefixLen, bool * pPrefixWritten)
 {
     // TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
     // RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
@@ -141,7 +141,7 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
         cReplace = '_';
         break;
     }
-    if ((sal_Size) (pDestBufEnd - *pDestBufPtr) > nPrefixLen)
+    if ((size_t) (pDestBufEnd - *pDestBufPtr) > nPrefixLen)
     {
         while (nPrefixLen-- > 0)
             *(*pDestBufPtr)++ = *pPrefix++;

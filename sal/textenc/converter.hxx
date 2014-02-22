@@ -44,7 +44,7 @@ BadInputConversionAction SAL_DLLPUBLIC
 handleBadInputUnicodeToTextConversion(
     bool bUndefined, sal_uInt32 nUtf32, sal_uInt32 nFlags, char ** pDestBufPtr,
     char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
-    sal_Size nPrefixLen, bool * pPrefixWritten);
+    size_t nPrefixLen, bool * pPrefixWritten);
 
 } } }
 

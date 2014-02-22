@@ -512,7 +512,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                 pFilter = NULL;
 
                 pStream->Seek( STREAM_SEEK_TO_END);
-                sal_Size nSize = pStream->Tell();
+                size_t nSize = pStream->Tell();
                 pStream->Seek( 0);
                 // Do not attempt to create an SotStorage on a
                 // 0-length stream as that would create the compound

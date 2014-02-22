@@ -443,8 +443,8 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
     // break loops after 100 runs to avoid freezing office due to developer error
     sal_Int32 nSafe = 100;
 
-    const sal_Size nCount = rLayouts.size();
-    sal_Size nIndex;
+    const size_t nCount = rLayouts.size();
+    size_t nIndex;
 
     bool bConstrainsBroken = false;
 

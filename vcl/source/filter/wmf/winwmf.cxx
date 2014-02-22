@@ -1093,7 +1093,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
 sal_Bool WMFReader::ReadHeader()
 {
-    sal_Size nStrmPos = pWMF->Tell();
+    size_t nStrmPos = pWMF->Tell();
 
     sal_uInt32 nPlaceableMetaKey(0);
     // if available read the METAFILEHEADER

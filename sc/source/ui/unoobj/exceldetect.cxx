@@ -54,7 +54,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
         return false;
 
     pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
+    size_t nSize = pStream->Tell();
     pStream->Seek(0);
 
     if (!nSize)
@@ -82,7 +82,7 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
         return false;
 
     pStream->Seek(STREAM_SEEK_TO_END);
-    sal_Size nSize = pStream->Tell();
+    size_t nSize = pStream->Tell();
     pStream->Seek(0);
 
     if (nSize < 4)
@@ -106,7 +106,7 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
         // BOF record must be sized between 4 and 16 for BIFF 2, 3 and 4.
         return false;
 
-    sal_Size nPos = pStream->Tell();
+    size_t nPos = pStream->Tell();
     if (nSize - nPos < nBofSize)
         // BOF record doesn't have required bytes.
         return false;

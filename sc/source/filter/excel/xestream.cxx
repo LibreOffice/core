@@ -102,7 +102,7 @@ XclExpStream::~XclExpStream()
     mrStrm.Flush();
 }
 
-void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_Size nRecSize )
+void XclExpStream::StartRecord( sal_uInt16 nRecId, size_t nRecSize )
 {
     OSL_ENSURE( !mbInRec, "XclExpStream::StartRecord - another record still open" );
     DisableEncryption();
@@ -209,21 +209,21 @@ XclExpStream& XclExpStream::operator<<( double fValue )
     return *this;
 }
 
-sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
+size_t XclExpStream::Write( const void* pData, size_t nBytes )
 {
-    sal_Size nRet = 0;
+    size_t nRet = 0;
     if( pData && (nBytes > 0) )
     {
         if( mbInRec )
         {
             const sal_uInt8* pBuffer = reinterpret_cast< const sal_uInt8* >( pData );
-            sal_Size nBytesLeft = nBytes;
+            size_t nBytesLeft = nBytes;
             bool bValid = true;
 
             while( bValid && (nBytesLeft > 0) )
             {
-                sal_Size nWriteLen = ::std::min< sal_Size >( PrepareWrite(), nBytesLeft );
-                sal_Size nWriteRet = nWriteLen;
+                size_t nWriteLen = ::std::min< size_t >( PrepareWrite(), nBytesLeft );
+                size_t nWriteRet = nWriteLen;
                 if (mbUseEncrypter && HasValidEncrypter())
                 {
                     OSL_ENSURE(nWriteLen > 0, "XclExpStream::Write: write length is 0!");
@@ -250,14 +250,14 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
     return nRet;
 }
 
-void XclExpStream::WriteZeroBytes( sal_Size nBytes )
+void XclExpStream::WriteZeroBytes( size_t nBytes )
 {
     if( mbInRec )
     {
-        sal_Size nBytesLeft = nBytes;
+        size_t nBytesLeft = nBytes;
         while( nBytesLeft > 0 )
         {
-            sal_Size nWriteLen = ::std::min< sal_Size >( PrepareWrite(), nBytesLeft );
+            size_t nWriteLen = ::std::min< size_t >( PrepareWrite(), nBytesLeft );
             WriteRawZeroBytes( nWriteLen );
             nBytesLeft -= nWriteLen;
             UpdateSizeVars( nWriteLen );
@@ -267,37 +267,37 @@ void XclExpStream::WriteZeroBytes( sal_Size nBytes )
         WriteRawZeroBytes( nBytes );
 }
 
-void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
+void XclExpStream::WriteZeroBytesToRecord( size_t nBytes )
 {
     if (!mbInRec)
         // not in record.
         return;
 
     sal_uInt8 nZero = 0;
-    for (sal_Size i = 0; i < nBytes; ++i)
+    for (size_t i = 0; i < nBytes; ++i)
         *this << nZero;
 }
 
-sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
+size_t XclExpStream::CopyFromStream( SvStream& rInStrm, size_t nBytes )
 {
-    sal_Size nStrmPos = rInStrm.Tell();
+    size_t nStrmPos = rInStrm.Tell();
     rInStrm.Seek( STREAM_SEEK_TO_END );
-    sal_Size nStrmSize = rInStrm.Tell();
+    size_t nStrmSize = rInStrm.Tell();
     rInStrm.Seek( nStrmPos );
 
-    sal_Size nBytesLeft = ::std::min( nBytes, nStrmSize - nStrmPos );
-    sal_Size nRet = 0;
+    size_t nBytesLeft = ::std::min( nBytes, nStrmSize - nStrmPos );
+    size_t nRet = 0;
     if( nBytesLeft > 0 )
     {
-        const sal_Size nMaxBuffer = 4096;
+        const size_t nMaxBuffer = 4096;
         sal_uInt8* pBuffer = new sal_uInt8[ ::std::min( nBytesLeft, nMaxBuffer ) ];
         bool bValid = true;
 
         while( bValid && (nBytesLeft > 0) )
         {
-            sal_Size nWriteLen = ::std::min( nBytesLeft, nMaxBuffer );
+            size_t nWriteLen = ::std::min( nBytesLeft, nMaxBuffer );
             rInStrm.Read( pBuffer, nWriteLen );
-            sal_Size nWriteRet = Write( pBuffer, nWriteLen );
+            size_t nWriteRet = Write( pBuffer, nWriteLen );
             bValid = (nWriteLen == nWriteRet);
             nRet += nWriteRet;
             nBytesLeft -= nWriteRet;
@@ -334,9 +334,9 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
 void XclExpStream::WriteByteString( const OString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
 {
     SetSliceSize( 0 );
-    sal_Size nLen = ::std::min< sal_Size >( rString.getLength(), nMaxLen );
+    size_t nLen = ::std::min< size_t >( rString.getLength(), nMaxLen );
     if( !b16BitCount )
-        nLen = ::std::min< sal_Size >( nLen, 0xFF );
+        nLen = ::std::min< size_t >( nLen, 0xFF );
 
     sal_uInt16 nLeft = PrepareWrite();
     sal_uInt16 nLenFieldSize = b16BitCount ? 2 : 1;
@@ -376,7 +376,7 @@ void XclExpStream::DisableEncryption()
     EnableEncryption(false);
 }
 
-sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
+size_t XclExpStream::SetSvStreamPos( size_t nPos )
 {
     OSL_ENSURE( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
     return mbInRec ? 0 : mrStrm.Seek( nPos );
@@ -390,7 +390,7 @@ void XclExpStream::InitRecord( sal_uInt16 nRecId )
     mrStrm.WriteUInt16( nRecId );
 
     mnLastSizePos = mrStrm.Tell();
-    mnHeaderSize = static_cast< sal_uInt16 >( ::std::min< sal_Size >( mnPredictSize, mnCurrMaxSize ) );
+    mnHeaderSize = static_cast< sal_uInt16 >( ::std::min< size_t >( mnPredictSize, mnCurrMaxSize ) );
     mrStrm.WriteUInt16( mnHeaderSize );
     mnCurrSize = mnSliceSize = 0;
 }
@@ -404,7 +404,7 @@ void XclExpStream::UpdateRecSize()
     }
 }
 
-void XclExpStream::UpdateSizeVars( sal_Size nSize )
+void XclExpStream::UpdateSizeVars( size_t nSize )
 {
     OSL_ENSURE( mnCurrSize + nSize <= mnCurrMaxSize, "XclExpStream::UpdateSizeVars - record overwritten" );
     mnCurrSize = mnCurrSize + static_cast< sal_uInt16 >( nSize );
@@ -452,10 +452,10 @@ sal_uInt16 XclExpStream::PrepareWrite()
     return nRet;
 }
 
-void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
+void XclExpStream::WriteRawZeroBytes( size_t nBytes )
 {
     const sal_uInt32 nData = 0;
-    sal_Size nBytesLeft = nBytes;
+    size_t nBytesLeft = nBytes;
     while( nBytesLeft >= sizeof( nData ) )
     {
         mrStrm.WriteUInt32( nData );
@@ -587,19 +587,19 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
     }
 }
 
-sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos ) const
+sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( size_t nStrmPos ) const
 {
     return static_cast< sal_uInt32 >( nStrmPos / EXC_ENCR_BLOCKSIZE );
 }
 
-sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos ) const
+sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( size_t nStrmPos ) const
 {
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }
 
 void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBytes )
 {
-    sal_Size nStrmPos = rStrm.Tell();
+    size_t nStrmPos = rStrm.Tell();
     sal_uInt16 nBlockOffset = GetOffsetInBlock(nStrmPos);
     sal_uInt32 nBlockPos = GetBlockPos(nStrmPos);
 
@@ -645,7 +645,7 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
         OSL_ENSURE(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
         (void) bRet; // to remove a silly compiler warning.
 
-        sal_Size nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
+        size_t nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
         OSL_ENSURE(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
         (void) nRet; // to remove a silly compiler warning.
 

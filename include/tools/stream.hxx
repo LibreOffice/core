@@ -98,7 +98,7 @@ enum LockType {};
 
 struct SvLockBytesStat
 {
-    sal_Size nSize;
+    size_t nSize;
 
     SvLockBytesStat() : nSize(0) {}
 };
@@ -129,14 +129,14 @@ public:
     virtual void    SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
     virtual bool    IsSynchronMode() const { return m_bSync; }
 
-    virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
-                           sal_Size * pRead) const;
-    virtual ErrCode WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
-                            sal_Size * pWritten);
+    virtual ErrCode ReadAt(size_t nPos, void * pBuffer, size_t nCount,
+                           size_t * pRead) const;
+    virtual ErrCode WriteAt(size_t nPos, const void * pBuffer, size_t nCount,
+                            size_t * pWritten);
 
     virtual ErrCode Flush() const;
 
-    virtual ErrCode SetSize(sal_Size nSize);
+    virtual ErrCode SetSize(size_t nSize);
 
     virtual ErrCode Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const;
 };
@@ -154,12 +154,12 @@ public:
     SvOpenLockBytes(SvStream * pStream, bool bOwner):
         SvLockBytes(pStream, bOwner) {}
 
-    virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
-                               sal_Size * pWritten) = 0;
+    virtual ErrCode FillAppend(const void * pBuffer, size_t nCount,
+                               size_t * pWritten) = 0;
 
-    virtual sal_Size Tell() const = 0;
+    virtual size_t Tell() const = 0;
 
-    virtual sal_Size Seek(sal_Size nPos) = 0;
+    virtual size_t Seek(size_t nPos) = 0;
 
     virtual void    Terminate() = 0;
 };
@@ -170,7 +170,7 @@ SV_DECL_IMPL_REF(SvOpenLockBytes);
 
 class SvAsyncLockBytes: public SvOpenLockBytes
 {
-    sal_Size m_nSize;
+    size_t m_nSize;
     bool m_bTerminated;
 
 public:
@@ -179,17 +179,17 @@ public:
     SvAsyncLockBytes(SvStream * pStream, bool bOwner):
         SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(false) {}
 
-    virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
-                           sal_Size * pRead) const;
-    virtual ErrCode WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCount,
-                            sal_Size * pWritten);
+    virtual ErrCode ReadAt(size_t nPos, void * pBuffer, size_t nCount,
+                           size_t * pRead) const;
+    virtual ErrCode WriteAt(size_t nPos, const void * pBuffer, size_t nCount,
+                            size_t * pWritten);
 
-    virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
-                               sal_Size * pWritten);
+    virtual ErrCode FillAppend(const void * pBuffer, size_t nCount,
+                               size_t * pWritten);
 
-    virtual sal_Size Tell() const { return m_nSize; }
+    virtual size_t Tell() const { return m_nSize; }
 
-    virtual sal_Size Seek(sal_Size nPos);
+    virtual size_t Seek(size_t nPos);
 
     virtual void    Terminate() { m_bTerminated = true; }
 };
@@ -204,7 +204,7 @@ private:
     // LockBytes Interface
     void*           pImp;           // unused
     SvLockBytesRef  xLockBytes;  // Default implementation
-    sal_Size        nActPos;
+    size_t        nActPos;
 
     // Puffer-Verwaltung
     sal_uInt8*      pRWBuf;         // Points to read/write buffer
@@ -244,24 +244,24 @@ private:
     SvStream&       operator=( const SvStream& rStream ); // not implemented
 
 protected:
-    sal_Size        nBufFilePos;///< File position of pBuf[0]
+    size_t        nBufFilePos;///< File position of pBuf[0]
     sal_uInt16      eStreamMode;
     bool            bIsWritable;
 
-    virtual sal_Size GetData( void* pData, sal_Size nSize );
-    virtual sal_Size PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size SeekPos( sal_Size nPos );
+    virtual size_t GetData( void* pData, size_t nSize );
+    virtual size_t PutData( const void* pData, size_t nSize );
+    virtual size_t SeekPos( size_t nPos );
     virtual void    FlushData();
-    virtual void    SetSize( sal_Size nSize );
+    virtual void    SetSize( size_t nSize );
 
     void            ClearError();
     void            ClearBuffer();
 
     // encrypt and write in blocks
-    sal_Size        CryptAndWriteBuffer( const void* pStart, sal_Size nLen );
-    bool            EncryptBuffer( void* pStart, sal_Size nLen );
+    size_t        CryptAndWriteBuffer( const void* pStart, size_t nLen );
+    bool            EncryptBuffer( void* pStart, size_t nLen );
 
-    void            SyncSvStream( sal_Size nNewStreamPos ); ///< SvStream <- Medium
+    void            SyncSvStream( size_t nNewStreamPos ); ///< SvStream <- Medium
     void            SyncSysStream(); ///< SvStream -> Medium
 
 public:
@@ -338,17 +338,17 @@ public:
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( sal_Int32 nInt32 );
 
-    sal_Size        Read( void* pData, sal_Size nSize );
-    sal_Size        Write( const void* pData, sal_Size nSize );
-    sal_Size        Seek( sal_Size nPos );
-    sal_Size        SeekRel( sal_sSize nPos );
-    sal_Size        Tell() const { return nBufFilePos+nBufActualPos;  }
+    size_t        Read( void* pData, size_t nSize );
+    size_t        Write( const void* pData, size_t nSize );
+    size_t        Seek( size_t nPos );
+    size_t        SeekRel( sal_sSize nPos );
+    size_t        Tell() const { return nBufFilePos+nBufActualPos;  }
     // length between current (Tell()) pos and end of stream
-    virtual sal_Size remainingSize();
+    virtual size_t remainingSize();
     void            Flush();
     bool            IsEof() const { return bIsEof; }
     // next Tell() <= nSize
-    bool            SetStreamSize( sal_Size nSize );
+    bool            SetStreamSize( size_t nSize );
 
     /** Read a line of bytes.
 
@@ -509,11 +509,11 @@ TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 /// Attempt to read nUnits 8bit units to an OString, returned OString's
 /// length is number of units successfully read
 TOOLS_DLLPUBLIC OString read_uInt8s_ToOString(SvStream& rStrm,
-    sal_Size nUnits);
+    size_t nUnits);
 
 /// Attempt to read nUnits 8bit units to an OUString
 TOOLS_DLLPUBLIC inline OUString read_uInt8s_ToOUString(SvStream& rStrm,
-    sal_Size nUnits, rtl_TextEncoding eEnc)
+    size_t nUnits, rtl_TextEncoding eEnc)
 {
     return OStringToOUString(read_uInt8s_ToOString(rStrm, nUnits), eEnc);
 }
@@ -521,7 +521,7 @@ TOOLS_DLLPUBLIC inline OUString read_uInt8s_ToOUString(SvStream& rStrm,
 /// Attempt to read nUnits 16bit units to an OUString, returned
 /// OUString's length is number of units successfully read
 TOOLS_DLLPUBLIC OUString read_uInt16s_ToOUString(SvStream& rStrm,
-    sal_Size nUnits);
+    size_t nUnits);
 
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 /// 16bit units to an OUString, returned OString's length is number of
@@ -542,10 +542,10 @@ TOOLS_DLLPUBLIC inline OUString read_uInt32_lenPrefixed_uInt16s_ToOUString(SvStr
 
 /// Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
 /// returned value is number of bytes written
-TOOLS_DLLPUBLIC sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
-    const OUString& rStr, sal_Size nUnits);
+TOOLS_DLLPUBLIC size_t write_uInt16s_FromOUString(SvStream& rStrm,
+    const OUString& rStr, size_t nUnits);
 
-TOOLS_DLLPUBLIC inline sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
+TOOLS_DLLPUBLIC inline size_t write_uInt16s_FromOUString(SvStream& rStrm,
     const OUString& rStr)
 {
     return write_uInt16s_FromOUString(rStrm, rStr, rStr.getLength());
@@ -554,13 +554,13 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-TOOLS_DLLPUBLIC sal_Size write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+TOOLS_DLLPUBLIC size_t write_uInt32_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
                                                 const OUString &rStr);
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-TOOLS_DLLPUBLIC sal_Size write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
+TOOLS_DLLPUBLIC size_t write_uInt16_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
                                                 const OUString &rStr);
 
 /// Attempt to read 8bit units to an OString until a zero terminator is
@@ -614,13 +614,13 @@ TOOLS_DLLPUBLIC inline OUString read_uInt8_lenPrefixed_uInt8s_ToOUString(SvStrea
 
 /// Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
 /// returned value is number of bytes written
-TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr,
-                                                         sal_Size nUnits)
+TOOLS_DLLPUBLIC inline size_t write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr,
+                                                         size_t nUnits)
 {
     return rStrm.Write(rStr.getStr(), nUnits);
 }
 
-TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr)
+TOOLS_DLLPUBLIC inline size_t write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr)
 {
     return write_uInt8s_FromOString(rStrm, rStr, rStr.getLength());
 }
@@ -628,13 +628,13 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const 
 /// Attempt to write a pascal-style length (of type prefix) prefixed
 /// sequence of units from a string-type, returned value is number of bytes
 /// written (including byte-count of prefix)
-TOOLS_DLLPUBLIC sal_Size write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
+TOOLS_DLLPUBLIC size_t write_uInt16_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
                                               const OString &rStr);
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 8bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
-TOOLS_DLLPUBLIC inline sal_Size write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
+TOOLS_DLLPUBLIC inline size_t write_uInt16_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
                                                const OUString &rStr,
                                                rtl_TextEncoding eEnc)
 {
@@ -655,16 +655,16 @@ private:
     SvFileStream (const SvFileStream&);
     SvFileStream & operator= (const SvFileStream&);
 
-    bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
-    bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
+    bool LockRange( size_t nByteOffset, size_t nBytes );
+    bool UnlockRange( size_t nByteOffset, size_t nBytes );
     bool LockFile();
     bool UnlockFile();
 
 protected:
-    virtual sal_Size GetData( void* pData, sal_Size nSize );
-    virtual sal_Size PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size SeekPos( sal_Size nPos );
-    virtual void    SetSize( sal_Size nSize );
+    virtual size_t GetData( void* pData, size_t nSize );
+    virtual size_t PutData( const void* pData, size_t nSize );
+    virtual size_t SeekPos( size_t nPos );
+    virtual void    SetSize( size_t nSize );
     virtual void    FlushData();
 
 public:
@@ -692,25 +692,25 @@ class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
     SvMemoryStream (const SvMemoryStream&);
     SvMemoryStream & operator= (const SvMemoryStream&);
 
-    sal_Size        GetBufSize() const { return nSize; }
+    size_t        GetBufSize() const { return nSize; }
 
 protected:
-    sal_Size        nSize;
-    sal_Size        nResize;
-    sal_Size        nPos;
-    sal_Size        nEndOfData;
+    size_t        nSize;
+    size_t        nResize;
+    size_t        nPos;
+    size_t        nEndOfData;
     sal_uInt8*      pBuf;
     bool            bOwnsData;
 
-    virtual sal_Size GetData( void* pData, sal_Size nSize );
-    virtual sal_Size PutData( const void* pData, sal_Size nSize );
-    virtual sal_Size SeekPos( sal_Size nPos );
-    virtual void    SetSize( sal_Size nSize );
+    virtual size_t GetData( void* pData, size_t nSize );
+    virtual size_t PutData( const void* pData, size_t nSize );
+    virtual size_t SeekPos( size_t nPos );
+    virtual void    SetSize( size_t nSize );
     virtual void    FlushData();
 
     /// AllocateMemory must update pBuf accordingly
     /// - pBuf: Address of new block
-    virtual bool    AllocateMemory( sal_Size nSize );
+    virtual bool    AllocateMemory( size_t nSize );
 
     /// ReAllocateMemory must update the following variables:
     /// - pBuf: Address of new block
@@ -727,28 +727,28 @@ protected:
                     SvMemoryStream(void*) { } // for sub-classes
 
 public:
-                    SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);
-                    SvMemoryStream( sal_Size nInitSize=512, sal_Size nResize=64 );
+                    SvMemoryStream( void* pBuf, size_t nSize, StreamMode eMode);
+                    SvMemoryStream( size_t nInitSize=512, size_t nResize=64 );
                     ~SvMemoryStream();
 
     virtual void    ResetError();
 
     const void*    GetBuffer();
     sal_uIntPtr     GetSize();
-    sal_Size        GetEndOfData() const { return nEndOfData; }
+    size_t        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
     operator const  void*() { Flush(); return pBuf; }
     virtual sal_uInt16  IsA() const;
 
-    void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
-    void*           SetBuffer( void* pBuf, sal_Size nSize,
-                               bool bOwnsData=true, sal_Size nEOF=0 );
+    void*           SwitchBuffer( size_t nInitSize=512, size_t nResize=64 );
+    void*           SetBuffer( void* pBuf, size_t nSize,
+                               bool bOwnsData=true, size_t nEOF=0 );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
     bool            IsObjectMemoryOwner() { return bOwnsData; }
-    void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
-    sal_Size        GetResizeOffset() const { return nResize; }
-    virtual sal_Size remainingSize() { return GetBufSize() - Tell(); }
+    void            SetResizeOffset( size_t nNewResize ) { nResize = nNewResize; }
+    size_t        GetResizeOffset() const { return nResize; }
+    virtual size_t remainingSize() { return GetBufSize() - Tell(); }
 };
 
 class TOOLS_DLLPUBLIC SvScriptStream: public SvStream

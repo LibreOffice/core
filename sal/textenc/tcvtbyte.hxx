@@ -14,21 +14,21 @@
 
 #include "sal/types.h"
 
-sal_Size ImplSymbolToUnicode(
+size_t ImplSymbolToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,
-    sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
-    sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
+    size_t nSrcBytes, sal_Unicode * pDestBuf, size_t nDestChars,
+    sal_uInt32 nFlags, sal_uInt32 * pInfo, size_t * pSrcCvtBytes);
 
-sal_Size ImplUnicodeToSymbol(
+size_t ImplUnicodeToSymbol(
     void const * pData, void * pContext, sal_Unicode const * pSrcBuf,
-    sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size * pSrcCvtChars);
+    size_t nSrcChars, char * pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t * pSrcCvtChars);
 
 /** For those encodings only with unicode range of 0x80 to 0xFF. */
-sal_Size ImplUpperCharToUnicode(
+size_t ImplUpperCharToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,
-    sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
-    sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
+    size_t nSrcBytes, sal_Unicode * pDestBuf, size_t nDestChars,
+    sal_uInt32 nFlags, sal_uInt32 * pInfo, size_t * pSrcCvtBytes);
 
 #endif
 

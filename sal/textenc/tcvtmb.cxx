@@ -34,11 +34,11 @@
 
 /* ======================================================================= */
 
-sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
-                            const char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
+size_t ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
+                            const char* pSrcBuf, size_t nSrcBytes,
+                            sal_Unicode* pDestBuf, size_t nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtBytes )
+                            size_t* pSrcCvtBytes )
 {
     unsigned char                   cLead;
     unsigned char                   cTrail;
@@ -213,11 +213,11 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
-                            const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            char* pDestBuf, sal_Size nDestBytes,
+size_t ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
+                            const sal_Unicode* pSrcBuf, size_t nSrcChars,
+                            char* pDestBuf, size_t nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtChars )
+                            size_t* pSrcCvtChars )
 {
     sal_uInt16                  cConv;
     sal_Unicode                 c;
@@ -375,12 +375,12 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplEUCJPToUnicode( const void* pData,
+size_t ImplEUCJPToUnicode( const void* pData,
                              SAL_UNUSED_PARAMETER void*,
-                             const char* pSrcBuf, sal_Size nSrcBytes,
-                             sal_Unicode* pDestBuf, sal_Size nDestChars,
+                             const char* pSrcBuf, size_t nSrcBytes,
+                             sal_Unicode* pDestBuf, size_t nDestChars,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
-                             sal_Size* pSrcCvtBytes )
+                             size_t* pSrcCvtBytes )
 {
     unsigned char                   c;
     unsigned char                   cLead = '\0';
@@ -537,12 +537,12 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToEUCJP( const void* pData,
+size_t ImplUnicodeToEUCJP( const void* pData,
                              SAL_UNUSED_PARAMETER void*,
-                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                             char* pDestBuf, sal_Size nDestBytes,
+                             const sal_Unicode* pSrcBuf, size_t nSrcChars,
+                             char* pDestBuf, size_t nDestBytes,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
-                             sal_Size* pSrcCvtChars )
+                             size_t* pSrcCvtChars )
 {
     sal_uInt32                  cConv;
     sal_Unicode                 c;

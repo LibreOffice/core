@@ -101,7 +101,7 @@ sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
 
     sal_Unicode aUCS2Char = aChar;
     sal_Char aTempArray[8];
-    sal_Size nTempSize;
+    size_t nTempSize;
     sal_uInt32 nCvtInfo;
 
     // TODO: use direct unicode->mbcs converter should there ever be one
@@ -129,7 +129,7 @@ void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt1
         sal_Unicode aUCS2Char = pSrc[n];
 
         sal_Char aTempArray[8];
-        sal_Size nTempSize;
+        size_t nTempSize;
         sal_uInt32 nCvtInfo;
 
         // assume that non-unicode-fonts do not support codepoints >U+FFFF

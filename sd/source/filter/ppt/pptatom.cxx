@@ -37,9 +37,9 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
             Atom* pLastAtom = NULL;
 
             // retrieve file size (to allow sanity checks)
-            const sal_Size nStreamPos = mrStream.Tell();
+            const size_t nStreamPos = mrStream.Tell();
             mrStream.Seek( STREAM_SEEK_TO_END );
-            const sal_Size nStreamSize = mrStream.Tell();
+            const size_t nStreamSize = mrStream.Tell();
             mrStream.Seek( nStreamPos );
 
             while( (mrStream.GetError() == 0 )

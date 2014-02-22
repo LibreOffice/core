@@ -511,7 +511,7 @@ void ImportExcel::Columndefault( void )
 
     aIn >> nColMic >> nColMac;
 
-    OSL_ENSURE( aIn.GetRecLeft() == (sal_Size)(nColMac - nColMic) * 3 + 2,
+    OSL_ENSURE( aIn.GetRecLeft() == (size_t)(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
 
     nColMac--;

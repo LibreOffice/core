@@ -9,15 +9,15 @@
 
 #include <sal/types.h>
 
-sal_Size ImplConvertIsciiDevanagariToUnicode(void const * pData,
-    void * pContext, char const * pSrcBuf, sal_Size nSrcBytes,
-    sal_Unicode * pDestBuf, sal_Size nDestChars, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
+size_t ImplConvertIsciiDevanagariToUnicode(void const * pData,
+    void * pContext, char const * pSrcBuf, size_t nSrcBytes,
+    sal_Unicode * pDestBuf, size_t nDestChars, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToIsciiDevanagari(void const * pData,
-    void * pContext, sal_Unicode const * pSrcBuf, sal_Size nSrcChars,
-    char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size * pSrcCvtChars);
+size_t ImplConvertUnicodeToIsciiDevanagari(void const * pData,
+    void * pContext, sal_Unicode const * pSrcBuf, size_t nSrcChars,
+    char * pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t * pSrcCvtChars);
 
 void *ImplCreateIsciiDevanagariToUnicodeContext();
 

@@ -28,9 +28,9 @@ class ExcDummy8_00a : public ExcDummyRec
 {
 private:
     static const sal_uInt8       pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
     virtual const sal_uInt8*     GetData() const;
 };
 
@@ -39,9 +39,9 @@ class ExcDummy8_00b : public ExcDummyRec
 {
 private:
     static const sal_uInt8       pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
     virtual const sal_uInt8*     GetData() const;
 };
 
@@ -50,9 +50,9 @@ class ExcDummy8_040 : public ExcDummyRec
 {
 private:
     static const sal_uInt8       pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
     virtual const sal_uInt8*     GetData() const;
 };
 
@@ -61,9 +61,9 @@ class ExcDummy8_041 : public ExcDummyRec
 {
 private:
     static const sal_uInt8       pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
     virtual const sal_uInt8*     GetData() const;
 };
 
@@ -72,9 +72,9 @@ class ExcDummy8_02 : public ExcDummyRec
 {
 private:
     static const sal_uInt8       pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
     virtual const sal_uInt8*     GetData() const;
 };
 

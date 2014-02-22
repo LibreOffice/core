@@ -88,7 +88,7 @@ public:
     inline const XclExpRoot& GetRoot() const { return mrRoot; }
 
     /** Starts a new record: writes header data, stores calculated record size. */
-    void                StartRecord( sal_uInt16 nRecId, sal_Size nRecSize );
+    void                StartRecord( sal_uInt16 nRecId, size_t nRecSize );
     /** Checks and corrects real record length. Must be called everytime a record is finished. */
     void                EndRecord();
 
@@ -115,15 +115,15 @@ public:
     XclExpStream& operator<<( double fValue );
 
     /** Writes nBytes bytes from memory. */
-    sal_Size            Write( const void* pData, sal_Size nBytes );
+    size_t            Write( const void* pData, size_t nBytes );
     /** Writes a sequence of nBytes zero bytes (respects slice setting). */
-    void                WriteZeroBytes( sal_Size nBytes );
+    void                WriteZeroBytes( size_t nBytes );
 
-    void                WriteZeroBytesToRecord( sal_Size nBytes );
+    void                WriteZeroBytesToRecord( size_t nBytes );
 
     /** Copies nBytes bytes from current position of the stream rInStrm.
         @descr  Omitting the second parameter means: read to end of stream. */
-    sal_Size            CopyFromStream( SvStream& rInStrm, sal_Size nBytes = STREAM_SEEK_TO_END );
+    size_t            CopyFromStream( SvStream& rInStrm, size_t nBytes = STREAM_SEEK_TO_END );
 
     // *** unicode string export is realized with helper class XclExpString ***
     // (slice length setting has no effect here -> disabled automatically)
@@ -146,9 +146,9 @@ public:
     // *** SvStream access ***
 
     /** Sets position of system stream (only allowed outside of records). */
-    sal_Size            SetSvStreamPos( sal_Size nPos );
+    size_t            SetSvStreamPos( size_t nPos );
     /** Returns the absolute position of the system stream. */
-    inline sal_Size     GetSvStreamPos() const { return mrStrm.Tell(); }
+    inline size_t     GetSvStreamPos() const { return mrStrm.Tell(); }
 
     void                SetEncrypter( XclExpEncrypterRef xEncrypter );
 
@@ -164,7 +164,7 @@ private:
     /** Rewrites correct record length, if different from calculated. */
     void                UpdateRecSize();
     /** Recalculates mnCurrSize and mnSliceSize. */
-    void                UpdateSizeVars( sal_Size nSize );
+    void                UpdateSizeVars( size_t nSize );
     /** Writes CONTINUE header, internal setup. */
     void                StartContinue();
     /** Refreshes counter vars, creates CONTINUE records. */
@@ -174,7 +174,7 @@ private:
     sal_uInt16          PrepareWrite();
 
     /** Writes a raw sequence of zero bytes. */
-    void                WriteRawZeroBytes( sal_Size nBytes );
+    void                WriteRawZeroBytes( size_t nBytes );
 
 private:
     SvStream&           mrStrm;         /// Reference to the system output stream.
@@ -191,10 +191,10 @@ private:
     sal_uInt16          mnHeaderSize;   /// Record size written in last record header.
     sal_uInt16          mnCurrSize;     /// Count of bytes already written in current record.
     sal_uInt16          mnSliceSize;    /// Count of bytes already written in current slice.
-    sal_Size            mnPredictSize;   /// Predicted size received from calling function.
+    size_t            mnPredictSize;   /// Predicted size received from calling function.
 
                         // stream position data
-    sal_Size            mnLastSizePos;  /// Stream position of size field in current header.
+    size_t            mnLastSizePos;  /// Stream position of size field in current header.
     bool                mbInRec;        /// true = currently writing inside of a record.
 };
 
@@ -228,8 +228,8 @@ public:
 private:
     void Init( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData );
 
-    sal_uInt32 GetBlockPos( sal_Size nStrmPos ) const;
-    sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos ) const;
+    sal_uInt32 GetBlockPos( size_t nStrmPos ) const;
+    sal_uInt16 GetOffsetInBlock( size_t nStrmPos ) const;
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.
@@ -237,7 +237,7 @@ private:
     sal_uInt8           mpnSalt[16];
     sal_uInt8           mpnSaltDigest[16];
 
-    sal_Size            mnOldPos;      /// Last known stream position
+    size_t            mnOldPos;      /// Last known stream position
     bool                mbValid;
 };
 

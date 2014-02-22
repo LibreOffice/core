@@ -101,21 +101,21 @@ struct BmpUnicodeToSingleByteConverterData {
 
    @see ImplConvertToUnicodeProc
  */
-sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
+size_t rtl_textenc_convertSingleByteToBmpUnicode(
     void const * data, void * context, sal_Char const * srcBuf,
-    sal_Size srcBytes, sal_Unicode * destBuf, sal_Size destChars,
-    sal_uInt32 flags, sal_uInt32 * info, sal_Size * srcCvtBytes);
+    size_t srcBytes, sal_Unicode * destBuf, size_t destChars,
+    sal_uInt32 flags, sal_uInt32 * info, size_t * srcCvtBytes);
 
 /**
    Function to convert from BMP Unicode to a single-byte character set.
 
    @see ImplConvertToTextProc
  */
-sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
+size_t rtl_textenc_convertBmpUnicodeToSingleByte(
     void const * data, void * context,
-    sal_Unicode const * srcBuf, sal_Size srcChars, sal_Char * destBuf,
-    sal_Size destBytes, sal_uInt32 flags, sal_uInt32 * info,
-    sal_Size * srcCvtChars);
+    sal_Unicode const * srcBuf, size_t srcChars, sal_Char * destBuf,
+    size_t destBytes, sal_uInt32 flags, sal_uInt32 * info,
+    size_t * srcCvtChars);
 
 #endif
 

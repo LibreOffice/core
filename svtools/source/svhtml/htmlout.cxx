@@ -417,14 +417,14 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
 
     sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
     sal_uInt32 nInfo = 0;
-    sal_Size nSrcChars;
+    size_t nSrcChars;
     const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
                         RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
     if( pStr )
     {
-        sal_Size nLen = rtl_convertUnicodeToText(
+        size_t nLen = rtl_convertUnicodeToText(
                             rContext.m_hConv, rContext.m_hContext, &c, 0,
                             cBuffer, TXTCONV_BUFFER_SIZE,
                             nFlags|RTL_UNICODETOTEXT_FLAGS_FLUSH,
@@ -437,7 +437,7 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
     }
     else
     {
-        sal_Size nLen = rtl_convertUnicodeToText( rContext.m_hConv,
+        size_t nLen = rtl_convertUnicodeToText( rContext.m_hConv,
                                                   rContext.m_hContext, &c, 1,
                                                      cBuffer, TXTCONV_BUFFER_SIZE,
                                                   nFlags,
@@ -480,13 +480,13 @@ static OString lcl_FlushToAscii( HTMLOutContext& rContext )
     sal_Unicode c = 0;
     sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
     sal_uInt32 nInfo = 0;
-    sal_Size nSrcChars;
+    size_t nSrcChars;
     const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
                         RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
                         RTL_UNICODETOTEXT_FLAGS_FLUSH|
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
-    sal_Size nLen = rtl_convertUnicodeToText(
+    size_t nLen = rtl_convertUnicodeToText(
                         rContext.m_hConv, rContext.m_hContext, &c, 0,
                         cBuffer, TXTCONV_BUFFER_SIZE, nFlags,
                         &nInfo, &nSrcChars );

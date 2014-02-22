@@ -20,10 +20,10 @@ void ImplResetUtf8ToUnicodeContext(void * pContext);
 
 void ImplDestroyUtf8ToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertUtf8ToUnicode(
+size_t ImplConvertUtf8ToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,
-    sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
-    sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
+    size_t nSrcBytes, sal_Unicode * pDestBuf, size_t nDestChars,
+    sal_uInt32 nFlags, sal_uInt32 * pInfo, size_t * pSrcCvtBytes);
 
 void * ImplCreateUnicodeToUtf8Context();
 
@@ -31,10 +31,10 @@ void ImplResetUnicodeToUtf8Context(void * pContext);
 
 void ImplDestroyUnicodeToUtf8Context(void * pContext);
 
-sal_Size ImplConvertUnicodeToUtf8(
+size_t ImplConvertUnicodeToUtf8(
     void const * pData, void * pContext, sal_Unicode const * pSrcBuf,
-    sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size* pSrcCvtChars);
+    size_t nSrcChars, char * pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t* pSrcCvtChars);
 
 #endif
 

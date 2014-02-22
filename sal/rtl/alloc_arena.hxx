@@ -32,18 +32,18 @@ struct rtl_arena_stat_type
     sal_uInt64 m_alloc;
     sal_uInt64 m_free;
 
-    sal_Size   m_mem_total;
-    sal_Size   m_mem_alloc;
+    size_t   m_mem_total;
+    size_t   m_mem_alloc;
 };
 
 
 /** rtl_arena_segment_type
  *  @internal
  */
-#define RTL_ARENA_SEGMENT_TYPE_HEAD ((sal_Size)(0x01))
-#define RTL_ARENA_SEGMENT_TYPE_SPAN ((sal_Size)(0x02))
-#define RTL_ARENA_SEGMENT_TYPE_FREE ((sal_Size)(0x04))
-#define RTL_ARENA_SEGMENT_TYPE_USED ((sal_Size)(0x08))
+#define RTL_ARENA_SEGMENT_TYPE_HEAD ((size_t)(0x01))
+#define RTL_ARENA_SEGMENT_TYPE_SPAN ((size_t)(0x02))
+#define RTL_ARENA_SEGMENT_TYPE_FREE ((size_t)(0x04))
+#define RTL_ARENA_SEGMENT_TYPE_USED ((size_t)(0x08))
 
 struct rtl_arena_segment_type
 {
@@ -57,8 +57,8 @@ struct rtl_arena_segment_type
 
     /* segment description */
     sal_uIntPtr         m_addr;
-    sal_Size            m_size;
-    sal_Size            m_type;
+    size_t            m_size;
+    size_t            m_type;
 };
 
 
@@ -84,11 +84,11 @@ struct rtl_arena_st
     rtl_arena_stat_type       m_stats;
 
     rtl_arena_type *          m_source_arena;
-    void * (SAL_CALL * m_source_alloc)(rtl_arena_type *, sal_Size *);
-    void   (SAL_CALL * m_source_free) (rtl_arena_type *, void *, sal_Size);
+    void * (SAL_CALL * m_source_alloc)(rtl_arena_type *, size_t *);
+    void   (SAL_CALL * m_source_free) (rtl_arena_type *, void *, size_t);
 
-    sal_Size                  m_quantum;
-    sal_Size                  m_quantum_shift; /* log2(m_quantum) */
+    size_t                  m_quantum;
+    size_t                  m_quantum_shift; /* log2(m_quantum) */
 
     rtl_arena_segment_type    m_segment_reserve_span_head;
     rtl_arena_segment_type    m_segment_reserve_head;
@@ -96,14 +96,14 @@ struct rtl_arena_st
     rtl_arena_segment_type    m_segment_head;
 
     rtl_arena_segment_type    m_freelist_head[RTL_ARENA_FREELIST_SIZE];
-    sal_Size                  m_freelist_bitmap;
+    size_t                  m_freelist_bitmap;
 
     rtl_arena_segment_type ** m_hash_table;
     rtl_arena_segment_type *  m_hash_table_0[RTL_ARENA_HASH_SIZE];
-    sal_Size                  m_hash_size;  /* m_hash_mask + 1   */
-    sal_Size                  m_hash_shift; /* log2(m_hash_size) */
+    size_t                  m_hash_size;  /* m_hash_mask + 1   */
+    size_t                  m_hash_shift; /* log2(m_hash_size) */
 
-    sal_Size                  m_qcache_max;
+    size_t                  m_qcache_max;
     rtl_cache_type **         m_qcache_ptr;
 };
 

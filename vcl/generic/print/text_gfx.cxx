@@ -539,7 +539,7 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
             RTL_TEXTENCODING_ASCII_US);
     PSSetFont (aFontName, RTL_TEXTENCODING_ISO_8859_1);
 
-    sal_Size  nSize    = 4 * nLen;
+    size_t  nSize    = 4 * nLen;
     unsigned char* pBuffer = (unsigned char*)alloca (nSize* sizeof(unsigned char));
 
     ConverterFactory &rCvt = GetConverterFactory ();

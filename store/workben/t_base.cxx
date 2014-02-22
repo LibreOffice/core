@@ -207,13 +207,13 @@ static storeError __store_namei (
     return eErrCode;
 }
 
-static sal_Size __store_convertTextToUnicode (
+static size_t __store_convertTextToUnicode (
     rtl_TextToUnicodeConverter hConvert,
-    const sal_Char *pszText, sal_Size nTextLen,
-    sal_Unicode    *pBuffer, sal_Size nBuffer)
+    const sal_Char *pszText, size_t nTextLen,
+    sal_Unicode    *pBuffer, size_t nBuffer)
 {
     sal_uInt32 nInfo = 0;
-    sal_Size   nSrcLen = 0;
+    size_t   nSrcLen = 0;
 
     sal_Int32 nDstLen = rtl_convertTextToUnicode (
         hConvert, 0,

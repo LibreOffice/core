@@ -19,11 +19,11 @@ using namespace com::sun::star;
 namespace writerfilter {
 namespace rtftok {
 
-RTFLookahead::RTFLookahead(SvStream& rStream, sal_Size nGroupStart)
+RTFLookahead::RTFLookahead(SvStream& rStream, size_t nGroupStart)
     : m_rStream(rStream),
     m_bHasTable(false)
 {
-    sal_Size nPos = m_rStream.Tell();
+    size_t nPos = m_rStream.Tell();
     m_rStream.Seek(nGroupStart);
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     m_pTokenizer.reset(new RTFTokenizer(*this, &m_rStream, xStatusIndicator));

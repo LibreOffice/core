@@ -55,7 +55,7 @@ namespace binaryurp {
 
 namespace {
 
-void * allocate(sal_Size size) {
+void * allocate(size_t size) {
     void * p = rtl_allocateMemory(size);
     if (p == 0) {
         throw std::bad_alloc();
@@ -475,7 +475,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
             css::uno::Reference< css::uno::XInterface >());
     }
     void * buf = allocate(
-        SAL_SEQUENCE_HEADER_SIZE + static_cast< sal_Size >(size));
+        SAL_SEQUENCE_HEADER_SIZE + static_cast< size_t >(size));
     static_cast< sal_Sequence * >(buf)->nRefCount = 0;
     static_cast< sal_Sequence * >(buf)->nElements =
         static_cast< sal_Int32 >(n);

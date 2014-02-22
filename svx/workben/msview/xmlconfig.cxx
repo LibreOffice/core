@@ -338,7 +338,7 @@ void load_config( const OUString& rPath )
 
 ///////////////////////////////////////////////////////////////////////
 
-OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
+OUString ElementConfig::format( SvStream& rStream, size_t& nLength ) const
 {
     OUString aRet;
     if( maName.getLength() )
@@ -359,7 +359,7 @@ OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
     return aRet;
 }
 
-OUString ElementConfig::dump_hex( SvStream& rStream, sal_Size& nLength )
+OUString ElementConfig::dump_hex( SvStream& rStream, size_t& nLength )
 {
     char buffer[128];
     OUString aOut, aEmpty;
@@ -401,7 +401,7 @@ OUString ElementConfig::dump_hex( SvStream& rStream, sal_Size& nLength )
     return aOut;
 }
 
-OUString ElementConfig::dump_byte( SvStream& rStream, sal_Size& nLength )
+OUString ElementConfig::dump_byte( SvStream& rStream, size_t& nLength )
 {
     OUString aRet;
     if( nLength >= sizeof(sal_Char) )
@@ -418,7 +418,7 @@ OUString ElementConfig::dump_byte( SvStream& rStream, sal_Size& nLength )
     return aRet;
 }
 
-OUString ElementConfig::dump_uint( SvStream& rStream, sal_Size& nLength )
+OUString ElementConfig::dump_uint( SvStream& rStream, size_t& nLength )
 {
     OUString aRet;
     if( nLength >= sizeof( sal_uInt32 ) )
@@ -435,14 +435,14 @@ OUString ElementConfig::dump_uint( SvStream& rStream, sal_Size& nLength )
     return aRet;
 }
 
-OUString ElementConfig::dump_unistring( SvStream& rStream, sal_Size& nLength )
+OUString ElementConfig::dump_unistring( SvStream& rStream, size_t& nLength )
 {
     String aString = SvxMSDffManager::MSDFFReadZString( rStream, nLength, sal_True );
     nLength = 0;
     return aString;
 }
 
-OUString ElementConfig::dump_float( SvStream& rStream, sal_Size& nLength )
+OUString ElementConfig::dump_float( SvStream& rStream, size_t& nLength )
 {
     OUString aRet;
     if( nLength >= sizeof( float ) )
@@ -461,7 +461,7 @@ OUString ElementConfig::dump_float( SvStream& rStream, sal_Size& nLength )
 
 ///////////////////////////////////////////////////////////////////////
 
-OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) const
+OUString ElementConfigContainer::format( SvStream& rStream, size_t& nLength ) const
 {
     OUString aRet;
 
@@ -527,7 +527,7 @@ OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) 
 
 ///////////////////////////////////////////////////////////////////////
 
-OUString SwitchElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
+OUString SwitchElementConfig::format( SvStream& rStream, size_t& nLength ) const
 {
     OUString aValue;
 

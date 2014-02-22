@@ -93,7 +93,7 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
 
     // #i76299# seems that SvStream::IsEof() does not work correctly
     aStream.Seek( STREAM_SEEK_TO_END );
-    sal_Size nStrmSize = aStream.Tell();
+    size_t nStrmSize = aStream.Tell();
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     while( !bEOF && !aStream.IsEof() && (aStream.Tell() < nStrmSize) )
     {

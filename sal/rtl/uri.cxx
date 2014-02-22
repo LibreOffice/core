@@ -169,8 +169,8 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
             {
                 sal_Unicode aDst[2];
                 sal_uInt32 nInfo;
-                sal_Size nConverted;
-                sal_Size nDstSize = rtl_convertTextToUnicode(
+                size_t nConverted;
+                size_t nDstSize = rtl_convertTextToUnicode(
                     aConverter, 0, aBuf.getStr(), aBuf.getLength(), aDst,
                     SAL_N_ELEMENTS( aDst ),
                     (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
@@ -286,7 +286,7 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         rtl_UnicodeToTextConverter aConverter
             = rtl_createUnicodeToTextConverter(eCharset);
         sal_Unicode aSrc[2];
-        sal_Size nSrcSize;
+        size_t nSrcSize;
         if (nUtf32 <= 0xFFFF)
         {
             aSrc[0] = static_cast< sal_Unicode >(nUtf32);
@@ -302,8 +302,8 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         }
         sal_Char aDst[32]; // FIXME  random value
         sal_uInt32 nInfo;
-        sal_Size nConverted;
-        sal_Size nDstSize = rtl_convertUnicodeToText(
+        size_t nConverted;
+        size_t nDstSize = rtl_convertUnicodeToText(
             aConverter, 0, aSrc, nSrcSize, aDst, sizeof aDst,
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
@@ -313,7 +313,7 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         rtl_destroyUnicodeToTextConverter(aConverter);
         if (nInfo == 0) {
             assert(nConverted == nSrcSize); // bad rtl_convertUnicodeToText
-            for (sal_Size i = 0; i < nDstSize; ++i)
+            for (size_t i = 0; i < nDstSize; ++i)
                 writeEscapeOctet(pBuffer, pCapacity,
                                  static_cast< unsigned char >(aDst[i]));
                     // FIXME  all octets are escaped, even if there is no need

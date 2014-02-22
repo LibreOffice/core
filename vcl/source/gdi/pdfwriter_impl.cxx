@@ -2145,7 +2145,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
     {
         m_aOutputStreams.front().m_pStream->Seek( STREAM_SEEK_TO_END );
-        m_aOutputStreams.front().m_pStream->Write( pBuffer, sal::static_int_cast<sal_Size>(nBytes) );
+        m_aOutputStreams.front().m_pStream->Write( pBuffer, sal::static_int_cast<size_t>(nBytes) );
         return true;
     }
 
@@ -2163,8 +2163,8 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
             /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
             if( ( buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) ) ) )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
-                                          (sal_uInt8*)pBuffer, static_cast<sal_Size>(nBytes),
-                                          m_pEncryptionBuffer, static_cast<sal_Size>(nBytes) );
+                                          (sal_uInt8*)pBuffer, static_cast<size_t>(nBytes),
+                                          m_pEncryptionBuffer, static_cast<size_t>(nBytes) );
         }
 
         const void* pWriteBuffer = ( m_bEncryptThisStream && buffOK ) ? m_pEncryptionBuffer  : pBuffer;
@@ -2830,7 +2830,7 @@ bool PDFWriterImpl::emitTilings()
 
         bool bDeflate = compressStream( it->m_pTilingStream );
         it->m_pTilingStream->Seek( STREAM_SEEK_TO_END );
-        sal_Size nTilingStreamSize = it->m_pTilingStream->Tell();
+        size_t nTilingStreamSize = it->m_pTilingStream->Tell();
         it->m_pTilingStream->Seek( STREAM_SEEK_TO_BEGIN );
 
         // write pattern object

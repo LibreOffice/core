@@ -322,7 +322,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     {
         // load character buffer
         ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
-        rStrm.Read( &aBuffer.front(), static_cast< sal_Size >( nSize ) );
+        rStrm.Read( &aBuffer.front(), static_cast< size_t >( nSize ) );
         // create string from encoded character array
         aValue = OUString( &aBuffer.front(), strlen( &aBuffer.front() ), GetTextEncoding() );
     }
@@ -1070,7 +1070,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
     rStrm.WriteUInt32( sal_uInt32( 0 ) ).WriteInt32( nPropCount );
 
     // write placeholders for property ID/position pairs
-    sal_Size nPropPosPos = rStrm.Tell();
+    size_t nPropPosPos = rStrm.Tell();
     rStrm.SeekRel( static_cast< sal_sSize >( 8 * nPropCount ) );
 
     // write dictionary property
@@ -1091,7 +1091,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
 
 bool SfxOleSection::SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) const
 {
-    rStrm.Seek( static_cast< sal_Size >( mnStartPos + nPropPos ) );
+    rStrm.Seek( static_cast< size_t >( mnStartPos + nPropPos ) );
     return rStrm.GetErrorCode() == SVSTREAM_OK;
 }
 
@@ -1134,7 +1134,7 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
     }
 }
 
-void SfxOleSection::SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sal_Size& rnPropPosPos )
+void SfxOleSection::SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, size_t& rnPropPosPos )
 {
     rStrm.Seek( STREAM_SEEK_TO_END );
     sal_uInt32 nPropPos = static_cast< sal_uInt32 >( rStrm.Tell() - mnStartPos );
@@ -1232,7 +1232,7 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
     rStrm.ReadInt32( nSectCount );
 
     // read sections
-    sal_Size nSectPosPos = rStrm.Tell();
+    size_t nSectPosPos = rStrm.Tell();
     for( sal_Int32 nSectIdx = 0; (nSectIdx < nSectCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nSectIdx )
     {
         // read section guid/position pair
@@ -1243,7 +1243,7 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
         rStrm.ReadUInt32( nSectPos );
         nSectPosPos = rStrm.Tell();
         // read section
-        rStrm.Seek( static_cast< sal_Size >( nSectPos ) );
+        rStrm.Seek( static_cast< size_t >( nSectPos ) );
         if( rStrm.GetErrorCode() == SVSTREAM_OK )
             LoadObject( rStrm, AddSection( aSectGuid ) );
     }
@@ -1262,7 +1262,7 @@ void SfxOlePropertySet::ImplSave( SvStream& rStrm )
     rStrm  .WriteInt32( nSectCount );              // number of sections
 
     // write placeholders for section guid/position pairs
-    sal_Size nSectPosPos = rStrm.Tell();
+    size_t nSectPosPos = rStrm.Tell();
     rStrm.SeekRel( static_cast< sal_sSize >( 20 * nSectCount ) );
 
     // write sections

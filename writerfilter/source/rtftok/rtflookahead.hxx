@@ -24,7 +24,7 @@ namespace writerfilter {
         class RTFLookahead : public RTFListener
         {
             public:
-                RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
+                RTFLookahead(SvStream& rStream, size_t nGroupStart);
                 virtual ~RTFLookahead();
                 virtual int dispatchDestination(RTFKeyword nKeyword);
                 virtual int dispatchFlag(RTFKeyword nKeyword);

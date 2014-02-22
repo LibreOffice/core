@@ -19,15 +19,15 @@
 
 namespace sal { namespace detail { namespace textenc {
 
-sal_Size SAL_DLLPUBLIC convertCharToUnicode(
+size_t SAL_DLLPUBLIC convertCharToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,
-    sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
-    sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
+    size_t nSrcBytes, sal_Unicode * pDestBuf, size_t nDestChars,
+    sal_uInt32 nFlags, sal_uInt32 * pInfo, size_t * pSrcCvtBytes);
 
-sal_Size SAL_DLLPUBLIC convertUnicodeToChar(
+size_t SAL_DLLPUBLIC convertUnicodeToChar(
     void const * pData, void * pContext, sal_Unicode const * pSrcBuf,
-    sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size * pSrcCvtChars);
+    size_t nSrcChars, char * pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t * pSrcCvtChars);
 
 } } }
 

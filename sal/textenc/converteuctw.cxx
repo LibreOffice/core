@@ -67,15 +67,15 @@ void ImplDestroyEucTwToUnicodeContext(void * pContext)
     delete static_cast< ImplEucTwToUnicodeContext * >(pContext);
 }
 
-sal_Size ImplConvertEucTwToUnicode(void const * pData,
+size_t ImplConvertEucTwToUnicode(void const * pData,
                                    void * pContext,
                                    char const * pSrcBuf,
-                                   sal_Size nSrcBytes,
+                                   size_t nSrcBytes,
                                    sal_Unicode * pDestBuf,
-                                   sal_Size nDestChars,
+                                   size_t nDestChars,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
-                                   sal_Size * pSrcCvtBytes)
+                                   size_t * pSrcCvtBytes)
 {
     sal_uInt16 const * pCns116431992Data
         = static_cast< ImplEucTwConverterData const * >(pData)->
@@ -90,7 +90,7 @@ sal_Size ImplConvertEucTwToUnicode(void const * pData,
     sal_Int32 nPlane = 0;
     sal_Int32 nRow = 0;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
 
@@ -289,15 +289,15 @@ sal_Size ImplConvertEucTwToUnicode(void const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertUnicodeToEucTw(void const * pData,
+size_t ImplConvertUnicodeToEucTw(void const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
-                                   sal_Size nSrcChars,
+                                   size_t nSrcChars,
                                    char * pDestBuf,
-                                   sal_Size nDestBytes,
+                                   size_t nDestBytes,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
-                                   sal_Size * pSrcCvtChars)
+                                   size_t * pSrcCvtChars)
 {
     sal_uInt8 const * pCns116431992Data
         = static_cast< ImplEucTwConverterData const * >(pData)->
@@ -310,7 +310,7 @@ sal_Size ImplConvertUnicodeToEucTw(void const * pData,
               m_pUnicodeToCns116431992PlaneOffsets;
     sal_Unicode nHighSurrogate = 0;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     char * pDestBufPtr = pDestBuf;
     char * pDestBufEnd = pDestBuf + nDestBytes;
 

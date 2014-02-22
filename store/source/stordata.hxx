@@ -735,10 +735,10 @@ public:
         return rtl_crc32 (nPath, pszName, rtl_str_getLength(pszName));
     }
 
-    sal_Size getName (sal_Char * pBuffer, sal_Size nBufsize) const
+    size_t getName (sal_Char * pBuffer, size_t nBufsize) const
     {
         sal_Char const * pszName = PAGE().m_aNameBlock.m_pData;
-        sal_Size nLength = rtl_str_getLength(pszName);
+        size_t nLength = rtl_str_getLength(pszName);
         memcpy (pBuffer, pszName, nLength < nBufsize ? nLength : nBufsize);
         return nLength;
     }

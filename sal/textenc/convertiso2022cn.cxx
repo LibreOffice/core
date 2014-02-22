@@ -94,15 +94,15 @@ void ImplDestroyIso2022CnToUnicodeContext(void * pContext)
     delete static_cast< ImplIso2022CnToUnicodeContext * >(pContext);
 }
 
-sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
+size_t ImplConvertIso2022CnToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
-                                       sal_Size nSrcBytes,
+                                       size_t nSrcBytes,
                                        sal_Unicode * pDestBuf,
-                                       sal_Size nDestChars,
+                                       size_t nDestChars,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtBytes)
+                                       size_t * pSrcCvtBytes)
 {
     ImplDBCSToUniLeadTab const * pGb2312Data
         = static_cast< ImplIso2022CnConverterData const * >(pData)->
@@ -122,7 +122,7 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
     bool bSo = false;
     bool b116431 = false;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
 
@@ -490,15 +490,15 @@ ImplIso2022CnTranslateTo116431(sal_uInt8 const * pCns116431992Data,
                | (0x20 + pCns116431992Data[nOffset + 1]);
 }
 
-sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
+size_t ImplConvertUnicodeToIso2022Cn(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
-                                       sal_Size nSrcChars,
+                                       size_t nSrcChars,
                                        char * pDestBuf,
-                                       sal_Size nDestBytes,
+                                       size_t nDestBytes,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtChars)
+                                       size_t * pSrcCvtChars)
 {
     ImplUniToDBCSHighTab const * pGb2312Data
         = static_cast< ImplIso2022CnConverterData const * >(pData)->
@@ -518,7 +518,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
     bool b116432Designator = false;
     bool bSo = false;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     char * pDestBufPtr = pDestBuf;
     char * pDestBufEnd = pDestBuf + nDestBytes;
     bool bWritten;

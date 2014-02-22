@@ -75,17 +75,17 @@ namespace
 void *
 SAL_CALL rtl_machdep_alloc (
     rtl_arena_type * pArena,
-    sal_Size *       pSize
+    size_t *       pSize
 );
 
 void
 SAL_CALL rtl_machdep_free (
     rtl_arena_type * pArena,
     void *           pAddr,
-    sal_Size         nSize
+    size_t         nSize
 );
 
-sal_Size
+size_t
 rtl_machdep_pagesize();
 
 
@@ -129,14 +129,14 @@ rtl_arena_segment_populate (
 )
 {
     rtl_arena_segment_type *span;
-    sal_Size                size = rtl_machdep_pagesize();
+    size_t                size = rtl_machdep_pagesize();
 
     span = static_cast< rtl_arena_segment_type * >(
         rtl_machdep_alloc(gp_machdep_arena, &size));
     if (span != 0)
     {
         rtl_arena_segment_type *first, *last, *head;
-        sal_Size                count = size / sizeof(rtl_arena_segment_type);
+        size_t                count = size / sizeof(rtl_arena_segment_type);
 
         /* insert onto reserve span list */
         QUEUE_INSERT_TAIL_NAMED(&(arena->m_segment_reserve_span_head), span, s);
@@ -271,11 +271,11 @@ rtl_arena_freelist_remove (
 void
 rtl_arena_hash_rescale (
     rtl_arena_type * arena,
-    sal_Size         new_size
+    size_t         new_size
 )
 {
     rtl_arena_segment_type ** new_table;
-    sal_Size                  new_bytes;
+    size_t                  new_bytes;
 
     new_bytes = new_size * sizeof(rtl_arena_segment_type*);
     new_table = (rtl_arena_segment_type **)rtl_arena_alloc (gp_arena_arena, &new_bytes);
@@ -283,7 +283,7 @@ rtl_arena_hash_rescale (
     if (new_table != 0)
     {
         rtl_arena_segment_type ** old_table;
-        sal_Size                  old_size, i;
+        size_t                  old_size, i;
 
         memset (new_table, 0, new_bytes);
 
@@ -326,7 +326,7 @@ rtl_arena_hash_rescale (
 
         if (old_table != arena->m_hash_table_0)
         {
-            sal_Size old_bytes = old_size * sizeof(rtl_arena_segment_type*);
+            size_t old_bytes = old_size * sizeof(rtl_arena_segment_type*);
             rtl_arena_free (gp_arena_arena, old_table, old_bytes);
         }
     }
@@ -360,11 +360,11 @@ rtl_arena_segment_type *
 rtl_arena_hash_remove (
     rtl_arena_type * arena,
     sal_uIntPtr      addr,
-    sal_Size         size
+    size_t         size
 )
 {
     rtl_arena_segment_type *segment, **segpp;
-    sal_Size lookups = 0;
+    size_t lookups = 0;
 
     segpp = &(arena->m_hash_table[RTL_ARENA_HASH_INDEX(arena, addr)]);
     while ((segment = *segpp) != 0)
@@ -391,13 +391,13 @@ rtl_arena_hash_remove (
 
         if (lookups > 1)
         {
-            sal_Size nseg = (sal_Size)(arena->m_stats.m_alloc - arena->m_stats.m_free);
+            size_t nseg = (size_t)(arena->m_stats.m_alloc - arena->m_stats.m_free);
             if (nseg > 4 * arena->m_hash_size)
             {
                 if (!(arena->m_flags & RTL_ARENA_FLAG_RESCALE))
                 {
-                    sal_Size ave = nseg >> arena->m_hash_shift;
-                    sal_Size new_size = arena->m_hash_size << (highbit(ave) - 1);
+                    size_t ave = nseg >> arena->m_hash_shift;
+                    size_t new_size = arena->m_hash_size << (highbit(ave) - 1);
 
                     arena->m_flags |= RTL_ARENA_FLAG_RESCALE;
                     RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
@@ -423,7 +423,7 @@ rtl_arena_hash_remove (
 bool
 rtl_arena_segment_alloc (
     rtl_arena_type *          arena,
-    sal_Size                  size,
+    size_t                  size,
     rtl_arena_segment_type ** ppSegment
 )
 {
@@ -452,7 +452,7 @@ rtl_arena_segment_alloc (
         }
 
         /* roundup to next power of 2 */
-        size = (((sal_Size)1) << msb);
+        size = (((size_t)1) << msb);
     }
 
     index = lowbit(RTL_MEMORY_P2ALIGN(arena->m_freelist_bitmap, size));
@@ -485,7 +485,7 @@ dequeue_and_leave:
 int
 rtl_arena_segment_create (
     rtl_arena_type *          arena,
-    sal_Size                  size,
+    size_t                  size,
     rtl_arena_segment_type ** ppSegment
 )
 {
@@ -619,7 +619,7 @@ rtl_arena_constructor (void * obj)
         head = &(arena->m_freelist_head[i]);
         rtl_arena_segment_constructor (head);
 
-        head->m_size = (((sal_Size)1) << i);
+        head->m_size = (((size_t)1) << i);
         head->m_type = RTL_ARENA_SEGMENT_TYPE_HEAD;
     }
 
@@ -658,7 +658,7 @@ rtl_arena_destructor (void * obj)
     {
         head = &(arena->m_freelist_head[i]);
 
-        assert(head->m_size == (((sal_Size)1) << i));
+        assert(head->m_size == (((size_t)1) << i));
         assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
 
         rtl_arena_segment_destructor (head);
@@ -679,11 +679,11 @@ rtl_arena_type *
 rtl_arena_activate (
     rtl_arena_type *   arena,
     const char *       name,
-    sal_Size           quantum,
-    sal_Size           quantum_cache_max,
+    size_t           quantum,
+    size_t           quantum_cache_max,
     rtl_arena_type *   source_arena,
-    void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
-    void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size)
+    void * (SAL_CALL * source_alloc)(rtl_arena_type *, size_t *),
+    void   (SAL_CALL * source_free) (rtl_arena_type *, void *, size_t)
 )
 {
     assert(arena != 0);
@@ -694,7 +694,7 @@ rtl_arena_activate (
         if (!RTL_MEMORY_ISP2(quantum))
         {
             /* roundup to next power of 2 */
-            quantum = (((sal_Size)1) << highbit(quantum));
+            quantum = (((size_t)1) << highbit(quantum));
         }
         quantum_cache_max = RTL_MEMORY_P2ROUNDUP(quantum_cache_max, quantum);
 
@@ -711,7 +711,7 @@ rtl_arena_activate (
             char namebuf[RTL_ARENA_NAME_LENGTH + 1];
             int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
 
-            sal_Size size = n * sizeof(rtl_cache_type*);
+            size_t size = n * sizeof(rtl_cache_type*);
             arena->m_qcache_ptr = (rtl_cache_type**)rtl_arena_alloc (gp_arena_arena, &size);
             if (!(arena->m_qcache_ptr))
             {
@@ -777,7 +777,7 @@ rtl_arena_deactivate (
     //      << arena->m_stats.m_mem_alloc);
     if (arena->m_stats.m_alloc > arena->m_stats.m_free)
     {
-        sal_Size i, n;
+        size_t i, n;
 
         // SAL_INFO(
         //  "sal.rtl",
@@ -873,16 +873,16 @@ rtl_arena_deactivate (
 rtl_arena_type *
 SAL_CALL rtl_arena_create (
     const char *       name,
-    sal_Size           quantum,
-    sal_Size           quantum_cache_max,
+    size_t           quantum,
+    size_t           quantum_cache_max,
     rtl_arena_type *   source_arena,
-    void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
-    void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
+    void * (SAL_CALL * source_alloc)(rtl_arena_type *, size_t *),
+    void   (SAL_CALL * source_free) (rtl_arena_type *, void *, size_t),
     SAL_UNUSED_PARAMETER int
 ) SAL_THROW_EXTERN_C()
 {
     rtl_arena_type * result = 0;
-    sal_Size         size   = sizeof(rtl_arena_type);
+    size_t         size   = sizeof(rtl_arena_type);
 
 try_alloc:
     result = (rtl_arena_type*)rtl_arena_alloc (gp_arena_arena, &size);
@@ -946,14 +946,14 @@ SAL_CALL rtl_arena_destroy (
 void *
 SAL_CALL rtl_arena_alloc (
     rtl_arena_type * arena,
-    sal_Size *       pSize
+    size_t *       pSize
 ) SAL_THROW_EXTERN_C()
 {
     void * addr = 0;
 
     if ((arena != 0) && (pSize != 0))
     {
-        sal_Size size;
+        size_t size;
 
         if (alloc_mode == AMode_SYSTEM)
             return rtl_allocateMemory(*pSize);
@@ -969,7 +969,7 @@ SAL_CALL rtl_arena_alloc (
                 rtl_arena_segment_create(arena, size, &segment)    )
             {
                 /* shrink to fit */
-                sal_Size oversize;
+                size_t oversize;
 
                 /* mark segment used */
                 assert(segment->m_type == RTL_ARENA_SEGMENT_TYPE_FREE);
@@ -1022,7 +1022,7 @@ void
 SAL_CALL rtl_arena_free (
     rtl_arena_type * arena,
     void *           addr,
-    sal_Size         size
+    size_t         size
 ) SAL_THROW_EXTERN_C()
 {
     if (arena != 0)
@@ -1124,11 +1124,11 @@ namespace
 void *
 SAL_CALL rtl_machdep_alloc (
     rtl_arena_type * pArena,
-    sal_Size *       pSize
+    size_t *       pSize
 )
 {
     void *   addr;
-    sal_Size size = (*pSize);
+    size_t size = (*pSize);
 
     assert(pArena == gp_machdep_arena);
 
@@ -1178,7 +1178,7 @@ void
 SAL_CALL rtl_machdep_free (
     rtl_arena_type * pArena,
     void *           pAddr,
-    sal_Size         nSize
+    size_t         nSize
 )
 {
     assert(pArena == gp_machdep_arena);
@@ -1195,19 +1195,19 @@ SAL_CALL rtl_machdep_free (
 }
 
 
-sal_Size
+size_t
 rtl_machdep_pagesize()
 {
 #if defined(SAL_UNX)
 #if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
-    return ((sal_Size)getpagesize());
+    return ((size_t)getpagesize());
 #else  /* POSIX */
-    return ((sal_Size)sysconf(_SC_PAGESIZE));
+    return ((size_t)sysconf(_SC_PAGESIZE));
 #endif /* xBSD || POSIX */
 #elif defined(SAL_W32)
     SYSTEM_INFO info;
     GetSystemInfo (&info);
-    return ((sal_Size)(info.dwPageSize));
+    return ((size_t)(info.dwPageSize));
 #endif /* (SAL_UNX || SAL_W32) */
 }
 

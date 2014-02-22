@@ -26,9 +26,9 @@ struct IsciiDevanagariToUnicode
     {
         m_cPrevChar = 0;
     }
-    sal_Size convert(char const* pSrcBuf, sal_Size nSrcBytes,
-        sal_Unicode* pDestBuf, sal_Size nDestChars, sal_uInt32 nFlags,
-        sal_uInt32* pInfo, sal_Size* pSrcCvtBytes);
+    size_t convert(char const* pSrcBuf, size_t nSrcBytes,
+        sal_Unicode* pDestBuf, size_t nDestChars, sal_uInt32 nFlags,
+        sal_uInt32* pInfo, size_t* pSrcCvtBytes);
 };
 
 struct UnicodeToIsciiDevanagari
@@ -45,9 +45,9 @@ struct UnicodeToIsciiDevanagari
         m_cPrevChar = 0;
         m_cHighSurrogate = 0;
     }
-    sal_Size convert(sal_Unicode const* pSrcBuf, sal_Size nSrcChars,
-        char* pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-        sal_uInt32 * pInfo, sal_Size * pSrcCvtChars);
+    size_t convert(sal_Unicode const* pSrcBuf, size_t nSrcChars,
+        char* pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+        sal_uInt32 * pInfo, size_t * pSrcCvtChars);
 };
 
 static const sal_Unicode IsciiDevanagariMap[256] =
@@ -86,13 +86,13 @@ static const sal_Unicode IsciiDevanagariMap[256] =
     0x096D,0x096E,0x096F,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF
 };
 
-sal_Size IsciiDevanagariToUnicode::convert(
-    char const* pSrcBuf, sal_Size nSrcBytes,
-    sal_Unicode* pDestBuf, sal_Size nDestChars, sal_uInt32 nFlags,
-    sal_uInt32* pInfo, sal_Size* pSrcCvtBytes)
+size_t IsciiDevanagariToUnicode::convert(
+    char const* pSrcBuf, size_t nSrcBytes,
+    sal_Unicode* pDestBuf, size_t nDestChars, sal_uInt32 nFlags,
+    sal_uInt32* pInfo, size_t* pSrcCvtBytes)
 {
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     sal_Unicode* pDestBufPtr = pDestBuf;
     sal_Unicode* pDestBufEnd = pDestBuf + nDestChars;
 
@@ -229,16 +229,16 @@ BmpUnicodeToSingleByteRange const unicodeToISCIIEncoding[] =
     { 0x0966, 0x096F - 0x0966, 0xF1 }
 };
 
-sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size nSrcChars,
-    char* pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
+size_t UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, size_t nSrcChars,
+    char* pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t* pSrcCvtChars)
 {
     size_t entries = SAL_N_ELEMENTS(unicodeToISCIIEncoding);
     BmpUnicodeToSingleByteRange const * ranges = unicodeToISCIIEncoding;
 
     sal_Unicode cHighSurrogate = m_cHighSurrogate;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     sal_Char* pDestBufPtr = pDestBuf;
     sal_Char* pDestBufEnd = pDestBuf + nDestBytes;
     for (; nConverted < nSrcChars; ++nConverted)
@@ -433,10 +433,10 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertIsciiDevanagariToUnicode(void const*,
-    void* pContext, char const* pSrcBuf, sal_Size nSrcBytes,
-    sal_Unicode* pDestBuf, sal_Size nDestChars, sal_uInt32 nFlags,
-    sal_uInt32* pInfo, sal_Size* pSrcCvtBytes)
+size_t ImplConvertIsciiDevanagariToUnicode(void const*,
+    void* pContext, char const* pSrcBuf, size_t nSrcBytes,
+    sal_Unicode* pDestBuf, size_t nDestChars, sal_uInt32 nFlags,
+    sal_uInt32* pInfo, size_t* pSrcCvtBytes)
 {
     IsciiDevanagariToUnicode *pCtx =
         static_cast<IsciiDevanagariToUnicode*>(pContext);
@@ -444,10 +444,10 @@ sal_Size ImplConvertIsciiDevanagariToUnicode(void const*,
         pInfo, pSrcCvtBytes);
 }
 
-sal_Size ImplConvertUnicodeToIsciiDevanagari(void const*,
-    void * pContext, sal_Unicode const * pSrcBuf, sal_Size nSrcChars,
-    char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
-    sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
+size_t ImplConvertUnicodeToIsciiDevanagari(void const*,
+    void * pContext, sal_Unicode const * pSrcBuf, size_t nSrcChars,
+    char * pDestBuf, size_t nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, size_t * pSrcCvtChars)
 {
     UnicodeToIsciiDevanagari *pCtx =
         static_cast<UnicodeToIsciiDevanagari*>(pContext);

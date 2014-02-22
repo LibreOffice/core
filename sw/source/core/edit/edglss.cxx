@@ -324,7 +324,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
                     rBuf = OUString(p);
                 else
                 {
-                    sal_Size nLen = aStream.GetSize();
+                    size_t nLen = aStream.GetSize();
                     rtl_uString *pStr = rtl_uString_alloc(nLen / sizeof( sal_Unicode ));
                     aStream.Seek( 0 );
                     aStream.ResetError();

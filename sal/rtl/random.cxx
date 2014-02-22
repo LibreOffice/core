@@ -82,12 +82,12 @@ static bool __rtl_random_initPool (
 /** __rtl_random_seedPool.
  */
 static void __rtl_random_seedPool (
-    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_Size nBufLen);
+    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, size_t nBufLen);
 
 /** __rtl_random_readPool.
  */
 static void __rtl_random_readPool (
-    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_Size nBufLen);
+    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, size_t nBufLen);
 
 /*
  * __rtl_random_data.
@@ -157,9 +157,9 @@ static bool __rtl_random_initPool (RandomPool_Impl *pImpl)
  * __rtl_random_seedPool.
  */
 static void __rtl_random_seedPool (
-    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_Size nBufLen)
+    RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, size_t nBufLen)
 {
-    sal_Size i;
+    size_t i;
     sal_sSize  j, k;
 
     for (i = 0; i < nBufLen; i += RTL_RANDOM_SIZE_DIGEST)
@@ -209,7 +209,7 @@ static void __rtl_random_seedPool (
  * __rtl_random_readPool.
  */
 static void __rtl_random_readPool (
-    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_Size nBufLen)
+    RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, size_t nBufLen)
 {
     sal_Int32 j, k;
 
@@ -298,7 +298,7 @@ void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
  * rtl_random_addBytes.
  */
 rtlRandomError SAL_CALL rtl_random_addBytes (
-    rtlRandomPool Pool, const void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
+    rtlRandomPool Pool, const void *Buffer, size_t Bytes) SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
     const sal_uInt8 *pBuffer = (const sal_uInt8 *)Buffer;
@@ -314,7 +314,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
  * rtl_random_getBytes.
  */
 rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool Pool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
+    rtlRandomPool Pool, void *Buffer, size_t Bytes) SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl   = (RandomPool_Impl *)Pool;
     sal_uInt8       *pBuffer = (sal_uInt8 *)Buffer;
