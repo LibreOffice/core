@@ -513,6 +513,8 @@ bool Application::ValidateSystemFont()
 
 void Application::SetSettings( const AllSettings& rSettings )
 {
+    const SolarMutexGuard aGuard;
+
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
