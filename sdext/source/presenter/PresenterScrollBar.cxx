@@ -447,7 +447,7 @@ void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent
 }
 
 void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEvent)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (meButtonDownArea != Thumb)
         return;

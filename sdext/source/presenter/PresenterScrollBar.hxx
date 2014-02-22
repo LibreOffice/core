@@ -150,7 +150,7 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
