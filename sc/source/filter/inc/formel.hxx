@@ -98,9 +98,9 @@ public:
     void                Reset();
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, size_t nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab,
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, size_t nFormulaLen, SCsTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 

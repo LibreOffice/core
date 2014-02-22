@@ -36,15 +36,15 @@ void ImplResetIso2022JpToUnicodeContext(void * pContext);
 
 void ImplDestroyIso2022JpToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
+size_t ImplConvertIso2022JpToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
-                                       sal_Size nSrcBytes,
+                                       size_t nSrcBytes,
                                        sal_Unicode * pDestBuf,
-                                       sal_Size nDestChars,
+                                       size_t nDestChars,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtBytes);
+                                       size_t * pSrcCvtBytes);
 
 void * ImplCreateUnicodeToIso2022JpContext();
 
@@ -52,15 +52,15 @@ void ImplResetUnicodeToIso2022JpContext(void * pContext);
 
 void ImplDestroyUnicodeToIso2022JpContext(void * pContext);
 
-sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
+size_t ImplConvertUnicodeToIso2022Jp(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
-                                       sal_Size nSrcChars,
+                                       size_t nSrcChars,
                                        char * pDestBuf,
-                                       sal_Size nDestBytes,
+                                       size_t nDestBytes,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtChars);
+                                       size_t * pSrcCvtChars);
 
 #endif
 

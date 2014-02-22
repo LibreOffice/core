@@ -192,11 +192,11 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
         rtl_String*                 pTemp;
         rtl_UnicodeToTextConverter  hConverter;
         sal_uInt32                  nInfo;
-        sal_Size                    nSrcChars;
-        sal_Size                    nDestBytes;
-        sal_Size                    nNewLen;
-        sal_Size                    nNotConvertedChars;
-        sal_Size                    nMaxCharLen;
+        size_t                    nSrcChars;
+        size_t                    nDestBytes;
+        size_t                    nNewLen;
+        size_t                    nNotConvertedChars;
+        size_t                    nMaxCharLen;
 
         /* Optimization for UTF-8 - we try to calculate the exact length */
         /* For all other encoding we try an good estimation */
@@ -205,7 +205,7 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
             nNewLen = rtl_ImplGetFastUTF8ByteLen( pSource, nLength );
             /* Includes the string only ASCII, then we could copy
                the buffer faster */
-            if ( nNewLen == (sal_Size)nLength )
+            if ( nNewLen == (size_t)nLength )
             {
                 sal_Char* pBuffer;
                 if ( *pTarget )

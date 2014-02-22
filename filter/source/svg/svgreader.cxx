@@ -118,7 +118,7 @@ double colorDiffSquared(const ARGBColor& rCol1, const ARGBColor& rCol2)
         + square(rCol1.b-rCol2.b);
 }
 
-typedef std::map<OUString,sal_Size> ElementRefMapType;
+typedef std::map<OUString,size_t> ElementRefMapType;
 
 struct AnnotatingVisitor
 {
@@ -318,7 +318,7 @@ struct AnnotatingVisitor
             mrStopVec(rStopVec)
         {}
 
-        bool operator()( sal_Size rLHS, sal_Size rRHS )
+        bool operator()( size_t rLHS, sal_Size rRHS )
         {
             return mrStopVec[rLHS].mnStopPosition < mrStopVec[rRHS].mnStopPosition;
         }
@@ -336,8 +336,8 @@ struct AnnotatingVisitor
             return; //easy! :-)
 
         // join similar colors
-        std::vector<sal_Size> aNewStops(1,rGradient.maStops.front());
-        for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
+        std::vector<size_t> aNewStops(1,rGradient.maStops.front());
+        for( size_t i=1; i<rGradient.maStops.size(); ++i )
         {
             if( maGradientStopVector[rGradient.maStops[i]].maStopColor !=
                 maGradientStopVector[aNewStops.back()].maStopColor )
@@ -364,9 +364,9 @@ struct AnnotatingVisitor
         // those two stops around this border (metric is
         // super-simplistic: take euclidean distance of colors, weigh
         // with stop distance)
-        sal_Size nMaxIndex=0;
+        size_t nMaxIndex=0;
         double    fMaxDistance=0.0;
-        for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
+        for( size_t i=1; i<rGradient.maStops.size(); ++i )
         {
             const double fCurrDistance(
                 colorDiffSquared(

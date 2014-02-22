@@ -41,7 +41,7 @@ namespace slideshow
             double                                  nPrio,
             const OUString&                  rServiceName,
             const char**                            pPropCopyTable,
-            sal_Size                                nNumPropEntries,
+            size_t                                nNumPropEntries,
             const SlideShowContext&                 rContext );
     }
 }

@@ -87,8 +87,8 @@ FltError ImportExcel::Read( void )
 
     /*  #i104057# Need to track a base position for progress bar calculation,
         because sheet substreams may not be in order of sheets. */
-    sal_Size nProgressBasePos = 0;
-    sal_Size nProgressBaseSize = 0;
+    size_t nProgressBasePos = 0;
+    size_t nProgressBaseSize = 0;
 
     while( eAkt != Z_Ende )
     {
@@ -822,8 +822,8 @@ FltError ImportExcel8::Read( void )
 
     /*  #i104057# Need to track a base position for progress bar calculation,
         because sheet substreams may not be in order of sheets. */
-    sal_Size nProgressBasePos = 0;
-    sal_Size nProgressBaseSize = 0;
+    size_t nProgressBasePos = 0;
+    size_t nProgressBaseSize = 0;
 
     bool bSheetHasCodeName = false;
 

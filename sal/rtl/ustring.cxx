@@ -643,9 +643,9 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             rtl_uString*                pTemp2 = NULL;
             rtl_TextToUnicodeConverter  hConverter;
             sal_uInt32                  nInfo;
-            sal_Size                    nSrcBytes;
-            sal_Size                    nDestChars;
-            sal_Size                    nNewLen;
+            size_t                    nSrcBytes;
+            size_t                    nDestChars;
+            size_t                    nNewLen;
 
             /* Optimization for UTF-8 - we try to calculate the exact length */
             /* For all other encoding we try the maximum - and reallocate
@@ -655,7 +655,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                 nNewLen = rtl_ImplGetFastUTF8UnicodeLen( pStr, nLen );
                 /* Includes the string only ASCII, then we could copy
                    the buffer faster */
-                if ( nNewLen == (sal_Size)nLen )
+                if ( nNewLen == (size_t)nLen )
                 {
                     sal_Unicode* pBuffer;
                     *ppThis = rtl_uString_ImplAlloc( nLen );
@@ -911,7 +911,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
         {
             rtl_uString *pScratch;
             rtl_TextToUnicodeConverter hConverter;
-            sal_Size nSrcBytes;
+            size_t nSrcBytes;
             sal_uInt32 nInfo;
 
             pScratch = static_cast< rtl_uString * >(

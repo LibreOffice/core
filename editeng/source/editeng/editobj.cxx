@@ -380,7 +380,7 @@ bool EditTextObject::Store( SvStream& rOStream ) const
     if ( rOStream.GetError() )
         return false;
 
-    sal_Size nStartPos = rOStream.Tell();
+    size_t nStartPos = rOStream.Tell();
 
     sal_uInt16 nWhich = static_cast<sal_uInt16>(EE_FORMAT_BIN);
     rOStream.WriteUInt16( nWhich );
@@ -390,7 +390,7 @@ bool EditTextObject::Store( SvStream& rOStream ) const
 
     StoreData( rOStream );
 
-    sal_Size nEndPos = rOStream.Tell();
+    size_t nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
     rOStream.Seek( nStartPos + sizeof( nWhich ) );
     rOStream.WriteUInt32( nStructSz );
@@ -424,7 +424,7 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     pTxtObj->CreateData(rIStream);
 
     // Make sure that the stream is left at the correct place.
-    sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
+    size_t nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
     return pTxtObj;
 }

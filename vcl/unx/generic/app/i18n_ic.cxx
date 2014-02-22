@@ -554,7 +554,7 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 // ---------------------------------------------------------------------------
 
 int
-SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
+SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, size_t nLength)
 {
     if (nLength == 1 && IsControlCode(pText[0]))
         return 0;

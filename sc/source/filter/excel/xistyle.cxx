@@ -150,7 +150,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
     rStrm >> nCount;
-    OSL_ENSURE( rStrm.GetRecLeft() == static_cast< sal_Size >( 4 * nCount ),
+    OSL_ENSURE( rStrm.GetRecLeft() == static_cast< size_t >( 4 * nCount ),
         "XclImpPalette::ReadPalette - size mismatch" );
 
     maColorTable.resize( nCount );

@@ -134,11 +134,11 @@ void ImplUTF7ResetTextToUnicodeContext( void* pContext )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
-                            const char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
+size_t ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
+                            const char* pSrcBuf, size_t nSrcBytes,
+                            sal_Unicode* pDestBuf, size_t nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtBytes )
+                            size_t* pSrcCvtBytes )
 {
     ImplUTF7ToUCContextData*    pContextData = (ImplUTF7ToUCContextData*)pContext;
     unsigned char                   c ='\0';
@@ -427,11 +427,11 @@ void ImplUTF7ResetUnicodeToTextContext( void* pContext )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
-                            const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            char* pDestBuf, sal_Size nDestBytes,
+size_t ImplUnicodeToUTF7( SAL_UNUSED_PARAMETER const void*, void* pContext,
+                            const sal_Unicode* pSrcBuf, size_t nSrcChars,
+                            char* pDestBuf, size_t nDestBytes,
                             SAL_UNUSED_PARAMETER sal_uInt32, sal_uInt32* pInfo,
-                            sal_Size* pSrcCvtChars )
+                            size_t* pSrcCvtChars )
 {
     ImplUTF7FromUCContextData*  pContextData = (ImplUTF7FromUCContextData*)pContext;
     sal_Unicode                 c = '\0';

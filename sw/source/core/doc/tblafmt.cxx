@@ -98,7 +98,7 @@ namespace
         // write a placeholder value first, write the data, then jump back and write the
         // real offset.
 
-        // Note that we explicitly use sal_uInt64 instead of sal_Size (which can be 32
+        // Note that we explicitly use sal_uInt64 instead of size_t (which can be 32
         // or 64 depending on platform) to ensure 64-bit portability on this front. I don't
         // actually know if autotbl.fmt as a whole is portable, since that requires all serialization
         // logic to be written with portability in mind.

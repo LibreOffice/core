@@ -47,7 +47,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
     ::osl::MutexGuard aGuard( m_aMutex );
     aData.realloc(nBytesToRead);
 
-    sal_Size nRead;
+    size_t nRead;
     ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, (void*)aData.getArray(), nBytesToRead, &nRead);
     // FIXME  nRead could be truncated on 64-bit arches
     m_nActPos += (sal_uInt32)nRead;

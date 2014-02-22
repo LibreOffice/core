@@ -58,15 +58,15 @@ void ImplDestroyBig5HkscsToUnicodeContext(void * pContext)
     delete static_cast< ImplBig5HkscsToUnicodeContext * >(pContext);
 }
 
-sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
+size_t ImplConvertBig5HkscsToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
-                                       sal_Size nSrcBytes,
+                                       size_t nSrcBytes,
                                        sal_Unicode * pDestBuf,
-                                       sal_Size nDestChars,
+                                       size_t nDestChars,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtBytes)
+                                       size_t * pSrcCvtBytes)
 {
     sal_uInt16 const * pBig5Hkscs2001Data
         = static_cast< ImplBig5HkscsConverterData const * >(pData)->
@@ -79,7 +79,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
               m_pBig5ToUnicodeData;
     sal_Int32 nRow = 0;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
 
@@ -276,15 +276,15 @@ sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
+size_t ImplConvertUnicodeToBig5Hkscs(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
-                                       sal_Size nSrcChars,
+                                       size_t nSrcChars,
                                        char * pDestBuf,
-                                       sal_Size nDestBytes,
+                                       size_t nDestBytes,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtChars)
+                                       size_t * pSrcCvtChars)
 {
     sal_uInt16 const * pBig5Hkscs2001Data
         = static_cast< ImplBig5HkscsConverterData const * >(pData)->
@@ -300,7 +300,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
               m_pUnicodeToBig5Data;
     sal_Unicode nHighSurrogate = 0;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     char * pDestBufPtr = pDestBuf;
     char * pDestBufEnd = pDestBuf + nDestBytes;
 

@@ -32,8 +32,8 @@ struct rtl_cache_stat_type
     sal_uInt64 m_alloc;
     sal_uInt64 m_free;
 
-    sal_Size   m_mem_total;
-    sal_Size   m_mem_alloc;
+    size_t   m_mem_total;
+    size_t   m_mem_alloc;
 };
 
 
@@ -57,7 +57,7 @@ struct rtl_cache_slab_type
     rtl_cache_slab_type *   m_slab_next; /* slab linkage */
     rtl_cache_slab_type *   m_slab_prev; /* slab linkage */
 
-    sal_Size                m_ntypes;    /* number of buffers used */
+    size_t                m_ntypes;    /* number of buffers used */
     sal_uIntPtr             m_data;      /* buffer start addr */
 
     sal_uIntPtr             m_bp;        /* free buffer linkage 'base pointer'  */
@@ -74,8 +74,8 @@ struct rtl_cache_magazine_type
 {
     rtl_cache_magazine_type * m_mag_next; /* depot linkage */
 
-    sal_Size                  m_mag_size;
-    sal_Size                  m_mag_used;
+    size_t                  m_mag_size;
+    size_t                  m_mag_used;
 
     void *                    m_objects[RTL_CACHE_MAGAZINE_SIZE];
 };
@@ -88,11 +88,11 @@ struct rtl_cache_depot_type
 {
     /* magazine list */
     rtl_cache_magazine_type * m_mag_next;  /* linkage */
-    sal_Size                  m_mag_count; /* count */
+    size_t                  m_mag_count; /* count */
 
     /* working set parameters */
-    sal_Size                  m_curr_min;
-    sal_Size                  m_prev_min;
+    size_t                  m_curr_min;
+    size_t                  m_prev_min;
 };
 
 
@@ -115,9 +115,9 @@ struct rtl_cache_st
     char                      m_name[RTL_CACHE_NAME_LENGTH + 1];
     long                      m_features;
 
-    sal_Size                  m_type_size;   /* const */
-    sal_Size                  m_type_align;  /* const */
-    sal_Size                  m_type_shift;  /* log2(m_type_size); const */
+    size_t                  m_type_size;   /* const */
+    size_t                  m_type_align;  /* const */
+    size_t                  m_type_shift;  /* log2(m_type_size); const */
 
     int  (SAL_CALL * m_constructor)(void * obj, void * userarg); /* const */
     void (SAL_CALL * m_destructor) (void * obj, void * userarg); /* const */
@@ -129,18 +129,18 @@ struct rtl_cache_st
     rtl_cache_stat_type       m_slab_stats;
 
     rtl_arena_type *          m_source;     /* slab supplier; const */
-    sal_Size                  m_slab_size;  /* const */
-    sal_Size                  m_ntypes;     /* number of buffers per slab; const */
-    sal_Size                  m_ncolor;     /* next slab color */
-    sal_Size                  m_ncolor_max; /* max. slab color */
+    size_t                  m_slab_size;  /* const */
+    size_t                  m_ntypes;     /* number of buffers per slab; const */
+    size_t                  m_ncolor;     /* next slab color */
+    size_t                  m_ncolor_max; /* max. slab color */
 
     rtl_cache_slab_type       m_free_head;
     rtl_cache_slab_type       m_used_head;
 
     rtl_cache_bufctl_type **  m_hash_table;
     rtl_cache_bufctl_type *   m_hash_table_0[RTL_CACHE_HASH_SIZE];
-    sal_Size                  m_hash_size;  /* m_hash_mask + 1   */
-    sal_Size                  m_hash_shift; /* log2(m_hash_size) */
+    size_t                  m_hash_size;  /* m_hash_mask + 1   */
+    size_t                  m_hash_shift; /* log2(m_hash_size) */
 
     /* depot layer */
     rtl_memory_lock_type      m_depot_lock;

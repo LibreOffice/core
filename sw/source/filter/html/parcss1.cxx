@@ -308,7 +308,7 @@ CSS1Token CSS1Parser::GetNextToken()
         case '9': // NUMBER | PERCENTAGE | LENGTH
             {
                 // die aktuelle Position retten
-                sal_Size nInPosSave = nInPos;
+                size_t nInPosSave = nInPos;
                 sal_Unicode cNextChSave = cNextCh;
                 sal_uInt32 nlLineNrSave = nlLineNr;
                 sal_uInt32 nlLinePosSave = nlLinePos;

@@ -51,15 +51,15 @@ protected:
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc();
-    virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
+    virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, size_t nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, size_t nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+    virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, size_t nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
 
-    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
+    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, size_t nLen );
 
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
@@ -129,16 +129,16 @@ public:
                         ExcelToSc8( const XclImpRoot& rRoot );
     virtual             ~ExcelToSc8();
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, size_t nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
 
-    virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+    virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, size_t nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
 
     static inline bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
 
-    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
+    virtual bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, size_t nLen );
 };
 
 

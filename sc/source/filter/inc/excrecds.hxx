@@ -52,7 +52,7 @@ public:
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 
     virtual sal_uInt16          GetNum() const = 0;
-    virtual sal_Size        GetLen() const = 0;
+    virtual size_t        GetLen() const = 0;
 
 protected:
     virtual void            SaveCont( XclExpStream& rStrm );
@@ -72,7 +72,7 @@ protected:
 public:
     virtual void            Save( XclExpStream& rStrm );
     virtual sal_uInt16          GetNum() const;
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
 };
 
 //--------------------------------------------------------- class ExcDummyRec -
@@ -103,7 +103,7 @@ protected:
 public:
     inline                  ExcBoolRecord( const bool bDefault ) : bVal( bDefault ) {}
 
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
 };
 
 
@@ -133,7 +133,7 @@ public:
                             ExcBof( void );
 
     virtual sal_uInt16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
 };
 
 
@@ -148,7 +148,7 @@ public:
                             ExcBofW( void );
 
     virtual sal_uInt16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
 };
 
 
@@ -159,7 +159,7 @@ class ExcEof : public ExcRecord
 private:
 public:
     virtual sal_uInt16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
 };
 
 
@@ -170,9 +170,9 @@ class ExcDummy_00 : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
     virtual const sal_uInt8*        GetData( void ) const;
 };
 
@@ -221,9 +221,9 @@ class ExcDummy_040 : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
     virtual const sal_uInt8*        GetData( void ) const;
 };
 
@@ -233,9 +233,9 @@ class ExcDummy_041 : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
     virtual const sal_uInt8*        GetData( void ) const;
 };
 
@@ -259,8 +259,8 @@ private:
 class ExcBundlesheetBase : public ExcRecord
 {
 protected:
-    sal_Size                nStrPos;
-    sal_Size                nOwnPos;    // Position NACH # und Len
+    size_t                nStrPos;
+    size_t                nOwnPos;    // Position NACH # und Len
     sal_uInt16                  nGrbit;
     SCTAB                   nTab;
 
@@ -269,7 +269,7 @@ protected:
 public:
                             ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
 
-    inline void             SetStreamPos( sal_Size nNewStrPos ) { nStrPos = nNewStrPos; }
+    inline void             SetStreamPos( size_t nNewStrPos ) { nStrPos = nNewStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual sal_uInt16          GetNum() const;
@@ -286,7 +286,7 @@ private:
 
 public:
                             ExcBundlesheet( RootData& rRootData, SCTAB nTab );
-    virtual sal_Size        GetLen() const;
+    virtual size_t        GetLen() const;
 };
 
 //--------------------------------------------------------- class ExcDummy_02 -
@@ -296,9 +296,9 @@ class ExcDummy_02a : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen( void ) const;
+    virtual size_t        GetLen( void ) const;
     virtual const sal_uInt8*        GetData( void ) const;
 };
 

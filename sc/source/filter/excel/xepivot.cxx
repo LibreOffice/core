@@ -288,7 +288,7 @@ sal_uInt16 XclExpPCField::GetItemIndex( const OUString& rItemName ) const
     return EXC_PC_NOITEM;
 }
 
-sal_Size XclExpPCField::GetIndexSize() const
+size_t XclExpPCField::GetIndexSize() const
 {
     return Has16BitIndexes() ? 2 : 1;
 }
@@ -896,7 +896,7 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 {
     if( HasItemIndexList() )
     {
-        sal_Size nRecSize = 0;
+        size_t nRecSize = 0;
         size_t nPos, nSize = maFieldList.GetSize();
         for( nPos = 0; nPos < nSize; ++nPos )
             nRecSize += maFieldList.GetRecord( nPos )->GetIndexSize();

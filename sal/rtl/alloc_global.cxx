@@ -51,7 +51,7 @@ static void determine_alloc_mode()
  *
  * ================================================================= */
 
-static const sal_Size g_alloc_sizes[] =
+static const size_t g_alloc_sizes[] =
 {
     /* powers of 2**(1/4) */
     4 *    4,           6 *    4,
@@ -92,15 +92,15 @@ static rtl_arena_type * gp_alloc_arena = 0;
  * ================================================================= */
 
 void *
-SAL_CALL rtl_allocateMemory_CUSTOM (sal_Size n) SAL_THROW_EXTERN_C()
+SAL_CALL rtl_allocateMemory_CUSTOM (size_t n) SAL_THROW_EXTERN_C()
 {
     void * p = 0;
     if (n > 0)
     {
         char *     addr;
-        sal_Size   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
+        size_t   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
 
-        assert(RTL_MEMALIGN >= sizeof(sal_Size));
+        assert(RTL_MEMALIGN >= sizeof(size_t));
         if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
         {
             /* requested size too large for roundup alignment */
@@ -115,7 +115,7 @@ try_alloc:
 
         if (addr != 0)
         {
-            ((sal_Size*)(addr))[0] = size;
+            ((size_t*)(addr))[0] = size;
             p = addr + RTL_MEMALIGN;
         }
         else if (gp_alloc_arena == 0)
@@ -138,7 +138,7 @@ void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
     if (p != 0)
     {
         char *   addr = (char*)(p) - RTL_MEMALIGN;
-        sal_Size size = ((sal_Size*)(addr))[0];
+        size_t size = ((sal_Size*)(addr))[0];
 
         if (size <= RTL_MEMORY_CACHED_LIMIT)
             rtl_cache_free(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT], addr);
@@ -149,14 +149,14 @@ void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
 
 /* ================================================================= */
 
-void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, size_t n) SAL_THROW_EXTERN_C()
 {
     if (n > 0)
     {
         if (p != 0)
         {
             void *   p_old = p;
-            sal_Size n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0] - RTL_MEMALIGN;
+            size_t n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0] - RTL_MEMALIGN;
 
             p = rtl_allocateMemory (n);
             if (p != 0)
@@ -204,7 +204,7 @@ void rtl_memory_init()
         assert(gp_alloc_arena != 0);
     }
     {
-        sal_Size size;
+        size_t size;
         int i, n = RTL_MEMORY_CACHED_SIZES;
 
         for (i = 0; i < n; i++)
@@ -264,7 +264,7 @@ void rtl_memory_fini()
  *
  * ================================================================= */
 
-void * SAL_CALL rtl_allocateMemory_SYSTEM (sal_Size n)
+void * SAL_CALL rtl_allocateMemory_SYSTEM (size_t n)
 {
     return malloc (n);
 }
@@ -278,14 +278,14 @@ void SAL_CALL rtl_freeMemory_SYSTEM (void * p)
 
 /* ================================================================= */
 
-void * SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, sal_Size n)
+void * SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, size_t n)
 {
     return realloc (p, n);
 }
 
 /* ================================================================= */
 
-void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_allocateMemory (size_t n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
@@ -308,7 +308,7 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 #endif
 }
 
-void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_reallocateMemory (void * p, size_t n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
@@ -359,7 +359,7 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
  *
  * ================================================================= */
 
-void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_allocateZeroMemory (size_t n) SAL_THROW_EXTERN_C()
 {
     void * p = rtl_allocateMemory (n);
     if (p != 0)
@@ -369,7 +369,7 @@ void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
 
 /* ================================================================= */
 
-void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeZeroMemory (void * p, size_t n) SAL_THROW_EXTERN_C()
 {
     if (p != 0)
     {

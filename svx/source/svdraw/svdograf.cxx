@@ -1441,7 +1441,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
                 {
                     memcpy( pBuffer, pSourceData, nSize );
 
-                    SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, STREAM_READ );
+                    SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (size_t)nSize, STREAM_READ );
                     pStream->ObjectOwnsMemory( true );
                     xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
                 }

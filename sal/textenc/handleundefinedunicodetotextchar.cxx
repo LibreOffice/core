@@ -30,7 +30,7 @@ bool ImplIsUnicodeIgnoreChar(sal_Unicode c, sal_uInt32 nFlags)
 
 bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
                                         char * pBuf,
-                                        sal_Size nMaxLen)
+                                        size_t nMaxLen)
 {
     if (nMaxLen == 0)
         return false;
@@ -54,7 +54,7 @@ bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
 
 bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
                                       char * pBuf,
-                                      sal_Size nMaxLen)
+                                      size_t nMaxLen)
 {
     if (nMaxLen == 0)
         return false;

@@ -1700,7 +1700,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
             // Extended ATRD
             if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
             {
-                sal_Size nOldPos = pTblSt->Tell();
+                size_t nOldPos = pTblSt->Tell();
                 if (checkSeek(*pTblSt, pWwFib->fcAtrdExtra) && (pTblSt->remainingSize() >= pWwFib->lcbAtrdExtra))
                 {
                     pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
@@ -1954,13 +1954,13 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
 {
     const sal_uInt32 nValidMin=4;
 
-    sal_Size nOldPos = pSt->Tell();
+    size_t nOldPos = pSt->Tell();
 
     bool bValid = checkSeek(*pSt, nFilePos);
-    sal_Size nRemainingSize = pSt->remainingSize();
+    size_t nRemainingSize = pSt->remainingSize();
     if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
         bValid = false;
-    nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
+    nPLCF = bValid ? std::min(nRemainingSize, static_cast<size_t>(nPLCF)) : nValidMin;
 
     // Pointer to Pos- and Struct-array
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];
@@ -2109,7 +2109,7 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 
 void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 {
-    sal_Size nOldPos = rSt.Tell();
+    size_t nOldPos = rSt.Tell();
     bool bValid = checkSeek(rSt, nFilePos) && (rSt.remainingSize() >= nPLCF);
 
     if (bValid)
@@ -2183,7 +2183,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
         {
             failure = true;
 
-            sal_Size nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
+            size_t nLastFkpPos = ( ( nPN + nIMax - 1 ) << 9 );
             // Anz. Fkp-Eintraege des letzten Fkp
             if (!checkSeek(rSt, nLastFkpPos + 511))
                 break;
@@ -2284,13 +2284,13 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 {
     const sal_uInt32 nValidMin=4;
 
-    sal_Size nOldPos = pSt->Tell();
+    size_t nOldPos = pSt->Tell();
 
     bool bValid = checkSeek(*pSt, nFilePos);
-    sal_Size nRemainingSize = pSt->remainingSize();
+    size_t nRemainingSize = pSt->remainingSize();
     if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
         bValid = false;
-    nPLCF = bValid ? std::min(nRemainingSize, static_cast<sal_Size>(nPLCF)) : nValidMin;
+    nPLCF = bValid ? std::min(nRemainingSize, static_cast<size_t>(nPLCF)) : nValidMin;
 
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer to Pos-array
     pPLCF_PosArray[0] = 0;
@@ -2390,7 +2390,7 @@ bool IsExpandableSprm(sal_uInt16 nSpId)
 }
 
 void WW8PLCFx_Fc_FKP::WW8Fkp::FillEntry(WW8PLCFx_Fc_FKP::WW8Fkp::Entry &rEntry,
-    sal_Size nDataOffset, sal_uInt16 nLen)
+    size_t nDataOffset, sal_uInt16 nLen)
 {
     bool bValidPos = (nDataOffset < sizeof(maRawData));
 
@@ -2416,7 +2416,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
 {
     memset(maRawData, 0, 512);
 
-    sal_Size nOldPos = pSt->Tell();
+    size_t nOldPos = pSt->Tell();
 
     bool bCouldSeek = checkSeek(*pSt, nFilePos);
     bool bCouldRead = bCouldSeek ? checkRead(*pSt, maRawData, 512) : false;
@@ -2458,7 +2458,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                     aEntry.mnLen = maRawData[nOfs];
 
                     //len byte
-                    sal_Size nDataOffset = nOfs + 1;
+                    size_t nDataOffset = nOfs + 1;
 
                     FillEntry(aEntry, nDataOffset, aEntry.mnLen);
 
@@ -2518,7 +2518,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             if (aEntry.mnLen >= 2)
                             {
                                 //len byte + optional extra len byte
-                                sal_Size nDataOffset = nOfs + 1 + nDelta;
+                                size_t nDataOffset = nOfs + 1 + nDelta;
                                 aEntry.mnIStd = nDataOffset <= sizeof(maRawData)-sizeof(aEntry.mnIStd) ?
                                     SVBT16ToShort(maRawData+nDataOffset) : 0;
                                 aEntry.mnLen-=2; //istd
@@ -3799,7 +3799,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
     if (nLen==0)     // Handle Empty STTBF
         return;
 
-    sal_Size nOldPos = rStrm.Tell();
+    size_t nOldPos = rStrm.Tell();
     if (checkSeek(rStrm, nStart))
     {
         sal_uInt16 nLen2(0);
@@ -7375,12 +7375,12 @@ SEPr::SEPr() :
 
 bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
 {
-    return (rSt.Seek(nOffset) == static_cast<sal_Size>(nOffset));
+    return (rSt.Seek(nOffset) == static_cast<size_t>(nOffset));
 }
 
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
 {
-    return (rSt.Read(pDest, nLength) == static_cast<sal_Size>(nLength));
+    return (rSt.Read(pDest, nLength) == static_cast<size_t>(nLength));
 }
 
 #ifdef OSL_BIGENDIAN

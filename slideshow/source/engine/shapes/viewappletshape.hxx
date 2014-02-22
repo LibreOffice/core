@@ -77,7 +77,7 @@ namespace slideshow
                                    ::com::sun::star::drawing::XShape >&        rxShape,
                              const OUString&                            rServiceName,
                              const char**                                      pPropCopyTable,
-                             sal_Size                                          nNumPropEntries,
+                             size_t                                          nNumPropEntries,
                              const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XComponentContext >& rxContext );
 

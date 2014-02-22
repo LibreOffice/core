@@ -68,9 +68,9 @@ using bridges::cpp_uno::shared::VtableFactory;
 namespace {
 
 extern "C" void * SAL_CALL allocExec(
-    SAL_UNUSED_PARAMETER rtl_arena_type *, sal_Size * size)
+    SAL_UNUSED_PARAMETER rtl_arena_type *, size_t * size)
 {
-    sal_Size pagesize;
+    size_t pagesize;
 #if defined SAL_UNX
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
     pagesize = getpagesize();
@@ -84,7 +84,7 @@ extern "C" void * SAL_CALL allocExec(
 #else
 #error Unsupported platform
 #endif
-    sal_Size n = (*size + (pagesize - 1)) & ~(pagesize - 1);
+    size_t n = (*size + (pagesize - 1)) & ~(pagesize - 1);
     void * p;
 #if defined SAL_UNX
     p = mmap(
@@ -108,7 +108,7 @@ extern "C" void * SAL_CALL allocExec(
 }
 
 extern "C" void SAL_CALL freeExec(
-    SAL_UNUSED_PARAMETER rtl_arena_type *, void * address, sal_Size size)
+    SAL_UNUSED_PARAMETER rtl_arena_type *, void * address, size_t size)
 {
 #if defined SAL_UNX
     munmap(static_cast< char * >(address), size);
@@ -229,8 +229,8 @@ VtableFactory::Vtables VtableFactory::getVtables(
 #ifdef USE_DOUBLE_MMAP
 bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 {
-    sal_Size size = getBlockSize(slotCount);
-    sal_Size pagesize = sysconf(_SC_PAGESIZE);
+    size_t size = getBlockSize(slotCount);
+    size_t pagesize = sysconf(_SC_PAGESIZE);
     block.size = (size + (pagesize - 1)) & ~(pagesize - 1);
     block.start = block.exec = NULL;
     block.fd = -1;

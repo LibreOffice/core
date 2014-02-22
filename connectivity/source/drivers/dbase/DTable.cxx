@@ -795,12 +795,12 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
     if (!bRetrieveData)
         return sal_True;
 
-    sal_Size nByteOffset = 1;
+    size_t nByteOffset = 1;
     // Fields:
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd  = _rCols.get().end();
-    const sal_Size nCount = _rRow->get().size();
-    for (sal_Size i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
+    const size_t nCount = _rRow->get().size();
+    for (size_t i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
     {
         // Lengths depending on data type:
         sal_Int32 nLen = 0;

@@ -319,7 +319,7 @@ int SAL_CALL main (void)
     {
         rtlCipherError result;
         sal_uInt8      arcfour_out[40];
-        sal_Size       length;
+        size_t       length;
         int            i, n;
 
         n = SAL_N_ELEMENTS(arcfour_data_len);

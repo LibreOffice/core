@@ -5593,13 +5593,13 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 
             if ( mnIdClusters-- > 2 )
             {
-                const sal_Size nFIDCLsize = sizeof(sal_uInt32) * 2;
+                const size_t nFIDCLsize = sizeof(sal_uInt32) * 2;
                 if ( aDggAtomHd.nRecLen == ( mnIdClusters * nFIDCLsize + 16 ) )
                 {
-                    sal_Size nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
+                    size_t nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
                     SAL_WARN_IF(nMaxEntriesPossible < mnIdClusters,
                         "filter.ms", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
-                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_Size>(mnIdClusters));
+                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<size_t>(mnIdClusters));
 
                     maFidcls.resize(mnIdClusters);
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
@@ -6405,7 +6405,7 @@ sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDat
 {
     if( nDatLen )
     {
-        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_Size>(nDatLen));
+        rBuffLen = std::min(rStData.remainingSize(), static_cast<size_t>(nDatLen));
         rpBuff = new char[rBuffLen];
         rBuffLen = rStData.Read(rpBuff, rBuffLen);
     }
@@ -6417,7 +6417,7 @@ sal_Bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLe
 {
     if( nDatLen )
     {
-        rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_Size>(nDatLen));
+        rBuffLen = std::min(rStData.remainingSize(), static_cast<size_t>(nDatLen));
         rpBuff = new char[rBuffLen];
         rBuffLen = rStData.Read(rpBuff, rBuffLen);
     }

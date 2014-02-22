@@ -723,7 +723,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 
     SvMemoryStream aStream;
     const void* aData = aLink.GetData();
-    sal_Size nDataSize = aLink.GetDataSize();
+    size_t nDataSize = aLink.GetDataSize();
 
     switch ( aLink.GetType() ) {
         case GFX_LINK_TYPE_NATIVE_GIF:

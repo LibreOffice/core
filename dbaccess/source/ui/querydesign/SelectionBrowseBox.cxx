@@ -335,7 +335,7 @@ void OSelectionBrowseBox::Init()
     Size aHeight;
     const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
 
-    for (sal_Size i = 0; i < sizeof (pControls) / sizeof (pControls[0]); ++i)
+    for (size_t i = 0; i < sizeof (pControls) / sizeof (pControls[0]); ++i)
     {
         const Size aTemp(pControls[i]->GetOptimalSize());
         if ( aTemp.Height() > aHeight.Height() )

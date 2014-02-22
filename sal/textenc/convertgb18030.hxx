@@ -54,25 +54,25 @@ void ImplResetGb18030ToUnicodeContext(void * pContext);
 
 void ImplDestroyGb18030ToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertGb18030ToUnicode(void const * pData,
+size_t ImplConvertGb18030ToUnicode(void const * pData,
                                      void * pContext,
                                      char const * pSrcBuf,
-                                     sal_Size nSrcBytes,
+                                     size_t nSrcBytes,
                                      sal_Unicode * pDestBuf,
-                                     sal_Size nDestChars,
+                                     size_t nDestChars,
                                      sal_uInt32 nFlags,
                                      sal_uInt32 * pInfo,
-                                     sal_Size * pSrcCvtBytes);
+                                     size_t * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToGb18030(void const * pData,
+size_t ImplConvertUnicodeToGb18030(void const * pData,
                                      void * pContext,
                                      sal_Unicode const * pSrcBuf,
-                                     sal_Size nSrcChars,
+                                     size_t nSrcChars,
                                      char * pDestBuf,
-                                     sal_Size nDestBytes,
+                                     size_t nDestBytes,
                                      sal_uInt32 nFlags,
                                      sal_uInt32 * pInfo,
-                                     sal_Size * pSrcCvtChars);
+                                     size_t * pSrcCvtChars);
 
 #endif
 

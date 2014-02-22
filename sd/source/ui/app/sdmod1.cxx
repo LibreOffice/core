@@ -928,15 +928,15 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
         // Create a memory stream and prepare to fill it with the content of
         // the original stream.
         mpStream.reset(new SvMemoryStream());
-        static const sal_Size nBufferSize = 4096;
+        static const size_t nBufferSize = 4096;
         ::boost::scoped_array<sal_Int8> pBuffer (new sal_Int8[nBufferSize]);
 
-        sal_Size nReadPosition (0);
+        size_t nReadPosition (0);
         bool bLoop (true);
         while (bLoop)
         {
             // Read the next part of the original stream.
-            sal_Size nReadByteCount (0);
+            size_t nReadByteCount (0);
             const ErrCode nErrorCode (
                 rBytes.ReadAt(
                     nReadPosition,

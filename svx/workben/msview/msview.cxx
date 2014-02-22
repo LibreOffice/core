@@ -171,10 +171,10 @@ bool Atom::compareContent( Atom& rAtom )
         boost::shared_ptr< char > buffer2( new char[nBufferSize] );
 
         sal_uInt32 nLength = maRecordHeader.nRecLen;
-        sal_Size nRead = 0;
+        size_t nRead = 0;
         while( nLength )
         {
-            sal_Size nRead = (nBufferSize < nLength) ? nBufferSize : nLength;
+            size_t nRead = (nBufferSize < nLength) ? nBufferSize : nLength;
             nRead = rStream1.Read( (void*)buffer1.get(), nRead );
             if( nRead == 0 )
                 break;
@@ -332,7 +332,7 @@ Atom* Atom::import( const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl 
 Atom* Atom::import( UINT16 nRecType, SvStream& rStCtrl )
 {
     rStCtrl.Seek( STREAM_SEEK_TO_END );
-    sal_Size nStreamLength = rStCtrl.Tell();
+    size_t nStreamLength = rStCtrl.Tell();
     rStCtrl.Seek( STREAM_SEEK_TO_BEGIN );
 
     DffRecordHeader aRootRecordHeader;
@@ -934,12 +934,12 @@ static String GetAtomText( const Atom* pAtom )
             AtomConfig* pAtomConfig = dynamic_cast< AtomConfig* >( gAtomConfigMap[pAtom->getType()].get() );
             if( pAtomConfig )
             {
-                sal_Size nLength = pAtom->getLength();
+                size_t nLength = pAtom->getLength();
                 aText += String( pAtomConfig->format( pAtom->getStream(), nLength ) );
             }
             else
             {
-                sal_Size nLength = pAtom->getLength();
+                size_t nLength = pAtom->getLength();
                 aText += String( ElementConfig::dump_hex( pAtom->getStream(), nLength ) );
             }
         }

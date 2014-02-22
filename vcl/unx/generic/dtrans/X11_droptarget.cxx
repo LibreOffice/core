@@ -67,7 +67,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
 
         if( m_pSelectionManager->getDisplay() ) // #136582# sanity check
         {
-            sal_Size aWindow = None;
+            size_t aWindow = None;
             arguments.getConstArray()[1] >>= aWindow;
             m_pSelectionManager->registerDropTarget( aWindow, this );
             m_aTargetWindow = aWindow;

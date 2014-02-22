@@ -29,7 +29,7 @@
 
 char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 {
-    sal_Size nMaxUniCodeBuf = strlen( pStr ) + 1;
+    size_t nMaxUniCodeBuf = strlen( pStr ) + 1;
     if( nMaxUniCodeBuf * 6 > 0x0FFFFF )
         RscExit( 10 );
 
@@ -135,8 +135,8 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
     rtl_TextToUnicodeConverter hConv = rtl_createTextToUnicodeConverter( nTextEncoding );
 
     sal_uInt32 nInfo;
-    sal_Size   nSrcCvtBytes;
-    sal_Size nUniSize = rtl_convertTextToUnicode( hConv, 0,
+    size_t   nSrcCvtBytes;
+    size_t nUniSize = rtl_convertTextToUnicode( hConv, 0,
                                                 pOrgStr, nOrgLen,
                                                 pUniCode, nMaxUniCodeBuf,
                                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT

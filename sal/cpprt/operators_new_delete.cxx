@@ -114,7 +114,7 @@ static void* allocate (
     n = rTraits.size (n);
     for (;;)
     {
-        void * p = rtl_allocateMemory (sal_Size(n));
+        void * p = rtl_allocateMemory (size_t(n));
         if (p != 0)
             return rTraits.init (p);
 

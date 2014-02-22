@@ -249,7 +249,7 @@ sal_Bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
             aStream.WriteStream( *pStream );
 
         aStream.Seek( STREAM_SEEK_TO_END );
-        sal_Size nLen = aStream.Tell();
+        size_t nLen = aStream.Tell();
         aStream.Seek( 0 );
         OString sBuffer = read_uInt8s_ToOString(aStream, nLen);
         rStr = OStringToOUString( sBuffer, RTL_TEXTENCODING_UTF8 );

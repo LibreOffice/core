@@ -456,7 +456,7 @@ sal_Bool IsWordproFile(OUString file)
 
         pStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         pStm->Seek(STREAM_SEEK_TO_BEGIN);
-        sal_Size nRead = pStm->Read(buf, sizeof(buf));
+        size_t nRead = pStm->Read(buf, sizeof(buf));
         if( nRead< sizeof(buf) )
             bRet = sal_False;
         else

@@ -96,7 +96,7 @@ namespace
         if (blobSize)
         {
             blob.pData = new sal_uInt8[blobSize];
-            blob.size = static_cast<sal_Size>(blobSize);
+            blob.size = static_cast<size_t>(blobSize);
             stream.Read(blob.pData, blob.size);
         }
 

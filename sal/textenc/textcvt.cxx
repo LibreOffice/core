@@ -26,10 +26,10 @@
 
 /* ======================================================================= */
 
-static sal_Size ImplDummyToUnicode( const char* pSrcBuf, sal_Size nSrcBytes,
-                                    sal_Unicode* pDestBuf, sal_Size nDestChars,
+static size_t ImplDummyToUnicode( const char* pSrcBuf, sal_Size nSrcBytes,
+                                    sal_Unicode* pDestBuf, size_t nDestChars,
                                     sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                    sal_Size* pSrcCvtBytes )
+                                    size_t* pSrcCvtBytes )
 {
     sal_Unicode*        pEndDestBuf;
     const char*     pEndSrcBuf;
@@ -65,10 +65,10 @@ static sal_Size ImplDummyToUnicode( const char* pSrcBuf, sal_Size nSrcBytes,
 
 /* ----------------------------------------------------------------------- */
 
-static sal_Size ImplUnicodeToDummy( const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                    char* pDestBuf, sal_Size nDestBytes,
+static size_t ImplUnicodeToDummy( const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
+                                    char* pDestBuf, size_t nDestBytes,
                                     sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                    sal_Size* pSrcCvtChars )
+                                    size_t* pSrcCvtChars )
 {
     char*               pEndDestBuf;
     const sal_Unicode*      pEndSrcBuf;
@@ -152,12 +152,12 @@ void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConvert
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverter,
+size_t SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverter,
                                             rtl_TextToUnicodeContext hContext,
-                                            const char* pSrcBuf, sal_Size nSrcBytes,
-                                            sal_Unicode* pDestBuf, sal_Size nDestChars,
+                                            const char* pSrcBuf, size_t nSrcBytes,
+                                            sal_Unicode* pDestBuf, size_t nDestChars,
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                            sal_Size* pSrcCvtBytes )
+                                            size_t* pSrcCvtBytes )
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
 
@@ -230,12 +230,12 @@ void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConvert
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverter,
+size_t SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverter,
                                             rtl_UnicodeToTextContext hContext,
-                                            const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                            char* pDestBuf, sal_Size nDestBytes,
+                                            const sal_Unicode* pSrcBuf, size_t nSrcChars,
+                                            char* pDestBuf, size_t nDestBytes,
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
-                                            sal_Size* pSrcCvtChars )
+                                            size_t* pSrcCvtChars )
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
 

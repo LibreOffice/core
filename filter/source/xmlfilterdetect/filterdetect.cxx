@@ -135,7 +135,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
 
         ::boost::scoped_ptr< SvStream > pInStream( ::utl::UcbStreamHelper::CreateStream( xInStream ) );
         pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
-        sal_Size nUniPos = pInStream->Tell();
+        size_t nUniPos = pInStream->Tell();
 
         const sal_uInt16 nSize = 4000;
         bool  bTryUtf16 = false;

@@ -33,7 +33,7 @@ namespace writerfilter {
                 /// To be invoked by the popState() callback to single when the importer leaves a group.
                 void popGroup();
                 OUString getPosition();
-                sal_Size getGroupStart();
+                size_t getGroupStart();
             private:
                 SvStream& Strm();
                 int resolveKeyword();
@@ -49,7 +49,7 @@ namespace writerfilter {
                 int m_nGroup;
                 sal_Int32 m_nLineNumber;
                 sal_Int32 m_nLineStartPos;
-                sal_Size m_nGroupStart;
+                size_t m_nGroupStart;
         };
     } // namespace rtftok
 } // namespace writerfilter

@@ -40,25 +40,25 @@ void ImplResetEucTwToUnicodeContext(void * pContext);
 
 void ImplDestroyEucTwToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertEucTwToUnicode(void const * pData,
+size_t ImplConvertEucTwToUnicode(void const * pData,
                                    void * pContext,
                                    char const * pSrcBuf,
-                                   sal_Size nSrcBytes,
+                                   size_t nSrcBytes,
                                    sal_Unicode * pDestBuf,
-                                   sal_Size nDestChars,
+                                   size_t nDestChars,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
-                                   sal_Size * pSrcCvtBytes);
+                                   size_t * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToEucTw(void const * pData,
+size_t ImplConvertUnicodeToEucTw(void const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
-                                   sal_Size nSrcChars,
+                                   size_t nSrcChars,
                                    char * pDestBuf,
-                                   sal_Size nDestBytes,
+                                   size_t nDestBytes,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
-                                   sal_Size * pSrcCvtChars);
+                                   size_t * pSrcCvtChars);
 
 #endif
 

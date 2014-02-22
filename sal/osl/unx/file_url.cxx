@@ -748,9 +748,9 @@ namespace
             return g_theConverter;
         }
 
-        sal_Size convert(
-            sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
-            sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
+        size_t convert(
+            sal_Unicode const * pSrcBuf, size_t nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
+            sal_uInt32 nFlags, sal_uInt32 * pInfo, size_t * pSrcCvtChars)
         {
             OSL_ASSERT(m_converter != 0);
             return rtl_convertUnicodeToText (
@@ -762,9 +762,9 @@ namespace
 int UnicodeToText( char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen )
 {
     sal_uInt32   nInfo = 0;
-    sal_Size     nSrcChars = 0;
+    size_t     nSrcChars = 0;
 
-    sal_Size nDestBytes = UnicodeToTextConverter_Impl::getInstance().convert (
+    size_t nDestBytes = UnicodeToTextConverter_Impl::getInstance().convert (
         uniText, uniTextLen, buffer, bufLen,
         OUSTRING_TO_OSTRING_CVTFLAGS | RTL_UNICODETOTEXT_FLAGS_FLUSH, &nInfo, &nSrcChars);
 
@@ -801,9 +801,9 @@ namespace
             return g_theConverter;
         }
 
-        sal_Size convert(
-            sal_Char const * pSrcBuf, sal_Size nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
-            sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
+        size_t convert(
+            sal_Char const * pSrcBuf, size_t nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
+            sal_uInt32 nFlags, sal_uInt32 * pInfo, size_t * pSrcCvtBytes)
         {
             OSL_ASSERT(m_converter != 0);
             return rtl_convertTextToUnicode (
@@ -819,9 +819,9 @@ int TextToUnicode(
     sal_Int32    unic_text_buffer_size)
 {
     sal_uInt32 nInfo = 0;
-    sal_Size   nSrcChars = 0;
+    size_t   nSrcChars = 0;
 
-    sal_Size nDestBytes = TextToUnicodeConverter_Impl::getInstance().convert(
+    size_t nDestBytes = TextToUnicodeConverter_Impl::getInstance().convert(
         text,  text_buffer_size, unic_text, unic_text_buffer_size,
         OSTRING_TO_OUSTRING_CVTFLAGS | RTL_TEXTTOUNICODE_FLAGS_FLUSH, &nInfo, &nSrcChars);
 

@@ -64,7 +64,7 @@ namespace slideshow
                                           const uno::Reference< drawing::XShape >&        rxShape,
                                           const OUString&                          rServiceName,
                                           const char**                                    pPropCopyTable,
-                                          sal_Size                                        nNumPropEntries,
+                                          size_t                                        nNumPropEntries,
                                           const uno::Reference< uno::XComponentContext >& rxContext ) :
             mpViewLayer( rViewLayer ),
             mxViewer(),
@@ -91,7 +91,7 @@ namespace slideshow
 
             // copy shape properties to applet viewer
             OUString aPropName;
-            for( sal_Size i=0; i<nNumPropEntries; ++i )
+            for( size_t i=0; i<nNumPropEntries; ++i )
             {
                 aPropName = OUString::createFromAscii( pPropCopyTable[i] );
                 mxViewerPropSet->setPropertyValue( aPropName,

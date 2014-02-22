@@ -211,7 +211,7 @@ sal_uInt32 SotStorageStream::GetSize() const
     return nSize;
 }
 
-sal_Size SotStorageStream::remainingSize()
+size_t SotStorageStream::remainingSize()
 {
     if (pOwnStm)
         return pOwnStm->GetSize() - Tell();

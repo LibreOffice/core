@@ -65,15 +65,15 @@ void ImplDestroyGb18030ToUnicodeContext(void * pContext)
     delete static_cast< ImplGb18030ToUnicodeContext * >(pContext);
 }
 
-sal_Size ImplConvertGb18030ToUnicode(void const * pData,
+size_t ImplConvertGb18030ToUnicode(void const * pData,
                                      void * pContext,
                                      char const * pSrcBuf,
-                                     sal_Size nSrcBytes,
+                                     size_t nSrcBytes,
                                      sal_Unicode * pDestBuf,
-                                     sal_Size nDestChars,
+                                     size_t nDestChars,
                                      sal_uInt32 nFlags,
                                      sal_uInt32 * pInfo,
-                                     sal_Size * pSrcCvtBytes)
+                                     size_t * pSrcCvtBytes)
 {
     sal_Unicode const * pGb18030Data
         = static_cast< ImplGb18030ConverterData const * >(pData)->m_pGb18030ToUnicodeData;
@@ -83,7 +83,7 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
     ImplGb18030ToUnicodeState eState = IMPL_GB_18030_TO_UNICODE_STATE_0;
     sal_uInt32 nCode = 0;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
 
@@ -280,15 +280,15 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertUnicodeToGb18030(void const * pData,
+size_t ImplConvertUnicodeToGb18030(void const * pData,
                                      void * pContext,
                                      sal_Unicode const * pSrcBuf,
-                                     sal_Size nSrcChars,
+                                     size_t nSrcChars,
                                      char * pDestBuf,
-                                     sal_Size nDestBytes,
+                                     size_t nDestBytes,
                                      sal_uInt32 nFlags,
                                      sal_uInt32 * pInfo,
-                                     sal_Size * pSrcCvtChars)
+                                     size_t * pSrcCvtChars)
 {
     sal_uInt32 const * pGb18030Data
         = static_cast< ImplGb18030ConverterData const * >(pData)->
@@ -298,7 +298,7 @@ sal_Size ImplConvertUnicodeToGb18030(void const * pData,
               m_pUnicodeToGb18030Ranges;
     sal_Unicode nHighSurrogate = 0;
     sal_uInt32 nInfo = 0;
-    sal_Size nConverted = 0;
+    size_t nConverted = 0;
     char * pDestBufPtr = pDestBuf;
     char * pDestBufEnd = pDestBuf + nDestBytes;
 

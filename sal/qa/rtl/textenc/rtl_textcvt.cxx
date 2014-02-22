@@ -43,7 +43,7 @@ struct SingleByteCharSet {
 void testSingleByteCharSet(SingleByteCharSet const & rSet) {
     sal_Char aText[256];
     sal_Unicode aUnicode[256];
-    sal_Size nNumber = 0;
+    size_t nNumber = 0;
     for (int i = 0; i < 256; ++i) {
         if (rSet.m_aMap[i] != 0xFFFF) {
             aText[nNumber++] = static_cast< sal_Char >(i);
@@ -55,9 +55,9 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
         rtl_TextToUnicodeContext aContext
             = rtl_createTextToUnicodeContext(aConverter);
         CPPUNIT_ASSERT_MESSAGE("failure #1", aConverter && aContext);
-        sal_Size nSize;
+        size_t nSize;
         sal_uInt32 nInfo;
-        sal_Size nConverted;
+        size_t nConverted;
         nSize = rtl_convertTextToUnicode(
             aConverter, aContext, aText, nNumber, aUnicode, nNumber,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
@@ -90,9 +90,9 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
         rtl_UnicodeToTextContext aContext
             = rtl_createUnicodeToTextContext(aConverter);
         CPPUNIT_ASSERT_MESSAGE("failure #4", aConverter && aContext);
-        sal_Size nSize;
+        size_t nSize;
         sal_uInt32 nInfo;
-        sal_Size nConverted;
+        size_t nConverted;
         nSize = rtl_convertUnicodeToText(
             aConverter, aContext, aUnicode, nNumber, aText, nNumber,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
@@ -125,9 +125,9 @@ void testSingleByteCharSet(SingleByteCharSet const & rSet) {
             rtl_TextToUnicodeContext aContext
                 = rtl_createTextToUnicodeContext(aConverter);
             CPPUNIT_ASSERT_MESSAGE("failure #7", aConverter && aContext);
-            sal_Size nSize;
+            size_t nSize;
             sal_uInt32 nInfo;
-            sal_Size nConverted;
+            size_t nConverted;
             nSize = rtl_convertTextToUnicode(
                 aConverter, aContext, aText, 1, aUnicode, 1,
                 (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
@@ -153,9 +153,9 @@ int const TEST_STRING_SIZE = 1000;
 struct ComplexCharSetTest {
     rtl_TextEncoding m_nEncoding;
     char const * m_pText;
-    sal_Size m_nTextSize;
+    size_t m_nTextSize;
     sal_Unicode m_aUnicode[TEST_STRING_SIZE];
-    sal_Size m_nUnicodeSize;
+    size_t m_nUnicodeSize;
     bool m_bNoContext;
     bool m_bForward;
     bool m_bReverse;
@@ -171,9 +171,9 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_TextToUnicodeContext aContext
             = rtl_createTextToUnicodeContext(aConverter);
         CPPUNIT_ASSERT_MESSAGE("failure #10", aConverter && aContext);
-        sal_Size nSize;
+        size_t nSize;
         sal_uInt32 nInfo;
-        sal_Size nConverted;
+        size_t nConverted;
         nSize = rtl_convertTextToUnicode(
             aConverter, aContext,
             reinterpret_cast< sal_Char const * >(rTest.m_pText),
@@ -192,7 +192,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_destroyTextToUnicodeContext(aConverter, aContext);
         rtl_destroyTextToUnicodeConverter(aConverter);
         bool bSuccess = true;
-        for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i) {
+        for (size_t i = 0; i < rTest.m_nUnicodeSize; ++i) {
             if (aUnicode[i] != rTest.m_aUnicode[i]) {
                 bSuccess = false;
                 break;
@@ -208,10 +208,10 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
             = rtl_createTextToUnicodeContext(aConverter);
         CPPUNIT_ASSERT_MESSAGE("failure #13", aConverter && aContext);
         if (aContext != (rtl_TextToUnicodeContext) 1) {
-            sal_Size nInput = 0;
-            sal_Size nOutput = 0;
+            size_t nInput = 0;
+            size_t nOutput = 0;
             for (bool bFlush = true; nInput < rTest.m_nTextSize || bFlush;) {
-                sal_Size nSrcBytes = 1;
+                size_t nSrcBytes = 1;
                 sal_uInt32 nFlags
                     = (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                        | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -224,8 +224,8 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                     bFlush = false;
                 }
                 sal_uInt32 nInfo;
-                sal_Size nConverted;
-                sal_Size nSize = rtl_convertTextToUnicode(
+                size_t nConverted;
+                size_t nSize = rtl_convertTextToUnicode(
                     aConverter, aContext,
                     reinterpret_cast< sal_Char const * >(rTest.m_pText + nInput),
                     nSrcBytes, aUnicode + nOutput, TEST_STRING_SIZE - nOutput,
@@ -240,7 +240,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                 "failure #15",
                 nOutput == rTest.m_nUnicodeSize && nInput == rTest.m_nTextSize);
             bool bSuccess = true;
-            for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i) {
+            for (size_t i = 0; i < rTest.m_nUnicodeSize; ++i) {
                 if (aUnicode[i] != rTest.m_aUnicode[i]) {
                     bSuccess = false;
                     break;
@@ -257,15 +257,15 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
         CPPUNIT_ASSERT_MESSAGE("failure #17", aConverter);
-        for (sal_Size i = 0;;) {
+        for (size_t i = 0;;) {
             if (i == rTest.m_nTextSize) {
                 goto done;
             }
             sal_Char c1 = rTest.m_pText[i++];
             sal_Unicode aUC[2];
             sal_uInt32 nInfo = 0;
-            sal_Size nCvtBytes;
-            sal_Size nChars = rtl_convertTextToUnicode(
+            size_t nCvtBytes;
+            size_t nChars = rtl_convertTextToUnicode(
                 aConverter, 0, &c1, 1, aUC, 2,
                 (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                  | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -323,7 +323,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
     done:
         rtl_destroyTextToUnicodeConverter(aConverter);
         bool bSuccess = true;
-        for (sal_Size i = 0; i < rTest.m_nUnicodeSize; ++i) {
+        for (size_t i = 0; i < rTest.m_nUnicodeSize; ++i) {
             if (aUnicode[i] != rTest.m_aUnicode[i]) {
                 bSuccess = false;
                 break;
@@ -338,9 +338,9 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_UnicodeToTextContext aContext
             = rtl_createUnicodeToTextContext(aConverter);
         CPPUNIT_ASSERT_MESSAGE("failure #19", aConverter && aContext);
-        sal_Size nSize;
+        size_t nSize;
         sal_uInt32 nInfo;
-        sal_Size nConverted;
+        size_t nConverted;
         nSize = rtl_convertUnicodeToText(
             aConverter, aContext, rTest.m_aUnicode, rTest.m_nUnicodeSize, aText,
             TEST_STRING_SIZE,
@@ -360,7 +360,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_destroyUnicodeToTextContext(aConverter, aContext);
         rtl_destroyUnicodeToTextConverter(aConverter);
         bool bSuccess = true;
-        for (sal_Size i = 0; i < rTest.m_nTextSize; ++i) {
+        for (size_t i = 0; i < rTest.m_nTextSize; ++i) {
             if (aText[i] != rTest.m_pText[i]) {
                 bSuccess = false;
                 break;
@@ -376,9 +376,9 @@ void doComplexCharSetCutTest(ComplexCharSetTest const & rTest) {
         rtl_TextToUnicodeConverter aConverter
             = rtl_createTextToUnicodeConverter(rTest.m_nEncoding);
         CPPUNIT_ASSERT_MESSAGE("failure #22", aConverter);
-        sal_Size nSize;
+        size_t nSize;
         sal_uInt32 nInfo;
-        sal_Size nConverted;
+        size_t nConverted;
         nSize = rtl_convertTextToUnicode(
             aConverter, 0, reinterpret_cast< sal_Char const * >(rTest.m_pText),
             rTest.m_nTextSize, aUnicode, TEST_STRING_SIZE,
@@ -396,7 +396,7 @@ void doComplexCharSetCutTest(ComplexCharSetTest const & rTest) {
              && nConverted < rTest.m_nTextSize));
         rtl_destroyTextToUnicodeConverter(aConverter);
         bool bSuccess = true;
-        for (sal_Size i = 0; i < nSize; ++i) {
+        for (size_t i = 0; i < nSize; ++i) {
             if (aUnicode[i] != rTest.m_aUnicode[i]) {
                 bSuccess = false;
                 break;
@@ -2605,9 +2605,9 @@ void Test::testSRCBUFFERTOSMALL() {
     char src = '\xA1';
     sal_Unicode dst[10];
     sal_uInt32 info;
-    sal_Size cvt;
+    size_t cvt;
     CPPUNIT_ASSERT_EQUAL(
-        sal_Size(0),
+        size_t(0),
         rtl_convertTextToUnicode(
             cv, cx, &src, 1, dst, sizeof dst / sizeof (sal_Unicode),
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |

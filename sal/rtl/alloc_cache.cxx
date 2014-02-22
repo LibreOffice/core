@@ -100,11 +100,11 @@ namespace
 void
 rtl_cache_hash_rescale (
     rtl_cache_type * cache,
-    sal_Size         new_size
+    size_t         new_size
 )
 {
     rtl_cache_bufctl_type ** new_table;
-    sal_Size                 new_bytes;
+    size_t                 new_bytes;
 
     new_bytes = new_size * sizeof(rtl_cache_bufctl_type*);
     new_table = (rtl_cache_bufctl_type**)rtl_arena_alloc(gp_cache_arena, &new_bytes);
@@ -112,7 +112,7 @@ rtl_cache_hash_rescale (
     if (new_table != 0)
     {
         rtl_cache_bufctl_type ** old_table;
-        sal_Size                 old_size, i;
+        size_t                 old_size, i;
 
         memset (new_table, 0, new_bytes);
 
@@ -156,7 +156,7 @@ rtl_cache_hash_rescale (
 
         if (old_table != cache->m_hash_table_0)
         {
-            sal_Size old_bytes = old_size * sizeof(rtl_cache_bufctl_type*);
+            size_t old_bytes = old_size * sizeof(rtl_cache_bufctl_type*);
             rtl_arena_free (gp_cache_arena, old_table, old_bytes);
         }
     }
@@ -188,7 +188,7 @@ rtl_cache_hash_remove (
 {
     rtl_cache_bufctl_type ** ppHead;
     rtl_cache_bufctl_type  * bufctl;
-    sal_Size                 lookups = 0;
+    size_t                 lookups = 0;
 
     ppHead = &(cache->m_hash_table[RTL_CACHE_HASH_INDEX(cache, addr)]);
     while ((bufctl = *ppHead) != 0)
@@ -207,13 +207,13 @@ rtl_cache_hash_remove (
 
     if (lookups > 1)
     {
-        sal_Size nbuf = (sal_Size)(cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free);
+        size_t nbuf = (sal_Size)(cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free);
         if (nbuf > 4 * cache->m_hash_size)
         {
             if (!(cache->m_features & RTL_CACHE_FEATURE_RESCALE))
             {
-                sal_Size ave = nbuf >> cache->m_hash_shift;
-                sal_Size new_size = cache->m_hash_size << (highbit(ave) - 1);
+                size_t ave = nbuf >> cache->m_hash_shift;
+                size_t new_size = cache->m_hash_size << (highbit(ave) - 1);
 
                 cache->m_features |= RTL_CACHE_FEATURE_RESCALE;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
@@ -272,7 +272,7 @@ rtl_cache_slab_create (
 {
     rtl_cache_slab_type * slab = 0;
     void *                addr;
-    sal_Size              size;
+    size_t              size;
 
     size = cache->m_slab_size;
     addr = rtl_arena_alloc (cache->m_source, &size);
@@ -320,12 +320,12 @@ rtl_cache_slab_destroy (
 )
 {
     void *   addr   = (void*)(slab->m_data);
-    sal_Size refcnt = slab->m_ntypes; slab->m_ntypes = 0;
+    size_t refcnt = slab->m_ntypes; slab->m_ntypes = 0;
 
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
     {
         /* cleanup bufctl(s) for free buffer(s) */
-        sal_Size ntypes = (slab->m_bp - slab->m_data) / cache->m_type_size;
+        size_t ntypes = (slab->m_bp - slab->m_data) / cache->m_type_size;
         for (ntypes -= refcnt; slab->m_sp != 0; ntypes--)
         {
             rtl_cache_bufctl_type * bufctl = slab->m_sp;
@@ -550,7 +550,7 @@ int
 rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
-    /* @@@ sal_Size size = (sal_Size)(arg); @@@ */
+    /* @@@ size_t size = (sal_Size)(arg); @@@ */
 
     mag->m_mag_next = 0;
     mag->m_mag_size = RTL_CACHE_MAGAZINE_SIZE;
@@ -774,7 +774,7 @@ rtl_cache_destructor (void * obj)
 
     assert(cache->m_hash_table == cache->m_hash_table_0);
     assert(cache->m_hash_size  == RTL_CACHE_HASH_SIZE);
-    assert(cache->m_hash_shift == (sal_Size)(highbit(cache->m_hash_size) - 1));
+    assert(cache->m_hash_shift == (size_t)(highbit(cache->m_hash_size) - 1));
 
     /* depot layer */
     (void)RTL_MEMORY_LOCK_DESTROY(&(cache->m_depot_lock));
@@ -801,7 +801,7 @@ rtl_cache_activate (
     assert(cache != 0);
     if (cache != 0)
     {
-        sal_Size slabsize;
+        size_t slabsize;
 
         snprintf (cache->m_name, sizeof(cache->m_name), "%s", name);
 
@@ -845,9 +845,9 @@ rtl_cache_activate (
         if (flags & RTL_CACHE_FLAG_QUANTUMCACHE)
         {
             /* next power of 2 above 3 * qcache_max */
-            if(slabsize < (((sal_Size)1) << highbit(3 * source->m_qcache_max)))
+            if(slabsize < (((size_t)1) << highbit(3 * source->m_qcache_max)))
             {
-                slabsize = (((sal_Size)1) << highbit(3 * source->m_qcache_max));
+                slabsize = (((size_t)1) << highbit(3 * source->m_qcache_max));
             }
         }
         else
@@ -861,7 +861,7 @@ rtl_cache_activate (
 
         slabsize = RTL_MEMORY_P2ROUNDUP(slabsize, source->m_quantum);
         if (!RTL_MEMORY_ISP2(slabsize))
-            slabsize = (((sal_Size)1) << highbit(slabsize));
+            slabsize = (((size_t)1) << highbit(slabsize));
         cache->m_slab_size = slabsize;
 
         if (cache->m_slab_size > source->m_quantum)
@@ -982,7 +982,7 @@ rtl_cache_deactivate (
         if (cache->m_features & RTL_CACHE_FEATURE_HASH)
         {
             /* cleanup bufctl(s) for leaking buffer(s) */
-            sal_Size i, n = cache->m_hash_size;
+            size_t i, n = cache->m_hash_size;
             for (i = 0; i < n; i++)
             {
                 rtl_cache_bufctl_type * bufctl;
@@ -1054,8 +1054,8 @@ rtl_cache_deactivate (
 rtl_cache_type *
 SAL_CALL rtl_cache_create (
     const char *     name,
-    sal_Size         objsize,
-    sal_Size         objalign,
+    size_t         objsize,
+    size_t         objalign,
     int  (SAL_CALL * constructor)(void * obj, void * userarg),
     void (SAL_CALL * destructor) (void * obj, void * userarg),
     void (SAL_CALL * reclaim)    (void * userarg),
@@ -1065,7 +1065,7 @@ SAL_CALL rtl_cache_create (
 ) SAL_THROW_EXTERN_C()
 {
     rtl_cache_type * result = 0;
-    sal_Size         size   = sizeof(rtl_cache_type);
+    size_t         size   = sizeof(rtl_cache_type);
 
 try_alloc:
     result = (rtl_cache_type*)rtl_arena_alloc (gp_cache_arena, &size);
@@ -1433,7 +1433,7 @@ rtl_cache_depot_wsupdate (
     rtl_cache_depot_type * depot
 )
 {
-    sal_Size npurge;
+    size_t npurge;
 
     depot->m_prev_min = depot->m_curr_min;
     depot->m_curr_min = depot->m_mag_count;

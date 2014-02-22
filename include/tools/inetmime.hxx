@@ -348,7 +348,7 @@ public:
                                                const sal_Unicode * pEnd,
                                                sal_uInt32 nOpening,
                                                sal_uInt32 nClosing,
-                                               sal_Size & rLength,
+                                               size_t & rLength,
                                                bool & rModify);
 
     static sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
@@ -375,12 +375,12 @@ public:
     static sal_Unicode * convertToUnicode(const sal_Char * pBegin,
                                           const sal_Char * pEnd,
                                           rtl_TextEncoding eEncoding,
-                                          sal_Size & rSize);
+                                          size_t & rSize);
 
     static sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
                                          const sal_Unicode * pEnd,
                                          rtl_TextEncoding eEncoding,
-                                         sal_Size & rSize);
+                                         size_t & rSize);
 
     /** Get the number of octets required to encode an UCS-4 character using
         UTF-8 encoding.
@@ -679,7 +679,7 @@ protected:
 
         @return  The length of pOctets (without the terminating null).
      */
-    virtual sal_Size writeSequence(const sal_Char * pSequence);
+    virtual size_t writeSequence(const sal_Char * pSequence);
 
     /** Write a sequence of octets.
 
@@ -742,7 +742,7 @@ public:
 
         @param nLength  The length of the sequence.
      */
-    void write(const sal_Char * pBegin, sal_Size nLength)
+    void write(const sal_Char * pBegin, size_t nLength)
     { write(pBegin, pBegin + nLength); }
 
     /** Write a sequence of octets.

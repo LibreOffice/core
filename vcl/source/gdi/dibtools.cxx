@@ -170,7 +170,7 @@ namespace
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown)
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER or BITMAPV5HEADER
-    const sal_Size aStartPos(rIStm.Tell());
+    const size_t aStartPos(rIStm.Tell());
     rIStm.ReadUInt32( rHeader.nSize );
 
     // BITMAPCOREHEADER
@@ -186,7 +186,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     else
     {
         // BITMAPCOREHEADER, BITMAPV5HEADER or unknown. Read as far as possible
-        sal_Size nUsed(sizeof(rHeader.nSize));
+        size_t nUsed(sizeof(rHeader.nSize));
 
         // read DIBInfoHeader entries
         if(nUsed < rHeader.nSize) { rIStm.ReadInt32( rHeader.nWidth ); nUsed += sizeof(rHeader.nWidth); }

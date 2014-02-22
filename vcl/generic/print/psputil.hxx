@@ -53,8 +53,8 @@ public:
     ConverterFactory();
     ~ConverterFactory();
     rtl_UnicodeToTextConverter  Get (rtl_TextEncoding nEncoding);
-    sal_Size                    Convert (const sal_Unicode *pText, int nTextLen,
-                                         unsigned char *pBuffer, sal_Size nBufferSize,
+    size_t                    Convert (const sal_Unicode *pText, int nTextLen,
+                                         unsigned char *pBuffer, size_t nBufferSize,
                                          rtl_TextEncoding nEncoding);
 private:
 

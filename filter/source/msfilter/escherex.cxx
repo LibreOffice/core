@@ -5030,10 +5030,10 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
 class SvNullStream : public SvStream
 {
 protected:
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) { memset( pData, 0, nSize ); return nSize; }
-    virtual sal_Size PutData( const void*, sal_Size nSize ) { return nSize; }
-    virtual sal_Size SeekPos( sal_Size nPos ) { return nPos; }
-    virtual void SetSize( sal_Size ) {}
+    virtual size_t GetData( void* pData, sal_Size nSize ) { memset( pData, 0, nSize ); return nSize; }
+    virtual size_t PutData( const void*, sal_Size nSize ) { return nSize; }
+    virtual size_t SeekPos( sal_Size nPos ) { return nPos; }
+    virtual void SetSize( size_t ) {}
     virtual void FlushData() {}
 
 public:

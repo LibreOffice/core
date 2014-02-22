@@ -952,8 +952,8 @@ sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
         nFormat = GFF_PCT;
     else
     {
-        sal_Size nStreamPos = rStm.Tell();
-        sal_Size nStreamLen = rStm.remainingSize();
+        size_t nStreamPos = rStm.Tell();
+        size_t nStreamLen = rStm.remainingSize();
         if (isPCT(rStm, nStreamPos, nStreamLen))
         {
             bRet = sal_True;
